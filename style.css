@@ -47,6 +47,9 @@ body {
     Helvetica,
     sans-serif;
 
+  font-size: 15px;
+  line-height: 1.5;
+
   color: var(--text);
   background: var(--background);
 
@@ -70,7 +73,7 @@ input {
   display: grid;
 
   grid-template-columns:
-    minmax(540px, 640px)
+    minmax(560px, 660px)
     1fr;
 
   background: white;
@@ -91,7 +94,7 @@ input {
 .login-inner {
 
   width: 100%;
-  max-width: 505px;
+  max-width: 535px;
 
 }
 
@@ -124,6 +127,7 @@ input {
 
   color: white;
 
+  font-size: 15px;
   font-weight: 700;
 
 }
@@ -133,7 +137,7 @@ input {
 
   margin: 0;
 
-  font-size: 26px;
+  font-size: 27px;
 
 }
 
@@ -145,7 +149,7 @@ input {
 
   color: var(--brand-mid);
 
-  font-size: 11px;
+  font-size: 13px;
 
 }
 
@@ -154,11 +158,11 @@ input {
 
   color: var(--brand-mid);
 
-  font-size: 9px;
+  font-size: 12px;
 
   font-weight: 800;
 
-  letter-spacing: 1.25px;
+  letter-spacing: 1.2px;
 
   text-transform: uppercase;
 
@@ -170,7 +174,7 @@ input {
   margin:
     7px 0 8px;
 
-  font-size: 29px;
+  font-size: 30px;
 
 }
 
@@ -181,9 +185,9 @@ input {
 
   color: var(--muted);
 
-  line-height: 1.55;
+  line-height: 1.6;
 
-  font-size: 13px;
+  font-size: 15px;
 
 }
 
@@ -225,18 +229,18 @@ input {
 
 .login-method-heading strong {
 
-  font-size: 14px;
+  font-size: 18px;
 
 }
 
 
 .login-method-heading span {
 
-  margin-top: 3px;
+  margin-top: 4px;
 
   color: var(--muted);
 
-  font-size: 10px;
+  font-size: 13px;
 
 }
 
@@ -246,9 +250,9 @@ input {
   display: block;
 
   margin:
-    13px 0 6px;
+    15px 0 7px;
 
-  font-size: 10px;
+  font-size: 14px;
 
   font-weight: 700;
 
@@ -258,7 +262,7 @@ input {
 .login-method-card input {
 
   width: 100%;
-  height: 44px;
+  height: 46px;
 
   padding:
     0 12px;
@@ -269,6 +273,8 @@ input {
   border-radius: 8px;
 
   outline: none;
+
+  font-size: 15px;
 
 }
 
@@ -286,13 +292,13 @@ input {
 
 .login-error {
 
-  min-height: 19px;
+  min-height: 21px;
 
-  padding-top: 6px;
+  padding-top: 7px;
 
   color: var(--red);
 
-  font-size: 10px;
+  font-size: 13px;
 
 }
 
@@ -307,7 +313,7 @@ input {
 .primary-button {
 
   width: 100%;
-  height: 45px;
+  height: 47px;
 
   border: 0;
 
@@ -317,6 +323,7 @@ input {
 
   color: white;
 
+  font-size: 15px;
   font-weight: 700;
 
   cursor: pointer;
@@ -361,7 +368,7 @@ input {
 
   color: #999;
 
-  font-size: 9px;
+  font-size: 12px;
 
 }
 
@@ -369,7 +376,7 @@ input {
 .sso-button {
 
   width: 100%;
-  height: 45px;
+  height: 47px;
 
   display: flex;
 
@@ -385,6 +392,7 @@ input {
 
   background: white;
 
+  font-size: 15px;
   font-weight: 700;
 
   cursor: pointer;
@@ -401,8 +409,8 @@ input {
 
 .microsoft-icon {
 
-  width: 17px;
-  height: 17px;
+  width: 18px;
+  height: 18px;
 
   display: grid;
 
@@ -428,11 +436,11 @@ input {
 
 .login-callout {
 
-  margin-top: 17px;
+  margin-top: 18px;
 
-  padding: 12px 13px;
+  padding: 14px 15px;
 
-  border-radius: 8px;
+  border-radius: 9px;
 
   background: var(--pink-soft);
 
@@ -445,7 +453,7 @@ input {
 
   color: var(--brand);
 
-  font-size: 10px;
+  font-size: 14px;
 
 }
 
@@ -453,16 +461,171 @@ input {
 .login-callout p {
 
   margin:
-    4px 0 0;
+    5px 0 0;
 
   color: var(--muted);
 
-  font-size: 9px;
+  font-size: 13px;
 
-  line-height: 1.5;
+  line-height: 1.6;
 
 }
 
+
+/* =========================================================
+   PROTOTYPE TEST ACCOUNTS
+========================================================= */
+
+.test-accounts {
+
+  margin-top: 20px;
+
+  padding-top: 18px;
+
+  border-top:
+    1px solid var(--border);
+
+}
+
+
+.test-accounts-heading {
+
+  display: flex;
+
+  justify-content: space-between;
+  align-items: flex-end;
+
+  gap: 15px;
+
+  margin-bottom: 11px;
+
+}
+
+
+.test-accounts-heading strong,
+.test-accounts-heading span {
+
+  display: block;
+
+}
+
+
+.test-accounts-heading strong {
+
+  font-size: 15px;
+
+}
+
+
+.test-accounts-heading span {
+
+  margin-top: 3px;
+
+  color: var(--muted);
+
+  font-size: 12px;
+
+}
+
+
+.test-accounts-heading small {
+
+  color: var(--brand-mid);
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+
+}
+
+
+.test-accounts-table {
+
+  overflow: hidden;
+
+  border:
+    1px solid var(--border);
+
+  border-radius: 10px;
+
+  background: white;
+
+}
+
+
+.test-account-row {
+
+  display: grid;
+
+  grid-template-columns:
+    1.25fr
+    1.8fr
+    0.8fr;
+
+  gap: 12px;
+
+  align-items: center;
+
+  padding:
+    11px 12px;
+
+  border-bottom:
+    1px solid var(--border);
+
+  font-size: 12px;
+
+}
+
+
+.test-account-row:last-child {
+
+  border-bottom: 0;
+
+}
+
+
+.test-account-row > span:first-child {
+
+  font-weight: 600;
+
+}
+
+
+.test-account-header {
+
+  background: var(--pink-soft);
+
+  color: var(--brand);
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+}
+
+
+.account-value {
+
+  font-family:
+    "Courier New",
+    monospace;
+
+  font-size: 11px;
+
+  color: #51474c;
+
+  word-break: break-word;
+
+}
+
+
+/* =========================================================
+   LOGIN VISUAL
+========================================================= */
 
 .login-visual {
 
@@ -528,7 +691,7 @@ input {
 
 .visual-content > span {
 
-  font-size: 10px;
+  font-size: 12px;
 
   letter-spacing: 2px;
 
@@ -558,13 +721,15 @@ input {
 
 .visual-content p {
 
+  font-size: 15px;
+
   opacity: 0.75;
 
 }
 
 
 /* =========================================================
-   APP SHELL
+   TOP BAR
 ========================================================= */
 
 .topbar {
@@ -620,7 +785,7 @@ input {
 
   color: white;
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
@@ -637,7 +802,7 @@ input {
 
 .topbar-brand strong {
 
-  font-size: 17px;
+  font-size: 18px;
 
 }
 
@@ -648,7 +813,7 @@ input {
 
   color: var(--muted);
 
-  font-size: 8px;
+  font-size: 11px;
 
 }
 
@@ -663,7 +828,7 @@ input {
 .identity-pill {
 
   padding:
-    6px 9px;
+    6px 10px;
 
   border-radius: 999px;
 
@@ -671,7 +836,7 @@ input {
 
   color: var(--brand);
 
-  font-size: 8px;
+  font-size: 11px;
 
   font-weight: 700;
 
@@ -680,8 +845,8 @@ input {
 
 .user-avatar {
 
-  width: 33px;
-  height: 33px;
+  width: 35px;
+  height: 35px;
 
   display: flex;
 
@@ -694,7 +859,7 @@ input {
 
   color: white;
 
-  font-size: 8px;
+  font-size: 11px;
 
   font-weight: 700;
 
@@ -718,7 +883,7 @@ input {
 
 .user-details strong {
 
-  font-size: 10px;
+  font-size: 13px;
 
 }
 
@@ -729,7 +894,7 @@ input {
 
   color: var(--muted);
 
-  font-size: 8px;
+  font-size: 11px;
 
 }
 
@@ -737,7 +902,7 @@ input {
 .switch-role {
 
   padding:
-    8px 10px;
+    8px 11px;
 
   border:
     1px solid var(--border);
@@ -746,10 +911,16 @@ input {
 
   background: white;
 
+  font-size: 13px;
+
   cursor: pointer;
 
 }
 
+
+/* =========================================================
+   LAYOUT
+========================================================= */
 
 .workspace-body {
 
@@ -784,16 +955,16 @@ input {
 .sidebar-title {
 
   margin:
-    20px 11px 8px;
+    22px 11px 10px;
 
   color:
-    rgba(255, 255, 255, 0.44);
+    rgba(255, 255, 255, 0.55);
 
-  font-size: 8px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: 1px;
+  letter-spacing: 1.1px;
 
   text-transform: uppercase;
 
@@ -802,17 +973,19 @@ input {
 
 .nav-item {
 
-  margin-bottom: 3px;
+  margin-bottom: 4px;
 
   padding:
-    10px 11px;
+    11px 11px;
 
   border-radius: 7px;
 
   color:
-    rgba(255, 255, 255, 0.8);
+    rgba(255, 255, 255, 0.88);
 
-  font-size: 10px;
+  font-size: 14px;
+
+  line-height: 1.4;
 
   cursor: pointer;
 
@@ -846,7 +1019,7 @@ input {
 
 
 /* =========================================================
-   COMMON
+   PAGE TITLES
 ========================================================= */
 
 .page-heading {
@@ -861,7 +1034,7 @@ input {
   margin:
     6px 0;
 
-  font-size: 28px;
+  font-size: 30px;
 
 }
 
@@ -872,10 +1045,16 @@ input {
 
   color: var(--muted);
 
-  font-size: 12px;
+  font-size: 15px;
+
+  line-height: 1.6;
 
 }
 
+
+/* =========================================================
+   GRIDS
+========================================================= */
 
 .dashboard-grid {
 
@@ -919,9 +1098,13 @@ input {
 }
 
 
+/* =========================================================
+   CARDS
+========================================================= */
+
 .dashboard-card {
 
-  padding: 20px;
+  padding: 21px;
 
   border:
     1px solid var(--border);
@@ -933,10 +1116,21 @@ input {
 }
 
 
+.dashboard-card h2 {
+
+  font-size: 22px;
+
+}
+
+
 .dashboard-card h3 {
 
   margin:
     7px 0;
+
+  font-size: 18px;
+
+  line-height: 1.35;
 
 }
 
@@ -945,9 +1139,9 @@ input {
 
   color: var(--muted);
 
-  font-size: 11px;
+  font-size: 14px;
 
-  line-height: 1.5;
+  line-height: 1.6;
 
 }
 
@@ -958,7 +1152,7 @@ input {
 
   color: var(--muted);
 
-  font-size: 9px;
+  font-size: 13px;
 
 }
 
@@ -972,7 +1166,7 @@ input {
 
   color: var(--brand);
 
-  font-size: 28px;
+  font-size: 29px;
 
 }
 
@@ -980,6 +1174,8 @@ input {
 .metric-card small {
 
   color: var(--muted);
+
+  font-size: 12px;
 
 }
 
@@ -1023,7 +1219,7 @@ input {
 
   color: var(--brand);
 
-  font-size: 29px;
+  font-size: 30px;
 
 }
 
@@ -1038,12 +1234,18 @@ input {
 
   color: var(--brand-mid);
 
+  font-size: 14px;
+
   font-weight: 700;
 
   cursor: pointer;
 
 }
 
+
+/* =========================================================
+   BADGES / BUTTONS
+========================================================= */
 
 .badge {
 
@@ -1052,7 +1254,7 @@ input {
   width: fit-content;
 
   padding:
-    5px 8px;
+    6px 9px;
 
   border-radius: 999px;
 
@@ -1060,7 +1262,7 @@ input {
 
   color: #666;
 
-  font-size: 8px;
+  font-size: 11px;
 
   font-weight: 700;
 
@@ -1089,9 +1291,11 @@ input {
 .primary-small {
 
   padding:
-    8px 11px;
+    9px 12px;
 
   border-radius: 7px;
+
+  font-size: 13px;
 
   cursor: pointer;
 
@@ -1119,16 +1323,19 @@ input {
 }
 
 
+/* =========================================================
+   GENERIC ROWS
+========================================================= */
+
 .profile-line {
 
   display: flex;
 
   justify-content: space-between;
-
   align-items: center;
 
   padding:
-    11px 0;
+    12px 0;
 
   border-bottom:
     1px solid var(--border);
@@ -1140,14 +1347,14 @@ input {
 
   color: var(--muted);
 
-  font-size: 9px;
+  font-size: 13px;
 
 }
 
 
 .profile-line strong {
 
-  font-size: 10px;
+  font-size: 14px;
 
 }
 
@@ -1157,14 +1364,17 @@ input {
   display: flex;
 
   justify-content: space-between;
-
   align-items: center;
 
+  gap: 15px;
+
   padding:
-    13px 0;
+    14px 0;
 
   border-bottom:
     1px solid var(--border);
+
+  font-size: 14px;
 
   cursor: pointer;
 
@@ -1199,13 +1409,20 @@ input {
 }
 
 
+.list-row strong {
+
+  font-size: 14px;
+
+}
+
+
 .list-row small {
 
   margin-top: 4px;
 
   color: var(--muted);
 
-  font-size: 9px;
+  font-size: 12px;
 
 }
 
@@ -1215,7 +1432,7 @@ input {
 
   margin-top: 16px;
 
-  padding: 19px;
+  padding: 20px;
 
   border:
     1px solid #e7d1d9;
@@ -1228,6 +1445,24 @@ input {
       white,
       var(--pink-soft)
     );
+
+}
+
+
+.insight-card h3,
+.notice-card h3 {
+
+  font-size: 18px;
+
+}
+
+
+.insight-card p,
+.notice-card p {
+
+  font-size: 14px;
+
+  line-height: 1.6;
 
 }
 
@@ -1247,7 +1482,7 @@ input {
 
   margin-bottom: 17px;
 
-  padding: 20px 22px;
+  padding: 21px 23px;
 
   border:
     1px solid #dec1cc;
@@ -1269,6 +1504,8 @@ input {
   margin:
     6px 0;
 
+  font-size: 19px;
+
 }
 
 
@@ -1280,7 +1517,9 @@ input {
 
   color: var(--muted);
 
-  font-size: 11px;
+  font-size: 14px;
+
+  line-height: 1.6;
 
 }
 
@@ -1300,7 +1539,7 @@ input {
 
   color: var(--brand);
 
-  font-size: 31px;
+  font-size: 32px;
 
 }
 
@@ -1317,7 +1556,7 @@ input {
 
   color: var(--brand-mid);
 
-  font-size: 10px;
+  font-size: 13px;
 
   font-weight: 700;
 
@@ -1327,7 +1566,7 @@ input {
 
 
 /* =========================================================
-   PERFORMANCE
+   ASSESSMENTS
 ========================================================= */
 
 .assessment-row {
@@ -1347,6 +1586,8 @@ input {
   border-bottom:
     1px solid var(--border);
 
+  font-size: 14px;
+
 }
 
 
@@ -1364,6 +1605,8 @@ input {
 
   color: var(--muted);
 
+  font-size: 12px;
+
 }
 
 
@@ -1376,7 +1619,7 @@ input {
 
   text-align: center;
 
-  font-size: 8px;
+  font-size: 11px;
 
   font-weight: 700;
 
@@ -1416,7 +1659,7 @@ input {
 
   margin-bottom: 17px;
 
-  padding: 22px;
+  padding: 23px;
 
   border-radius: 14px;
 
@@ -1436,7 +1679,7 @@ input {
 .section-label {
 
   color:
-    rgba(255, 255, 255, 0.65);
+    rgba(255, 255, 255, 0.7);
 
 }
 
@@ -1445,6 +1688,8 @@ input {
 
   margin:
     6px 0;
+
+  font-size: 22px;
 
 }
 
@@ -1456,18 +1701,18 @@ input {
   margin: 0;
 
   color:
-    rgba(255, 255, 255, 0.74);
+    rgba(255, 255, 255, 0.8);
 
-  font-size: 10px;
+  font-size: 14px;
 
-  line-height: 1.5;
+  line-height: 1.6;
 
 }
 
 
 .analyse-overall-button {
 
-  min-width: 245px;
+  min-width: 255px;
 
   display: flex;
 
@@ -1476,7 +1721,7 @@ input {
   gap: 12px;
 
   padding:
-    14px 18px;
+    15px 18px;
 
   border:
     1px solid
@@ -1505,25 +1750,25 @@ input {
 
 .analyse-overall-button strong {
 
-  font-size: 11px;
+  font-size: 14px;
 
 }
 
 
 .analyse-overall-button small {
 
-  margin-top: 3px;
+  margin-top: 4px;
 
   color: var(--muted);
 
-  font-size: 8px;
+  font-size: 11px;
 
 }
 
 
 .overall-ai-icon {
 
-  font-size: 22px;
+  font-size: 23px;
 
   color: var(--accent);
 
@@ -1539,7 +1784,6 @@ input {
   display: flex;
 
   justify-content: space-between;
-
   align-items: center;
 
   margin-bottom: 10px;
@@ -1552,6 +1796,8 @@ input {
   margin:
     5px 0 0;
 
+  font-size: 18px;
+
 }
 
 
@@ -1559,6 +1805,8 @@ input {
 
   margin:
     4px 0 0;
+
+  font-size: 13px;
 
 }
 
@@ -1595,13 +1843,20 @@ input {
 }
 
 
+.interaction-table-row strong {
+
+  font-size: 13px;
+
+}
+
+
 .interaction-table-row > div > span {
 
   margin-top: 3px;
 
   color: var(--muted);
 
-  font-size: 8px;
+  font-size: 11px;
 
 }
 
@@ -1610,7 +1865,7 @@ input {
 
   color: var(--muted) !important;
 
-  font-size: 7px !important;
+  font-size: 10px !important;
 
   text-transform: uppercase;
 
@@ -1626,7 +1881,7 @@ input {
   gap: 9px;
 
   padding:
-    9px 11px;
+    10px 12px;
 
   border: 0;
 
@@ -1652,7 +1907,7 @@ input {
 
 .analyse-button > span {
 
-  font-size: 17px;
+  font-size: 18px;
 
 }
 
@@ -1667,7 +1922,7 @@ input {
 
 .analyse-button strong {
 
-  font-size: 9px;
+  font-size: 12px;
 
 }
 
@@ -1677,9 +1932,9 @@ input {
   margin-top: 2px;
 
   color:
-    rgba(255, 255, 255, 0.72);
+    rgba(255, 255, 255, 0.78);
 
-  font-size: 7px;
+  font-size: 10px;
 
 }
 
@@ -1701,7 +1956,7 @@ input {
 
   display: grid;
 
-  gap: 14px;
+  gap: 16px;
 
   margin:
     22px 0;
@@ -1741,9 +1996,9 @@ input {
 
   align-items: center;
 
-  gap: 10px;
+  gap: 11px;
 
-  padding: 14px;
+  padding: 15px;
 
   border:
     1px solid var(--border);
@@ -1757,8 +2012,8 @@ input {
 
 .agent-team-number {
 
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
 
   flex-shrink: 0;
 
@@ -1773,7 +2028,7 @@ input {
 
   color: white;
 
-  font-size: 9px;
+  font-size: 12px;
 
   font-weight: 700;
 
@@ -1790,7 +2045,9 @@ input {
 
 .agent-team-card strong {
 
-  font-size: 9px;
+  font-size: 13px;
+
+  line-height: 1.35;
 
 }
 
@@ -1801,7 +2058,9 @@ input {
 
   color: var(--muted);
 
-  font-size: 7px;
+  font-size: 11px;
+
+  line-height: 1.4;
 
 }
 
@@ -1810,7 +2069,7 @@ input {
 
   margin-bottom: 14px;
 
-  padding: 13px;
+  padding: 14px;
 
   border:
     1px dashed #d5c7cc;
@@ -1819,7 +2078,7 @@ input {
 
   color: var(--muted);
 
-  font-size: 10px;
+  font-size: 13px;
 
 }
 
@@ -1829,12 +2088,16 @@ input {
   margin:
     5px 0 3px;
 
+  font-size: 17px;
+
 }
 
 
 .selected-interaction-placeholder p {
 
   margin: 0;
+
+  font-size: 13px;
 
 }
 
@@ -1847,7 +2110,7 @@ input {
 
   min-height: 120px;
 
-  padding: 18px;
+  padding: 19px;
 
   border:
     1px solid var(--border);
@@ -1867,7 +2130,7 @@ input {
 
   color: var(--muted);
 
-  font-size: 10px;
+  font-size: 13px;
 
 }
 
@@ -1877,7 +2140,6 @@ input {
   display: flex;
 
   justify-content: space-between;
-
   align-items: center;
 
 }
@@ -1888,13 +2150,15 @@ input {
   margin:
     5px 0 0;
 
+  font-size: 18px;
+
 }
 
 
 .pipeline-running-badge {
 
   padding:
-    6px 9px;
+    7px 10px;
 
   border-radius: 999px;
 
@@ -1902,7 +2166,7 @@ input {
 
   color: var(--brand);
 
-  font-size: 8px;
+  font-size: 11px;
 
   font-weight: 700;
 
@@ -1929,15 +2193,15 @@ input {
 
 .pipeline-step {
 
-  min-width: 135px;
+  min-width: 155px;
 
   display: flex;
 
   align-items: center;
 
-  gap: 8px;
+  gap: 9px;
 
-  padding: 11px;
+  padding: 13px;
 
   border:
     1px solid var(--border);
@@ -1962,26 +2226,26 @@ input {
 
 .pipeline-step strong {
 
-  font-size: 8px;
+  font-size: 13px;
 
 }
 
 
 .pipeline-step span {
 
-  margin-top: 2px;
+  margin-top: 3px;
 
   color: var(--muted);
 
-  font-size: 7px;
+  font-size: 11px;
 
 }
 
 
 .pipeline-number {
 
-  width: 27px;
-  height: 27px;
+  width: 30px;
+  height: 30px;
 
   flex-shrink: 0;
 
@@ -1994,7 +2258,7 @@ input {
 
   background: #efedef;
 
-  font-size: 8px;
+  font-size: 11px;
 
   font-weight: 700;
 
@@ -2003,12 +2267,12 @@ input {
 
 .pipeline-line {
 
-  min-width: 25px;
+  min-width: 28px;
 
   height: 2px;
 
   margin:
-    0 5px;
+    0 6px;
 
   background: #dfdadd;
 
@@ -2076,7 +2340,7 @@ input {
 
   gap: 8px;
 
-  padding: 11px;
+  padding: 12px;
 
   border-radius: 8px;
 
@@ -2084,7 +2348,7 @@ input {
 
   color: var(--muted);
 
-  font-size: 9px;
+  font-size: 12px;
 
 }
 
@@ -2178,6 +2442,8 @@ input {
   margin:
     5px 0 3px;
 
+  font-size: 22px;
+
 }
 
 
@@ -2187,13 +2453,15 @@ input {
 
   color: var(--muted);
 
+  font-size: 13px;
+
 }
 
 
 .analysis-score {
 
-  width: 70px;
-  height: 70px;
+  width: 74px;
+  height: 74px;
 
   display: flex;
 
@@ -2208,7 +2476,7 @@ input {
 
   color: var(--green);
 
-  font-size: 19px;
+  font-size: 20px;
 
   font-weight: 700;
 
@@ -2219,7 +2487,7 @@ input {
 
   margin-top: 2px;
 
-  font-size: 7px;
+  font-size: 10px;
 
   font-weight: 500;
 
@@ -2243,7 +2511,7 @@ input {
 
 .analysis-agent-card {
 
-  padding: 13px;
+  padding: 14px;
 
   border:
     1px solid var(--border);
@@ -2268,7 +2536,7 @@ input {
 
   color: var(--muted);
 
-  font-size: 8px;
+  font-size: 12px;
 
 }
 
@@ -2280,7 +2548,7 @@ input {
 
   color: var(--brand);
 
-  font-size: 18px;
+  font-size: 19px;
 
 }
 
@@ -2288,6 +2556,8 @@ input {
 .analysis-agent-card small {
 
   color: var(--muted);
+
+  font-size: 11px;
 
 }
 
@@ -2308,7 +2578,7 @@ input {
 
 .overall-insight-card {
 
-  padding: 16px;
+  padding: 17px;
 
   border:
     1px solid var(--border);
@@ -2325,7 +2595,7 @@ input {
   margin:
     6px 0;
 
-  font-size: 12px;
+  font-size: 17px;
 
 }
 
@@ -2336,9 +2606,9 @@ input {
 
   color: var(--muted);
 
-  font-size: 9px;
+  font-size: 13px;
 
-  line-height: 1.5;
+  line-height: 1.6;
 
 }
 
@@ -2347,7 +2617,7 @@ input {
 
   margin-top: 15px;
 
-  padding: 14px;
+  padding: 16px;
 
   border-radius: 9px;
 
@@ -2366,13 +2636,20 @@ input {
 
 .recommendation-card span {
 
-  margin-bottom: 4px;
+  margin-bottom: 5px;
 
   color: var(--brand-mid);
 
-  font-size: 7px;
+  font-size: 11px;
 
   font-weight: 700;
+
+}
+
+
+.recommendation-card strong {
+
+  font-size: 15px;
 
 }
 
@@ -2390,7 +2667,7 @@ input {
 
   margin-top: 17px;
 
-  padding: 17px;
+  padding: 18px;
 
   border-radius: 11px;
 
@@ -2425,6 +2702,8 @@ input {
   margin:
     4px 0;
 
+  font-size: 17px;
+
 }
 
 
@@ -2434,7 +2713,9 @@ input {
 
   color: var(--muted);
 
-  font-size: 9px;
+  font-size: 13px;
+
+  line-height: 1.6;
 
 }
 
@@ -2452,7 +2733,7 @@ input {
 
   color: white;
 
-  font-size: 9px;
+  font-size: 12px;
 
   cursor: pointer;
 
@@ -2465,7 +2746,7 @@ input {
 
 .analysis-section {
 
-  padding: 16px;
+  padding: 17px;
 
   border:
     1px solid var(--border);
@@ -2477,6 +2758,13 @@ input {
 }
 
 
+.analysis-section h3 {
+
+  font-size: 18px;
+
+}
+
+
 .severity-row,
 .location-severity-row,
 .theme-result {
@@ -2484,13 +2772,12 @@ input {
   display: flex;
 
   justify-content: space-between;
-
   align-items: center;
 
   gap: 15px;
 
   padding:
-    13px 0;
+    14px 0;
 
   border-bottom:
     1px solid var(--border);
@@ -2510,15 +2797,24 @@ input {
 }
 
 
+.severity-row strong,
+.location-severity-row strong,
+.theme-result strong {
+
+  font-size: 14px;
+
+}
+
+
 .severity-row > div > span,
 .location-severity-row > div > span,
 .theme-result > div > span {
 
-  margin-top: 3px;
+  margin-top: 4px;
 
   color: var(--muted);
 
-  font-size: 8px;
+  font-size: 12px;
 
 }
 
@@ -2530,7 +2826,7 @@ input {
 
   border-radius: 999px;
 
-  font-size: 8px;
+  font-size: 11px;
 
   font-weight: 700;
 
@@ -2566,7 +2862,7 @@ input {
 
 .theme-meta {
 
-  min-width: 70px;
+  min-width: 80px;
 
   text-align: right;
 
@@ -2575,7 +2871,7 @@ input {
 
 .theme-meta span {
 
-  font-size: 8px;
+  font-size: 11px;
 
 }
 
@@ -2586,7 +2882,7 @@ input {
 
   color: var(--brand);
 
-  font-size: 9px;
+  font-size: 12px;
 
 }
 
@@ -2596,15 +2892,15 @@ input {
   display: grid;
 
   grid-template-columns:
-    42px 1fr 230px;
+    42px 1fr 240px;
 
   align-items: center;
 
-  gap: 15px;
+  gap: 16px;
 
   margin-top: 16px;
 
-  padding: 17px;
+  padding: 19px;
 
   border:
     1px solid #ead1da;
@@ -2654,6 +2950,8 @@ input {
   margin:
     4px 0;
 
+  font-size: 18px;
+
 }
 
 
@@ -2663,16 +2961,16 @@ input {
 
   color: var(--muted);
 
-  font-size: 9px;
+  font-size: 13px;
 
-  line-height: 1.5;
+  line-height: 1.6;
 
 }
 
 
 .intervention-actions {
 
-  padding: 12px;
+  padding: 14px;
 
   border-radius: 9px;
 
@@ -2691,22 +2989,24 @@ input {
 
 .intervention-actions strong {
 
-  margin-bottom: 6px;
+  margin-bottom: 7px;
 
   color: var(--brand);
 
-  font-size: 9px;
+  font-size: 13px;
 
 }
 
 
 .intervention-actions span {
 
-  margin-top: 4px;
+  margin-top: 5px;
 
   color: var(--muted);
 
-  font-size: 8px;
+  font-size: 12px;
+
+  line-height: 1.5;
 
 }
 
@@ -2719,7 +3019,7 @@ input {
 
   margin-bottom: 18px;
 
-  padding: 23px;
+  padding: 24px;
 
   border:
     1px solid #dec5ce;
@@ -2754,7 +3054,7 @@ input {
   margin:
     6px 0;
 
-  font-size: 22px;
+  font-size: 23px;
 
 }
 
@@ -2767,16 +3067,16 @@ input {
 
   color: var(--muted);
 
-  font-size: 10px;
+  font-size: 14px;
 
-  line-height: 1.5;
+  line-height: 1.6;
 
 }
 
 
 .journey-percent {
 
-  min-width: 80px;
+  min-width: 85px;
 
   text-align: center;
 
@@ -2795,7 +3095,7 @@ input {
 
   color: var(--brand);
 
-  font-size: 27px;
+  font-size: 29px;
 
 }
 
@@ -2804,14 +3104,14 @@ input {
 
   color: var(--muted);
 
-  font-size: 8px;
+  font-size: 11px;
 
 }
 
 
 .journey-progress {
 
-  height: 8px;
+  height: 9px;
 
   margin:
     20px 0 26px;
@@ -2855,7 +3155,7 @@ input {
 
 .journey-milestone {
 
-  width: 130px;
+  width: 140px;
 
   text-align: center;
 
@@ -2864,8 +3164,8 @@ input {
 
 .milestone-icon {
 
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
 
   margin:
     0 auto 8px;
@@ -2884,7 +3184,7 @@ input {
 
   color: #aaa;
 
-  font-size: 11px;
+  font-size: 13px;
 
   font-weight: 700;
 
@@ -2901,18 +3201,18 @@ input {
 
 .journey-milestone strong {
 
-  font-size: 9px;
+  font-size: 13px;
 
 }
 
 
 .journey-milestone span {
 
-  margin-top: 3px;
+  margin-top: 4px;
 
   color: var(--muted);
 
-  font-size: 7px;
+  font-size: 11px;
 
 }
 
@@ -2965,7 +3265,7 @@ input {
   width: 50px;
   height: 3px;
 
-  margin-top: 18px;
+  margin-top: 19px;
 
   background: #ded8da;
 
@@ -3002,7 +3302,7 @@ input {
 
   gap: 14px;
 
-  padding: 15px;
+  padding: 16px;
 
   border-radius: 11px;
 
@@ -3041,7 +3341,7 @@ input {
 
   color: var(--brand-mid);
 
-  font-size: 7px;
+  font-size: 11px;
 
   font-weight: 700;
 
@@ -3054,7 +3354,7 @@ input {
 
   margin-top: 3px;
 
-  font-size: 10px;
+  font-size: 14px;
 
 }
 
@@ -3066,7 +3366,9 @@ input {
 
   color: var(--muted);
 
-  font-size: 9px;
+  font-size: 12px;
+
+  line-height: 1.5;
 
 }
 
@@ -3074,7 +3376,7 @@ input {
 .journey-current-task button {
 
   padding:
-    9px 12px;
+    10px 13px;
 
   border: 0;
 
@@ -3084,7 +3386,7 @@ input {
 
   color: white;
 
-  font-size: 9px;
+  font-size: 12px;
 
   cursor: pointer;
 
@@ -3099,11 +3401,20 @@ input {
 
   margin-top: 15px;
 
-  padding: 16px;
+  padding: 17px;
 
   border-radius: 10px;
 
   background: var(--pink-soft);
+
+}
+
+
+.knowledge-gap p {
+
+  font-size: 13px;
+
+  line-height: 1.6;
 
 }
 
@@ -3119,6 +3430,13 @@ input {
 }
 
 
+.knowledge-gap-score strong {
+
+  font-size: 15px;
+
+}
+
+
 .knowledge-gap-score span {
 
   padding:
@@ -3130,7 +3448,7 @@ input {
 
   color: var(--amber);
 
-  font-size: 7px;
+  font-size: 11px;
 
   font-weight: 700;
 
@@ -3164,6 +3482,13 @@ input {
 }
 
 
+.locked-check-card h2 {
+
+  font-size: 22px;
+
+}
+
+
 .locked-check-card p {
 
   max-width: 430px;
@@ -3173,7 +3498,9 @@ input {
 
   color: var(--muted);
 
-  line-height: 1.5;
+  font-size: 14px;
+
+  line-height: 1.6;
 
 }
 
@@ -3186,7 +3513,7 @@ input {
 
   color: var(--brand);
 
-  font-size: 10px;
+  font-size: 13px;
 
 }
 
@@ -3205,6 +3532,8 @@ input {
   background: var(--brand);
 
   color: white;
+
+  font-size: 13px;
 
   cursor: pointer;
 
@@ -3241,6 +3570,8 @@ input {
 
   color: white;
 
+  font-size: 18px;
+
   font-weight: 700;
 
 }
@@ -3261,7 +3592,7 @@ input {
 
   margin-top: 18px;
 
-  padding: 10px;
+  padding: 11px;
 
   border: 0;
 
@@ -3270,6 +3601,8 @@ input {
   background: var(--brand);
 
   color: white;
+
+  font-size: 13px;
 
   cursor: pointer;
 
@@ -3295,8 +3628,8 @@ input {
 
 .onboarding-check {
 
-  width: 25px;
-  height: 25px;
+  width: 27px;
+  height: 27px;
 
   display: flex;
 
@@ -3330,13 +3663,20 @@ input {
 }
 
 
+.onboarding-row strong {
+
+  font-size: 14px;
+
+}
+
+
 .onboarding-row span {
 
   margin-top: 3px;
 
   color: var(--muted);
 
-  font-size: 9px;
+  font-size: 12px;
 
 }
 
@@ -3419,6 +3759,8 @@ input {
 
   color: var(--brand);
 
+  font-size: 15px;
+
 }
 
 
@@ -3428,7 +3770,7 @@ input {
 
   color: var(--muted);
 
-  font-size: 8px;
+  font-size: 11px;
 
 }
 
@@ -3457,14 +3799,14 @@ input {
 
   color: var(--muted);
 
-  font-size: 8px;
+  font-size: 11px;
 
 }
 
 
 .qr-destination strong {
 
-  font-size: 9px;
+  font-size: 12px;
 
 }
 
@@ -3478,13 +3820,29 @@ input {
   margin:
     16px 0;
 
-  padding: 13px;
+  padding: 14px;
 
   text-align: left;
 
   border-radius: 10px;
 
   background: var(--pink-soft);
+
+}
+
+
+.qr-unlock-message strong {
+
+  font-size: 14px;
+
+}
+
+
+.qr-unlock-message p {
+
+  font-size: 12px;
+
+  line-height: 1.5;
 
 }
 
@@ -3579,7 +3937,7 @@ input {
   display: grid;
 
   grid-template-columns:
-    50px 1fr 45px;
+    60px 1fr 50px;
 
   align-items: center;
 
@@ -3587,7 +3945,7 @@ input {
 
   margin-top: 15px;
 
-  font-size: 9px;
+  font-size: 12px;
 
 }
 
@@ -3637,7 +3995,7 @@ input {
   border-bottom:
     1px solid var(--border);
 
-  font-size: 9px;
+  font-size: 12px;
 
 }
 
@@ -3655,6 +4013,8 @@ input {
   margin-top: 3px;
 
   color: var(--muted);
+
+  font-size: 11px;
 
 }
 
@@ -3686,20 +4046,20 @@ input {
 
   color: var(--muted);
 
-  font-size: 8px;
+  font-size: 12px;
 
 }
 
 
 .risk-list {
 
-  padding-left: 19px;
+  padding-left: 20px;
 
   color: var(--muted);
 
   line-height: 1.8;
 
-  font-size: 10px;
+  font-size: 13px;
 
 }
 
@@ -3729,7 +4089,7 @@ input {
 
   color: var(--muted);
 
-  font-size: 8px;
+  font-size: 11px;
 
   font-weight: 700;
 
@@ -3746,7 +4106,7 @@ input {
   border-top:
     1px solid var(--border);
 
-  font-size: 9px;
+  font-size: 12px;
 
 }
 
@@ -3778,7 +4138,7 @@ input {
 
   color: white;
 
-  font-size: 8px;
+  font-size: 11px;
 
   font-weight: 700;
 
@@ -3790,7 +4150,7 @@ input {
   margin:
     28px 0 12px;
 
-  font-size: 16px;
+  font-size: 19px;
 
 }
 
@@ -3843,7 +4203,7 @@ input {
       100px
       75px
       1fr
-      165px;
+      175px;
 
   }
 
@@ -4029,6 +4389,46 @@ input {
 
 @media (max-width: 620px) {
 
+  .login-inner {
+
+    max-width: 100%;
+
+  }
+
+
+  .test-account-header {
+
+    display: none;
+
+  }
+
+
+  .test-account-row {
+
+    grid-template-columns: 1fr;
+
+    gap: 4px;
+
+    padding:
+      12px;
+
+  }
+
+
+  .test-account-row:not(.test-account-header) {
+
+    margin-bottom: 0;
+
+  }
+
+
+  .account-value {
+
+    font-size: 12px;
+
+  }
+
+
   .dashboard-grid.four {
 
     grid-template-columns: 1fr;
@@ -4092,362 +4492,4 @@ input {
 
   }
 
-}
-
-/* =========================================================
-   DEMO READABILITY OVERRIDE
-   Increase text sizes across cards, callouts, side nav,
-   insights and action boxes
-   ========================================================= */
-
-/* Base page readability */
-body {
-  font-size: 15px;
-  line-height: 1.5;
-}
-
-/* Main section titles */
-.page-title,
-.section-title,
-.content-header h1,
-.content-header h2,
-.dashboard-header h1,
-.dashboard-header h2 {
-  font-size: 30px;
-  line-height: 1.2;
-  font-weight: 700;
-}
-
-.section-subtitle,
-.content-header p,
-.dashboard-header p,
-.page-subtitle {
-  font-size: 16px;
-  line-height: 1.6;
-  color: #6b6170;
-}
-
-/* Small uppercase section labels */
-.section-label,
-.eyebrow,
-.card-label,
-.kicker {
-  font-size: 12px;
-  letter-spacing: 0.14em;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-/* Generic cards / boxes */
-.card,
-.dashboard-card,
-.panel-card,
-.insight-card,
-.analysis-card,
-.summary-card,
-.feature-card,
-.callout-card,
-.action-card,
-.training-card,
-.profile-card,
-.metric-card,
-.status-card,
-.box,
-.tile {
-  border-radius: 18px;
-}
-
-/* Card headings */
-.card h3,
-.card h4,
-.dashboard-card h3,
-.dashboard-card h4,
-.panel-card h3,
-.panel-card h4,
-.insight-card h3,
-.insight-card h4,
-.analysis-card h3,
-.analysis-card h4,
-.summary-card h3,
-.summary-card h4,
-.feature-card h3,
-.feature-card h4,
-.callout-card h3,
-.callout-card h4,
-.action-card h3,
-.action-card h4,
-.training-card h3,
-.training-card h4,
-.profile-card h3,
-.profile-card h4,
-.metric-card h3,
-.metric-card h4,
-.status-card h3,
-.status-card h4,
-.box h3,
-.box h4,
-.tile h3,
-.tile h4 {
-  font-size: 20px;
-  line-height: 1.35;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-
-/* Card body text */
-.card p,
-.card li,
-.dashboard-card p,
-.dashboard-card li,
-.panel-card p,
-.panel-card li,
-.insight-card p,
-.insight-card li,
-.analysis-card p,
-.analysis-card li,
-.summary-card p,
-.summary-card li,
-.feature-card p,
-.feature-card li,
-.callout-card p,
-.callout-card li,
-.action-card p,
-.action-card li,
-.training-card p,
-.training-card li,
-.profile-card p,
-.profile-card li,
-.metric-card p,
-.metric-card li,
-.status-card p,
-.status-card li,
-.box p,
-.box li,
-.tile p,
-.tile li {
-  font-size: 15px;
-  line-height: 1.65;
-}
-
-/* Secondary helper text inside boxes */
-.helper-text,
-.support-text,
-.subtext,
-.meta-text,
-.caption,
-.card-meta,
-.muted {
-  font-size: 13px;
-  line-height: 1.5;
-  color: #7b7180;
-}
-
-/* KPI / metric value */
-.metric-value,
-.stat-value,
-.kpi-value,
-.score-value,
-.big-number {
-  font-size: 28px;
-  line-height: 1.1;
-  font-weight: 700;
-}
-
-/* KPI / metric labels */
-.metric-label,
-.stat-label,
-.kpi-label,
-.score-label {
-  font-size: 13px;
-  line-height: 1.4;
-}
-
-/* Sidebar nav */
-.sidebar,
-.sidebar-nav {
-  font-size: 15px;
-}
-
-.sidebar .nav-section-title,
-.nav-group-title,
-.sidebar-heading {
-  font-size: 12px;
-  letter-spacing: 0.14em;
-  font-weight: 700;
-  text-transform: uppercase;
-  margin-bottom: 12px;
-  opacity: 0.75;
-}
-
-.sidebar a,
-.sidebar button,
-.nav-link,
-.nav-item {
-  font-size: 16px;
-  line-height: 1.5;
-  font-weight: 500;
-}
-
-.sidebar .nav-item.active,
-.sidebar .nav-link.active {
-  font-weight: 700;
-}
-
-/* Buttons */
-button,
-.btn,
-.primary-btn,
-.secondary-btn,
-.ghost-btn,
-.action-btn {
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 1.2;
-}
-
-/* Agent animation titles */
-.pipeline-step strong,
-.agent-team-card strong,
-.agent-node strong {
-  font-size: 15px;
-  line-height: 1.35;
-  font-weight: 700;
-}
-
-/* Agent animation helper text */
-.pipeline-step span,
-.agent-team-card span,
-.agent-node span,
-.pipeline-status {
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-/* Agent animation number circles */
-.step-number,
-.agent-number,
-.pipeline-number {
-  font-size: 14px;
-  font-weight: 700;
-}
-
-/* Overall analysis / recommendation / next best action */
-.next-best-action,
-.recommendation-box,
-.overall-analysis-card,
-.overall-insight-card,
-.intervention-focus,
-.knowledge-gap,
-.activation-banner,
-.result-card,
-.priority-box {
-  padding: 20px;
-}
-
-.next-best-action h3,
-.recommendation-box h3,
-.overall-analysis-card h3,
-.overall-insight-card h3,
-.intervention-focus h3,
-.knowledge-gap h3,
-.activation-banner h3,
-.result-card h3,
-.priority-box h3 {
-  font-size: 20px;
-  line-height: 1.35;
-  margin-bottom: 10px;
-}
-
-.next-best-action p,
-.next-best-action li,
-.recommendation-box p,
-.recommendation-box li,
-.overall-analysis-card p,
-.overall-analysis-card li,
-.overall-insight-card p,
-.overall-insight-card li,
-.intervention-focus p,
-.intervention-focus li,
-.knowledge-gap p,
-.knowledge-gap li,
-.activation-banner p,
-.activation-banner li,
-.result-card p,
-.result-card li,
-.priority-box p,
-.priority-box li {
-  font-size: 15px;
-  line-height: 1.65;
-}
-
-/* Tables / severity rows / insights rows */
-table,
-.table,
-.severity-table,
-.intervention-table {
-  font-size: 14px;
-}
-
-table th,
-.table th,
-.severity-table th,
-.intervention-table th {
-  font-size: 13px;
-  font-weight: 700;
-}
-
-table td,
-.table td,
-.severity-table td,
-.intervention-table td,
-.location-severity-row span,
-.severity-row span,
-.theme-result span,
-.intervention-actions span {
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-/* Training timeline / onboarding progression */
-.timeline-item-title,
-.training-step-title,
-.milestone-title {
-  font-size: 16px;
-  font-weight: 700;
-}
-
-.timeline-item-text,
-.training-step-text,
-.milestone-text {
-  font-size: 14px;
-  line-height: 1.55;
-}
-
-.progress-label,
-.deadline-label,
-.status-chip {
-  font-size: 12px;
-  font-weight: 600;
-}
-
-/* Login screen clarity */
-.login-card h1,
-.login-card h2 {
-  font-size: 28px;
-}
-
-.login-card p,
-.login-callout p,
-.login-hint {
-  font-size: 15px;
-  line-height: 1.6;
-}
-
-.login-card label {
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.login-card input {
-  font-size: 15px;
 }
