@@ -2,19 +2,19 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
 
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0"
-  />
+  >
 
   <title>SHARE Lens</title>
 
   <link
     rel="stylesheet"
     href="style.css"
-  />
+  >
 </head>
 
 <body>
@@ -23,71 +23,279 @@
 
     <section class="login-page">
 
-      <div class="login-card">
+      <div class="login-panel">
 
-        <div class="brand-mark">
-          SL
-        </div>
+        <div class="login-inner">
 
-        <div class="brand-block">
+          <div class="login-brand">
 
-          <h1>
-            SHARE Lens
-          </h1>
+            <div class="brand-mark">
+              SL
+            </div>
 
-          <p>
-            See. Understand. Act.
-          </p>
+            <div>
 
-        </div>
+              <h1>
+                SHARE Lens
+              </h1>
 
-        <div class="login-content">
+              <p>
+                See. Understand. Act.
+              </p>
 
-          <span class="eyebrow">
-            SHARE
-          </span>
+            </div>
 
-          <h2>
-            Welcome to SHARE Lens
-          </h2>
+          </div>
 
-          <p class="description">
-            One connected view of Service Delivery,
-            Training & Knowledge and the SHARE Ambassador Program.
-          </p>
 
-          <button
-            class="primary-button"
-            onclick="showAmbassador()"
-          >
-            Continue with SSO
-          </button>
+          <div class="login-heading">
 
-          <p class="sso-note">
-            Staff ID / Microsoft Entra ID
-          </p>
+            <span class="section-label">
+              SHARE
+            </span>
 
-        </div>
+            <h2>
+              Welcome to SHARE Lens
+            </h2>
 
-        <div class="demo-access">
+            <p>
+              Service Delivery, Training & Knowledge
+              and the Ambassador Program in one connected platform.
+            </p>
 
-          <span>
-            Prototype role access
-          </span>
+          </div>
 
-          <div class="demo-buttons">
 
-            <button onclick="showAmbassador()">
-              Ambassador
+          <div class="login-method-card">
+
+            <div class="login-method-heading">
+
+              <strong>
+                Sign in to SHARE Lens
+              </strong>
+
+              <span>
+                Use your SHARE Lens credentials
+              </span>
+
+            </div>
+
+
+            <label>
+              Email or Staff ID
+            </label>
+
+            <input
+              id="login-id"
+              type="text"
+              placeholder="Email address or Staff ID"
+            >
+
+
+            <label>
+              Password
+            </label>
+
+            <input
+              id="login-password"
+              type="password"
+              placeholder="Password"
+            >
+
+
+            <div
+              id="login-error"
+              class="login-error"
+            ></div>
+
+
+            <button
+              class="primary-button"
+              onclick="signIn()"
+            >
+              Sign in
             </button>
 
-            <button onclick="showManager()">
-              BU Lead / Trainer
+
+            <div class="login-or">
+
+              <span></span>
+
+              <strong>
+                OR
+              </strong>
+
+              <span></span>
+
+            </div>
+
+
+            <button
+              class="sso-button"
+              onclick="continueWithSSO()"
+            >
+
+              <div class="microsoft-icon">
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+              </div>
+
+              Continue with Microsoft SSO
+
             </button>
 
-            <button onclick="showServiceDelivery()">
-              Service Delivery
-            </button>
+
+            <div class="login-callout">
+
+              <strong>
+                Prototype authentication
+              </strong>
+
+              <p>
+                Ambassador access is demonstrated using Staff ID.
+                Corporate roles use Microsoft Entra ID / SSO.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="persona-section">
+
+            <div class="persona-title">
+
+              <div>
+
+                <strong>
+                  Prototype Personas
+                </strong>
+
+                <span>
+                  Select a persona to load its credentials
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <div class="persona-grid">
+
+              <button
+                class="persona-card"
+                onclick="selectPersona('ambassador')"
+              >
+
+                <div class="persona-avatar">
+                  LH
+                </div>
+
+                <div>
+
+                  <strong>
+                    Ambassador
+                  </strong>
+
+                  <span>
+                    Layla Haddad
+                  </span>
+
+                  <small>
+                    Staff ID · 100245
+                  </small>
+
+                </div>
+
+              </button>
+
+
+              <button
+                class="persona-card"
+                onclick="selectPersona('manager')"
+              >
+
+                <div class="persona-avatar">
+                  AS
+                </div>
+
+                <div>
+
+                  <strong>
+                    BU Lead / Trainer
+                  </strong>
+
+                  <span>
+                    Ahmed Salah
+                  </span>
+
+                  <small>
+                    Entertainment UAE
+                  </small>
+
+                </div>
+
+              </button>
+
+
+              <button
+                class="persona-card"
+                onclick="selectPersona('service')"
+              >
+
+                <div class="persona-avatar">
+                  MZ
+                </div>
+
+                <div>
+
+                  <strong>
+                    Service Delivery
+                  </strong>
+
+                  <span>
+                    Marian Zakhary
+                  </span>
+
+                  <small>
+                    Group View
+                  </small>
+
+                </div>
+
+              </button>
+
+
+              <button
+                class="persona-card"
+                onclick="selectPersona('admin')"
+              >
+
+                <div class="persona-avatar">
+                  PA
+                </div>
+
+                <div>
+
+                  <strong>
+                    Platform Admin
+                  </strong>
+
+                  <span>
+                    System Administrator
+                  </span>
+
+                  <small>
+                    Platform Configuration
+                  </small>
+
+                </div>
+
+              </button>
+
+            </div>
 
           </div>
 
@@ -95,18 +303,19 @@
 
       </div>
 
+
       <div class="login-visual">
 
         <div class="visual-content">
 
-          <span class="visual-label">
+          <span>
             SHARE LENS
           </span>
 
           <h2>
             One view.<br>
             Three pillars.<br>
-            Better action.
+            Intelligent action.
           </h2>
 
           <p>
@@ -120,6 +329,7 @@
     </section>
 
   </div>
+
 
   <script
     type="module"
