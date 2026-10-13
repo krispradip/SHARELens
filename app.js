@@ -2348,7 +2348,7 @@ function managerGenericPage(
       )}
 
       ${genericPerformanceRow(
-        "Dubai Festival City",
+        "City Centre Deira",
         "74%",
         "Attention"
       )}
@@ -4527,7 +4527,7 @@ function showManagerAnalysisResult() {
 
 
         ${locationSeverityRow(
-          "Dubai Festival City",
+          "City Centre Deira",
           "72%",
           "Critical",
           "critical"
@@ -4565,7 +4565,7 @@ function showManagerAnalysisResult() {
         </span>
 
         <h3>
-          Dubai Festival City
+          City Centre Deira
         </h3>
 
         <p>
@@ -4677,7 +4677,7 @@ function showServiceAnalysisResult() {
 
 
         ${locationSeverityRow(
-          "Dubai Festival City",
+          "City Centre Deira",
           "Entertainment",
           "Critical",
           "critical"
@@ -4722,7 +4722,7 @@ function showServiceAnalysisResult() {
         </span>
 
         <h3>
-          Dubai Festival City
+          City Centre Deira
         </h3>
 
         <p>
