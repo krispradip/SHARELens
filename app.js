@@ -4684,7 +4684,7 @@ function showServiceAnalysisResult() {
         )}
 
         ${locationSeverityRow(
-          "Riyadh Park",
+          "Mall of Egypt",
           "Retail",
           "High",
           "high"
