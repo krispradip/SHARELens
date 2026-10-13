@@ -13,6 +13,9 @@
   --amber: #956000;
   --amber-soft: #fff3df;
 
+  --red: #b42318;
+  --red-soft: #fdecec;
+
   --text: #1d1920;
   --muted: #77717a;
 
@@ -32,7 +35,6 @@
 html,
 body {
   margin: 0;
-
   min-height: 100%;
 }
 
@@ -46,7 +48,6 @@ body {
     sans-serif;
 
   color: var(--text);
-
   background: var(--background);
 
 }
@@ -54,9 +55,7 @@ body {
 
 button,
 input {
-
   font-family: inherit;
-
 }
 
 
@@ -82,7 +81,6 @@ input {
 .login-panel {
 
   display: flex;
-
   justify-content: center;
 
   padding: 42px;
@@ -93,7 +91,6 @@ input {
 .login-inner {
 
   width: 100%;
-
   max-width: 505px;
 
 }
@@ -102,12 +99,11 @@ input {
 .login-brand {
 
   display: flex;
-
   align-items: center;
 
   gap: 13px;
 
-  margin-bottom: 38px;
+  margin-bottom: 42px;
 
 }
 
@@ -194,9 +190,9 @@ input {
 
 .login-method-card {
 
-  margin-top: 24px;
+  margin-top: 26px;
 
-  padding: 20px;
+  padding: 22px;
 
   border:
     1px solid var(--border);
@@ -262,7 +258,6 @@ input {
 .login-method-card input {
 
   width: 100%;
-
   height: 44px;
 
   padding:
@@ -295,7 +290,7 @@ input {
 
   padding-top: 6px;
 
-  color: #b42318;
+  color: var(--red);
 
   font-size: 10px;
 
@@ -312,7 +307,6 @@ input {
 .primary-button {
 
   width: 100%;
-
   height: 45px;
 
   border: 0;
@@ -349,7 +343,7 @@ input {
   gap: 12px;
 
   margin:
-    17px 0;
+    18px 0;
 
 }
 
@@ -375,13 +369,11 @@ input {
 .sso-button {
 
   width: 100%;
-
   height: 45px;
 
   display: flex;
 
   align-items: center;
-
   justify-content: center;
 
   gap: 10px;
@@ -438,7 +430,7 @@ input {
 
   margin-top: 17px;
 
-  padding: 11px 13px;
+  padding: 12px 13px;
 
   border-radius: 8px;
 
@@ -472,162 +464,6 @@ input {
 }
 
 
-.persona-section {
-
-  margin-top: 24px;
-
-}
-
-
-.persona-title {
-
-  display: flex;
-
-  justify-content: space-between;
-
-  margin-bottom: 11px;
-
-}
-
-
-.persona-title strong,
-.persona-title span {
-
-  display: block;
-
-}
-
-
-.persona-title strong {
-
-  font-size: 11px;
-
-}
-
-
-.persona-title span {
-
-  margin-top: 2px;
-
-  color: var(--muted);
-
-  font-size: 9px;
-
-}
-
-
-.persona-grid {
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(2, 1fr);
-
-  gap: 9px;
-
-}
-
-
-.persona-card {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 9px;
-
-  padding: 11px;
-
-  text-align: left;
-
-  border:
-    1px solid var(--border);
-
-  border-radius: 9px;
-
-  background: white;
-
-  cursor: pointer;
-
-  transition:
-    0.2s ease;
-
-}
-
-
-.persona-card:hover,
-.persona-card.selected {
-
-  border-color: var(--brand-mid);
-
-  background: var(--pink-soft);
-
-}
-
-
-.persona-avatar {
-
-  width: 37px;
-  height: 37px;
-
-  flex-shrink: 0;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 50%;
-
-  background: var(--brand);
-
-  color: white;
-
-  font-size: 9px;
-
-  font-weight: 700;
-
-}
-
-
-.persona-card strong,
-.persona-card span,
-.persona-card small {
-
-  display: block;
-
-}
-
-
-.persona-card strong {
-
-  font-size: 10px;
-
-}
-
-
-.persona-card span {
-
-  margin-top: 2px;
-
-  color: var(--muted);
-
-  font-size: 9px;
-
-}
-
-
-.persona-card small {
-
-  margin-top: 2px;
-
-  color: #999;
-
-  font-size: 8px;
-
-}
-
-
 .login-visual {
 
   min-height: 100vh;
@@ -647,7 +483,7 @@ input {
   background:
     radial-gradient(
       circle at 80% 18%,
-      rgba(255,255,255,0.18),
+      rgba(255, 255, 255, 0.18),
       transparent 30%
     ),
     linear-gradient(
@@ -674,7 +510,7 @@ input {
 
   border:
     1px solid
-    rgba(255,255,255,0.09);
+    rgba(255, 255, 255, 0.09);
 
   border-radius: 50%;
 
@@ -738,7 +574,6 @@ input {
   display: flex;
 
   align-items: center;
-
   justify-content: space-between;
 
   padding:
@@ -924,9 +759,7 @@ input {
     235px 1fr;
 
   min-height:
-    calc(
-      100vh - 72px
-    );
+    calc(100vh - 72px);
 
 }
 
@@ -954,7 +787,7 @@ input {
     20px 11px 8px;
 
   color:
-    rgba(255,255,255,0.44);
+    rgba(255, 255, 255, 0.44);
 
   font-size: 8px;
 
@@ -977,7 +810,7 @@ input {
   border-radius: 7px;
 
   color:
-    rgba(255,255,255,0.8);
+    rgba(255, 255, 255, 0.8);
 
   font-size: 10px;
 
@@ -989,7 +822,7 @@ input {
 .nav-item:hover {
 
   background:
-    rgba(255,255,255,0.08);
+    rgba(255, 255, 255, 0.08);
 
 }
 
@@ -1075,6 +908,13 @@ input {
 
   grid-template-columns:
     repeat(4, 1fr);
+
+}
+
+
+.dashboard-grid.no-bottom {
+
+  margin-bottom: 0;
 
 }
 
@@ -1393,7 +1233,7 @@ input {
 
 
 /* =========================================================
-   HOME ACTIVATION BANNER
+   ACTIVATION HOME
 ========================================================= */
 
 .activation-banner {
@@ -1401,7 +1241,6 @@ input {
   display: flex;
 
   justify-content: space-between;
-
   align-items: center;
 
   gap: 30px;
@@ -1563,7 +1402,136 @@ input {
 
 
 /* =========================================================
-   INTERACTIONS + AI
+   OVERALL ANALYSIS CTA
+========================================================= */
+
+.overall-analysis-card {
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 30px;
+
+  margin-bottom: 17px;
+
+  padding: 22px;
+
+  border-radius: 14px;
+
+  color: white;
+
+  background:
+    linear-gradient(
+      120deg,
+      var(--brand),
+      #75133a
+    );
+
+}
+
+
+.overall-analysis-card
+.section-label {
+
+  color:
+    rgba(255, 255, 255, 0.65);
+
+}
+
+
+.overall-analysis-card h2 {
+
+  margin:
+    6px 0;
+
+}
+
+
+.overall-analysis-card p {
+
+  max-width: 690px;
+
+  margin: 0;
+
+  color:
+    rgba(255, 255, 255, 0.74);
+
+  font-size: 10px;
+
+  line-height: 1.5;
+
+}
+
+
+.analyse-overall-button {
+
+  min-width: 245px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding:
+    14px 18px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.4);
+
+  border-radius: 10px;
+
+  background: white;
+
+  color: var(--brand);
+
+  text-align: left;
+
+  cursor: pointer;
+
+}
+
+
+.analyse-overall-button strong,
+.analyse-overall-button small {
+
+  display: block;
+
+}
+
+
+.analyse-overall-button strong {
+
+  font-size: 11px;
+
+}
+
+
+.analyse-overall-button small {
+
+  margin-top: 3px;
+
+  color: var(--muted);
+
+  font-size: 8px;
+
+}
+
+
+.overall-ai-icon {
+
+  font-size: 22px;
+
+  color: var(--accent);
+
+}
+
+
+/* =========================================================
+   INTERACTION TABLE
 ========================================================= */
 
 .table-heading {
@@ -1587,20 +1555,10 @@ input {
 }
 
 
-.ai-team-label {
+.table-heading p {
 
-  padding:
-    7px 10px;
-
-  border-radius: 999px;
-
-  background: var(--pink-soft);
-
-  color: var(--brand);
-
-  font-size: 8px;
-
-  font-weight: 700;
+  margin:
+    4px 0 0;
 
 }
 
@@ -1719,12 +1677,16 @@ input {
   margin-top: 2px;
 
   color:
-    rgba(255,255,255,0.72);
+    rgba(255, 255, 255, 0.72);
 
   font-size: 7px;
 
 }
 
+
+/* =========================================================
+   AGENT TEAM DISPLAY
+========================================================= */
 
 .agent-demo {
 
@@ -1733,41 +1695,55 @@ input {
 }
 
 
-.agent-demo-heading p {
+.agent-team-strip {
 
-  margin-top: 5px;
+  width: 100%;
+
+  display: grid;
+
+  gap: 14px;
+
+  margin:
+    22px 0;
 
 }
 
 
-.agent-team-strip {
+.agent-team-strip.ambassador-team {
 
-  display: flex;
+  grid-template-columns:
+    repeat(4, 1fr);
 
-  align-items: center;
+}
 
-  margin:
-    18px 0;
 
-  overflow-x: auto;
+.agent-team-strip.manager-team {
 
-  padding:
-    5px 0;
+  grid-template-columns:
+    repeat(5, 1fr);
+
+}
+
+
+.agent-team-strip.service-team {
+
+  grid-template-columns:
+    repeat(6, 1fr);
 
 }
 
 
 .agent-team-card {
 
-  min-width: 155px;
+  min-width: 0;
 
   display: flex;
 
   align-items: center;
 
-  gap: 9px;
+  gap: 10px;
 
-  padding: 11px;
+  padding: 14px;
 
   border:
     1px solid var(--border);
@@ -1781,8 +1757,8 @@ input {
 
 .agent-team-number {
 
-  width: 29px;
-  height: 29px;
+  width: 32px;
+  height: 32px;
 
   flex-shrink: 0;
 
@@ -1821,23 +1797,11 @@ input {
 
 .agent-team-card span {
 
-  margin-top: 2px;
+  margin-top: 3px;
 
   color: var(--muted);
 
   font-size: 7px;
-
-}
-
-
-.agent-team-arrow {
-
-  padding:
-    0 9px;
-
-  color: var(--brand-mid);
-
-  font-weight: 700;
 
 }
 
@@ -1860,47 +1824,24 @@ input {
 }
 
 
-.selected-interaction-card {
-
-  display: flex;
-
-  justify-content: space-between;
-
-  align-items: center;
-
-}
-
-
-.selected-interaction-card h3 {
+.selected-interaction-placeholder h3 {
 
   margin:
-    4px 0 0;
+    5px 0 3px;
 
 }
 
 
-.selected-interaction-meta {
+.selected-interaction-placeholder p {
 
-  display: flex;
-
-  gap: 8px;
+  margin: 0;
 
 }
 
 
-.selected-interaction-meta span {
-
-  padding:
-    6px 9px;
-
-  border-radius: 999px;
-
-  background: #f3f1f2;
-
-  font-size: 8px;
-
-}
-
+/* =========================================================
+   AGENT ANIMATION
+========================================================= */
 
 .agent-output {
 
@@ -1930,10 +1871,6 @@ input {
 
 }
 
-
-/* =========================================================
-   AI PIPELINE
-========================================================= */
 
 .pipeline-heading {
 
@@ -1985,7 +1922,6 @@ input {
     10px 0;
 
   overflow-x: auto;
-
   overflow-y: visible;
 
 }
@@ -2081,7 +2017,7 @@ input {
 
 .pipeline-step.waiting {
 
-  opacity: 0.5;
+  opacity: 0.45;
 
 }
 
@@ -2176,7 +2112,7 @@ input {
 
     box-shadow:
       0 0 0 3px
-      rgba(123,21,60,0.07);
+      rgba(123, 21, 60, 0.07);
 
   }
 
@@ -2184,7 +2120,7 @@ input {
 
     box-shadow:
       0 0 0 8px
-      rgba(123,21,60,0.04);
+      rgba(123, 21, 60, 0.04);
 
   }
 
@@ -2192,7 +2128,7 @@ input {
 
     box-shadow:
       0 0 0 3px
-      rgba(123,21,60,0.07);
+      rgba(123, 21, 60, 0.07);
 
   }
 
@@ -2224,7 +2160,7 @@ input {
 
 
 /* =========================================================
-   AI RESULT
+   ANALYSIS RESULTS
 ========================================================= */
 
 .analysis-result-header {
@@ -2232,7 +2168,6 @@ input {
   display: flex;
 
   justify-content: space-between;
-
   align-items: center;
 
 }
@@ -2357,9 +2292,60 @@ input {
 }
 
 
+.overall-insight-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: 12px;
+
+  margin-top: 18px;
+
+}
+
+
+.overall-insight-card {
+
+  padding: 16px;
+
+  border:
+    1px solid var(--border);
+
+  border-radius: 10px;
+
+  background: white;
+
+}
+
+
+.overall-insight-card h3 {
+
+  margin:
+    6px 0;
+
+  font-size: 12px;
+
+}
+
+
+.overall-insight-card p {
+
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 9px;
+
+  line-height: 1.5;
+
+}
+
+
 .recommendation-card {
 
-  margin-top: 13px;
+  margin-top: 15px;
 
   padding: 14px;
 
@@ -2391,8 +2377,342 @@ input {
 }
 
 
+.overall-next-action {
+
+  display: grid;
+
+  grid-template-columns:
+    45px 1fr auto;
+
+  align-items: center;
+
+  gap: 15px;
+
+  margin-top: 17px;
+
+  padding: 17px;
+
+  border-radius: 11px;
+
+  background: var(--pink-soft);
+
+}
+
+
+.next-action-icon {
+
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: var(--brand);
+
+  color: white;
+
+  font-size: 18px;
+
+}
+
+
+.overall-next-action h3 {
+
+  margin:
+    4px 0;
+
+}
+
+
+.overall-next-action p {
+
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 9px;
+
+}
+
+
+.overall-next-action button {
+
+  padding:
+    10px 13px;
+
+  border: 0;
+
+  border-radius: 8px;
+
+  background: var(--brand);
+
+  color: white;
+
+  font-size: 9px;
+
+  cursor: pointer;
+
+}
+
+
 /* =========================================================
-   ACTIVATION / GAMIFIED TRAINING
+   MANAGER / SERVICE RESULT
+========================================================= */
+
+.analysis-section {
+
+  padding: 16px;
+
+  border:
+    1px solid var(--border);
+
+  border-radius: 11px;
+
+  background: white;
+
+}
+
+
+.severity-row,
+.location-severity-row,
+.theme-result {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 15px;
+
+  padding:
+    13px 0;
+
+  border-bottom:
+    1px solid var(--border);
+
+}
+
+
+.severity-row strong,
+.severity-row span,
+.location-severity-row strong,
+.location-severity-row span,
+.theme-result strong,
+.theme-result span {
+
+  display: block;
+
+}
+
+
+.severity-row > div > span,
+.location-severity-row > div > span,
+.theme-result > div > span {
+
+  margin-top: 3px;
+
+  color: var(--muted);
+
+  font-size: 8px;
+
+}
+
+
+.severity-pill {
+
+  padding:
+    6px 9px;
+
+  border-radius: 999px;
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+}
+
+
+.severity-pill.medium {
+
+  background: var(--amber-soft);
+
+  color: var(--amber);
+
+}
+
+
+.severity-pill.high {
+
+  background: #fff0e5;
+
+  color: #b54708;
+
+}
+
+
+.severity-pill.critical {
+
+  background: var(--red-soft);
+
+  color: var(--red);
+
+}
+
+
+.theme-meta {
+
+  min-width: 70px;
+
+  text-align: right;
+
+}
+
+
+.theme-meta span {
+
+  font-size: 8px;
+
+}
+
+
+.theme-meta strong {
+
+  margin-top: 3px;
+
+  color: var(--brand);
+
+  font-size: 9px;
+
+}
+
+
+.intervention-focus {
+
+  display: grid;
+
+  grid-template-columns:
+    42px 1fr 230px;
+
+  align-items: center;
+
+  gap: 15px;
+
+  margin-top: 16px;
+
+  padding: 17px;
+
+  border:
+    1px solid #ead1da;
+
+  border-radius: 11px;
+
+  background:
+    linear-gradient(
+      135deg,
+      white,
+      var(--pink-soft)
+    );
+
+}
+
+
+.severity-marker {
+
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  font-size: 13px;
+
+  font-weight: 800;
+
+}
+
+
+.severity-marker.critical {
+
+  background: var(--red);
+
+  color: white;
+
+}
+
+
+.intervention-focus h3 {
+
+  margin:
+    4px 0;
+
+}
+
+
+.intervention-focus p {
+
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 9px;
+
+  line-height: 1.5;
+
+}
+
+
+.intervention-actions {
+
+  padding: 12px;
+
+  border-radius: 9px;
+
+  background: white;
+
+}
+
+
+.intervention-actions strong,
+.intervention-actions span {
+
+  display: block;
+
+}
+
+
+.intervention-actions strong {
+
+  margin-bottom: 6px;
+
+  color: var(--brand);
+
+  font-size: 9px;
+
+}
+
+
+.intervention-actions span {
+
+  margin-top: 4px;
+
+  color: var(--muted);
+
+  font-size: 8px;
+
+}
+
+
+/* =========================================================
+   GAMIFIED TRAINING
 ========================================================= */
 
 .activation-journey {
@@ -2526,7 +2846,6 @@ input {
   display: flex;
 
   align-items: flex-start;
-
   justify-content: center;
 
   margin-bottom: 24px;
@@ -2621,7 +2940,7 @@ input {
 
   box-shadow:
     0 0 0 5px
-    rgba(213,21,91,0.06);
+    rgba(213, 21, 91, 0.06);
 
 }
 
@@ -2644,7 +2963,6 @@ input {
 .journey-connector {
 
   width: 50px;
-
   height: 3px;
 
   margin-top: 18px;
@@ -3080,7 +3398,7 @@ input {
   border-radius: 7px;
 
   background:
-    rgba(255,255,255,0.92);
+    rgba(255, 255, 255, 0.92);
 
   backdrop-filter:
     blur(4px);
@@ -3188,14 +3506,6 @@ input {
   background: #fff0bd;
 
   color: #b37a00;
-
-}
-
-
-.qr-unlock-message p {
-
-  margin:
-    4px 0 0;
 
 }
 
@@ -3489,6 +3799,26 @@ input {
    RESPONSIVE
 ========================================================= */
 
+@media (max-width: 1250px) {
+
+  .agent-team-strip.manager-team {
+
+    grid-template-columns:
+      repeat(3, 1fr);
+
+  }
+
+
+  .agent-team-strip.service-team {
+
+    grid-template-columns:
+      repeat(3, 1fr);
+
+  }
+
+}
+
+
 @media (max-width: 1180px) {
 
   .dashboard-grid.four {
@@ -3579,6 +3909,16 @@ input {
   }
 
 
+  .agent-team-strip.ambassador-team,
+  .agent-team-strip.manager-team,
+  .agent-team-strip.service-team {
+
+    grid-template-columns:
+      repeat(2, 1fr);
+
+  }
+
+
   .journey-milestones {
 
     overflow-x: auto;
@@ -3629,19 +3969,76 @@ input {
 
   }
 
-}
+
+  .overall-analysis-card {
+
+    display: block;
+
+  }
 
 
-@media (max-width: 620px) {
+  .analyse-overall-button {
 
-  .persona-grid {
+    width: 100%;
+
+    margin-top: 15px;
+
+  }
+
+
+  .overall-insight-grid {
 
     grid-template-columns: 1fr;
 
   }
 
 
+  .overall-next-action {
+
+    grid-template-columns:
+      40px 1fr;
+
+  }
+
+
+  .overall-next-action button {
+
+    grid-column:
+      1 / -1;
+
+  }
+
+
+  .intervention-focus {
+
+    grid-template-columns:
+      40px 1fr;
+
+  }
+
+
+  .intervention-actions {
+
+    grid-column:
+      1 / -1;
+
+  }
+
+}
+
+
+@media (max-width: 620px) {
+
   .dashboard-grid.four {
+
+    grid-template-columns: 1fr;
+
+  }
+
+
+  .agent-team-strip.ambassador-team,
+  .agent-team-strip.manager-team,
+  .agent-team-strip.service-team {
 
     grid-template-columns: 1fr;
 
