@@ -10,7 +10,7 @@ let selectedTrainingId = null;
 
 
 /* =========================================================
-   SHARED PERFORMANCE PERIOD
+   SHARED PERIOD
 ========================================================= */
 
 const currentPerformancePeriod = {
@@ -93,7 +93,6 @@ const interactions = [
     trainingTarget: "refund",
     trainingTitle: "Refund Handling Refresher",
     knowledgeTarget: "Refund Handling Knowledge Check",
-
     transcript: `
 Customer: I cancelled my booking yesterday but I still have not received my refund.
 Agent: Let me check that for you.
@@ -119,7 +118,6 @@ Agent: It depends on the bank.
     trainingTarget: "refund",
     trainingTitle: "Refund Handling Refresher",
     knowledgeTarget: "Refund Handling Knowledge Check",
-
     transcript: `
 Customer: My booking was cancelled. When will I receive the refund?
 Agent: I can check that for you.
@@ -142,7 +140,6 @@ Customer: Thank you.
     trainingTarget: "refund",
     trainingTitle: "Refund Handling Refresher",
     knowledgeTarget: "Refund Handling Knowledge Check",
-
     transcript: `
 Customer: I cancelled my tickets and need to know when the refund will arrive.
 Agent: I can help with that.
@@ -369,9 +366,7 @@ const navigation = {
 
     {
       title: "",
-      items: [
-        ["home", "Home"]
-      ]
+      items: [["home", "Home"]]
     },
 
     {
@@ -407,9 +402,7 @@ const navigation = {
 
     {
       title: "",
-      items: [
-        ["home", "Home"]
-      ]
+      items: [["home", "Home"]]
     },
 
     {
@@ -446,9 +439,7 @@ const navigation = {
 
     {
       title: "",
-      items: [
-        ["home", "Platform Overview"]
-      ]
+      items: [["home", "Platform Overview"]]
     },
 
     {
@@ -625,9 +616,7 @@ function loginAsRole(role) {
 
 
 function signOut() {
-
   location.reload();
-
 }
 
 
@@ -727,7 +716,6 @@ function sidebar() {
             : ""
         }
 
-
         ${group.items.map(item => `
 
           <div
@@ -780,6 +768,25 @@ function renderShell(content) {
 
 function ambassadorHome() {
 
+  const user =
+    prototypeUsers.ambassador;
+
+  const achievement =
+    Math.round(
+      (
+        user.shareMembersOnboarded /
+        user.shareMemberTarget
+      ) * 100
+    );
+
+  const remaining =
+    Math.max(
+      user.shareMemberTarget -
+      user.shareMembersOnboarded,
+      0
+    );
+
+
   return `
     ${pageTitle(
       "MY SHARE",
@@ -791,31 +798,34 @@ function ambassadorHome() {
     ${ambassadorProgress()}
 
 
-    <div class="dashboard-grid four">
+    <div class="home-kpi-grid">
 
-      ${metricCard(
+      ${homeMetricCard(
         "Performance Score",
         "86%",
-        "On Track"
+        "On Track",
+        "performance"
       )}
 
-      ${metricCard(
+      ${homeMetricCard(
         "Knowledge Score",
         "94%",
-        "On Track"
+        "Strong",
+        "knowledge"
       )}
 
-      ${metricCard(
-        "Mandatory Training",
+      ${homeMetricCard(
+        "Training",
         "100%",
-        "Completed"
+        "Completed",
+        "training"
       )}
 
-      ${clickableMetricCard(
-        "Open Actions",
-        "2",
-        "Review actions",
-        "performance"
+      ${homeAcquisitionCard(
+        user.shareMembersOnboarded,
+        user.shareMemberTarget,
+        achievement,
+        remaining
       )}
 
     </div>
@@ -900,13 +910,13 @@ function ambassadorHome() {
         )}
 
         ${profileLine(
-          "Members Onboarded",
-          "42"
+          "Personal QR Code",
+          "Active"
         )}
 
         ${profileLine(
-          "Personal QR Code",
-          "Active"
+          "Brand",
+          "VOX Cinemas"
         )}
 
         ${profileLine(
@@ -924,6 +934,111 @@ function ambassadorHome() {
       </section>
 
     </div>
+  `;
+
+}
+
+
+function homeMetricCard(
+  title,
+  value,
+  detail,
+  target
+) {
+
+  return `
+    <section
+      class="dashboard-card home-metric-card"
+      onclick="navigateTo('${target}')"
+    >
+
+      <span class="home-metric-label">
+        ${title}
+      </span>
+
+      <strong>
+        ${value}
+      </strong>
+
+      <div class="home-metric-footer">
+
+        <span class="metric-positive">
+          ${detail}
+        </span>
+
+        <span class="metric-link">
+          View →
+        </span>
+
+      </div>
+
+    </section>
+  `;
+
+}
+
+
+function homeAcquisitionCard(
+  onboarded,
+  target,
+  achievement,
+  remaining
+) {
+
+  return `
+    <section
+      class="dashboard-card home-metric-card acquisition-home-card"
+      onclick="navigateTo('status')"
+    >
+
+      <div class="home-acquisition-top">
+
+        <span class="home-metric-label">
+          SHARE Acquisition
+        </span>
+
+        <span class="home-acquisition-percent">
+          ${achievement}%
+        </span>
+
+      </div>
+
+
+      <strong class="home-acquisition-value">
+        ${onboarded}
+        <span>
+          / ${target}
+        </span>
+      </strong>
+
+      <div class="home-acquisition-caption">
+        Members onboarded
+      </div>
+
+
+      <div class="mini-progress-track">
+
+        <div
+          class="mini-progress-fill"
+          style="--home-progress:${achievement}%"
+        ></div>
+
+      </div>
+
+
+      <div class="home-acquisition-footer">
+
+        <span>
+          ${remaining} members to target
+        </span>
+
+        <span class="metric-link">
+          View progress →
+        </span>
+
+      </div>
+
+    </section>
   `;
 
 }
@@ -1033,7 +1148,7 @@ function ambassadorPerformance() {
     ${pageTitle(
       "PERFORMANCE",
       "My Performance",
-      "See how you're performing and where to focus next."
+      "Understand your overall performance and the interactions behind it."
     )}
 
 
@@ -1042,7 +1157,7 @@ function ambassadorPerformance() {
       <div>
 
         <span>
-          Assessment period
+          Performance period
         </span>
 
         <strong>
@@ -1058,30 +1173,69 @@ function ambassadorPerformance() {
     </div>
 
 
-    <div class="dashboard-grid four">
+    <section class="performance-summary-intro">
 
-      ${metricCard(
+      <div>
+
+        <span class="section-label">
+          OVERALL PERFORMANCE
+        </span>
+
+        <h2>
+          Performance Score
+        </h2>
+
+        <p>
+          Your overall score is based on all assessed interactions in the selected period.
+          Recent interactions below are shown to help you understand individual strengths
+          and opportunities.
+        </p>
+
+      </div>
+
+      <div class="headline-performance-score">
+
+        <strong>
+          86%
+        </strong>
+
+        <span>
+          On Track
+        </span>
+
+      </div>
+
+    </section>
+
+
+    <div class="dashboard-grid four performance-diagnostics">
+
+      ${performanceMetricCard(
         "Performance Score",
         "86%",
-        "On Track"
+        "Overall outcome",
+        "Overall score for the selected period."
       )}
 
-      ${metricCard(
-        "SOP Compliance",
+      ${performanceMetricCard(
+        "Service Quality",
+        "86%",
+        "Evaluation",
+        "Communication, issue understanding and resolution quality."
+      )}
+
+      ${performanceMetricCard(
+        "SOP Adherence",
         "92%",
-        "On Track"
+        "Process",
+        "How consistently required service steps were followed."
       )}
 
-      ${metricCard(
+      ${performanceMetricCard(
         "Compliance",
         "100%",
-        "No critical failures"
-      )}
-
-      ${metricCard(
-        "Open Actions",
-        "2",
-        "Review required"
+        "Controls",
+        "Mandatory and critical controls completed correctly."
       )}
 
     </div>
@@ -1100,7 +1254,8 @@ function ambassadorPerformance() {
         </h3>
 
         <p>
-          Review your score and analyse interactions where there is an opportunity to strengthen.
+          These are recent assessed interactions and are not the full population used
+          to calculate your overall Performance Score.
         </p>
 
       </div>
@@ -1136,12 +1291,49 @@ function ambassadorPerformance() {
 
 
       ${interactions
-        .map(interaction =>
-          interactionBlock(
-            interaction
-          )
+        .map(
+          interaction =>
+            interactionBlock(
+              interaction
+            )
         )
         .join("")}
+
+    </section>
+  `;
+
+}
+
+
+function performanceMetricCard(
+  title,
+  value,
+  category,
+  detail
+) {
+
+  return `
+    <section class="dashboard-card performance-metric-card">
+
+      <div class="performance-metric-top">
+
+        <span>
+          ${title}
+        </span>
+
+        <small>
+          ${category}
+        </small>
+
+      </div>
+
+      <strong>
+        ${value}
+      </strong>
+
+      <p>
+        ${detail}
+      </p>
 
     </section>
   `;
@@ -1675,13 +1867,13 @@ function showInlineAnalysisResult(
       <div class="analysis-score-row">
 
         ${analysisMiniCard(
-          "Evaluation",
+          "Service Quality",
           `${analysis.evaluation.score}%`,
-          "Service quality"
+          "Evaluation result"
         )}
 
         ${analysisMiniCard(
-          "SOP Compliance",
+          "SOP Adherence",
           `${analysis.sop.compliance}%`,
           "Process adherence"
         )}
@@ -2650,7 +2842,7 @@ function statusPage() {
     ${pageTitle(
       "AMBASSADOR",
       "My Status",
-      "Your profile, Ambassador status and Personal QR Code."
+      "Your profile, Personal QR Code and SHARE impact."
     )}
 
 
@@ -2842,18 +3034,24 @@ function statusPage() {
             class="acquisition-marker halfway"
             style="left:50%"
           >
+
             <span>
-              25
+              ${Math.round(
+                target / 2
+              )}
             </span>
+
           </div>
 
           <div
             class="acquisition-marker target"
             style="left:100%"
           >
+
             <span>
               ${target}
             </span>
+
           </div>
 
         </div>
@@ -2896,7 +3094,7 @@ function statusPage() {
                   </strong>
 
                   <p>
-                    You have already achieved ${achievement}% of your SHARE onboarding target for this period.
+                    You have achieved ${achievement}% of your SHARE onboarding target for this period.
                   </p>
                 `
                 : `
@@ -2925,8 +3123,13 @@ function statusPage() {
 
           ${impactMilestone(
             "Halfway",
-            "25 members onboarded",
-            onboarded >= 25
+            `${Math.round(
+              target / 2
+            )} members onboarded`,
+            onboarded >=
+              Math.round(
+                target / 2
+              )
           )}
 
           ${impactMilestone(
@@ -3014,7 +3217,7 @@ function impactMilestone(
 
 
 /* =========================================================
-   MANAGER
+   OTHER PERSONAS
 ========================================================= */
 
 function managerHome() {
@@ -3222,12 +3425,6 @@ function managerPerformance() {
         BU performance agent team
       </h3>
 
-      <p>
-        SHARE Lens combines specialist agents to identify
-        recurring themes and prioritise interventions.
-      </p>
-
-
       <div class="agent-team-strip manager-team">
 
         ${agentTeamMember(
@@ -3268,226 +3465,6 @@ function managerPerformance() {
         class="agent-output empty-state"
       >
         Run Analyse BU Performance to start.
-      </div>
-
-    </section>
-  `;
-
-}
-
-
-function runManagerAnalysis() {
-
-  runAnimation({
-
-    outputId:
-      "manager-agent-output",
-
-    title:
-      "Analysing Entertainment UAE",
-
-    steps: [
-
-      {
-        id:
-          "manager-performance",
-
-        title:
-          "Performance Agent",
-
-        message:
-          "Assessing performance, training and knowledge indicators."
-      },
-
-      {
-        id:
-          "manager-theme",
-
-        title:
-          "Theme Agent",
-
-        message:
-          "Grouping recurring themes across locations and Ambassadors."
-      },
-
-      {
-        id:
-          "manager-knowledge",
-
-        title:
-          "Knowledge Gap Agent",
-
-        message:
-          "Identifying recurring development gaps."
-      },
-
-      {
-        id:
-          "manager-intervention",
-
-        title:
-          "Intervention Agent",
-
-        message:
-          "Ranking MAF mall locations requiring intervention."
-      },
-
-      {
-        id:
-          "manager-combined",
-
-        title:
-          "Combined Analysis",
-
-        message:
-          "Preparing recommended areas of focus."
-      }
-
-    ],
-
-    onComplete:
-      showManagerAnalysisResult
-
-  });
-
-}
-
-
-function showManagerAnalysisResult() {
-
-  const output =
-    document.getElementById(
-      "manager-agent-output"
-    );
-
-  if (!output) return;
-
-
-  output.innerHTML = `
-
-    ${analysisHeader(
-      "BU AI ANALYSIS",
-      "3 locations require intervention",
-      86,
-      "Entertainment UAE"
-    )}
-
-
-    <div class="dashboard-grid two no-bottom">
-
-      <section class="analysis-section">
-
-        <span class="section-label">
-          PERFORMANCE THEMES
-        </span>
-
-        <h3>
-          Areas to focus on
-        </h3>
-
-        ${severityRow(
-          "Refund SLA knowledge",
-          "Detected across 3 locations",
-          "High",
-          "high"
-        )}
-
-        ${severityRow(
-          "Customer verification consistency",
-          "Detected across 2 locations",
-          "Medium",
-          "medium"
-        )}
-
-        ${severityRow(
-          "Escalation handling",
-          "Detected across 2 locations",
-          "Medium",
-          "medium"
-        )}
-
-      </section>
-
-
-      <section class="analysis-section">
-
-        <span class="section-label">
-          LOCATIONS REQUIRING INTERVENTION
-        </span>
-
-        <h3>
-          Prioritised by severity
-        </h3>
-
-        ${locationSeverityRow(
-          "City Centre Deira",
-          "72%",
-          "Critical",
-          "critical"
-        )}
-
-        ${locationSeverityRow(
-          "City Centre Mirdif",
-          "79%",
-          "High",
-          "high"
-        )}
-
-        ${locationSeverityRow(
-          "Mall of the Emirates",
-          "84%",
-          "Medium",
-          "medium"
-        )}
-
-      </section>
-
-    </div>
-
-
-    <section class="intervention-focus">
-
-      <div class="severity-marker critical">
-        1
-      </div>
-
-      <div>
-
-        <span class="section-label">
-          PRIORITY INTERVENTION
-        </span>
-
-        <h3>
-          City Centre Deira
-        </h3>
-
-        <p>
-          8 Ambassadors affected. Refund SLA is the dominant theme.
-          Training completion is 71% and performance has declined
-          during the current period.
-        </p>
-
-      </div>
-
-
-      <div class="intervention-actions">
-
-        <strong>
-          Recommended
-        </strong>
-
-        <span>
-          Assign targeted refresher
-        </span>
-
-        <span>
-          Complete Knowledge Check
-        </span>
-
-        <span>
-          Trainer intervention
-        </span>
-
       </div>
 
     </section>
@@ -3564,9 +3541,165 @@ function managerOnboarding() {
 }
 
 
-/* =========================================================
-   SERVICE DELIVERY
-========================================================= */
+function runManagerAnalysis() {
+
+  runAnimation({
+
+    outputId:
+      "manager-agent-output",
+
+    title:
+      "Analysing Entertainment UAE",
+
+    steps: [
+
+      {
+        id:
+          "manager-performance",
+        title:
+          "Performance Agent",
+        message:
+          "Assessing performance, training and knowledge indicators."
+      },
+
+      {
+        id:
+          "manager-theme",
+        title:
+          "Theme Agent",
+        message:
+          "Grouping recurring themes across locations and Ambassadors."
+      },
+
+      {
+        id:
+          "manager-knowledge",
+        title:
+          "Knowledge Gap Agent",
+        message:
+          "Identifying recurring development gaps."
+      },
+
+      {
+        id:
+          "manager-intervention",
+        title:
+          "Intervention Agent",
+        message:
+          "Ranking MAF mall locations requiring intervention."
+      },
+
+      {
+        id:
+          "manager-combined",
+        title:
+          "Combined Analysis",
+        message:
+          "Preparing recommended areas of focus."
+      }
+
+    ],
+
+    onComplete:
+      showManagerAnalysisResult
+
+  });
+
+}
+
+
+function showManagerAnalysisResult() {
+
+  const output =
+    document.getElementById(
+      "manager-agent-output"
+    );
+
+  if (!output) return;
+
+
+  output.innerHTML = `
+    ${analysisHeader(
+      "BU AI ANALYSIS",
+      "3 locations require intervention",
+      86,
+      "Entertainment UAE"
+    )}
+
+    <div class="dashboard-grid two no-bottom">
+
+      <section class="analysis-section">
+
+        <span class="section-label">
+          PERFORMANCE THEMES
+        </span>
+
+        <h3>
+          Areas to focus on
+        </h3>
+
+        ${severityRow(
+          "Refund SLA knowledge",
+          "Detected across 3 locations",
+          "High",
+          "high"
+        )}
+
+        ${severityRow(
+          "Customer verification consistency",
+          "Detected across 2 locations",
+          "Medium",
+          "medium"
+        )}
+
+        ${severityRow(
+          "Escalation handling",
+          "Detected across 2 locations",
+          "Medium",
+          "medium"
+        )}
+
+      </section>
+
+
+      <section class="analysis-section">
+
+        <span class="section-label">
+          LOCATIONS REQUIRING INTERVENTION
+        </span>
+
+        <h3>
+          Prioritised by severity
+        </h3>
+
+        ${locationSeverityRow(
+          "City Centre Deira",
+          "72%",
+          "Critical",
+          "critical"
+        )}
+
+        ${locationSeverityRow(
+          "City Centre Mirdif",
+          "79%",
+          "High",
+          "high"
+        )}
+
+        ${locationSeverityRow(
+          "Mall of the Emirates",
+          "84%",
+          "Medium",
+          "medium"
+        )}
+
+      </section>
+
+    </div>
+  `;
+
+}
+
 
 function serviceHome() {
 
@@ -3576,28 +3709,6 @@ function serviceHome() {
       "Service Delivery",
       "Cross-location visibility across Service Delivery, Training & Knowledge and the Ambassador Program."
     )}
-
-
-    <div class="filter-bar">
-
-      <span>
-        Country: UAE
-      </span>
-
-      <span>
-        MAF Mall: All
-      </span>
-
-      <span>
-        Brand: All
-      </span>
-
-      <span>
-        Ambassador: All
-      </span>
-
-    </div>
-
 
     <div class="dashboard-grid four">
 
@@ -3626,105 +3737,6 @@ function serviceHome() {
       )}
 
     </div>
-
-
-    <div class="dashboard-grid three">
-
-      ${pillarCard(
-        "Service Delivery",
-        "88%",
-        "Performance Score",
-        "3 locations require focus",
-        "group-performance"
-      )}
-
-      ${pillarCard(
-        "Training & Knowledge",
-        "91%",
-        "Training Completion",
-        "Knowledge score 84%",
-        "group-training"
-      )}
-
-      ${pillarCard(
-        "Ambassador Program",
-        "812",
-        "Active Ambassadors",
-        "38 onboarding",
-        "group-ambassadors"
-      )}
-
-    </div>
-
-
-    <div class="dashboard-grid two">
-
-      <section class="dashboard-card">
-
-        <span class="section-label">
-          PRIORITY RISKS
-        </span>
-
-        <h3>
-          Areas requiring attention
-        </h3>
-
-        <ul class="risk-list">
-
-          <li>
-            Refund SLA knowledge gap across three MAF mall locations
-          </li>
-
-          <li>
-            22 Ambassadors have overdue learning
-          </li>
-
-          <li>
-            3 locations are below performance threshold
-          </li>
-
-          <li>
-            6 Ambassador onboarding journeys are delayed
-          </li>
-
-        </ul>
-
-      </section>
-
-
-      <section class="dashboard-card">
-
-        <span class="section-label">
-          RECOMMENDED ACTIONS
-        </span>
-
-        <h3>
-          Where to focus
-        </h3>
-
-        <ul class="risk-list">
-
-          <li>
-            Assign targeted refund handling refresher
-          </li>
-
-          <li>
-            Notify relevant BU trainers
-          </li>
-
-          <li>
-            Prioritise low-performing MAF mall locations
-          </li>
-
-          <li>
-            Follow up delayed Ambassador onboarding
-          </li>
-
-        </ul>
-
-      </section>
-
-    </div>
   `;
 
 }
@@ -3738,7 +3750,6 @@ function servicePerformance() {
       "Performance",
       "Identify systemic themes and MAF mall locations requiring intervention."
     )}
-
 
     <section class="overall-analysis-card">
 
@@ -3759,18 +3770,15 @@ function servicePerformance() {
 
       </div>
 
-
       <button
         class="analyse-overall-button"
         onclick="runServiceAnalysis()"
       >
-
         <span class="overall-ai-icon">
           ✦
         </span>
 
         <div>
-
           <strong>
             Analyse Group Performance
           </strong>
@@ -3778,108 +3786,18 @@ function servicePerformance() {
           <small>
             Finds themes and priority interventions
           </small>
-
         </div>
-
       </button>
 
     </section>
 
 
-    <div class="dashboard-grid four">
-
-      ${metricCard(
-        "Performance Score",
-        "88%",
-        "On Track"
-      )}
-
-      ${metricCard(
-        "Critical Locations",
-        "3",
-        "Immediate attention"
-      )}
-
-      ${metricCard(
-        "High Severity Themes",
-        "4",
-        "Cross-location"
-      )}
-
-      ${metricCard(
-        "Ambassadors Impacted",
-        "96",
-        "Current"
-      )}
-
+    <div
+      id="service-agent-output"
+      class="agent-output empty-state"
+    >
+      Run Analyse Group Performance to start.
     </div>
-
-
-    <section class="dashboard-card">
-
-      <span class="section-label">
-        AI ORCHESTRATION
-      </span>
-
-      <h3>
-        Service Delivery agent team
-      </h3>
-
-      <p>
-        SHARE Lens identifies systemic patterns and converts
-        them into prioritised interventions.
-      </p>
-
-
-      <div class="agent-team-strip service-team">
-
-        ${agentTeamMember(
-          "1",
-          "Performance Agent",
-          "Measures outcomes"
-        )}
-
-        ${agentTeamMember(
-          "2",
-          "Pattern Agent",
-          "Finds systemic themes"
-        )}
-
-        ${agentTeamMember(
-          "3",
-          "Location Severity Agent",
-          "Ranks locations"
-        )}
-
-        ${agentTeamMember(
-          "4",
-          "Intervention Agent",
-          "Defines response"
-        )}
-
-        ${agentTeamMember(
-          "5",
-          "Next Best Action",
-          "Prioritises action"
-        )}
-
-        ${agentTeamMember(
-          "6",
-          "Combined Analysis",
-          "Group insight"
-        )}
-
-      </div>
-
-
-      <div
-        id="service-agent-output"
-        class="agent-output empty-state"
-      >
-        Run Analyse Group Performance to start.
-      </div>
-
-    </section>
   `;
 
 }
@@ -3900,10 +3818,8 @@ function runServiceAnalysis() {
       {
         id:
           "service-performance",
-
         title:
           "Performance Agent",
-
         message:
           "Assessing performance across MAF mall locations."
       },
@@ -3911,10 +3827,8 @@ function runServiceAnalysis() {
       {
         id:
           "service-pattern",
-
         title:
           "Pattern Agent",
-
         message:
           "Identifying recurring themes across locations."
       },
@@ -3922,10 +3836,8 @@ function runServiceAnalysis() {
       {
         id:
           "service-severity",
-
         title:
           "Location Severity Agent",
-
         message:
           "Ranking locations by intervention need."
       },
@@ -3933,10 +3845,8 @@ function runServiceAnalysis() {
       {
         id:
           "service-intervention",
-
         title:
           "Intervention Agent",
-
         message:
           "Matching issues to targeted interventions."
       },
@@ -3944,10 +3854,8 @@ function runServiceAnalysis() {
       {
         id:
           "service-action",
-
         title:
           "Next Best Action",
-
         message:
           "Prioritising recommended actions."
       },
@@ -3955,10 +3863,8 @@ function runServiceAnalysis() {
       {
         id:
           "service-combined",
-
         title:
           "Combined Analysis",
-
         message:
           "Preparing the Service Delivery view."
       }
@@ -3984,14 +3890,12 @@ function showServiceAnalysisResult() {
 
 
   output.innerHTML = `
-
     ${analysisHeader(
       "GROUP AI ANALYSIS",
       "Priority intervention required",
       88,
       "MAF Mall Estate"
     )}
-
 
     <div class="dashboard-grid two no-bottom">
 
@@ -4000,10 +3904,6 @@ function showServiceAnalysisResult() {
         <span class="section-label">
           EMERGING THEMES
         </span>
-
-        <h3>
-          Systemic patterns
-        </h3>
 
         ${themeResult(
           "Refund SLA",
@@ -4021,14 +3921,6 @@ function showServiceAnalysisResult() {
           "Medium"
         )}
 
-        ${themeResult(
-          "Escalation Handling",
-          "2 locations",
-          "19 Ambassadors",
-          "Worsening",
-          "High"
-        )}
-
       </section>
 
 
@@ -4037,10 +3929,6 @@ function showServiceAnalysisResult() {
         <span class="section-label">
           LOCATION SEVERITY
         </span>
-
-        <h3>
-          Where to intervene first
-        </h3>
 
         ${locationSeverityRow(
           "City Centre Deira",
@@ -4057,13 +3945,6 @@ function showServiceAnalysisResult() {
         )}
 
         ${locationSeverityRow(
-          "City Centre Al Zahia",
-          "Entertainment",
-          "High",
-          "high"
-        )}
-
-        ${locationSeverityRow(
           "Mall of the Emirates",
           "Entertainment",
           "Medium",
@@ -4073,62 +3954,10 @@ function showServiceAnalysisResult() {
       </section>
 
     </div>
-
-
-    <section class="intervention-focus">
-
-      <div class="severity-marker critical">
-        1
-      </div>
-
-      <div>
-
-        <span class="section-label">
-          PRIORITY INTERVENTION
-        </span>
-
-        <h3>
-          City Centre Deira
-        </h3>
-
-        <p>
-          Lowest current Service Delivery score. Eight failed
-          Knowledge Checks, six repeated SOP misses and five
-          Ambassadors with overdue learning.
-        </p>
-
-      </div>
-
-
-      <div class="intervention-actions">
-
-        <strong>
-          Next Best Action
-        </strong>
-
-        <span>
-          Assign Refund Handling refresher
-        </span>
-
-        <span>
-          Trigger Knowledge Check
-        </span>
-
-        <span>
-          BU trainer intervention
-        </span>
-
-      </div>
-
-    </section>
   `;
 
 }
 
-
-/* =========================================================
-   AUDIT
-========================================================= */
 
 function auditPage() {
 
@@ -4139,218 +3968,26 @@ function auditPage() {
       "Service Audit and Mystery Shop findings across MAF mall locations."
     )}
 
-
-    <div class="dashboard-grid four">
-
-      ${metricCard(
-        "Audits Completed",
-        "42",
-        "Current period"
-      )}
-
-      ${metricCard(
-        "Average Score",
-        "84%",
-        "Current period"
-      )}
-
-      ${metricCard(
-        "Critical Findings",
-        "3",
-        "Needs intervention"
-      )}
-
-      ${metricCard(
-        "Open Actions",
-        "11",
-        "Current"
-      )}
-
-    </div>
-
-
     <section class="dashboard-card">
 
       <span class="section-label">
-        RECENT SERVICE AUDITS
+        SERVICE PULSE
       </span>
 
       <h3>
-        Location results
+        Prototype view
       </h3>
 
-      ${auditRow(
-        "Mall of the Emirates",
-        "91%",
-        "On Track",
-        "good"
-      )}
-
-      ${auditRow(
-        "City Centre Mirdif",
-        "82%",
-        "Opportunity to Strengthen",
-        "strengthen"
-      )}
-
-      ${auditRow(
-        "City Centre Deira",
-        "71%",
-        "Needs Attention",
-        "attention"
-      )}
-
-      ${auditRow(
-        "City Centre Al Zahia",
-        "88%",
-        "Opportunity to Strengthen",
-        "strengthen"
-      )}
-
-    </section>
-
-
-    <section class="dashboard-card">
-
-      <span class="section-label">
-        MYSTERY SHOP FINDINGS
-      </span>
-
-      <h3>
-        Emerging themes
-      </h3>
-
-
-      <div class="audit-theme-header">
-
-        <span>
-          Theme
-        </span>
-
-        <span>
-          Locations
-        </span>
-
-        <span>
-          Severity
-        </span>
-
-      </div>
-
-
-      ${auditThemeRow(
-        "Greeting & Welcome",
-        "3",
-        "High",
-        "high"
-      )}
-
-      ${auditThemeRow(
-        "Product Knowledge",
-        "4",
-        "High",
-        "high"
-      )}
-
-      ${auditThemeRow(
-        "Queue / Waiting Experience",
-        "2",
-        "Medium",
-        "medium"
-      )}
-
-      ${auditThemeRow(
-        "Issue Resolution",
-        "2",
-        "Medium",
-        "medium"
-      )}
-
-    </section>
-
-
-    <section class="audit-flow-card">
-
-      <span class="section-label">
-        PERFORMANCE FLOW
-      </span>
-
-      <h3>
-        How Service Audit feeds performance
-      </h3>
-
-
-      <div class="audit-flow">
-
-        <span>
-          Mystery Shop
-        </span>
-
-        <b>
-          →
-        </b>
-
-        <span>
-          Location Finding
-        </span>
-
-        <b>
-          →
-        </b>
-
-        <span>
-          Theme & Severity
-        </span>
-
-        <b>
-          →
-        </b>
-
-        <span>
-          Corrective Action
-        </span>
-
-        <b>
-          →
-        </b>
-
-        <span>
-          BU Performance
-        </span>
-
-        <b>
-          →
-        </b>
-
-        <span>
-          Service Delivery Performance
-        </span>
-
-      </div>
-
-
-      <div class="prototype-assumption">
-
-        <strong>
-          Prototype assumption
-        </strong>
-
-        <p>
-          Mystery Shop data structure, scoring and report ingestion
-          will be aligned once the current reporting format is reviewed.
-        </p>
-
-      </div>
+      <p>
+        Detailed Service Pulse reporting will be expanded during
+        the Service Delivery persona review.
+      </p>
 
     </section>
   `;
 
 }
 
-
-/* =========================================================
-   ADMIN
-========================================================= */
 
 function adminHome() {
 
@@ -4360,7 +3997,6 @@ function adminHome() {
       "SHARE Lens Platform",
       "Manage identity, access, AI agents and integrations."
     )}
-
 
     <div class="dashboard-grid four">
 
@@ -4389,193 +4025,6 @@ function adminHome() {
       )}
 
     </div>
-
-
-    <div class="dashboard-grid two">
-
-      <section class="dashboard-card">
-
-        <span class="section-label">
-          AMBASSADOR PROVISIONING
-        </span>
-
-        <h3>
-          Add an Ambassador
-        </h3>
-
-        <p>
-          Invite an Ambassador or create the account manually.
-        </p>
-
-        <div class="admin-action-buttons">
-
-          <button
-            class="primary-small"
-            onclick="showInviteAmbassador()"
-          >
-            Invite Ambassador
-          </button>
-
-          <button
-            class="secondary-small"
-            onclick="showManualAmbassador()"
-          >
-            Create Manually
-          </button>
-
-        </div>
-
-      </section>
-
-
-      <section class="dashboard-card">
-
-        <span class="section-label">
-          PLATFORM STATUS
-        </span>
-
-        <h3>
-          Prototype capabilities
-        </h3>
-
-        ${statusLine(
-          "Identity",
-          "Prototype"
-        )}
-
-        ${statusLine(
-          "AI Agents",
-          "Enabled"
-        )}
-
-        ${statusLine(
-          "Integrations",
-          "Mocked"
-        )}
-
-        ${statusLine(
-          "Audit",
-          "Enabled"
-        )}
-
-      </section>
-
-    </div>
-
-
-    <div
-      id="admin-provisioning-output"
-    ></div>
-  `;
-
-}
-
-
-function showInviteAmbassador() {
-
-  const output =
-    document.getElementById(
-      "admin-provisioning-output"
-    );
-
-  if (!output) return;
-
-
-  output.innerHTML = `
-    <section class="dashboard-card provisioning-card">
-
-      <span class="section-label">
-        INVITE AMBASSADOR
-      </span>
-
-      <h3>
-        Create onboarding invitation
-      </h3>
-
-      <div class="provisioning-grid">
-
-        ${mockInput(
-          "Staff ID",
-          "100955"
-        )}
-
-        ${mockInput(
-          "Ambassador Name",
-          "New Ambassador"
-        )}
-
-        ${mockInput(
-          "MAF Mall",
-          "City Centre Mirdif"
-        )}
-
-        ${mockInput(
-          "Contact",
-          "Mobile / Email"
-        )}
-
-      </div>
-
-      <button class="primary-small">
-        Send Onboarding Invite
-      </button>
-
-    </section>
-  `;
-
-}
-
-
-function showManualAmbassador() {
-
-  const output =
-    document.getElementById(
-      "admin-provisioning-output"
-    );
-
-  if (!output) return;
-
-
-  output.innerHTML = `
-    <section class="dashboard-card provisioning-card">
-
-      <span class="section-label">
-        MANUAL SETUP
-      </span>
-
-      <h3>
-        Create Ambassador account
-      </h3>
-
-      <div class="provisioning-grid">
-
-        ${mockInput(
-          "Staff ID",
-          "100955"
-        )}
-
-        ${mockInput(
-          "Ambassador Name",
-          "New Ambassador"
-        )}
-
-        ${mockInput(
-          "MAF Mall",
-          "City Centre Mirdif"
-        )}
-
-        ${mockInput(
-          "Temporary Password",
-          "Generated on create"
-        )}
-
-      </div>
-
-      <button class="primary-small">
-        Create Account
-      </button>
-
-    </section>
   `;
 
 }
@@ -4590,33 +4039,7 @@ function usersAccessPage() {
       "Manage Staff ID, Microsoft SSO, roles and scope."
     )}
 
-
     <section class="dashboard-card">
-
-      <div class="admin-table-header">
-
-        <span>
-          User
-        </span>
-
-        <span>
-          Identity
-        </span>
-
-        <span>
-          Role
-        </span>
-
-        <span>
-          Scope
-        </span>
-
-        <span>
-          Status
-        </span>
-
-      </div>
-
 
       ${userAccessRow(
         "Layla Haddad",
@@ -4624,14 +4047,6 @@ function usersAccessPage() {
         "Ambassador",
         "VOX · Mall of the Emirates",
         "Active"
-      )}
-
-      ${userAccessRow(
-        "Noor Hassan",
-        "Staff ID 100822",
-        "Ambassador",
-        "VOX · City Centre Mirdif",
-        "Onboarded"
       )}
 
       ${userAccessRow(
@@ -4651,20 +4066,6 @@ function usersAccessPage() {
       )}
 
     </section>
-
-
-    <section class="notice-card">
-
-      <strong>
-        Ambassador journey
-      </strong>
-
-      <p>
-        Onboarded → Mandatory Training → Knowledge Check →
-        Personal QR Code.
-      </p>
-
-    </section>
   `;
 
 }
@@ -4672,179 +4073,33 @@ function usersAccessPage() {
 
 function rolesPage() {
 
-  return `
-    ${pageTitle(
-      "IDENTITY & ACCESS",
-      "Roles & Permissions",
-      "Role-based access used by the SHARE Lens prototype."
-    )}
-
-
-    <div class="dashboard-grid two">
-
-      ${roleCard(
-        "Ambassador",
-        "Staff ID",
-        [
-          "My Performance",
-          "My Training",
-          "Knowledge Base",
-          "My Status",
-          "Personal QR Code"
-        ]
-      )}
-
-      ${roleCard(
-        "BU Lead / Trainer",
-        "Microsoft SSO",
-        [
-          "Assigned Ambassador population",
-          "Performance analysis",
-          "Training",
-          "Knowledge gaps",
-          "Onboarding"
-        ]
-      )}
-
-      ${roleCard(
-        "Service Delivery",
-        "Microsoft SSO",
-        [
-          "MAF mall estate visibility",
-          "Group Performance",
-          "Audit & Service Pulse",
-          "Intervention prioritisation"
-        ]
-      )}
-
-      ${roleCard(
-        "Platform Admin",
-        "Microsoft SSO",
-        [
-          "Identity",
-          "Roles & permissions",
-          "AI agents",
-          "Integrations",
-          "Configuration"
-        ]
-      )}
-
-    </div>
-  `;
+  return genericRolePage(
+    "IDENTITY & ACCESS",
+    "Roles & Permissions",
+    "Role-based access used by the SHARE Lens prototype."
+  );
 
 }
 
 
 function aiAgentsPage() {
 
-  return `
-    ${pageTitle(
-      "AI PLATFORM",
-      "AI Agents",
-      "Specialist capabilities used by SHARE Lens."
-    )}
-
-
-    <div class="dashboard-grid three">
-
-      ${agentCard(
-        "Evaluation Agent",
-        "Evaluates service quality.",
-        "Active"
-      )}
-
-      ${agentCard(
-        "SOP Agent",
-        "Checks process adherence.",
-        "Active"
-      )}
-
-      ${agentCard(
-        "Compliance Agent",
-        "Checks mandatory controls.",
-        "Active"
-      )}
-
-      ${agentCard(
-        "Performance Agent",
-        "Assesses population performance.",
-        "Prototype"
-      )}
-
-      ${agentCard(
-        "Pattern Agent",
-        "Finds recurring themes.",
-        "Prototype"
-      )}
-
-      ${agentCard(
-        "Location Severity Agent",
-        "Prioritises MAF mall locations.",
-        "Prototype"
-      )}
-
-    </div>
-  `;
+  return genericRolePage(
+    "AI PLATFORM",
+    "AI Agents",
+    "Specialist AI capabilities used by SHARE Lens."
+  );
 
 }
 
 
 function integrationsPage() {
 
-  return `
-    ${pageTitle(
-      "PLATFORM",
-      "Integrations",
-      "Prototype representation of the integration landscape."
-    )}
-
-
-    <div class="dashboard-grid three">
-
-      ${integrationCard(
-        "Mitti / SafetyCulture",
-        "Training data",
-        "Mock"
-      )}
-
-      ${integrationCard(
-        "Knowmax",
-        "Knowledge Base",
-        "Mock"
-      )}
-
-      ${integrationCard(
-        "Infobip",
-        "Communications",
-        "Mock"
-      )}
-
-      ${integrationCard(
-        "Adjust",
-        "SHARE member acquisition attribution",
-        "Mock"
-      )}
-
-      ${integrationCard(
-        "HR / Staff Master",
-        "Staff identity and assignments",
-        "Mock"
-      )}
-
-      ${integrationCard(
-        "Performance Data",
-        "Location and Ambassador performance",
-        "Mock"
-      )}
-
-      ${integrationCard(
-        "Genesys",
-        "Customer interactions",
-        "Planned"
-      )}
-
-    </div>
-  `;
+  return genericRolePage(
+    "PLATFORM",
+    "Integrations",
+    "Prototype integration landscape."
+  );
 
 }
 
@@ -4904,9 +4159,7 @@ function runAnimation(
 
             ${
               index > 0
-                ? `
-                  <div class="pipeline-line"></div>
-                `
+                ? `<div class="pipeline-line"></div>`
                 : ""
             }
 
@@ -5309,8 +4562,7 @@ function navigateTo(
     }
 
     else if (
-      page ===
-      "audit"
+      page === "audit"
     ) {
 
       content =
@@ -5569,77 +4821,6 @@ function metricCard(
 }
 
 
-function clickableMetricCard(
-  title,
-  value,
-  detail,
-  target
-) {
-
-  return `
-    <section
-      class="dashboard-card metric-card clickable-card"
-      onclick="navigateTo('${target}')"
-    >
-
-      <span>
-        ${title}
-      </span>
-
-      <strong>
-        ${value}
-      </strong>
-
-      <small>
-        ${detail} →
-      </small>
-
-    </section>
-  `;
-
-}
-
-
-function pillarCard(
-  title,
-  value,
-  metric,
-  detail,
-  target
-) {
-
-  return `
-    <section class="dashboard-card pillar-card">
-
-      <span class="section-label">
-        ${title}
-      </span>
-
-      <strong class="pillar-value">
-        ${value}
-      </strong>
-
-      <h3>
-        ${metric}
-      </h3>
-
-      <p>
-        ${detail}
-      </p>
-
-      <button
-        class="text-button"
-        onclick="navigateTo('${target}')"
-      >
-        View →
-      </button>
-
-    </section>
-  `;
-
-}
-
-
 function profileLine(
   label,
   value
@@ -5655,28 +4836,6 @@ function profileLine(
       <strong>
         ${value}
       </strong>
-
-    </div>
-  `;
-
-}
-
-
-function statusLine(
-  label,
-  value
-) {
-
-  return `
-    <div class="profile-line">
-
-      <span>
-        ${label}
-      </span>
-
-      <span class="status-block good">
-        ${value}
-      </span>
 
     </div>
   `;
@@ -5991,66 +5150,6 @@ function themeResult(
 }
 
 
-function auditRow(
-  location,
-  score,
-  status,
-  className
-) {
-
-  return `
-    <div class="audit-row">
-
-      <strong>
-        ${location}
-      </strong>
-
-      <strong>
-        ${score}
-      </strong>
-
-      <span class="status-block ${className}">
-        ${status}
-      </span>
-
-      <button class="small-button">
-        View
-      </button>
-
-    </div>
-  `;
-
-}
-
-
-function auditThemeRow(
-  theme,
-  locations,
-  severity,
-  className
-) {
-
-  return `
-    <div class="audit-theme-row">
-
-      <strong>
-        ${theme}
-      </strong>
-
-      <span>
-        ${locations}
-      </span>
-
-      <span class="severity-pill ${className}">
-        ${severity}
-      </span>
-
-    </div>
-  `;
-
-}
-
-
 function userAccessRow(
   user,
   identity,
@@ -6078,139 +5177,9 @@ function userAccessRow(
         ${scope}
       </span>
 
-      <span class="status-block ${
-        status === "Active"
-          ? "good"
-          : "strengthen"
-      }">
+      <span class="status-block good">
         ${status}
       </span>
-
-    </div>
-  `;
-
-}
-
-
-function roleCard(
-  role,
-  identity,
-  permissions
-) {
-
-  return `
-    <section class="dashboard-card">
-
-      <span class="section-label">
-        ${identity}
-      </span>
-
-      <h3>
-        ${role}
-      </h3>
-
-      <ul class="risk-list">
-
-        ${permissions
-          .map(
-            item =>
-              `<li>${item}</li>`
-          )
-          .join("")}
-
-      </ul>
-
-    </section>
-  `;
-
-}
-
-
-function agentCard(
-  name,
-  description,
-  status
-) {
-
-  return `
-    <section class="dashboard-card">
-
-      <div class="agent-card-top">
-
-        <div class="agent-icon">
-          AI
-        </div>
-
-        <span class="status-block ${
-          status === "Active"
-            ? "good"
-            : "strengthen"
-        }">
-          ${status}
-        </span>
-
-      </div>
-
-      <h3>
-        ${name}
-      </h3>
-
-      <p>
-        ${description}
-      </p>
-
-    </section>
-  `;
-
-}
-
-
-function integrationCard(
-  name,
-  purpose,
-  status
-) {
-
-  return `
-    <section class="dashboard-card">
-
-      <span class="section-label">
-        INTEGRATION
-      </span>
-
-      <h3>
-        ${name}
-      </h3>
-
-      <p>
-        ${purpose}
-      </p>
-
-      <strong>
-        ${status}
-      </strong>
-
-    </section>
-  `;
-
-}
-
-
-function mockInput(
-  label,
-  value
-) {
-
-  return `
-    <div class="mock-field">
-
-      <label>
-        ${label}
-      </label>
-
-      <div>
-        ${value}
-      </div>
 
     </div>
   `;
@@ -6295,12 +5264,6 @@ window.runManagerAnalysis =
 
 window.runServiceAnalysis =
   runServiceAnalysis;
-
-window.showInviteAmbassador =
-  showInviteAmbassador;
-
-window.showManualAmbassador =
-  showManualAmbassador;
 
 window.filterKnowledgeBase =
   filterKnowledgeBase;
