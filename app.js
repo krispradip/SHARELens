@@ -1,11 +1,11 @@
 import { analyseInteraction } from "./agents/agentOrchestrator.js";
 
-
 const app = document.getElementById("app");
 
 let currentRole = null;
 let currentPage = "home";
 let expandedInteractionId = null;
+let selectedTrainingId = null;
 
 
 /* =========================================================
@@ -13,7 +13,6 @@ let expandedInteractionId = null;
 ========================================================= */
 
 const prototypeUsers = {
-
   ambassador: {
     login: "100245",
     password: "demo123",
@@ -60,16 +59,14 @@ const prototypeUsers = {
     identityType: "Microsoft Entra ID",
     scope: "Platform"
   }
-
 };
 
 
 /* =========================================================
-   AMBASSADOR INTERACTIONS
+   INTERACTIONS
 ========================================================= */
 
 const interactions = [
-
   {
     id: "INT-1001",
     date: "10 Oct 2026",
@@ -78,7 +75,8 @@ const interactions = [
     process: "Refund Handling",
     score: 86,
     customer: "Aisha Rahman",
-    trainingTarget: "Refund Handling Refresher",
+    trainingTarget: "refund",
+    trainingTitle: "Refund Handling Refresher",
     knowledgeTarget: "Refund Handling Knowledge Check",
     transcript: `
 Customer: I cancelled my booking yesterday but I still have not received my refund.
@@ -102,7 +100,8 @@ Agent: It depends on the bank.
     process: "Refund Status",
     score: 94,
     customer: "Omar Khalid",
-    trainingTarget: "Refund Handling Refresher",
+    trainingTarget: "refund",
+    trainingTitle: "Refund Handling Refresher",
     knowledgeTarget: "Refund Handling Knowledge Check",
     transcript: `
 Customer: My booking was cancelled. When will I receive the refund?
@@ -123,7 +122,8 @@ Customer: Thank you.
     process: "Cancellation Refund",
     score: 47,
     customer: "Sara Malik",
-    trainingTarget: "Refund Handling Refresher",
+    trainingTarget: "refund",
+    trainingTitle: "Refund Handling Refresher",
     knowledgeTarget: "Refund Handling Knowledge Check",
     transcript: `
 Customer: I cancelled my tickets and need to know when the refund will arrive.
@@ -135,7 +135,156 @@ Customer: How many days does the refund take?
 Agent: Processing times vary depending on the bank.
 `
   }
+];
 
+
+/* =========================================================
+   TRAINING
+========================================================= */
+
+const assignedTraining = [
+  {
+    id: "share-cx",
+    title: "SHARE Customer Experience",
+    duration: "20 min",
+    assigned: "01 Oct 2026",
+    due: "15 Oct 2026",
+    aging: "13 days",
+    status: "Completed",
+    description:
+      "Core customer experience expectations for SHARE Ambassadors."
+  },
+
+  {
+    id: "product-knowledge",
+    title: "Product Knowledge",
+    duration: "30 min",
+    assigned: "20 Sep 2026",
+    due: "30 Sep 2026",
+    aging: "Completed",
+    status: "Completed",
+    description:
+      "Core SHARE proposition, benefits and product knowledge."
+  },
+
+  {
+    id: "service-recovery",
+    title: "Service Recovery Essentials",
+    duration: "25 min",
+    assigned: "12 Oct 2026",
+    due: "19 Oct 2026",
+    aging: "2 days",
+    status: "In Progress",
+    description:
+      "How to recover customer interactions when expectations have not been met."
+  }
+];
+
+
+const recommendedTraining = [
+  {
+    id: "refund",
+    title: "Refund Handling Refresher",
+    duration: "15 min",
+    recommended: "14 Oct 2026",
+    reason:
+      "Recommended from your recent Refund Handling performance.",
+    status: "Recommended",
+    description:
+      "Refresh refund timelines, customer communication expectations and required process steps."
+  }
+];
+
+
+/* =========================================================
+   KNOWLEDGE BASE
+========================================================= */
+
+const knowledgeRepository = [
+  {
+    title: "Refund Process",
+    category: "Refunds & Cancellations",
+    type: "Process Guidance",
+    updated: "02 Oct 2026"
+  },
+  {
+    title: "Cancellation & Refund Policy",
+    category: "Refunds & Cancellations",
+    type: "Policy",
+    updated: "12 Sep 2026"
+  },
+  {
+    title: "Customer Verification",
+    category: "Customer Service",
+    type: "Service Guidance",
+    updated: "19 Sep 2026"
+  },
+  {
+    title: "Customer Escalation Process",
+    category: "Customer Service",
+    type: "SOP",
+    updated: "25 Sep 2026"
+  },
+  {
+    title: "Service Recovery Guidelines",
+    category: "Customer Service",
+    type: "Service Guidance",
+    updated: "06 Oct 2026"
+  },
+  {
+    title: "SHARE Benefits",
+    category: "SHARE Benefits",
+    type: "Product Knowledge",
+    updated: "09 Oct 2026"
+  },
+  {
+    title: "Earning SHARE Points",
+    category: "SHARE Benefits",
+    type: "Product Knowledge",
+    updated: "01 Oct 2026"
+  },
+  {
+    title: "Redeeming SHARE Points",
+    category: "SHARE Benefits",
+    type: "Product Knowledge",
+    updated: "01 Oct 2026"
+  },
+  {
+    title: "Ambassador Role & Responsibilities",
+    category: "Ambassador Program",
+    type: "Program Guide",
+    updated: "05 Oct 2026"
+  },
+  {
+    title: "Personal QR Code Guidelines",
+    category: "Ambassador Program",
+    type: "Program Guide",
+    updated: "07 Oct 2026"
+  },
+  {
+    title: "Bronze, Silver & Gold Status",
+    category: "Ambassador Program",
+    type: "Program Guide",
+    updated: "08 Oct 2026"
+  },
+  {
+    title: "Customer Data Protection",
+    category: "Policies",
+    type: "Policy",
+    updated: "21 Sep 2026"
+  },
+  {
+    title: "Complaint Handling",
+    category: "SOPs",
+    type: "SOP",
+    updated: "29 Sep 2026"
+  },
+  {
+    title: "Customer Communication Standards",
+    category: "SOPs",
+    type: "SOP",
+    updated: "30 Sep 2026"
+  }
 ];
 
 
@@ -144,23 +293,15 @@ Agent: Processing times vary depending on the bank.
 ========================================================= */
 
 const navigation = {
-
   ambassador: [
-
     {
       title: "",
-      items: [
-        ["home", "Home"]
-      ]
+      items: [["home", "Home"]]
     },
-
     {
       title: "Performance",
-      items: [
-        ["performance", "My Performance"]
-      ]
+      items: [["performance", "My Performance"]]
     },
-
     {
       title: "Training & Knowledge",
       items: [
@@ -168,25 +309,17 @@ const navigation = {
         ["knowledge", "Knowledge Base"]
       ]
     },
-
     {
       title: "Ambassador",
-      items: [
-        ["ambassador", "My Ambassador"]
-      ]
+      items: [["status", "My Status"]]
     }
-
   ],
 
   manager: [
-
     {
       title: "",
-      items: [
-        ["home", "Home"]
-      ]
+      items: [["home", "Home"]]
     },
-
     {
       title: "Service Delivery",
       items: [
@@ -194,7 +327,6 @@ const navigation = {
         ["team-actions", "Actions"]
       ]
     },
-
     {
       title: "Training & Knowledge",
       items: [
@@ -203,7 +335,6 @@ const navigation = {
         ["manager-knowledge", "Knowledge Base"]
       ]
     },
-
     {
       title: "Ambassador Program",
       items: [
@@ -213,18 +344,13 @@ const navigation = {
         ["manager-recognition", "Recognition"]
       ]
     }
-
   ],
 
   service: [
-
     {
       title: "",
-      items: [
-        ["home", "Home"]
-      ]
+      items: [["home", "Home"]]
     },
-
     {
       title: "Service Delivery",
       items: [
@@ -233,7 +359,6 @@ const navigation = {
         ["group-actions", "Actions"]
       ]
     },
-
     {
       title: "Training & Knowledge",
       items: [
@@ -242,7 +367,6 @@ const navigation = {
         ["group-gaps", "Knowledge Gaps"]
       ]
     },
-
     {
       title: "Ambassador Program",
       items: [
@@ -252,18 +376,13 @@ const navigation = {
         ["group-recognition", "Recognition"]
       ]
     }
-
   ],
 
   admin: [
-
     {
       title: "",
-      items: [
-        ["home", "Platform Overview"]
-      ]
+      items: [["home", "Platform Overview"]]
     },
-
     {
       title: "Identity & Access",
       items: [
@@ -272,7 +391,6 @@ const navigation = {
         ["identity", "Identity Providers"]
       ]
     },
-
     {
       title: "AI Platform",
       items: [
@@ -281,7 +399,6 @@ const navigation = {
         ["knowledge-sources", "Knowledge Sources"]
       ]
     },
-
     {
       title: "Platform",
       items: [
@@ -291,68 +408,55 @@ const navigation = {
         ["audit-log", "Audit Log"]
       ]
     }
-
   ]
-
 };
 
 
 /* =========================================================
-   AUTHENTICATION
+   AUTH
 ========================================================= */
 
 function setLoginMessage(message, type = "error") {
-
   const node = document.getElementById("login-error");
 
   if (!node) return;
 
   node.textContent = message;
   node.className = `login-error ${type}`;
-
 }
 
 
 function signIn() {
-
   const login = document
     .getElementById("login-id")
     .value
     .trim()
     .toLowerCase();
 
-  const password = document
-    .getElementById("login-password")
-    .value;
+  const password =
+    document.getElementById("login-password").value;
 
   const matchedRole = Object.keys(prototypeUsers).find(role => {
-
     const user = prototypeUsers[role];
 
     return (
       user.login.toLowerCase() === login &&
       user.password === password
     );
-
   });
 
   if (!matchedRole) {
-
     setLoginMessage(
       "The email / Staff ID or password is incorrect."
     );
-
     return;
-
   }
 
   loginAsRole(matchedRole);
-
 }
 
 
 function continueWithSSO() {
-
   const login = document
     .getElementById("login-id")
     .value
@@ -360,51 +464,41 @@ function continueWithSSO() {
     .toLowerCase();
 
   if (!login) {
-
     setLoginMessage(
       "Enter your corporate email first to continue with Microsoft SSO.",
       "info"
     );
-
     return;
-
   }
 
   const matchedRole = Object.keys(prototypeUsers).find(role => {
-
     const user = prototypeUsers[role];
 
     return (
       user.identityType === "Microsoft Entra ID" &&
       user.login.toLowerCase() === login
     );
-
   });
 
   if (!matchedRole) {
-
     setLoginMessage(
       "Microsoft SSO is available for the corporate prototype accounts. Ambassador access is demonstrated using Staff ID.",
       "info"
     );
-
     return;
-
   }
 
   loginAsRole(matchedRole);
-
 }
 
 
 function loginAsRole(role) {
-
   currentRole = role;
   currentPage = "home";
   expandedInteractionId = null;
+  selectedTrainingId = null;
 
   navigateTo("home");
-
 }
 
 
@@ -414,11 +508,10 @@ function signOut() {
 
 
 /* =========================================================
-   APP SHELL
+   SHELL
 ========================================================= */
 
 function topBar() {
-
   const user = prototypeUsers[currentRole];
 
   return `
@@ -431,19 +524,11 @@ function topBar() {
         </div>
 
         <div class="topbar-brand">
-
-          <strong>
-            SHARE Lens
-          </strong>
-
-          <span>
-            See. Understand. Act.
-          </span>
-
+          <strong>SHARE Lens</strong>
+          <span>See. Understand. Act.</span>
         </div>
 
       </div>
-
 
       <div class="user-header">
 
@@ -456,15 +541,8 @@ function topBar() {
         </div>
 
         <div class="user-details">
-
-          <strong>
-            ${user.name}
-          </strong>
-
-          <span>
-            ${user.role}
-          </span>
-
+          <strong>${user.name}</strong>
+          <span>${user.role}</span>
         </div>
 
         <button
@@ -478,12 +556,10 @@ function topBar() {
 
     </header>
   `;
-
 }
 
 
 function sidebar() {
-
   const groups = navigation[currentRole];
 
   return `
@@ -493,39 +569,29 @@ function sidebar() {
 
         ${
           group.title
-            ? `
-              <div class="sidebar-title">
-                ${group.title}
-              </div>
-            `
+            ? `<div class="sidebar-title">${group.title}</div>`
             : ""
         }
 
         ${group.items.map(item => `
-
           <div
             class="nav-item ${
-              currentPage === item[0]
-                ? "active"
-                : ""
+              currentPage === item[0] ? "active" : ""
             }"
             onclick="navigateTo('${item[0]}')"
           >
             ${item[1]}
           </div>
-
         `).join("")}
 
       `).join("")}
 
     </aside>
   `;
-
 }
 
 
 function renderShell(content) {
-
   app.innerHTML = `
     <div class="workspace">
 
@@ -543,7 +609,6 @@ function renderShell(content) {
 
     </div>
   `;
-
 }
 
 
@@ -552,7 +617,6 @@ function renderShell(content) {
 ========================================================= */
 
 function ambassadorHome() {
-
   return `
     ${pageTitle(
       "MY SHARE",
@@ -560,22 +624,20 @@ function ambassadorHome() {
       "Your Ambassador progress."
     )}
 
-
     ${ambassadorProgress()}
-
 
     <div class="dashboard-grid four">
 
       ${metricCard(
         "Performance Score",
         "86%",
-        "Needs Improvement"
+        "On Track"
       )}
 
       ${metricCard(
         "Knowledge Score",
         "94%",
-        "On track"
+        "On Track"
       )}
 
       ${metricCard(
@@ -587,33 +649,29 @@ function ambassadorHome() {
       ${clickableMetricCard(
         "Open Actions",
         "2",
-        "Needs your attention",
+        "Review actions",
         "performance"
       )}
 
     </div>
-
 
     <div class="dashboard-grid two">
 
       <section class="dashboard-card">
 
         <span class="section-label">
-          NEEDS YOUR ATTENTION
+          RECENT ACTIVITY
         </span>
 
         <h3>
-          What to work on next
+          What to review
         </h3>
 
-
         <div
-          class="home-action-card high"
+          class="home-action-card attention"
           onclick="openPerformanceInteraction('INT-0984')"
         >
-
           <div>
-
             <strong>
               Cancellation Refund interaction
             </strong>
@@ -621,13 +679,9 @@ function ambassadorHome() {
             <p>
               Score 47% · Needs Attention
             </p>
-
           </div>
 
-          <span>
-            Review →
-          </span>
-
+          <span>Review →</span>
         </div>
 
 
@@ -635,9 +689,7 @@ function ambassadorHome() {
           class="home-action-card"
           onclick="openTrainingTarget('refund')"
         >
-
           <div>
-
             <strong>
               Refund Handling Refresher
             </strong>
@@ -645,13 +697,9 @@ function ambassadorHome() {
             <p>
               Recommended · 15 min
             </p>
-
           </div>
 
-          <span>
-            Start →
-          </span>
-
+          <span>Open →</span>
         </div>
 
       </section>
@@ -660,15 +708,15 @@ function ambassadorHome() {
       <section class="dashboard-card">
 
         <span class="section-label">
-          MY AMBASSADOR
+          MY STATUS
         </span>
 
         <h3>
-          Current status
+          Ambassador status
         </h3>
 
         ${profileLine(
-          "Status",
+          "Current Status",
           "Bronze Status"
         )}
 
@@ -689,46 +737,41 @@ function ambassadorHome() {
 
         <button
           class="profile-action-button"
-          onclick="navigateTo('ambassador')"
+          onclick="navigateTo('status')"
         >
-          View My Ambassador
+          View My Profile
         </button>
 
       </section>
 
     </div>
   `;
-
 }
 
 
 /* =========================================================
-   AMBASSADOR PROGRESS
+   AMBASSADOR JOURNEY
 ========================================================= */
 
 function ambassadorProgress() {
-
   return `
     <section class="ambassador-progress-card">
 
       <div class="progress-card-heading">
 
         <div>
-
           <span class="section-label">
             AMBASSADOR PROGRESS
           </span>
 
           <h2>
-            Progressing to Silver Status
+            Ambassador journey complete
           </h2>
 
           <p>
-            You're 65% of the way to Silver Status.
+            You have completed the core steps to become an active Ambassador.
           </p>
-
         </div>
-
 
         <div class="current-status-pill">
           Bronze Status
@@ -737,100 +780,64 @@ function ambassadorProgress() {
       </div>
 
 
-      <div class="ambassador-progress-track">
+      <div class="journey-step-track">
 
-        <div class="progress-line-background"></div>
+        ${journeyStep("Onboarded")}
 
-        <div class="progress-line-fill"></div>
+        ${journeyConnector()}
 
+        ${journeyStep("Mandatory Training")}
 
-        ${progressMilestone(
-          0,
-          "Onboarded",
-          "complete"
-        )}
+        ${journeyConnector()}
 
-        ${progressMilestone(
-          16.5,
-          "Mandatory Training",
-          "complete"
-        )}
+        ${journeyStep("Knowledge Check")}
 
-        ${progressMilestone(
-          33,
-          "Knowledge Check",
-          "complete"
-        )}
+        ${journeyConnector()}
 
-        ${progressMilestone(
-          49.5,
-          "Personal QR Code",
-          "complete"
-        )}
-
-        ${progressMilestone(
-          66,
-          "Bronze Status",
-          "complete current"
-        )}
-
-        ${progressMilestone(
-          83,
-          "Silver Status",
-          "target"
-        )}
-
-        ${progressMilestone(
-          100,
-          "Gold Status",
-          "future"
-        )}
+        ${journeyStep("Personal QR Code")}
 
       </div>
 
 
-      <div class="progress-target-callout">
+      <div class="ambassador-status-summary">
 
-        <div class="progress-target-icon">
-          ↑
+        <div class="status-achieved-icon">
+          ★
         </div>
 
         <div>
+          <span class="section-label">
+            CURRENT STATUS
+          </span>
 
-          <strong>
-            Your next milestone: Silver Status
-          </strong>
+          <h3>
+            Bronze Status
+          </h3>
 
           <p>
-            Improve your Performance Score from 86% to the
-            required level to continue progressing.
+            You are progressing toward Silver Status.
           </p>
-
         </div>
 
-        <button
-          onclick="navigateTo('performance')"
-        >
-          Work on Performance
-        </button>
+        <div class="status-next">
+          <span>Next</span>
+          <strong>Silver Status</strong>
+        </div>
 
       </div>
 
     </section>
   `;
-
 }
 
 
-function progressMilestone(position, label, state) {
-
+function journeyStep(label) {
   return `
-    <div
-      class="progress-milestone ${state}"
-      style="left:${position}%"
-    >
+    <div class="journey-step completed">
 
-      <div class="progress-dot"></div>
+      <div class="journey-step-icon">
+        ✓
+      </div>
 
       <span>
         ${label}
@@ -838,16 +845,21 @@ function progressMilestone(position, label, state) {
 
     </div>
   `;
+}
 
+
+function journeyConnector() {
+  return `
+    <div class="journey-step-connector complete"></div>
+  `;
 }
 
 
 /* =========================================================
-   AMBASSADOR PERFORMANCE
+   PERFORMANCE
 ========================================================= */
 
 function ambassadorPerformance() {
-
   return `
     ${pageTitle(
       "PERFORMANCE",
@@ -855,19 +867,11 @@ function ambassadorPerformance() {
       "See how you're performing and where to focus next."
     )}
 
-
     <div class="performance-period">
 
       <div>
-
-        <span>
-          Assessment period
-        </span>
-
-        <strong>
-          01 Oct 2026 – 14 Oct 2026
-        </strong>
-
+        <span>Assessment period</span>
+        <strong>01 Oct 2026 – 14 Oct 2026</strong>
       </div>
 
       <button>
@@ -882,13 +886,13 @@ function ambassadorPerformance() {
       ${metricCard(
         "Performance Score",
         "86%",
-        "Current period"
+        "On Track"
       )}
 
       ${metricCard(
         "SOP Compliance",
         "92%",
-        "Current period"
+        "On Track"
       )}
 
       ${metricCard(
@@ -900,7 +904,7 @@ function ambassadorPerformance() {
       ${metricCard(
         "Open Actions",
         "2",
-        "Needs attention"
+        "Review required"
       )}
 
     </div>
@@ -910,72 +914,51 @@ function ambassadorPerformance() {
 
       <div class="table-heading">
 
-        <div>
+        <span class="section-label">
+          RECENT CUSTOMER INTERACTIONS
+        </span>
 
-          <span class="section-label">
-            RECENT CUSTOMER INTERACTIONS
-          </span>
+        <h3>
+          Your latest interactions
+        </h3>
 
-          <h3>
-            Your latest interactions
-          </h3>
-
-          <p>
-            Review your scores and analyse interactions that need improvement.
-          </p>
-
-        </div>
+        <p>
+          Review your score and analyse interactions where there is an opportunity to strengthen.
+        </p>
 
       </div>
 
 
       <div class="interaction-header">
 
-        <span>
-          Interaction
-        </span>
-
-        <span>
-          Channel / Duration
-        </span>
-
-        <span>
-          Process / Theme
-        </span>
-
-        <span>
-          Score
-        </span>
-
-        <span>
-          Status
-        </span>
-
-        <span>
-          Action
-        </span>
+        <span>Interaction</span>
+        <span>Channel / Duration</span>
+        <span>Process / Theme</span>
+        <span>Score</span>
+        <span>Status</span>
+        <span>Action</span>
 
       </div>
 
 
-      ${interactions.map(interaction => {
-
-        return interactionBlock(interaction);
-
-      }).join("")}
+      ${interactions
+        .map(interaction =>
+          interactionBlock(interaction)
+        )
+        .join("")}
 
     </section>
   `;
-
 }
 
 
 function interactionBlock(interaction) {
-
-  const status = getInteractionStatus(interaction.score);
+  const status =
+    getInteractionStatus(interaction.score);
 
   const isExpanded =
     expandedInteractionId === interaction.id;
+
 
   const action =
     interaction.score >= 90
@@ -984,7 +967,11 @@ function interactionBlock(interaction) {
           class="details-button"
           onclick="toggleInteractionDetails('${interaction.id}')"
         >
-          ${isExpanded ? "Collapse Details" : "View Details"}
+          ${
+            isExpanded
+              ? "Collapse Details"
+              : "View Details"
+          }
         </button>
       `
       : `
@@ -993,7 +980,12 @@ function interactionBlock(interaction) {
           onclick="analyseInlineInteraction('${interaction.id}')"
         >
           <span>✦</span>
-          ${isExpanded ? "Collapse Analysis" : "Analyse Interaction"}
+
+          ${
+            isExpanded
+              ? "Collapse Analysis"
+              : "Analyse Interaction"
+          }
         </button>
       `;
 
@@ -1004,62 +996,32 @@ function interactionBlock(interaction) {
       <div class="interaction-row">
 
         <div>
-
-          <strong>
-            ${interaction.id}
-          </strong>
-
-          <span>
-            ${interaction.date}
-          </span>
-
+          <strong>${interaction.id}</strong>
+          <span>${interaction.date}</span>
         </div>
-
 
         <div>
-
-          <strong>
-            ${interaction.channel}
-          </strong>
-
-          <span>
-            ${interaction.duration}
-          </span>
-
+          <strong>${interaction.channel}</strong>
+          <span>${interaction.duration}</span>
         </div>
-
 
         <div>
-
-          <strong>
-            ${interaction.process}
-          </strong>
-
-          <span>
-            Customer interaction
-          </span>
-
+          <strong>${interaction.process}</strong>
+          <span>Customer interaction</span>
         </div>
-
 
         <div class="interaction-score ${
           interaction.score < 50 ? "low" : ""
         }">
-
           ${interaction.score}%
-
         </div>
 
-
         <div>
-
           <span class="status-block ${status.className}">
             ${status.icon}
             ${status.label}
           </span>
-
         </div>
-
 
         <div>
           ${action}
@@ -1074,41 +1036,33 @@ function interactionBlock(interaction) {
           isExpanded ? "open" : ""
         }"
       >
-
         ${
           isExpanded
             ? renderExpandedInteraction(interaction)
             : ""
         }
-
       </div>
 
     </div>
   `;
-
 }
 
 
 function getInteractionStatus(score) {
-
   if (score >= 90) {
-
     return {
       label: "Good Interaction",
       className: "good",
       icon: "✓"
     };
-
   }
 
   if (score >= 50) {
-
     return {
-      label: "Needs Improvement",
-      className: "improvement",
-      icon: "!"
+      label: "Opportunity to Strengthen",
+      className: "strengthen",
+      icon: "↗"
     };
-
   }
 
   return {
@@ -1116,31 +1070,21 @@ function getInteractionStatus(score) {
     className: "attention",
     icon: "!"
   };
-
 }
 
 
 function toggleInteractionDetails(interactionId) {
-
-  if (expandedInteractionId === interactionId) {
-
-    expandedInteractionId = null;
-
-  } else {
-
-    expandedInteractionId = interactionId;
-
-  }
+  expandedInteractionId =
+    expandedInteractionId === interactionId
+      ? null
+      : interactionId;
 
   navigateTo("performance");
-
 }
 
 
 function renderExpandedInteraction(interaction) {
-
   if (interaction.score >= 90) {
-
     return `
       <div class="good-interaction-detail">
 
@@ -1149,7 +1093,6 @@ function renderExpandedInteraction(interaction) {
         </div>
 
         <div>
-
           <span class="section-label">
             INTERACTION RESULT
           </span>
@@ -1163,12 +1106,10 @@ function renderExpandedInteraction(interaction) {
             Customer verification, communication and process handling
             were completed successfully.
           </p>
-
         </div>
 
       </div>
     `;
-
   }
 
 
@@ -1181,7 +1122,6 @@ function renderExpandedInteraction(interaction) {
       <div class="analysis-ready">
 
         <div>
-
           <span class="section-label">
             AI INTERACTION ANALYSIS
           </span>
@@ -1191,10 +1131,9 @@ function renderExpandedInteraction(interaction) {
           </h3>
 
           <p>
-            SHARE Lens will run the complete specialist agent team
+            SHARE Lens will run the specialist agent team
             against this interaction.
           </p>
-
         </div>
 
         <button
@@ -1208,20 +1147,14 @@ function renderExpandedInteraction(interaction) {
 
     </div>
   `;
-
 }
 
 
 function analyseInlineInteraction(interactionId) {
-
   if (expandedInteractionId === interactionId) {
-
     expandedInteractionId = null;
-
     navigateTo("performance");
-
     return;
-
   }
 
   expandedInteractionId = interactionId;
@@ -1229,71 +1162,73 @@ function analyseInlineInteraction(interactionId) {
   navigateTo("performance");
 
   setTimeout(() => {
-
     startInlineAnalysis(interactionId);
-
   }, 100);
-
 }
 
 
 function startInlineAnalysis(interactionId) {
-
   const interaction =
-    interactions.find(item => item.id === interactionId);
+    interactions.find(
+      item => item.id === interactionId
+    );
 
   if (!interaction) return;
 
 
   runAnimation({
+    outputId:
+      `inline-analysis-${interaction.id}`,
 
-    outputId: `inline-analysis-${interaction.id}`,
-
-    title: `Analysing ${interaction.id}`,
+    title:
+      `Analysing ${interaction.id}`,
 
     steps: [
-
       {
-        id: `evaluation-${interaction.id}`,
-        title: "Evaluation Agent",
+        id:
+          `evaluation-${interaction.id}`,
+        title:
+          "Evaluation Agent",
         message:
           "Reviewing service quality and customer handling."
       },
 
       {
-        id: `sop-${interaction.id}`,
-        title: "SOP Agent",
+        id:
+          `sop-${interaction.id}`,
+        title:
+          "SOP Agent",
         message:
           "Checking required process steps."
       },
 
       {
-        id: `compliance-${interaction.id}`,
-        title: "Compliance Agent",
+        id:
+          `compliance-${interaction.id}`,
+        title:
+          "Compliance Agent",
         message:
           "Checking mandatory controls and compliance."
       },
 
       {
-        id: `combined-${interaction.id}`,
-        title: "Combined Analysis",
+        id:
+          `combined-${interaction.id}`,
+        title:
+          "Combined Analysis",
         message:
           "Combining findings and identifying the next best action."
       }
-
     ],
 
     onComplete: () => {
       showInlineAnalysisResult(interaction);
     }
-
   });
-
 }
 
 
 function showInlineAnalysisResult(interaction) {
-
   const output =
     document.getElementById(
       `inline-analysis-${interaction.id}`
@@ -1305,7 +1240,6 @@ function showInlineAnalysisResult(interaction) {
   const analysis =
     analyseInteraction(interaction);
 
-
   const urgent =
     interaction.score < 50;
 
@@ -1316,7 +1250,6 @@ function showInlineAnalysisResult(interaction) {
       <div class="inline-result-heading">
 
         <div>
-
           <span class="section-label">
             AI ANALYSIS COMPLETE
           </span>
@@ -1324,24 +1257,23 @@ function showInlineAnalysisResult(interaction) {
           <h3>
             ${
               urgent
-                ? "Immediate Attention Required"
-                : "Needs Improvement"
+                ? "Needs Attention"
+                : "Opportunity to Strengthen"
             }
           </h3>
 
           <p>
             ${interaction.process} · ${interaction.score}%
           </p>
-
         </div>
 
         <span class="status-block ${
-          urgent ? "attention" : "improvement"
+          urgent ? "attention" : "strengthen"
         }">
           ${
             urgent
               ? "! Needs Attention"
-              : "! Needs Improvement"
+              : "↗ Opportunity to Strengthen"
           }
         </span>
 
@@ -1371,7 +1303,7 @@ function showInlineAnalysisResult(interaction) {
         <section class="analysis-callout warning">
 
           <span class="section-label">
-            NEEDS ATTENTION
+            OPPORTUNITY TO STRENGTHEN
           </span>
 
           <h4>
@@ -1379,8 +1311,8 @@ function showInlineAnalysisResult(interaction) {
           </h4>
 
           <p>
-            The expected refund timeframe was not clearly
-            communicated to the customer.
+            The expected refund timeframe could have been
+            communicated more clearly to the customer.
           </p>
 
         </section>
@@ -1418,24 +1350,22 @@ function showInlineAnalysisResult(interaction) {
         </div>
 
         <div>
-
           <span class="section-label">
             RECOMMENDED NEXT ACTION
           </span>
 
           <h3>
-            ${interaction.trainingTarget}
+            ${interaction.trainingTitle}
           </h3>
 
           <p>
-            Complete the relevant training before taking the
+            Review the relevant training and then complete the
             ${interaction.knowledgeTarget}.
           </p>
-
         </div>
 
         <button
-          onclick="openTrainingTarget('refund')"
+          onclick="openTrainingTarget('${interaction.trainingTarget}')"
         >
           Go to Training
         </button>
@@ -1444,7 +1374,6 @@ function showInlineAnalysisResult(interaction) {
 
     </div>
   `;
-
 }
 
 
@@ -1453,7 +1382,6 @@ function showInlineAnalysisResult(interaction) {
 ========================================================= */
 
 function trainingPage() {
-
   return `
     ${pageTitle(
       "TRAINING & KNOWLEDGE",
@@ -1465,140 +1393,120 @@ function trainingPage() {
     <section class="completed-journey-card">
 
       <div>
-
         <span class="section-label">
           AMBASSADOR JOURNEY
         </span>
 
         <h3>
-          Activation complete
+          Core journey complete
         </h3>
 
         <p>
-          You have completed Onboarding, Mandatory Training,
-          Knowledge Check and Personal QR Code activation.
-          You are now progressing through Ambassador Status levels.
+          Onboarded, Mandatory Training, Knowledge Check and
+          Personal QR Code are complete.
         </p>
-
       </div>
 
       <span class="status-block good">
-        ✓ Bronze Status
+        ✓ Complete
       </span>
 
     </section>
 
 
-    <div class="training-summary">
+    <div class="training-layout">
 
-      ${metricCard(
-        "Completed",
-        "6",
-        "Modules"
-      )}
+      <section class="dashboard-card training-panel">
 
-      ${metricCard(
-        "In Progress",
-        "1",
-        "Module"
-      )}
+        <div class="training-panel-heading">
 
-      ${metricCard(
-        "Recommended",
-        "1",
-        "From performance"
-      )}
+          <div>
+            <span class="section-label">
+              ASSIGNED TRAINING
+            </span>
 
-      ${metricCard(
-        "Overdue",
-        "0",
-        "No overdue learning"
-      )}
+            <h3>
+              Your assigned learning
+            </h3>
+
+            <p>
+              Training assigned as part of your formal learning plan.
+            </p>
+          </div>
+
+          <span class="training-count">
+            ${assignedTraining.length}
+          </span>
+
+        </div>
+
+
+        <div class="training-card-list">
+
+          ${assignedTraining
+            .map(item =>
+              assignedTrainingCard(item)
+            )
+            .join("")}
+
+        </div>
+
+      </section>
+
+
+      <section class="dashboard-card training-panel recommended-panel">
+
+        <div class="training-panel-heading">
+
+          <div>
+            <span class="section-label">
+              RECOMMENDED TRAINING
+            </span>
+
+            <h3>
+              Recommended for you
+            </h3>
+
+            <p>
+              Development recommended from your recent performance.
+            </p>
+          </div>
+
+          <span class="training-count recommended">
+            ${recommendedTraining.length}
+          </span>
+
+        </div>
+
+
+        <div class="training-card-list">
+
+          ${recommendedTraining
+            .map(item =>
+              recommendedTrainingCard(item)
+            )
+            .join("")}
+
+        </div>
+
+      </section>
 
     </div>
 
 
-    <section class="dashboard-card">
-
-      <div class="table-heading">
-
-        <div>
-
-          <span class="section-label">
-            LEARNING
-          </span>
-
-          <h3>
-            Assigned & recommended training
-          </h3>
-
-        </div>
-
-      </div>
-
-
-      <div class="training-header">
-
-        <span>Training</span>
-        <span>Duration</span>
-        <span>Assigned</span>
-        <span>Due</span>
-        <span>Aging</span>
-        <span>Status</span>
-        <span>Action</span>
-
-      </div>
-
-
-      ${trainingTableRow(
-        "SHARE Customer Experience",
-        "20 min",
-        "01 Oct",
-        "15 Oct",
-        "13 days",
-        "Completed",
-        "completed"
-      )}
-
-
-      ${trainingTableRow(
-        "Product Knowledge",
-        "30 min",
-        "20 Sep",
-        "30 Sep",
-        "Completed",
-        "Completed",
-        "completed"
-      )}
-
-
-      <div
-        id="training-refund"
-      >
-
-        ${trainingTableRow(
-          "Refund Handling Refresher",
-          "15 min",
-          "14 Oct",
-          "21 Oct",
-          "New",
-          "Recommended",
-          "recommended"
-        )}
-
-      </div>
-
-
-      ${trainingTableRow(
-        "Service Recovery Essentials",
-        "25 min",
-        "12 Oct",
-        "19 Oct",
-        "2 days",
-        "In Progress",
-        "progress"
-      )}
-
+    <section
+      id="training-focus-panel"
+      class="training-focus-panel ${
+        selectedTrainingId ? "visible" : ""
+      }"
+    >
+      ${
+        selectedTrainingId
+          ? renderTrainingFocus(
+              selectedTrainingId
+            )
+          : ""
+      }
     </section>
 
 
@@ -1617,19 +1525,12 @@ function trainingPage() {
       </p>
 
       <div class="knowledge-check-meta">
+        <span>10 questions</span>
+        <span>Approx. 5 min</span>
 
-        <span>
-          10 questions
-        </span>
-
-        <span>
-          Approx. 5 min
-        </span>
-
-        <span class="status-block improvement">
+        <span class="status-block strengthen">
           Recommended
         </span>
-
       </div>
 
       <button class="primary-small">
@@ -1638,54 +1539,53 @@ function trainingPage() {
 
     </section>
   `;
-
 }
 
 
-function trainingTableRow(
-  title,
-  duration,
-  assigned,
-  due,
-  aging,
-  status,
-  state
-) {
-
+function assignedTrainingCard(item) {
   return `
-    <div class="training-row ${state}">
+    <div
+      id="training-${item.id}"
+      class="training-item-card"
+    >
 
-      <div>
+      <div class="training-item-main">
 
-        <strong>
-          ${title}
-        </strong>
+        <div>
+          <strong class="training-item-title">
+            ${item.title}
+          </strong>
+
+          <div class="training-item-meta">
+            <span>${item.duration}</span>
+            <span>Assigned ${item.assigned}</span>
+            <span>Due ${item.due}</span>
+          </div>
+        </div>
+
+        <span class="training-status ${
+          item.status === "Completed"
+            ? "completed"
+            : "progress"
+        }">
+          ${item.status}
+        </span>
 
       </div>
 
-      <span>
-        ${duration}
-      </span>
 
-      <span>
-        ${assigned}
-      </span>
+      <div class="training-aging">
+        <span>Aging</span>
+        <strong>${item.aging}</strong>
+      </div>
 
-      <span>
-        ${due}
-      </span>
 
-      <span>
-        ${aging}
-      </span>
-
-      <span class="training-status ${state}">
-        ${status}
-      </span>
-
-      <button class="small-button">
+      <button
+        class="training-open-button"
+        onclick="openTrainingTarget('${item.id}')"
+      >
         ${
-          status === "Completed"
+          item.status === "Completed"
             ? "Review"
             : "Open"
         }
@@ -1693,36 +1593,192 @@ function trainingTableRow(
 
     </div>
   `;
-
 }
 
 
-function openTrainingTarget(target) {
+function recommendedTrainingCard(item) {
+  return `
+    <div
+      id="training-${item.id}"
+      class="training-item-card recommended"
+    >
+
+      <div class="recommended-tag">
+        Performance recommendation
+      </div>
+
+      <div class="training-item-main">
+
+        <div>
+          <strong class="training-item-title">
+            ${item.title}
+          </strong>
+
+          <div class="training-item-meta">
+            <span>${item.duration}</span>
+            <span>Recommended ${item.recommended}</span>
+          </div>
+        </div>
+
+        <span class="training-status recommended">
+          Recommended
+        </span>
+
+      </div>
+
+
+      <p class="training-reason">
+        ${item.reason}
+      </p>
+
+
+      <button
+        class="training-open-button primary"
+        onclick="openTrainingTarget('${item.id}')"
+      >
+        Open
+      </button>
+
+    </div>
+  `;
+}
+
+
+function openTrainingTarget(trainingId) {
+  selectedTrainingId = trainingId;
 
   navigateTo("training");
 
   setTimeout(() => {
-
-    const node =
+    const trainingCard =
       document.getElementById(
-        `training-${target}`
+        `training-${trainingId}`
       );
 
-    if (node) {
+    const focusPanel =
+      document.getElementById(
+        "training-focus-panel"
+      );
 
-      node.scrollIntoView({
+    if (trainingCard) {
+      trainingCard.classList.add(
+        "highlight-training"
+      );
+    }
+
+    if (focusPanel) {
+      focusPanel.scrollIntoView({
         behavior: "smooth",
         block: "center"
       });
-
-      node.classList.add(
-        "highlight-training"
-      );
-
     }
+  }, 120);
+}
 
-  }, 100);
 
+function renderTrainingFocus(trainingId) {
+  const item =
+    assignedTraining.find(
+      training =>
+        training.id === trainingId
+    )
+    ||
+    recommendedTraining.find(
+      training =>
+        training.id === trainingId
+    );
+
+  if (!item) return "";
+
+
+  const isRecommended =
+    recommendedTraining.some(
+      training =>
+        training.id === trainingId
+    );
+
+
+  return `
+    <div class="training-focus-content">
+
+      <div class="training-focus-heading">
+
+        <div>
+          <span class="section-label">
+            ${
+              isRecommended
+                ? "RECOMMENDED TRAINING"
+                : "ASSIGNED TRAINING"
+            }
+          </span>
+
+          <h2>
+            ${item.title}
+          </h2>
+
+          <p>
+            ${item.description}
+          </p>
+        </div>
+
+        <span class="training-focus-duration">
+          ${item.duration}
+        </span>
+
+      </div>
+
+
+      ${
+        isRecommended
+          ? `
+            <div class="training-source-callout">
+              <strong>
+                Why this was recommended
+              </strong>
+
+              <p>
+                ${item.reason}
+              </p>
+            </div>
+          `
+          : `
+            <div class="training-detail-grid">
+
+              <div>
+                <span>Assigned</span>
+                <strong>${item.assigned}</strong>
+              </div>
+
+              <div>
+                <span>Due</span>
+                <strong>${item.due}</strong>
+              </div>
+
+              <div>
+                <span>Aging</span>
+                <strong>${item.aging}</strong>
+              </div>
+
+              <div>
+                <span>Status</span>
+                <strong>${item.status}</strong>
+              </div>
+
+            </div>
+          `
+      }
+
+
+      <button class="start-training-button">
+        ${
+          item.status === "Completed"
+            ? "Review Training"
+            : "Start Training"
+        }
+      </button>
+
+    </div>
+  `;
 }
 
 
@@ -1731,91 +1787,278 @@ function openTrainingTarget(target) {
 ========================================================= */
 
 function knowledgePage() {
-
   return `
     ${pageTitle(
       "TRAINING & KNOWLEDGE",
       "Knowledge Base",
-      "Approved knowledge relevant to your role."
+      "Search and access approved SHARE knowledge."
     )}
 
 
-    <div class="dashboard-grid two">
+    <section class="knowledge-recommended">
 
-      <section class="dashboard-card">
+      <span class="section-label">
+        RECOMMENDED FOR YOU
+      </span>
 
-        <span class="section-label">
-          RECOMMENDED FOR YOU
-        </span>
+      <h3>
+        Based on your recent performance
+      </h3>
 
-        <h3>
-          Relevant Knowledge
-        </h3>
 
-        ${knowledgeRow(
+      <div class="recommended-knowledge-grid">
+
+        ${recommendedKnowledgeCard(
           "Refund Process",
-          "Process Guidance · Updated 2 Oct"
+          "Refunds & Cancellations",
+          "Linked to your recent Refund Handling performance."
         )}
 
-        ${knowledgeRow(
-          "Customer Verification",
-          "Service Guidance · Updated 19 Sep"
-        )}
-
-        ${knowledgeRow(
+        ${recommendedKnowledgeCard(
           "Cancellation & Refund Policy",
-          "Policy · Updated 12 Sep"
+          "Refunds & Cancellations",
+          "Review expected refund timelines and customer communication."
         )}
 
-        ${knowledgeRow(
-          "SHARE Benefits",
-          "Product Knowledge · Updated 9 Oct"
+      </div>
+
+    </section>
+
+
+    <section class="dashboard-card knowledge-repository">
+
+      <div class="knowledge-repository-heading">
+
+        <div>
+          <span class="section-label">
+            FULL KNOWLEDGE BASE
+          </span>
+
+          <h3>
+            All approved knowledge
+          </h3>
+
+          <p>
+            Browse the complete approved knowledge repository.
+          </p>
+        </div>
+
+        <div class="knowledge-count">
+          ${knowledgeRepository.length}
+          <span>Articles</span>
+        </div>
+
+      </div>
+
+
+      <div class="knowledge-toolbar">
+
+        <div class="knowledge-search">
+          <span>⌕</span>
+
+          <input
+            id="knowledge-search"
+            type="text"
+            placeholder="Search Knowledge Base"
+            oninput="filterKnowledgeBase()"
+          >
+        </div>
+
+
+        <select
+          id="knowledge-category"
+          onchange="filterKnowledgeBase()"
+        >
+          <option value="all">
+            All Categories
+          </option>
+
+          <option value="Customer Service">
+            Customer Service
+          </option>
+
+          <option value="Refunds & Cancellations">
+            Refunds & Cancellations
+          </option>
+
+          <option value="SHARE Benefits">
+            SHARE Benefits
+          </option>
+
+          <option value="Ambassador Program">
+            Ambassador Program
+          </option>
+
+          <option value="Policies">
+            Policies
+          </option>
+
+          <option value="SOPs">
+            SOPs
+          </option>
+        </select>
+
+      </div>
+
+
+      <div class="knowledge-header">
+        <span>Knowledge Article</span>
+        <span>Category</span>
+        <span>Type</span>
+        <span>Updated</span>
+        <span>Action</span>
+      </div>
+
+
+      <div id="knowledge-results">
+        ${renderKnowledgeRows(
+          knowledgeRepository
         )}
+      </div>
 
-      </section>
+    </section>
+  `;
+}
 
 
-      <section class="dashboard-card">
+function recommendedKnowledgeCard(
+  title,
+  category,
+  reason
+) {
+  return `
+    <div class="recommended-knowledge-card">
 
-        <span class="section-label">
-          PERFORMANCE INSIGHT
+      <span class="knowledge-recommendation-icon">
+        ✦
+      </span>
+
+      <div>
+        <span class="knowledge-category">
+          ${category}
         </span>
 
-        <h3>
-          Refund timeline communication
-        </h3>
+        <h3>${title}</h3>
 
-        <p>
-          Your recent performance indicates an opportunity
-          to strengthen refund timeline communication.
-        </p>
+        <p>${reason}</p>
+      </div>
 
-        <button
-          class="primary-small"
-          onclick="openTrainingTarget('refund')"
-        >
-          Go to Training
-        </button>
-
-      </section>
+      <button class="small-button">
+        Open
+      </button>
 
     </div>
   `;
+}
 
+
+function renderKnowledgeRows(items) {
+  if (!items.length) {
+    return `
+      <div class="knowledge-empty">
+        No knowledge articles match your search.
+      </div>
+    `;
+  }
+
+  return items.map(item => `
+    <div class="knowledge-row">
+
+      <div>
+        <strong>${item.title}</strong>
+      </div>
+
+      <span>${item.category}</span>
+      <span>${item.type}</span>
+      <span>${item.updated}</span>
+
+      <button class="small-button">
+        Open
+      </button>
+
+    </div>
+  `).join("");
+}
+
+
+function filterKnowledgeBase() {
+  const searchNode =
+    document.getElementById(
+      "knowledge-search"
+    );
+
+  const categoryNode =
+    document.getElementById(
+      "knowledge-category"
+    );
+
+  const resultsNode =
+    document.getElementById(
+      "knowledge-results"
+    );
+
+  if (
+    !searchNode ||
+    !categoryNode ||
+    !resultsNode
+  ) {
+    return;
+  }
+
+
+  const search =
+    searchNode.value
+      .trim()
+      .toLowerCase();
+
+  const category =
+    categoryNode.value;
+
+
+  const filtered =
+    knowledgeRepository.filter(item => {
+      const matchesSearch =
+        !search
+        ||
+        item.title
+          .toLowerCase()
+          .includes(search)
+        ||
+        item.category
+          .toLowerCase()
+          .includes(search)
+        ||
+        item.type
+          .toLowerCase()
+          .includes(search);
+
+      const matchesCategory =
+        category === "all"
+        ||
+        item.category === category;
+
+      return (
+        matchesSearch &&
+        matchesCategory
+      );
+    });
+
+
+  resultsNode.innerHTML =
+    renderKnowledgeRows(filtered);
 }
 
 
 /* =========================================================
-   MY AMBASSADOR
+   MY STATUS
 ========================================================= */
 
-function ambassadorPage() {
-
+function statusPage() {
   return `
     ${pageTitle(
       "AMBASSADOR",
-      "My Ambassador",
-      "Your Ambassador status, Personal QR Code and recognition."
+      "My Status",
+      "Your profile, Ambassador status and Personal QR Code."
     )}
 
 
@@ -1830,7 +2073,6 @@ function ambassadorPage() {
           </div>
 
           <div>
-
             <h2>
               Layla Haddad
             </h2>
@@ -1838,7 +2080,6 @@ function ambassadorPage() {
             <span class="status-block good">
               Active Ambassador
             </span>
-
           </div>
 
         </div>
@@ -1914,44 +2155,51 @@ function ambassadorPage() {
     <section class="dashboard-card">
 
       <span class="section-label">
-        RECOGNITION
+        STATUS
       </span>
 
       <h3>
-        Ambassador achievements
+        Bronze Status achieved
       </h3>
 
-      <div class="dashboard-grid three no-bottom">
+      <p>
+        Your current Ambassador activity contributes toward
+        Silver Status.
+      </p>
 
-        ${awardCard(
-          "Bronze Status",
-          "Achieved"
-        )}
 
-        ${awardCard(
-          "Silver Status",
-          "In progress"
-        )}
+      <div class="status-cards">
 
-        ${awardCard(
-          "Gold Status",
-          "Future milestone"
-        )}
+        <div class="status-level achieved">
+          <span>Current</span>
+          <strong>Bronze Status</strong>
+          <small>Achieved</small>
+        </div>
+
+        <div class="status-level next">
+          <span>Next</span>
+          <strong>Silver Status</strong>
+          <small>In progress</small>
+        </div>
+
+        <div class="status-level future">
+          <span>Future</span>
+          <strong>Gold Status</strong>
+          <small>Future status</small>
+        </div>
 
       </div>
 
     </section>
   `;
-
 }
 
 
 /* =========================================================
-   MANAGER HOME
+   MANAGER
 ========================================================= */
 
 function managerHome() {
-
   return `
     ${pageTitle(
       "ENTERTAINMENT UAE",
@@ -2036,8 +2284,8 @@ function managerHome() {
 
         ${attentionRow(
           "Layla Haddad",
-          "Performance",
-          "86%"
+          "Interaction review",
+          "1"
         )}
 
         ${attentionRow(
@@ -2048,7 +2296,7 @@ function managerHome() {
 
         ${attentionRow(
           "Sara Khan",
-          "Low performance",
+          "Performance",
           "72%"
         )}
 
@@ -2056,16 +2304,10 @@ function managerHome() {
 
     </div>
   `;
-
 }
 
 
-/* =========================================================
-   MANAGER PERFORMANCE
-========================================================= */
-
 function managerPerformance() {
-
   return `
     ${pageTitle(
       "SERVICE DELIVERY",
@@ -2077,7 +2319,6 @@ function managerPerformance() {
     <section class="overall-analysis-card">
 
       <div>
-
         <span class="section-label">
           AI PERFORMANCE ANALYSIS
         </span>
@@ -2090,7 +2331,6 @@ function managerPerformance() {
           Analyse performance, training and knowledge signals
           across Entertainment UAE.
         </p>
-
       </div>
 
 
@@ -2098,13 +2338,11 @@ function managerPerformance() {
         class="analyse-overall-button"
         onclick="runManagerAnalysis()"
       >
-
         <span class="overall-ai-icon">
           ✦
         </span>
 
         <div>
-
           <strong>
             Analyse BU Performance
           </strong>
@@ -2112,9 +2350,7 @@ function managerPerformance() {
           <small>
             Finds themes, severity and intervention needs
           </small>
-
         </div>
-
       </button>
 
     </section>
@@ -2125,7 +2361,7 @@ function managerPerformance() {
       ${metricCard(
         "Performance Score",
         "86%",
-        "Entertainment UAE"
+        "On Track"
       )}
 
       ${metricCard(
@@ -2209,66 +2445,67 @@ function managerPerformance() {
 
     </section>
   `;
-
 }
 
 
 function runManagerAnalysis() {
-
   runAnimation({
+    outputId:
+      "manager-agent-output",
 
-    outputId: "manager-agent-output",
-
-    title: "Analysing Entertainment UAE",
+    title:
+      "Analysing Entertainment UAE",
 
     steps: [
-
       {
-        id: "manager-performance",
-        title: "Performance Agent",
+        id:
+          "manager-performance",
+        title:
+          "Performance Agent",
         message:
           "Assessing performance, training and knowledge indicators."
       },
-
       {
-        id: "manager-theme",
-        title: "Theme Agent",
+        id:
+          "manager-theme",
+        title:
+          "Theme Agent",
         message:
           "Grouping recurring themes across locations and Ambassadors."
       },
-
       {
-        id: "manager-knowledge",
-        title: "Knowledge Gap Agent",
+        id:
+          "manager-knowledge",
+        title:
+          "Knowledge Gap Agent",
         message:
           "Identifying recurring development gaps."
       },
-
       {
-        id: "manager-intervention",
-        title: "Intervention Agent",
+        id:
+          "manager-intervention",
+        title:
+          "Intervention Agent",
         message:
           "Ranking MAF mall locations requiring intervention."
       },
-
       {
-        id: "manager-combined",
-        title: "Combined Analysis",
+        id:
+          "manager-combined",
+        title:
+          "Combined Analysis",
         message:
           "Preparing recommended areas of focus."
       }
-
     ],
 
-    onComplete: showManagerAnalysisResult
-
+    onComplete:
+      showManagerAnalysisResult
   });
-
 }
 
 
 function showManagerAnalysisResult() {
-
   const output =
     document.getElementById(
       "manager-agent-output"
@@ -2276,8 +2513,8 @@ function showManagerAnalysisResult() {
 
   if (!output) return;
 
-  output.innerHTML = `
 
+  output.innerHTML = `
     ${analysisHeader(
       "BU AI ANALYSIS",
       "3 locations require intervention",
@@ -2365,7 +2602,6 @@ function showManagerAnalysisResult() {
       </div>
 
       <div>
-
         <span class="section-label">
           PRIORITY INTERVENTION
         </span>
@@ -2377,49 +2613,29 @@ function showManagerAnalysisResult() {
         <p>
           8 Ambassadors affected. Refund SLA is the dominant theme.
           Training completion is 71% and performance has declined
-          by 9% during the current assessment period.
+          by 9% during the current period.
         </p>
-
       </div>
 
 
       <div class="intervention-actions">
-
-        <strong>
-          Recommended
-        </strong>
-
-        <span>
-          Assign targeted refresher
-        </span>
-
-        <span>
-          Complete Knowledge Check
-        </span>
-
-        <span>
-          Trainer intervention within 3 days
-        </span>
-
+        <strong>Recommended</strong>
+        <span>Assign targeted refresher</span>
+        <span>Complete Knowledge Check</span>
+        <span>Trainer intervention within 3 days</span>
       </div>
 
     </section>
   `;
-
 }
 
 
-/* =========================================================
-   MANAGER ONBOARDING
-========================================================= */
-
 function managerOnboarding() {
-
   return `
     ${pageTitle(
       "AMBASSADOR PROGRAM",
       "Onboarding",
-      "Track Ambassadors from account creation through active status."
+      "Track Ambassadors through the onboarding journey."
     )}
 
 
@@ -2444,9 +2660,9 @@ function managerOnboarding() {
       )}
 
       ${metricCard(
-        "Ready for Bronze Status",
+        "Personal QR Code",
         "3",
-        "Current"
+        "Ready"
       )}
 
     </div>
@@ -2477,7 +2693,6 @@ function managerOnboarding() {
 
     </section>
   `;
-
 }
 
 
@@ -2486,7 +2701,6 @@ function managerOnboarding() {
 ========================================================= */
 
 function serviceHome() {
-
   return `
     ${pageTitle(
       "MAF MALLS",
@@ -2496,23 +2710,10 @@ function serviceHome() {
 
 
     <div class="filter-bar">
-
-      <span>
-        Country: UAE
-      </span>
-
-      <span>
-        MAF Mall: All
-      </span>
-
-      <span>
-        Brand: All
-      </span>
-
-      <span>
-        Ambassador: All
-      </span>
-
+      <span>Country: UAE</span>
+      <span>MAF Mall: All</span>
+      <span>Brand: All</span>
+      <span>Ambassador: All</span>
     </div>
 
 
@@ -2551,7 +2752,7 @@ function serviceHome() {
         "Service Delivery",
         "88%",
         "Performance Score",
-        "3 locations need intervention",
+        "3 locations require focus",
         "group-performance"
       )}
 
@@ -2587,23 +2788,18 @@ function serviceHome() {
         </h3>
 
         <ul class="risk-list">
-
           <li>
             Refund SLA knowledge gap across three MAF mall locations
           </li>
-
           <li>
             22 Ambassadors have overdue learning
           </li>
-
           <li>
             3 locations are below performance threshold
           </li>
-
           <li>
             6 Ambassador onboarding journeys are delayed
           </li>
-
         </ul>
 
       </section>
@@ -2620,35 +2816,28 @@ function serviceHome() {
         </h3>
 
         <ul class="risk-list">
-
           <li>
             Assign targeted refund handling refresher
           </li>
-
           <li>
             Notify relevant BU trainers
           </li>
-
           <li>
             Prioritise low-performing MAF mall locations
           </li>
-
           <li>
             Follow up delayed Ambassador onboarding
           </li>
-
         </ul>
 
       </section>
 
     </div>
   `;
-
 }
 
 
 function servicePerformance() {
-
   return `
     ${pageTitle(
       "SERVICE DELIVERY",
@@ -2660,7 +2849,6 @@ function servicePerformance() {
     <section class="overall-analysis-card">
 
       <div>
-
         <span class="section-label">
           GROUP AI ANALYSIS
         </span>
@@ -2673,7 +2861,6 @@ function servicePerformance() {
           Analyse performance, audit, training and knowledge
           signals across MAF mall locations.
         </p>
-
       </div>
 
 
@@ -2681,13 +2868,11 @@ function servicePerformance() {
         class="analyse-overall-button"
         onclick="runServiceAnalysis()"
       >
-
         <span class="overall-ai-icon">
           ✦
         </span>
 
         <div>
-
           <strong>
             Analyse Group Performance
           </strong>
@@ -2695,9 +2880,7 @@ function servicePerformance() {
           <small>
             Finds themes and priority interventions
           </small>
-
         </div>
-
       </button>
 
     </section>
@@ -2708,7 +2891,7 @@ function servicePerformance() {
       ${metricCard(
         "Performance Score",
         "88%",
-        "MAF malls"
+        "On Track"
       )}
 
       ${metricCard(
@@ -2798,73 +2981,75 @@ function servicePerformance() {
 
     </section>
   `;
-
 }
 
 
 function runServiceAnalysis() {
-
   runAnimation({
+    outputId:
+      "service-agent-output",
 
-    outputId: "service-agent-output",
-
-    title: "Analysing MAF Mall Performance",
+    title:
+      "Analysing MAF Mall Performance",
 
     steps: [
-
       {
-        id: "service-performance",
-        title: "Performance Agent",
+        id:
+          "service-performance",
+        title:
+          "Performance Agent",
         message:
           "Assessing performance across MAF mall locations."
       },
-
       {
-        id: "service-pattern",
-        title: "Pattern Agent",
+        id:
+          "service-pattern",
+        title:
+          "Pattern Agent",
         message:
           "Identifying recurring themes across locations."
       },
-
       {
-        id: "service-severity",
-        title: "Location Severity Agent",
+        id:
+          "service-severity",
+        title:
+          "Location Severity Agent",
         message:
           "Ranking locations by intervention need."
       },
-
       {
-        id: "service-intervention",
-        title: "Intervention Agent",
+        id:
+          "service-intervention",
+        title:
+          "Intervention Agent",
         message:
           "Matching issues to targeted interventions."
       },
-
       {
-        id: "service-action",
-        title: "Next Best Action",
+        id:
+          "service-action",
+        title:
+          "Next Best Action",
         message:
           "Prioritising recommended actions."
       },
-
       {
-        id: "service-combined",
-        title: "Combined Analysis",
+        id:
+          "service-combined",
+        title:
+          "Combined Analysis",
         message:
           "Preparing the Service Delivery view."
       }
-
     ],
 
-    onComplete: showServiceAnalysisResult
-
+    onComplete:
+      showServiceAnalysisResult
   });
-
 }
 
 
 function showServiceAnalysisResult() {
-
   const output =
     document.getElementById(
       "service-agent-output"
@@ -2874,7 +3059,6 @@ function showServiceAnalysisResult() {
 
 
   output.innerHTML = `
-
     ${analysisHeader(
       "GROUP AI ANALYSIS",
       "Priority intervention required",
@@ -2972,7 +3156,6 @@ function showServiceAnalysisResult() {
       </div>
 
       <div>
-
         <span class="section-label">
           PRIORITY INTERVENTION
         </span>
@@ -2986,37 +3169,19 @@ function showServiceAnalysisResult() {
           Knowledge Checks, six repeated SOP misses and five
           Ambassadors with overdue learning.
         </p>
-
       </div>
 
 
       <div class="intervention-actions">
-
-        <strong>
-          Next Best Action
-        </strong>
-
-        <span>
-          Assign Refund Handling refresher
-        </span>
-
-        <span>
-          Trigger Knowledge Check
-        </span>
-
-        <span>
-          BU trainer intervention
-        </span>
-
-        <span>
-          Reassess in 7 days
-        </span>
-
+        <strong>Next Best Action</strong>
+        <span>Assign Refund Handling refresher</span>
+        <span>Trigger Knowledge Check</span>
+        <span>BU trainer intervention</span>
+        <span>Reassess in 7 days</span>
       </div>
 
     </section>
   `;
-
 }
 
 
@@ -3025,7 +3190,6 @@ function showServiceAnalysisResult() {
 ========================================================= */
 
 function auditPage() {
-
   return `
     ${pageTitle(
       "SERVICE DELIVERY",
@@ -3083,8 +3247,8 @@ function auditPage() {
       ${auditRow(
         "City Centre Mirdif",
         "82%",
-        "Needs Improvement",
-        "improvement"
+        "Opportunity to Strengthen",
+        "strengthen"
       )}
 
       ${auditRow(
@@ -3097,8 +3261,8 @@ function auditPage() {
       ${auditRow(
         "City Centre Al Zahia",
         "88%",
-        "Needs Improvement",
-        "improvement"
+        "Opportunity to Strengthen",
+        "strengthen"
       )}
 
     </section>
@@ -3114,21 +3278,13 @@ function auditPage() {
         Emerging themes
       </h3>
 
+
       <div class="audit-theme-header">
-
-        <span>
-          Theme
-        </span>
-
-        <span>
-          Locations
-        </span>
-
-        <span>
-          Severity
-        </span>
-
+        <span>Theme</span>
+        <span>Locations</span>
+        <span>Severity</span>
       </div>
+
 
       ${auditThemeRow(
         "Greeting & Welcome",
@@ -3171,41 +3327,20 @@ function auditPage() {
         How Service Audit feeds performance
       </h3>
 
+
       <div class="audit-flow">
 
-        <span>
-          Mystery Shop
-        </span>
-
+        <span>Mystery Shop</span>
         <b>→</b>
-
-        <span>
-          Location Finding
-        </span>
-
+        <span>Location Finding</span>
         <b>→</b>
-
-        <span>
-          Theme & Severity
-        </span>
-
+        <span>Theme & Severity</span>
         <b>→</b>
-
-        <span>
-          Corrective Action
-        </span>
-
+        <span>Corrective Action</span>
         <b>→</b>
-
-        <span>
-          BU Performance
-        </span>
-
+        <span>BU Performance</span>
         <b>→</b>
-
-        <span>
-          Service Delivery Performance
-        </span>
+        <span>Service Delivery Performance</span>
 
       </div>
 
@@ -3225,16 +3360,14 @@ function auditPage() {
 
     </section>
   `;
-
 }
 
 
 /* =========================================================
-   PLATFORM ADMIN
+   ADMIN
 ========================================================= */
 
 function adminHome() {
-
   return `
     ${pageTitle(
       "PLATFORM ADMINISTRATION",
@@ -3344,16 +3477,12 @@ function adminHome() {
     </div>
 
 
-    <div
-      id="admin-provisioning-output"
-    ></div>
+    <div id="admin-provisioning-output"></div>
   `;
-
 }
 
 
 function showInviteAmbassador() {
-
   const output =
     document.getElementById(
       "admin-provisioning-output"
@@ -3403,12 +3532,10 @@ function showInviteAmbassador() {
 
     </section>
   `;
-
 }
 
 
 function showManualAmbassador() {
-
   const output =
     document.getElementById(
       "admin-provisioning-output"
@@ -3458,12 +3585,10 @@ function showManualAmbassador() {
 
     </section>
   `;
-
 }
 
 
 function usersAccessPage() {
-
   return `
     ${pageTitle(
       "IDENTITY & ACCESS",
@@ -3475,13 +3600,11 @@ function usersAccessPage() {
     <section class="dashboard-card">
 
       <div class="admin-table-header">
-
         <span>User</span>
         <span>Identity</span>
         <span>Role</span>
         <span>Scope</span>
         <span>Status</span>
-
       </div>
 
       ${userAccessRow(
@@ -3522,23 +3645,20 @@ function usersAccessPage() {
     <section class="notice-card">
 
       <strong>
-        Ambassador access
+        Ambassador journey
       </strong>
 
       <p>
-        Staff ID → account → first login → Onboarded →
-        Mandatory Training → Knowledge Check → Personal QR Code →
-        Bronze Status → Silver Status → Gold Status.
+        Onboarded → Mandatory Training → Knowledge Check →
+        Personal QR Code.
       </p>
 
     </section>
   `;
-
 }
 
 
 function rolesPage() {
-
   return `
     ${pageTitle(
       "IDENTITY & ACCESS",
@@ -3553,10 +3673,10 @@ function rolesPage() {
         "Ambassador",
         "Staff ID",
         [
-          "Own Performance",
+          "My Performance",
           "My Training",
           "Knowledge Base",
-          "My Ambassador",
+          "My Status",
           "Personal QR Code"
         ]
       )}
@@ -3598,12 +3718,10 @@ function rolesPage() {
 
     </div>
   `;
-
 }
 
 
 function aiAgentsPage() {
-
   return `
     ${pageTitle(
       "AI PLATFORM",
@@ -3652,12 +3770,10 @@ function aiAgentsPage() {
 
     </div>
   `;
-
 }
 
 
 function integrationsPage() {
-
   return `
     ${pageTitle(
       "PLATFORM",
@@ -3712,7 +3828,6 @@ function integrationsPage() {
 
     </div>
   `;
-
 }
 
 
@@ -3721,7 +3836,6 @@ function integrationsPage() {
 ========================================================= */
 
 function runAnimation(config) {
-
   const output =
     document.getElementById(
       config.outputId
@@ -3741,7 +3855,6 @@ function runAnimation(config) {
       <div class="pipeline-heading">
 
         <div>
-
           <span class="section-label">
             AGENT-TO-AGENT ORCHESTRATION
           </span>
@@ -3749,7 +3862,6 @@ function runAnimation(config) {
           <h3>
             ${config.title}
           </h3>
-
         </div>
 
         <span class="pipeline-running-badge">
@@ -3800,51 +3912,43 @@ function runAnimation(config) {
   `;
 
 
-  config.steps.forEach((step, index) => {
+  config.steps.forEach(
+    (step, index) => {
 
-    const startDelay =
-      index * 1050;
-
-
-    if (index > 0) {
-
-      setTimeout(() => {
-
-        activateGenericStep(
-          config.outputId,
-          step.id,
-          step.message
-        );
-
-      }, startDelay);
-
-    }
+      const startDelay =
+        index * 1050;
 
 
-    setTimeout(() => {
-
-      completeGenericStep(
-        step.id
-      );
-
-
-      if (
-        index ===
-        config.steps.length - 1
-      ) {
-
+      if (index > 0) {
         setTimeout(() => {
-
-          config.onComplete();
-
-        }, 350);
-
+          activateGenericStep(
+            config.outputId,
+            step.id,
+            step.message
+          );
+        }, startDelay);
       }
 
-    }, startDelay + 850);
 
-  });
+      setTimeout(() => {
+        completeGenericStep(
+          step.id
+        );
 
+
+        if (
+          index ===
+          config.steps.length - 1
+        ) {
+          setTimeout(() => {
+            config.onComplete();
+          }, 350);
+        }
+
+      }, startDelay + 850);
+
+    }
+  );
 }
 
 
@@ -3855,7 +3959,6 @@ function pipelineStep(
   status,
   state
 ) {
-
   return `
     <div
       id="step-${id}"
@@ -3867,20 +3970,15 @@ function pipelineStep(
       </div>
 
       <div>
-
-        <strong>
-          ${title}
-        </strong>
+        <strong>${title}</strong>
 
         <span id="status-${id}">
           ${status}
         </span>
-
       </div>
 
     </div>
   `;
-
 }
 
 
@@ -3889,14 +3987,12 @@ function activateGenericStep(
   id,
   message
 ) {
-
   const step =
     document.getElementById(
       `step-${id}`
     );
 
   if (step) {
-
     step.classList.remove(
       "waiting",
       "complete"
@@ -3905,7 +4001,6 @@ function activateGenericStep(
     step.classList.add(
       "active"
     );
-
   }
 
 
@@ -3925,21 +4020,19 @@ function activateGenericStep(
     );
 
   if (messageNode) {
-    messageNode.textContent = message;
+    messageNode.textContent =
+      message;
   }
-
 }
 
 
 function completeGenericStep(id) {
-
   const step =
     document.getElementById(
       `step-${id}`
     );
 
   if (step) {
-
     step.classList.remove(
       "waiting",
       "active"
@@ -3948,7 +4041,6 @@ function completeGenericStep(id) {
     step.classList.add(
       "complete"
     );
-
   }
 
 
@@ -3958,9 +4050,9 @@ function completeGenericStep(id) {
     );
 
   if (status) {
-    status.textContent = "Complete";
+    status.textContent =
+      "Complete";
   }
-
 }
 
 
@@ -3969,54 +4061,56 @@ function completeGenericStep(id) {
 ========================================================= */
 
 function navigateTo(page) {
-
   currentPage = page;
 
   let content = "";
 
 
   if (currentRole === "ambassador") {
-
     const pages = {
-      home: ambassadorHome,
-      performance: ambassadorPerformance,
-      training: trainingPage,
-      knowledge: knowledgePage,
-      ambassador: ambassadorPage
+      home:
+        ambassadorHome,
+      performance:
+        ambassadorPerformance,
+      training:
+        trainingPage,
+      knowledge:
+        knowledgePage,
+      status:
+        statusPage
     };
 
     content =
       pages[page]
         ? pages[page]()
         : ambassadorHome();
-
   }
 
 
   if (currentRole === "manager") {
-
     if (page === "home") {
-
-      content = managerHome();
-
+      content =
+        managerHome();
     }
 
-    else if (page === "team-performance") {
-
-      content = managerPerformance();
-
+    else if (
+      page ===
+      "team-performance"
+    ) {
+      content =
+        managerPerformance();
     }
 
-    else if (page === "manager-onboarding") {
-
-      content = managerOnboarding();
-
+    else if (
+      page ===
+      "manager-onboarding"
+    ) {
+      content =
+        managerOnboarding();
     }
 
     else {
-
       const configs = {
-
         "team-actions": [
           "SERVICE DELIVERY",
           "Actions",
@@ -4056,45 +4150,41 @@ function navigateTo(page) {
         "manager-recognition": [
           "AMBASSADOR PROGRAM",
           "Recognition",
-          "View Bronze, Silver and Gold Status progression."
+          "View Ambassador status and recognition."
         ]
-
       };
 
       content =
         genericRolePage(
           ...configs[page]
         );
-
     }
-
   }
 
 
   if (currentRole === "service") {
-
     if (page === "home") {
-
-      content = serviceHome();
-
+      content =
+        serviceHome();
     }
 
-    else if (page === "group-performance") {
-
-      content = servicePerformance();
-
+    else if (
+      page ===
+      "group-performance"
+    ) {
+      content =
+        servicePerformance();
     }
 
-    else if (page === "audit") {
-
-      content = auditPage();
-
+    else if (
+      page === "audit"
+    ) {
+      content =
+        auditPage();
     }
 
     else {
-
       const configs = {
-
         "group-actions": [
           "SERVICE DELIVERY",
           "Actions",
@@ -4140,43 +4230,44 @@ function navigateTo(page) {
         "group-recognition": [
           "AMBASSADOR PROGRAM",
           "Recognition",
-          "Bronze, Silver and Gold Status progression."
+          "Ambassador status and recognition."
         ]
-
       };
 
       content =
         genericRolePage(
           ...configs[page]
         );
-
     }
-
   }
 
 
   if (currentRole === "admin") {
-
     const pages = {
-      home: adminHome,
-      "users-access": usersAccessPage,
-      roles: rolesPage,
-      "ai-agents": aiAgentsPage,
-      integrations: integrationsPage
+      home:
+        adminHome,
+
+      "users-access":
+        usersAccessPage,
+
+      roles:
+        rolesPage,
+
+      "ai-agents":
+        aiAgentsPage,
+
+      integrations:
+        integrationsPage
     };
 
 
     if (pages[page]) {
-
       content =
         pages[page]();
-
     }
 
     else {
-
       const configs = {
-
         identity: [
           "IDENTITY & ACCESS",
           "Identity Providers",
@@ -4212,7 +4303,6 @@ function navigateTo(page) {
           "Audit Log",
           "Review platform activity."
         ]
-
       };
 
 
@@ -4220,23 +4310,23 @@ function navigateTo(page) {
         genericRolePage(
           ...configs[page]
         );
-
     }
-
   }
 
 
   renderShell(content);
-
 }
 
 
 /* =========================================================
-   GENERIC PAGES / HELPERS
+   HELPERS
 ========================================================= */
 
-function genericRolePage(label, title, description) {
-
+function genericRolePage(
+  label,
+  title,
+  description
+) {
   return `
     ${pageTitle(
       label,
@@ -4250,9 +4340,7 @@ function genericRolePage(label, title, description) {
         PROTOTYPE VIEW
       </span>
 
-      <h3>
-        ${title}
-      </h3>
+      <h3>${title}</h3>
 
       <p>
         This section represents the role-specific capability
@@ -4261,12 +4349,14 @@ function genericRolePage(label, title, description) {
 
     </section>
   `;
-
 }
 
 
-function pageTitle(label, title, subtitle) {
-
+function pageTitle(
+  label,
+  title,
+  subtitle
+) {
   return `
     <div class="page-heading">
 
@@ -4274,40 +4364,29 @@ function pageTitle(label, title, subtitle) {
         ${label}
       </span>
 
-      <h1>
-        ${title}
-      </h1>
+      <h1>${title}</h1>
 
-      <p>
-        ${subtitle}
-      </p>
+      <p>${subtitle}</p>
 
     </div>
   `;
-
 }
 
 
-function metricCard(title, value, detail) {
-
+function metricCard(
+  title,
+  value,
+  detail
+) {
   return `
     <section class="dashboard-card metric-card">
 
-      <span>
-        ${title}
-      </span>
-
-      <strong>
-        ${value}
-      </strong>
-
-      <small>
-        ${detail}
-      </small>
+      <span>${title}</span>
+      <strong>${value}</strong>
+      <small>${detail}</small>
 
     </section>
   `;
-
 }
 
 
@@ -4317,28 +4396,16 @@ function clickableMetricCard(
   detail,
   target
 ) {
-
   return `
     <section
       class="dashboard-card metric-card clickable-card"
       onclick="navigateTo('${target}')"
     >
-
-      <span>
-        ${title}
-      </span>
-
-      <strong>
-        ${value}
-      </strong>
-
-      <small>
-        ${detail} →
-      </small>
-
+      <span>${title}</span>
+      <strong>${value}</strong>
+      <small>${detail} →</small>
     </section>
   `;
-
 }
 
 
@@ -4349,7 +4416,6 @@ function pillarCard(
   detail,
   target
 ) {
-
   return `
     <section class="dashboard-card pillar-card">
 
@@ -4361,13 +4427,9 @@ function pillarCard(
         ${value}
       </strong>
 
-      <h3>
-        ${metric}
-      </h3>
+      <h3>${metric}</h3>
 
-      <p>
-        ${detail}
-      </p>
+      <p>${detail}</p>
 
       <button
         class="text-button"
@@ -4378,37 +4440,32 @@ function pillarCard(
 
     </section>
   `;
-
 }
 
 
-function profileLine(label, value) {
-
+function profileLine(
+  label,
+  value
+) {
   return `
     <div class="profile-line">
 
-      <span>
-        ${label}
-      </span>
-
-      <strong>
-        ${value}
-      </strong>
+      <span>${label}</span>
+      <strong>${value}</strong>
 
     </div>
   `;
-
 }
 
 
-function statusLine(label, value) {
-
+function statusLine(
+  label,
+  value
+) {
   return `
     <div class="profile-line">
 
-      <span>
-        ${label}
-      </span>
+      <span>${label}</span>
 
       <span class="status-block good">
         ${value}
@@ -4416,104 +4473,43 @@ function statusLine(label, value) {
 
     </div>
   `;
-
 }
 
 
-function knowledgeRow(title, detail) {
-
-  return `
-    <div class="list-row">
-
-      <div>
-
-        <strong>
-          ${title}
-        </strong>
-
-        <small>
-          ${detail}
-        </small>
-
-      </div>
-
-      <button class="small-button">
-        Open
-      </button>
-
-    </div>
-  `;
-
-}
-
-
-function awardCard(title, subtitle) {
-
-  return `
-    <section class="award-mini-card">
-
-      <div class="award-icon">
-        ★
-      </div>
-
-      <h3>
-        ${title}
-      </h3>
-
-      <p>
-        ${subtitle}
-      </p>
-
-    </section>
-  `;
-
-}
-
-
-function storeBar(name, score) {
-
+function storeBar(
+  name,
+  score
+) {
   return `
     <div class="store-bar">
 
-      <span>
-        ${name}
-      </span>
+      <span>${name}</span>
 
       <div class="bar-track">
-
         <div
           class="bar-fill"
           style="width:${score}%"
         ></div>
-
       </div>
 
-      <strong>
-        ${score}%
-      </strong>
+      <strong>${score}%</strong>
 
     </div>
   `;
-
 }
 
 
-function attentionRow(name, issue, detail) {
-
+function attentionRow(
+  name,
+  issue,
+  detail
+) {
   return `
     <div class="attention-row">
 
-      <strong>
-        ${name}
-      </strong>
-
-      <span>
-        ${issue}
-      </span>
-
-      <strong>
-        ${detail}
-      </strong>
+      <strong>${name}</strong>
+      <span>${issue}</span>
+      <strong>${detail}</strong>
 
       <button class="small-button">
         View
@@ -4521,7 +4517,6 @@ function attentionRow(name, issue, detail) {
 
     </div>
   `;
-
 }
 
 
@@ -4531,29 +4526,16 @@ function personOnboardingRow(
   stage,
   status
 ) {
-
   return `
     <div class="generic-row">
 
       <div>
-
-        <strong>
-          ${name}
-        </strong>
-
-        <small>
-          Staff ID ${staffId}
-        </small>
-
+        <strong>${name}</strong>
+        <small>Staff ID ${staffId}</small>
       </div>
 
-      <span>
-        ${stage}
-      </span>
-
-      <strong>
-        ${status}
-      </strong>
+      <span>${stage}</span>
+      <strong>${status}</strong>
 
       <button class="small-button">
         View
@@ -4561,7 +4543,6 @@ function personOnboardingRow(
 
     </div>
   `;
-
 }
 
 
@@ -4570,7 +4551,6 @@ function agentTeamMember(
   title,
   description
 ) {
-
   return `
     <div class="agent-team-card">
 
@@ -4579,20 +4559,12 @@ function agentTeamMember(
       </div>
 
       <div>
-
-        <strong>
-          ${title}
-        </strong>
-
-        <span>
-          ${description}
-        </span>
-
+        <strong>${title}</strong>
+        <span>${description}</span>
       </div>
 
     </div>
   `;
-
 }
 
 
@@ -4601,25 +4573,15 @@ function analysisMiniCard(
   score,
   detail
 ) {
-
   return `
     <div class="analysis-agent-card">
 
-      <span>
-        ${title}
-      </span>
-
-      <strong>
-        ${score}
-      </strong>
-
-      <small>
-        ${detail}
-      </small>
+      <span>${title}</span>
+      <strong>${score}</strong>
+      <small>${detail}</small>
 
     </div>
   `;
-
 }
 
 
@@ -4629,39 +4591,25 @@ function analysisHeader(
   score,
   subtitle
 ) {
-
   return `
     <div class="analysis-result-header">
 
       <div>
-
         <span class="section-label">
           ${label}
         </span>
 
-        <h2>
-          ${title}
-        </h2>
-
-        <p>
-          ${subtitle}
-        </p>
-
+        <h2>${title}</h2>
+        <p>${subtitle}</p>
       </div>
 
       <div class="analysis-score">
-
         ${score}%
-
-        <span>
-          Overall
-        </span>
-
+        <span>Overall</span>
       </div>
 
     </div>
   `;
-
 }
 
 
@@ -4671,20 +4619,12 @@ function severityRow(
   severity,
   className
 ) {
-
   return `
     <div class="severity-row">
 
       <div>
-
-        <strong>
-          ${title}
-        </strong>
-
-        <span>
-          ${detail}
-        </span>
-
+        <strong>${title}</strong>
+        <span>${detail}</span>
       </div>
 
       <span class="severity-pill ${className}">
@@ -4693,7 +4633,6 @@ function severityRow(
 
     </div>
   `;
-
 }
 
 
@@ -4703,20 +4642,12 @@ function locationSeverityRow(
   severity,
   className
 ) {
-
   return `
     <div class="location-severity-row">
 
       <div>
-
-        <strong>
-          ${title}
-        </strong>
-
-        <span>
-          ${detail}
-        </span>
-
+        <strong>${title}</strong>
+        <span>${detail}</span>
       </div>
 
       <span class="severity-pill ${className}">
@@ -4725,7 +4656,6 @@ function locationSeverityRow(
 
     </div>
   `;
-
 }
 
 
@@ -4736,37 +4666,23 @@ function themeResult(
   trend,
   severity
 ) {
-
   return `
     <div class="theme-result">
 
       <div>
-
-        <strong>
-          ${title}
-        </strong>
-
+        <strong>${title}</strong>
         <span>
           ${locations} · ${population}
         </span>
-
       </div>
 
       <div class="theme-meta">
-
-        <span>
-          ${trend}
-        </span>
-
-        <strong>
-          ${severity}
-        </strong>
-
+        <span>${trend}</span>
+        <strong>${severity}</strong>
       </div>
 
     </div>
   `;
-
 }
 
 
@@ -4776,17 +4692,11 @@ function auditRow(
   status,
   className
 ) {
-
   return `
     <div class="audit-row">
 
-      <strong>
-        ${location}
-      </strong>
-
-      <strong>
-        ${score}
-      </strong>
+      <strong>${location}</strong>
+      <strong>${score}</strong>
 
       <span class="status-block ${className}">
         ${status}
@@ -4798,7 +4708,6 @@ function auditRow(
 
     </div>
   `;
-
 }
 
 
@@ -4808,17 +4717,11 @@ function auditThemeRow(
   severity,
   className
 ) {
-
   return `
     <div class="audit-theme-row">
 
-      <strong>
-        ${theme}
-      </strong>
-
-      <span>
-        ${locations}
-      </span>
+      <strong>${theme}</strong>
+      <span>${locations}</span>
 
       <span class="severity-pill ${className}">
         ${severity}
@@ -4826,7 +4729,6 @@ function auditThemeRow(
 
     </div>
   `;
-
 }
 
 
@@ -4837,37 +4739,24 @@ function userAccessRow(
   scope,
   status
 ) {
-
   return `
     <div class="admin-table-row">
 
-      <strong>
-        ${user}
-      </strong>
-
-      <span>
-        ${identity}
-      </span>
-
-      <span>
-        ${role}
-      </span>
-
-      <span>
-        ${scope}
-      </span>
+      <strong>${user}</strong>
+      <span>${identity}</span>
+      <span>${role}</span>
+      <span>${scope}</span>
 
       <span class="status-block ${
         status === "Active"
           ? "good"
-          : "improvement"
+          : "strengthen"
       }">
         ${status}
       </span>
 
     </div>
   `;
-
 }
 
 
@@ -4876,7 +4765,6 @@ function roleCard(
   identity,
   permissions
 ) {
-
   return `
     <section class="dashboard-card">
 
@@ -4884,21 +4772,19 @@ function roleCard(
         ${identity}
       </span>
 
-      <h3>
-        ${role}
-      </h3>
+      <h3>${role}</h3>
 
       <ul class="risk-list">
-
         ${permissions
-          .map(item => `<li>${item}</li>`)
+          .map(
+            item =>
+              `<li>${item}</li>`
+          )
           .join("")}
-
       </ul>
 
     </section>
   `;
-
 }
 
 
@@ -4907,7 +4793,6 @@ function agentCard(
   description,
   status
 ) {
-
   return `
     <section class="dashboard-card">
 
@@ -4920,24 +4805,19 @@ function agentCard(
         <span class="status-block ${
           status === "Active"
             ? "good"
-            : "improvement"
+            : "strengthen"
         }">
           ${status}
         </span>
 
       </div>
 
-      <h3>
-        ${name}
-      </h3>
+      <h3>${name}</h3>
 
-      <p>
-        ${description}
-      </p>
+      <p>${description}</p>
 
     </section>
   `;
-
 }
 
 
@@ -4946,7 +4826,6 @@ function integrationCard(
   purpose,
   status
 ) {
-
   return `
     <section class="dashboard-card">
 
@@ -4954,68 +4833,54 @@ function integrationCard(
         INTEGRATION
       </span>
 
-      <h3>
-        ${name}
-      </h3>
+      <h3>${name}</h3>
 
-      <p>
-        ${purpose}
-      </p>
+      <p>${purpose}</p>
 
-      <strong>
-        ${status}
-      </strong>
+      <strong>${status}</strong>
 
     </section>
   `;
-
 }
 
 
-function mockInput(label, value) {
-
+function mockInput(
+  label,
+  value
+) {
   return `
     <div class="mock-field">
 
-      <label>
-        ${label}
-      </label>
+      <label>${label}</label>
 
-      <div>
-        ${value}
-      </div>
+      <div>${value}</div>
 
     </div>
   `;
-
 }
 
 
-function openPerformanceInteraction(interactionId) {
-
+function openPerformanceInteraction(
+  interactionId
+) {
   expandedInteractionId =
     interactionId;
 
   navigateTo("performance");
 
   setTimeout(() => {
-
     const node =
       document.getElementById(
         `interaction-expand-${interactionId}`
       );
 
     if (node) {
-
       node.scrollIntoView({
         behavior: "smooth",
         block: "center"
       });
-
     }
-
   }, 100);
-
 }
 
 
@@ -5023,10 +4888,17 @@ function openPerformanceInteraction(interactionId) {
    WINDOW FUNCTIONS
 ========================================================= */
 
-window.signIn = signIn;
-window.continueWithSSO = continueWithSSO;
-window.signOut = signOut;
-window.navigateTo = navigateTo;
+window.signIn =
+  signIn;
+
+window.continueWithSSO =
+  continueWithSSO;
+
+window.signOut =
+  signOut;
+
+window.navigateTo =
+  navigateTo;
 
 window.toggleInteractionDetails =
   toggleInteractionDetails;
@@ -5055,6 +4927,9 @@ window.showInviteAmbassador =
 window.showManualAmbassador =
   showManualAmbassador;
 
+window.filterKnowledgeBase =
+  filterKnowledgeBase;
+
 
 /* =========================================================
    ENTER KEY
@@ -5066,11 +4941,11 @@ document.addEventListener(
 
     if (
       event.key === "Enter" &&
-      document.getElementById("login-id")
+      document.getElementById(
+        "login-id"
+      )
     ) {
-
       signIn();
-
     }
 
   }
