@@ -15,7 +15,8 @@ let selectedTrainingId = null;
 
 const currentPerformancePeriod = {
   from: "01 Oct 2026",
-  to: "14 Oct 2026"
+  to: "14 Oct 2026",
+  preset: "MTD"
 };
 
 
@@ -50,7 +51,8 @@ const prototypeUsers = {
     role: "BU Lead / Trainer",
     identityType: "Microsoft Entra ID",
     businessUnit: "Entertainment",
-    country: "UAE"
+    country: "UAE",
+    scope: "Entertainment UAE"
   },
 
   service: {
@@ -77,7 +79,7 @@ const prototypeUsers = {
 
 
 /* =========================================================
-   INTERACTIONS
+   AMBASSADOR INTERACTIONS
 ========================================================= */
 
 const interactions = [
@@ -155,7 +157,7 @@ Agent: Processing times vary depending on the bank.
 
 
 /* =========================================================
-   TRAINING
+   AMBASSADOR TRAINING
 ========================================================= */
 
 const assignedTraining = [
@@ -324,6 +326,285 @@ const knowledgeRepository = [
 
 
 /* =========================================================
+   BU LEAD DEMO DATA
+========================================================= */
+
+const managerPerformanceBreakdown = [
+  {
+    level: "BU",
+    name: "Entertainment",
+    score: 86,
+    ambassadors: 238
+  },
+  {
+    level: "Brand",
+    name: "VOX Cinemas",
+    score: 87,
+    ambassadors: 172
+  },
+  {
+    level: "Mall",
+    name: "Mall of the Emirates",
+    score: 91,
+    ambassadors: 38
+  },
+  {
+    level: "Mall",
+    name: "City Centre Mirdif",
+    score: 88,
+    ambassadors: 31
+  },
+  {
+    level: "Mall",
+    name: "City Centre Deira",
+    score: 74,
+    ambassadors: 27
+  },
+  {
+    level: "Mall",
+    name: "City Centre Al Zahia",
+    score: 86,
+    ambassadors: 24
+  }
+];
+
+
+const managerAttentionItems = [
+  {
+    severity: "Critical",
+    location: "City Centre Deira",
+    issue: "Refund SLA knowledge",
+    affected: "8 Ambassadors",
+    action: "Review"
+  },
+  {
+    severity: "High",
+    location: "City Centre Mirdif",
+    issue: "Training overdue",
+    affected: "5 Ambassadors",
+    action: "Review"
+  },
+  {
+    severity: "Medium",
+    location: "Mall of the Emirates",
+    issue: "Service Recovery",
+    affected: "3 Ambassadors",
+    action: "Review"
+  }
+];
+
+
+const ambassadorPopulation = [
+  {
+    name: "Layla Haddad",
+    staffId: "100245",
+    bu: "Entertainment",
+    brand: "VOX Cinemas",
+    mall: "Mall of the Emirates",
+    location: "VOX MOE",
+    performance: 86,
+    training: 100,
+    members: 42,
+    status: "Active"
+  },
+  {
+    name: "Noor Hassan",
+    staffId: "100822",
+    bu: "Entertainment",
+    brand: "VOX Cinemas",
+    mall: "City Centre Mirdif",
+    location: "VOX CCM",
+    performance: 91,
+    training: 100,
+    members: 48,
+    status: "Active"
+  },
+  {
+    name: "Rania Ali",
+    staffId: "100845",
+    bu: "Entertainment",
+    brand: "VOX Cinemas",
+    mall: "City Centre Deira",
+    location: "VOX CCD",
+    performance: 74,
+    training: 82,
+    members: 29,
+    status: "Active"
+  },
+  {
+    name: "Sami Omar",
+    staffId: "100901",
+    bu: "Entertainment",
+    brand: "VOX Cinemas",
+    mall: "City Centre Al Zahia",
+    location: "VOX CCAZ",
+    performance: 88,
+    training: 94,
+    members: 44,
+    status: "Active"
+  },
+  {
+    name: "Sara Khan",
+    staffId: "100928",
+    bu: "Entertainment",
+    brand: "VOX Cinemas",
+    mall: "City Centre Deira",
+    location: "VOX CCD",
+    performance: 72,
+    training: 69,
+    members: 21,
+    status: "Active"
+  }
+];
+
+
+const managerKnowledgeGaps = [
+  {
+    theme: "Refund SLA",
+    ambassadors: 34,
+    knowledgeScore: 72,
+    relatedPerformance: "Service Quality",
+    trend: "Declining"
+  },
+  {
+    theme: "Customer Verification",
+    ambassadors: 18,
+    knowledgeScore: 81,
+    relatedPerformance: "SOP Adherence",
+    trend: "Stable"
+  },
+  {
+    theme: "SHARE Benefits",
+    ambassadors: 11,
+    knowledgeScore: 84,
+    relatedPerformance: "Member Acquisition",
+    trend: "Improving"
+  }
+];
+
+
+const managerTrainingOverview = [
+  {
+    training: "SHARE Customer Experience",
+    assigned: 238,
+    completed: 224,
+    inProgress: 9,
+    overdue: 5,
+    avgAging: "4 days"
+  },
+  {
+    training: "Service Recovery Essentials",
+    assigned: 118,
+    completed: 91,
+    inProgress: 19,
+    overdue: 8,
+    avgAging: "6 days"
+  },
+  {
+    training: "Product Knowledge",
+    assigned: 238,
+    completed: 230,
+    inProgress: 4,
+    overdue: 4,
+    avgAging: "3 days"
+  }
+];
+
+
+const onboardingJourneys = [
+  {
+    name: "Noor Hassan",
+    staffId: "100822",
+    steps: [
+      ["Account Created", "Complete"],
+      ["First Login", "Complete"],
+      ["Mandatory Training", "In Progress"],
+      ["Knowledge Check", "Pending"],
+      ["Personal QR Code", "Pending"],
+      ["Active", "Pending"]
+    ]
+  },
+  {
+    name: "Rania Ali",
+    staffId: "100845",
+    steps: [
+      ["Account Created", "Complete"],
+      ["First Login", "Complete"],
+      ["Mandatory Training", "Complete"],
+      ["Knowledge Check", "Pending"],
+      ["Personal QR Code", "Pending"],
+      ["Active", "Pending"]
+    ]
+  }
+];
+
+
+const offboardingJourneys = [
+  {
+    name: "Omar Faris",
+    staffId: "100312",
+    steps: [
+      ["Offboarding Initiated", "Complete"],
+      ["Access Disabled", "Complete"],
+      ["Personal QR Code Deactivated", "Complete"],
+      ["Outstanding Tasks Closed", "In Progress"],
+      ["Offboarded", "Pending"]
+    ]
+  }
+];
+
+
+const communicationsFeed = [
+  {
+    title: "SHARE Member Week",
+    type: "Announcement",
+    date: "13 Oct 2026",
+    reach: "221 / 238",
+    views: 198,
+    likes: 74,
+    comments: 18
+  },
+  {
+    title: "New Service Recovery Guide",
+    type: "Knowledge Update",
+    date: "09 Oct 2026",
+    reach: "238 / 238",
+    views: 215,
+    likes: 61,
+    comments: 11
+  }
+];
+
+
+const ambassadorHubSubmissions = [
+  {
+    type: "Feedback",
+    submissions: 18,
+    open: 4,
+    integration: "Alida"
+  },
+  {
+    type: "Suggestion",
+    submissions: 24,
+    open: 7,
+    integration: "Alida"
+  },
+  {
+    type: "In-Store Training",
+    submissions: 13,
+    open: 2,
+    integration: "Alida"
+  },
+  {
+    type: "SHARE Walls",
+    submissions: 9,
+    open: 1,
+    integration: "Alida"
+  }
+];
+
+
+/* =========================================================
    NAVIGATION
 ========================================================= */
 
@@ -366,14 +647,16 @@ const navigation = {
 
     {
       title: "",
-      items: [["home", "Home"]]
+      items: [
+        ["home", "Home"]
+      ]
     },
 
     {
-      title: "Service Delivery",
+      title: "Performance",
       items: [
         ["team-performance", "Performance"],
-        ["team-actions", "Actions"]
+        ["team-attention", "Requires Attention"]
       ]
     },
 
@@ -390,9 +673,10 @@ const navigation = {
       title: "Ambassador Program",
       items: [
         ["ambassadors", "Ambassadors"],
-        ["manager-onboarding", "Onboarding"],
+        ["manager-onboarding", "Onboarding & Offboarding"],
         ["manager-acquisition", "Acquisition"],
-        ["manager-recognition", "Recognition"]
+        ["manager-communications", "Communications"],
+        ["manager-hub", "Ambassador Hub"]
       ]
     }
 
@@ -402,7 +686,9 @@ const navigation = {
 
     {
       title: "",
-      items: [["home", "Home"]]
+      items: [
+        ["home", "Home"]
+      ]
     },
 
     {
@@ -439,7 +725,9 @@ const navigation = {
 
     {
       title: "",
-      items: [["home", "Platform Overview"]]
+      items: [
+        ["home", "Platform Overview"]
+      ]
     },
 
     {
@@ -488,7 +776,9 @@ function setLoginMessage(message, type = "error") {
 
   if (!node) return;
 
-  node.textContent = message;
+  node.textContent =
+    message;
+
   node.className =
     `login-error ${type}`;
 
@@ -603,10 +893,17 @@ function continueWithSSO() {
 
 function loginAsRole(role) {
 
-  currentRole = role;
-  currentPage = "home";
-  expandedInteractionId = null;
-  selectedTrainingId = null;
+  currentRole =
+    role;
+
+  currentPage =
+    "home";
+
+  expandedInteractionId =
+    null;
+
+  selectedTrainingId =
+    null;
 
   navigateTo(
     "home"
@@ -616,7 +913,9 @@ function loginAsRole(role) {
 
 
 function signOut() {
+
   location.reload();
+
 }
 
 
@@ -715,6 +1014,7 @@ function sidebar() {
             `
             : ""
         }
+
 
         ${group.items.map(item => `
 
@@ -1006,6 +1306,7 @@ function homeAcquisitionCard(
 
       <strong class="home-acquisition-value">
         ${onboarded}
+
         <span>
           / ${target}
         </span>
@@ -1080,27 +1381,19 @@ function ambassadorProgress() {
 
       <div class="journey-step-track">
 
-        ${journeyStep(
-          "Onboarded"
-        )}
+        ${journeyStep("Onboarded")}
 
         ${journeyConnector()}
 
-        ${journeyStep(
-          "Mandatory Training"
-        )}
+        ${journeyStep("Mandatory Training")}
 
         ${journeyConnector()}
 
-        ${journeyStep(
-          "Knowledge Check"
-        )}
+        ${journeyStep("Knowledge Check")}
 
         ${journeyConnector()}
 
-        ${journeyStep(
-          "Personal QR Code"
-        )}
+        ${journeyStep("Personal QR Code")}
 
       </div>
 
@@ -1139,7 +1432,7 @@ function journeyConnector() {
 
 
 /* =========================================================
-   PERFORMANCE
+   AMBASSADOR PERFORMANCE
 ========================================================= */
 
 function ambassadorPerformance() {
@@ -1263,29 +1556,12 @@ function ambassadorPerformance() {
 
       <div class="interaction-header">
 
-        <span>
-          Interaction
-        </span>
-
-        <span>
-          Channel / Duration
-        </span>
-
-        <span>
-          Process / Theme
-        </span>
-
-        <span>
-          Score
-        </span>
-
-        <span>
-          Status
-        </span>
-
-        <span>
-          Action
-        </span>
+        <span>Interaction</span>
+        <span>Channel / Duration</span>
+        <span>Process / Theme</span>
+        <span>Score</span>
+        <span>Status</span>
+        <span>Action</span>
 
       </div>
 
@@ -1372,9 +1648,7 @@ function interactionBlock(interaction) {
           class="analyse-button compact"
           onclick="analyseInlineInteraction('${interaction.id}')"
         >
-          <span>
-            ✦
-          </span>
+          <span>✦</span>
 
           ${
             isExpanded
@@ -1391,67 +1665,34 @@ function interactionBlock(interaction) {
       <div class="interaction-row">
 
         <div>
-
-          <strong>
-            ${interaction.id}
-          </strong>
-
-          <span>
-            ${interaction.date}
-          </span>
-
+          <strong>${interaction.id}</strong>
+          <span>${interaction.date}</span>
         </div>
-
 
         <div>
-
-          <strong>
-            ${interaction.channel}
-          </strong>
-
-          <span>
-            ${interaction.duration}
-          </span>
-
+          <strong>${interaction.channel}</strong>
+          <span>${interaction.duration}</span>
         </div>
-
 
         <div>
-
-          <strong>
-            ${interaction.process}
-          </strong>
-
-          <span>
-            Customer interaction
-          </span>
-
+          <strong>${interaction.process}</strong>
+          <span>Customer interaction</span>
         </div>
-
 
         <div class="interaction-score ${
           interaction.score < 50
             ? "low"
             : ""
         }">
-
           ${interaction.score}%
-
         </div>
-
 
         <div>
-
           <span class="status-block ${status.className}">
-
             ${status.icon}
-
             ${status.label}
-
           </span>
-
         </div>
-
 
         <div>
           ${action}
@@ -1468,7 +1709,6 @@ function interactionBlock(interaction) {
             : ""
         }"
       >
-
         ${
           isExpanded
             ? renderExpandedInteraction(
@@ -1476,7 +1716,6 @@ function interactionBlock(interaction) {
               )
             : ""
         }
-
       </div>
 
     </div>
@@ -1487,51 +1726,32 @@ function interactionBlock(interaction) {
 
 function getInteractionStatus(score) {
 
-  if (
-    score >= 90
-  ) {
+  if (score >= 90) {
 
     return {
-      label:
-        "Good Interaction",
-
-      className:
-        "good",
-
-      icon:
-        "✓"
+      label: "Good Interaction",
+      className: "good",
+      icon: "✓"
     };
 
   }
 
 
-  if (
-    score >= 50
-  ) {
+  if (score >= 50) {
 
     return {
-      label:
-        "Opportunity to Strengthen",
-
-      className:
-        "strengthen",
-
-      icon:
-        "↗"
+      label: "Opportunity to Strengthen",
+      className: "strengthen",
+      icon: "↗"
     };
 
   }
 
 
   return {
-    label:
-      "Needs Attention",
-
-    className:
-      "attention",
-
-    icon:
-      "!"
+    label: "Needs Attention",
+    className: "attention",
+    icon: "!"
   };
 
 }
@@ -1642,8 +1862,7 @@ function analyseInlineInteraction(
     interactionId
   ) {
 
-    expandedInteractionId =
-      null;
+    expandedInteractionId = null;
 
     navigateTo(
       "performance"
@@ -1683,8 +1902,7 @@ function startInlineAnalysis(
   const interaction =
     interactions.find(
       item =>
-        item.id ===
-        interactionId
+        item.id === interactionId
     );
 
   if (!interaction) return;
@@ -1703,10 +1921,8 @@ function startInlineAnalysis(
       {
         id:
           `evaluation-${interaction.id}`,
-
         title:
           "Evaluation Agent",
-
         message:
           "Reviewing service quality and customer handling."
       },
@@ -1714,10 +1930,8 @@ function startInlineAnalysis(
       {
         id:
           `sop-${interaction.id}`,
-
         title:
           "SOP Agent",
-
         message:
           "Checking required process steps."
       },
@@ -1725,10 +1939,8 @@ function startInlineAnalysis(
       {
         id:
           `compliance-${interaction.id}`,
-
         title:
           "Compliance Agent",
-
         message:
           "Checking mandatory controls and compliance."
       },
@@ -1736,10 +1948,8 @@ function startInlineAnalysis(
       {
         id:
           `combined-${interaction.id}`,
-
         title:
           "Combined Analysis",
-
         message:
           "Combining findings and identifying the next best action."
       }
@@ -1925,7 +2135,7 @@ function showInlineAnalysisResult(
 
 
 /* =========================================================
-   TRAINING
+   AMBASSADOR TRAINING
 ========================================================= */
 
 function trainingPage() {
@@ -2116,9 +2326,7 @@ function trainingPage() {
 }
 
 
-function assignedTrainingCard(
-  item
-) {
+function assignedTrainingCard(item) {
 
   return `
     <div
@@ -2194,9 +2402,7 @@ function assignedTrainingCard(
 }
 
 
-function recommendedTrainingCard(
-  item
-) {
+function recommendedTrainingCard(item) {
 
   return `
     <div
@@ -2257,9 +2463,7 @@ function recommendedTrainingCard(
 }
 
 
-function openTrainingTarget(
-  trainingId
-) {
+function openTrainingTarget(trainingId) {
 
   selectedTrainingId =
     trainingId;
@@ -2283,9 +2487,7 @@ function openTrainingTarget(
         );
 
 
-      if (
-        trainingCard
-      ) {
+      if (trainingCard) {
 
         trainingCard
           .classList
@@ -2296,17 +2498,12 @@ function openTrainingTarget(
       }
 
 
-      if (
-        focusPanel
-      ) {
+      if (focusPanel) {
 
         focusPanel
           .scrollIntoView({
-            behavior:
-              "smooth",
-
-            block:
-              "center"
+            behavior: "smooth",
+            block: "center"
           });
 
       }
@@ -2318,9 +2515,7 @@ function openTrainingTarget(
 }
 
 
-function renderTrainingFocus(
-  trainingId
-) {
+function renderTrainingFocus(trainingId) {
 
   const item =
     assignedTraining.find(
@@ -2395,43 +2590,23 @@ function renderTrainingFocus(
             <div class="training-detail-grid">
 
               <div>
-                <span>
-                  Assigned
-                </span>
-
-                <strong>
-                  ${item.assigned}
-                </strong>
+                <span>Assigned</span>
+                <strong>${item.assigned}</strong>
               </div>
 
               <div>
-                <span>
-                  Due
-                </span>
-
-                <strong>
-                  ${item.due}
-                </strong>
+                <span>Due</span>
+                <strong>${item.due}</strong>
               </div>
 
               <div>
-                <span>
-                  Aging
-                </span>
-
-                <strong>
-                  ${item.aging}
-                </strong>
+                <span>Aging</span>
+                <strong>${item.aging}</strong>
               </div>
 
               <div>
-                <span>
-                  Status
-                </span>
-
-                <strong>
-                  ${item.status}
-                </strong>
+                <span>Status</span>
+                <strong>${item.status}</strong>
               </div>
 
             </div>
@@ -2499,6 +2674,32 @@ function knowledgePage() {
     </section>
 
 
+    ${knowledgeRepositorySection()}
+  `;
+
+}
+
+
+function managerKnowledgePage() {
+
+  return `
+    ${pageTitle(
+      "TRAINING & KNOWLEDGE",
+      "Knowledge Base",
+      "Browse the approved knowledge available to your Ambassador population."
+    )}
+
+    ${managerFilters()}
+
+    ${knowledgeRepositorySection()}
+  `;
+
+}
+
+
+function knowledgeRepositorySection() {
+
+  return `
     <section class="dashboard-card knowledge-repository">
 
       <div class="knowledge-repository-heading">
@@ -2667,13 +2868,9 @@ function recommendedKnowledgeCard(
 }
 
 
-function renderKnowledgeRows(
-  items
-) {
+function renderKnowledgeRows(items) {
 
-  if (
-    !items.length
-  ) {
+  if (!items.length) {
 
     return `
       <div class="knowledge-empty">
@@ -2691,24 +2888,12 @@ function renderKnowledgeRows(
         <div class="knowledge-row">
 
           <div>
-
-            <strong>
-              ${item.title}
-            </strong>
-
+            <strong>${item.title}</strong>
           </div>
 
-          <span>
-            ${item.category}
-          </span>
-
-          <span>
-            ${item.type}
-          </span>
-
-          <span>
-            ${item.updated}
-          </span>
+          <span>${item.category}</span>
+          <span>${item.type}</span>
+          <span>${item.updated}</span>
 
           <button class="small-button">
             Open
@@ -2806,7 +2991,7 @@ function filterKnowledgeBase() {
 
 
 /* =========================================================
-   MY STATUS
+   AMBASSADOR STATUS
 ========================================================= */
 
 function statusPage() {
@@ -3030,47 +3215,6 @@ function statusPage() {
             style="--target-width:${achievement}%"
           ></div>
 
-          <div
-            class="acquisition-marker halfway"
-            style="left:50%"
-          >
-
-            <span>
-              ${Math.round(
-                target / 2
-              )}
-            </span>
-
-          </div>
-
-          <div
-            class="acquisition-marker target"
-            style="left:100%"
-          >
-
-            <span>
-              ${target}
-            </span>
-
-          </div>
-
-        </div>
-
-
-        <div class="progress-scale">
-
-          <span>
-            0
-          </span>
-
-          <span>
-            Halfway
-          </span>
-
-          <span>
-            Target
-          </span>
-
         </div>
 
 
@@ -3082,31 +3226,13 @@ function statusPage() {
 
           <div>
 
-            ${
-              remaining > 0
-                ? `
-                  <strong>
-                    ${remaining} ${
-                      remaining === 1
-                        ? "member"
-                        : "members"
-                    } away from your target
-                  </strong>
+            <strong>
+              ${remaining} members away from your target
+            </strong>
 
-                  <p>
-                    You have achieved ${achievement}% of your SHARE onboarding target for this period.
-                  </p>
-                `
-                : `
-                  <strong>
-                    Target achieved
-                  </strong>
-
-                  <p>
-                    You have reached your SHARE member onboarding target for this period.
-                  </p>
-                `
-            }
+            <p>
+              You have achieved ${achievement}% of your SHARE onboarding target for this period.
+            </p>
 
           </div>
 
@@ -3123,13 +3249,8 @@ function statusPage() {
 
           ${impactMilestone(
             "Halfway",
-            `${Math.round(
-              target / 2
-            )} members onboarded`,
-            onboarded >=
-              Math.round(
-                target / 2
-              )
+            `${Math.round(target / 2)} members onboarded`,
+            onboarded >= Math.round(target / 2)
           )}
 
           ${impactMilestone(
@@ -3157,17 +3278,11 @@ function impactMetric(
   return `
     <div class="impact-metric">
 
-      <span>
-        ${title}
-      </span>
+      <span>${title}</span>
 
-      <strong>
-        ${value}
-      </strong>
+      <strong>${value}</strong>
 
-      <small>
-        ${detail}
-      </small>
+      <small>${detail}</small>
 
     </div>
   `;
@@ -3217,43 +3332,183 @@ function impactMilestone(
 
 
 /* =========================================================
-   OTHER PERSONAS
+   BU LEAD FILTERS
+========================================================= */
+
+function managerFilters() {
+
+  return `
+    <section class="manager-filter-bar">
+
+      <div class="filter-field">
+
+        <label>
+          Period
+        </label>
+
+        <select>
+          <option>MTD</option>
+          <option>QTD</option>
+          <option>YTD</option>
+          <option>Custom</option>
+        </select>
+
+      </div>
+
+
+      <div class="filter-field">
+
+        <label>
+          Country
+        </label>
+
+        <select>
+          <option>UAE</option>
+        </select>
+
+      </div>
+
+
+      <div class="filter-field">
+
+        <label>
+          BU
+        </label>
+
+        <select>
+          <option>Entertainment</option>
+        </select>
+
+      </div>
+
+
+      <div class="filter-field">
+
+        <label>
+          Brand
+        </label>
+
+        <select>
+          <option>All Brands</option>
+          <option>VOX Cinemas</option>
+        </select>
+
+      </div>
+
+
+      <div class="filter-field">
+
+        <label>
+          Mall
+        </label>
+
+        <select>
+          <option>All Malls</option>
+          <option>Mall of the Emirates</option>
+          <option>City Centre Mirdif</option>
+          <option>City Centre Deira</option>
+          <option>City Centre Al Zahia</option>
+        </select>
+
+      </div>
+
+
+      <div class="filter-field">
+
+        <label>
+          Store / Location
+        </label>
+
+        <select>
+          <option>All Locations</option>
+          <option>VOX MOE</option>
+          <option>VOX CCM</option>
+          <option>VOX CCD</option>
+          <option>VOX CCAZ</option>
+        </select>
+
+      </div>
+
+    </section>
+
+
+    <div class="scope-notice">
+
+      <div class="scope-icon">
+        🔒
+      </div>
+
+      <div>
+
+        <strong>
+          Scoped to Entertainment UAE
+        </strong>
+
+        <span>
+          You only see Ambassadors, locations and performance data within your assigned BU scope.
+        </span>
+
+      </div>
+
+    </div>
+  `;
+
+}
+
+
+/* =========================================================
+   BU LEAD HOME
 ========================================================= */
 
 function managerHome() {
+
+  const onboarded = 1842;
+  const target = 2100;
+  const achievement =
+    Math.round(
+      (onboarded / target) * 100
+    );
+
+  const remaining =
+    target - onboarded;
+
 
   return `
     ${pageTitle(
       "ENTERTAINMENT UAE",
       "BU Lead / Trainer Dashboard",
-      "Performance across your MAF mall locations and Ambassador population."
+      "Understand how your teams are performing and where attention is required."
     )}
+
+
+    ${managerFilters()}
 
 
     <div class="dashboard-grid four">
 
       ${metricCard(
-        "Active Ambassadors",
-        "238",
-        "Current"
+        "Overall Performance Score",
+        "86%",
+        "On Track"
       )}
 
       ${metricCard(
-        "Onboarding",
-        "18",
-        "3 require attention"
+        "Active Ambassadors",
+        "238",
+        "Within your scope"
       )}
 
       ${metricCard(
         "Training Completion",
         "91%",
-        "Current"
+        "Current period"
       )}
 
-      ${metricCard(
-        "Knowledge Score",
-        "84%",
-        "Current"
+      ${managerAcquisitionSummaryCard(
+        onboarded,
+        target,
+        achievement,
+        remaining
       )}
 
     </div>
@@ -3263,66 +3518,261 @@ function managerHome() {
 
       <section class="dashboard-card">
 
-        <span class="section-label">
-          LOCATION PERFORMANCE
-        </span>
+        <div class="card-heading-row">
 
-        <h3>
-          Service quality
-        </h3>
+          <div>
 
-        ${storeBar(
-          "Mall of the Emirates",
-          91
-        )}
+            <span class="section-label">
+              PERFORMANCE BREAKDOWN
+            </span>
 
-        ${storeBar(
-          "City Centre Mirdif",
-          88
-        )}
+            <h3>
+              Performance by organisational level
+            </h3>
 
-        ${storeBar(
-          "City Centre Deira",
-          74
-        )}
+            <p>
+              Drill from BU to Brand, Mall and Store / Location.
+            </p>
 
-        ${storeBar(
-          "City Centre Al Zahia",
-          86
-        )}
+          </div>
+
+          <button
+            class="small-button"
+            onclick="navigateTo('team-performance')"
+          >
+            View Performance
+          </button>
+
+        </div>
+
+
+        <div class="manager-performance-list">
+
+          ${managerPerformanceBreakdown
+            .map(
+              item =>
+                managerPerformanceRow(
+                  item
+                )
+            )
+            .join("")}
+
+        </div>
 
       </section>
 
 
       <section class="dashboard-card">
 
-        <span class="section-label">
-          REQUIRES ATTENTION
-        </span>
+        <div class="card-heading-row">
 
-        <h3>
-          Ambassador interventions
-        </h3>
+          <div>
 
-        ${attentionRow(
-          "Layla Haddad",
-          "Interaction review",
-          "1"
-        )}
+            <span class="section-label">
+              REQUIRES ATTENTION
+            </span>
 
-        ${attentionRow(
-          "Ahmed Ali",
-          "Training overdue",
-          "2 modules"
-        )}
+            <h3>
+              Priority areas in your team
+            </h3>
 
-        ${attentionRow(
-          "Sara Khan",
-          "Performance",
-          "72%"
-        )}
+            <p>
+              Only issues within your assigned BU population are shown.
+            </p>
+
+          </div>
+
+          <button
+            class="small-button"
+            onclick="navigateTo('team-attention')"
+          >
+            View All
+          </button>
+
+        </div>
+
+
+        ${managerAttentionItems
+          .map(
+            item =>
+              managerAttentionRow(
+                item
+              )
+          )
+          .join("")}
 
       </section>
+
+    </div>
+
+
+    <section class="manager-home-acquisition">
+
+      <div>
+
+        <span class="section-label">
+          SHARE ACQUISITION
+        </span>
+
+        <h2>
+          ${onboarded.toLocaleString()} of ${target.toLocaleString()} members onboarded
+        </h2>
+
+        <p>
+          Entertainment UAE · ${currentPerformancePeriod.preset}
+        </p>
+
+      </div>
+
+
+      <div class="manager-acquisition-right">
+
+        <strong>
+          ${achievement}%
+        </strong>
+
+        <span>
+          ${remaining} members remaining
+        </span>
+
+      </div>
+
+
+      <div class="manager-progress-track">
+
+        <div
+          class="manager-progress-fill"
+          style="--manager-progress:${achievement}%"
+        ></div>
+
+      </div>
+
+
+      <button
+        class="manager-progress-link"
+        onclick="navigateTo('manager-acquisition')"
+      >
+        View Acquisition →
+      </button>
+
+    </section>
+  `;
+
+}
+
+
+function managerAcquisitionSummaryCard(
+  onboarded,
+  target,
+  achievement,
+  remaining
+) {
+
+  return `
+    <section
+      class="dashboard-card manager-acquisition-kpi"
+      onclick="navigateTo('manager-acquisition')"
+    >
+
+      <div class="manager-kpi-top">
+
+        <span>
+          SHARE Members Onboarded
+        </span>
+
+        <small>
+          ${achievement}%
+        </small>
+
+      </div>
+
+      <strong>
+        ${onboarded.toLocaleString()}
+      </strong>
+
+      <div class="tiny-progress-track">
+
+        <div
+          class="tiny-progress-fill"
+          style="--tiny-progress:${achievement}%"
+        ></div>
+
+      </div>
+
+      <div class="manager-kpi-footer">
+
+        <span>
+          Target ${target.toLocaleString()}
+        </span>
+
+        <span>
+          ${remaining} remaining
+        </span>
+
+      </div>
+
+    </section>
+  `;
+
+}
+
+
+function managerPerformanceRow(item) {
+
+  return `
+    <div class="manager-performance-row">
+
+      <div>
+
+        <span class="hierarchy-pill">
+          ${item.level}
+        </span>
+
+        <strong>
+          ${item.name}
+        </strong>
+
+      </div>
+
+      <div class="manager-row-population">
+
+        <span>
+          Ambassadors
+        </span>
+
+        <strong>
+          ${item.ambassadors}
+        </strong>
+
+      </div>
+
+      <div class="manager-row-score">
+
+        <strong>
+          ${item.score}%
+        </strong>
+
+        <div class="mini-score-track">
+
+          <div
+            class="mini-score-fill ${
+              item.score < 80
+                ? "attention"
+                : ""
+            }"
+            style="width:${item.score}%"
+          ></div>
+
+        </div>
+
+      </div>
+
+      <button
+        class="small-button"
+        onclick="navigateTo('team-performance')"
+      >
+        Drill Down
+      </button>
 
     </div>
   `;
@@ -3330,31 +3780,77 @@ function managerHome() {
 }
 
 
+function managerAttentionRow(item) {
+
+  const severityClass =
+    item.severity.toLowerCase();
+
+
+  return `
+    <div class="manager-attention-row">
+
+      <span class="severity-pill ${severityClass}">
+        ${item.severity}
+      </span>
+
+      <div>
+
+        <strong>
+          ${item.location}
+        </strong>
+
+        <span>
+          ${item.issue}
+        </span>
+
+      </div>
+
+      <span>
+        ${item.affected}
+      </span>
+
+      <button class="small-button">
+        ${item.action}
+      </button>
+
+    </div>
+  `;
+
+}
+
+
+/* =========================================================
+   BU LEAD PERFORMANCE
+========================================================= */
+
 function managerPerformance() {
 
   return `
     ${pageTitle(
-      "SERVICE DELIVERY",
+      "PERFORMANCE",
       "BU Performance",
-      "Identify themes and MAF mall locations requiring intervention."
+      "Drill into performance by BU, Brand, Mall, Store / Location and Ambassador."
     )}
+
+
+    ${managerFilters()}
 
 
     <section class="overall-analysis-card">
 
       <div>
 
-        <span class="section-label">
+        <span class="section-label light-label">
           AI PERFORMANCE ANALYSIS
         </span>
 
         <h2>
-          Analyse BU Performance
+          Analyse Entertainment UAE
         </h2>
 
         <p>
-          Analyse performance, training and knowledge signals
-          across Entertainment UAE.
+          SHARE Lens will analyse the current filtered scope and identify recurring themes,
+          affected teams and recommended interventions.
         </p>
 
       </div>
@@ -3372,11 +3868,11 @@ function managerPerformance() {
         <div>
 
           <strong>
-            Analyse BU Performance
+            Analyse Current View
           </strong>
 
           <small>
-            Finds themes, severity and intervention needs
+            Uses the filters above
           </small>
 
         </div>
@@ -3389,33 +3885,118 @@ function managerPerformance() {
     <div class="dashboard-grid four">
 
       ${metricCard(
-        "Performance Score",
+        "Overall Performance Score",
         "86%",
         "On Track"
       )}
 
       ${metricCard(
-        "Training Completion",
-        "91%",
-        "Current"
-      )}
-
-      ${metricCard(
-        "Knowledge Score",
+        "Service Quality",
         "84%",
-        "Current"
+        "Current period"
       )}
 
       ${metricCard(
-        "Locations Requiring Focus",
-        "3",
-        "Current"
+        "SOP Adherence",
+        "89%",
+        "Current period"
+      )}
+
+      ${metricCard(
+        "Compliance",
+        "97%",
+        "Current period"
       )}
 
     </div>
 
 
     <section class="dashboard-card">
+
+      <div class="card-heading-row">
+
+        <div>
+
+          <span class="section-label">
+            PERFORMANCE BREAKDOWN
+          </span>
+
+          <h3>
+            Drill-down view
+          </h3>
+
+          <p>
+            Follow performance from BU through to individual Ambassador.
+          </p>
+
+        </div>
+
+
+        <select class="inline-selector">
+
+          <option>
+            BU
+          </option>
+
+          <option>
+            Brand
+          </option>
+
+          <option>
+            Mall
+          </option>
+
+          <option>
+            Store / Location
+          </option>
+
+          <option>
+            Ambassador
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="manager-drill-header">
+
+        <span>
+          Level
+        </span>
+
+        <span>
+          Name
+        </span>
+
+        <span>
+          Ambassadors
+        </span>
+
+        <span>
+          Performance
+        </span>
+
+        <span>
+          Action
+        </span>
+
+      </div>
+
+
+      ${managerPerformanceBreakdown
+        .map(
+          item =>
+            managerDrillRow(
+              item
+            )
+        )
+        .join("")}
+
+    </section>
+
+
+    <section class="dashboard-card manager-ai-section">
 
       <span class="section-label">
         AI ORCHESTRATION
@@ -3424,6 +4005,11 @@ function managerPerformance() {
       <h3>
         BU performance agent team
       </h3>
+
+      <p>
+        The agent team analyses only the currently selected BU Lead scope.
+      </p>
+
 
       <div class="agent-team-strip manager-team">
 
@@ -3435,8 +4021,8 @@ function managerPerformance() {
 
         ${agentTeamMember(
           "2",
-          "Theme Agent",
-          "Finds repeated issues"
+          "Pattern Agent",
+          "Finds recurring issues"
         )}
 
         ${agentTeamMember(
@@ -3448,13 +4034,13 @@ function managerPerformance() {
         ${agentTeamMember(
           "4",
           "Intervention Agent",
-          "Prioritises locations"
+          "Prioritises teams"
         )}
 
         ${agentTeamMember(
           "5",
           "Combined Analysis",
-          "Focus & next action"
+          "Recommends action"
         )}
 
       </div>
@@ -3464,7 +4050,7 @@ function managerPerformance() {
         id="manager-agent-output"
         class="agent-output empty-state"
       >
-        Run Analyse BU Performance to start.
+        Run Analyse Current View to start.
       </div>
 
     </section>
@@ -3473,40 +4059,82 @@ function managerPerformance() {
 }
 
 
-function managerOnboarding() {
+function managerDrillRow(item) {
+
+  return `
+    <div class="manager-drill-row">
+
+      <span>
+        ${item.level}
+      </span>
+
+      <strong>
+        ${item.name}
+      </strong>
+
+      <span>
+        ${item.ambassadors}
+      </span>
+
+      <strong class="${
+        item.score < 80
+          ? "score-attention"
+          : "score-good"
+      }">
+        ${item.score}%
+      </strong>
+
+      <button class="small-button">
+        Drill Down
+      </button>
+
+    </div>
+  `;
+
+}
+
+
+/* =========================================================
+   BU LEAD REQUIRES ATTENTION
+========================================================= */
+
+function managerRequiresAttentionPage() {
 
   return `
     ${pageTitle(
-      "AMBASSADOR PROGRAM",
-      "Onboarding",
-      "Track Ambassadors through the onboarding journey."
+      "PERFORMANCE",
+      "Requires Attention",
+      "Prioritised issues within your assigned Entertainment UAE scope."
     )}
+
+
+    ${managerFilters()}
 
 
     <div class="dashboard-grid four">
 
       ${metricCard(
-        "Invited",
+        "Critical",
+        "1",
+        "Immediate attention"
+      )}
+
+      ${metricCard(
+        "High",
+        "4",
+        "Priority follow-up"
+      )}
+
+      ${metricCard(
+        "Medium",
         "7",
-        "Awaiting first login"
+        "Monitor"
       )}
 
       ${metricCard(
-        "Onboarded",
-        "11",
-        "Current"
-      )}
-
-      ${metricCard(
-        "Mandatory Training",
-        "6",
-        "In progress"
-      )}
-
-      ${metricCard(
-        "Personal QR Code",
-        "3",
-        "Ready"
+        "Ambassadors Impacted",
+        "34",
+        "Within your scope"
       )}
 
     </div>
@@ -3514,26 +4142,39 @@ function managerOnboarding() {
 
     <section class="dashboard-card">
 
-      ${personOnboardingRow(
-        "Noor Hassan",
-        "100822",
-        "Mandatory Training",
-        "In Progress"
-      )}
+      <div class="attention-table-header">
 
-      ${personOnboardingRow(
-        "Rania Ali",
-        "100845",
-        "Knowledge Check",
-        "Pending"
-      )}
+        <span>
+          Severity
+        </span>
 
-      ${personOnboardingRow(
-        "Sami Omar",
-        "100901",
-        "Personal QR Code",
-        "Ready"
-      )}
+        <span>
+          Location
+        </span>
+
+        <span>
+          Area
+        </span>
+
+        <span>
+          Affected
+        </span>
+
+        <span>
+          Action
+        </span>
+
+      </div>
+
+
+      ${managerAttentionItems
+        .map(
+          item =>
+            managerAttentionTableRow(
+              item
+            )
+        )
+        .join("")}
 
     </section>
   `;
@@ -3541,156 +4182,371 @@ function managerOnboarding() {
 }
 
 
-function runManagerAnalysis() {
+function managerAttentionTableRow(item) {
 
-  runAnimation({
+  return `
+    <div class="attention-table-row">
 
-    outputId:
-      "manager-agent-output",
+      <span class="severity-pill ${item.severity.toLowerCase()}">
+        ${item.severity}
+      </span>
 
-    title:
-      "Analysing Entertainment UAE",
+      <strong>
+        ${item.location}
+      </strong>
 
-    steps: [
+      <span>
+        ${item.issue}
+      </span>
 
-      {
-        id:
-          "manager-performance",
-        title:
-          "Performance Agent",
-        message:
-          "Assessing performance, training and knowledge indicators."
-      },
+      <span>
+        ${item.affected}
+      </span>
 
-      {
-        id:
-          "manager-theme",
-        title:
-          "Theme Agent",
-        message:
-          "Grouping recurring themes across locations and Ambassadors."
-      },
+      <button class="small-button">
+        Review
+      </button>
 
-      {
-        id:
-          "manager-knowledge",
-        title:
-          "Knowledge Gap Agent",
-        message:
-          "Identifying recurring development gaps."
-      },
-
-      {
-        id:
-          "manager-intervention",
-        title:
-          "Intervention Agent",
-        message:
-          "Ranking MAF mall locations requiring intervention."
-      },
-
-      {
-        id:
-          "manager-combined",
-        title:
-          "Combined Analysis",
-        message:
-          "Preparing recommended areas of focus."
-      }
-
-    ],
-
-    onComplete:
-      showManagerAnalysisResult
-
-  });
+    </div>
+  `;
 
 }
 
 
-function showManagerAnalysisResult() {
+/* =========================================================
+   BU LEAD AMBASSADOR POPULATION
+========================================================= */
 
-  const output =
-    document.getElementById(
-      "manager-agent-output"
-    );
+function managerAmbassadorsPage() {
 
-  if (!output) return;
-
-
-  output.innerHTML = `
-    ${analysisHeader(
-      "BU AI ANALYSIS",
-      "3 locations require intervention",
-      86,
-      "Entertainment UAE"
+  return `
+    ${pageTitle(
+      "AMBASSADOR PROGRAM",
+      "Ambassadors",
+      "View and manage the Ambassador population within your assigned scope."
     )}
 
-    <div class="dashboard-grid two no-bottom">
 
-      <section class="analysis-section">
+    ${managerFilters()}
+
+
+    <section class="dashboard-card">
+
+      <div class="card-heading-row">
+
+        <div>
+
+          <span class="section-label">
+            AMBASSADOR POPULATION
+          </span>
+
+          <h3>
+            Entertainment UAE
+          </h3>
+
+          <p>
+            Filter by BU, Brand, Mall or Store / Location and export the resulting population.
+          </p>
+
+        </div>
+
+
+        <button
+          class="export-button"
+          onclick="exportAmbassadorList()"
+        >
+          ↓ Export List
+        </button>
+
+      </div>
+
+
+      <div
+        id="export-message"
+        class="export-message"
+      ></div>
+
+
+      <div class="population-header">
+
+        <span>
+          Ambassador
+        </span>
+
+        <span>
+          BU / Brand
+        </span>
+
+        <span>
+          Mall / Location
+        </span>
+
+        <span>
+          Performance
+        </span>
+
+        <span>
+          Training
+        </span>
+
+        <span>
+          Members Onboarded
+        </span>
+
+        <span>
+          Status
+        </span>
+
+      </div>
+
+
+      ${ambassadorPopulation
+        .map(
+          ambassador =>
+            ambassadorPopulationRow(
+              ambassador
+            )
+        )
+        .join("")}
+
+    </section>
+  `;
+
+}
+
+
+function ambassadorPopulationRow(
+  ambassador
+) {
+
+  return `
+    <div class="population-row">
+
+      <div>
+
+        <strong>
+          ${ambassador.name}
+        </strong>
+
+        <span>
+          Staff ID ${ambassador.staffId}
+        </span>
+
+      </div>
+
+
+      <div>
+
+        <strong>
+          ${ambassador.bu}
+        </strong>
+
+        <span>
+          ${ambassador.brand}
+        </span>
+
+      </div>
+
+
+      <div>
+
+        <strong>
+          ${ambassador.mall}
+        </strong>
+
+        <span>
+          ${ambassador.location}
+        </span>
+
+      </div>
+
+
+      <strong class="${
+        ambassador.performance < 80
+          ? "score-attention"
+          : "score-good"
+      }">
+        ${ambassador.performance}%
+      </strong>
+
+
+      <strong>
+        ${ambassador.training}%
+      </strong>
+
+
+      <strong>
+        ${ambassador.members}
+      </strong>
+
+
+      <span class="status-block good">
+        ${ambassador.status}
+      </span>
+
+    </div>
+  `;
+
+}
+
+
+function exportAmbassadorList() {
+
+  const message =
+    document.getElementById(
+      "export-message"
+    );
+
+  if (!message) return;
+
+
+  message.innerHTML = `
+    <strong>
+      Export prepared
+    </strong>
+
+    <span>
+      The Ambassador population export reflects the current BU Lead filter scope.
+    </span>
+  `;
+
+
+  message.classList.add(
+    "visible"
+  );
+
+}
+
+
+/* =========================================================
+   BU LEAD TRAINING
+========================================================= */
+
+function managerTrainingOverviewPage() {
+
+  return `
+    ${pageTitle(
+      "TRAINING & KNOWLEDGE",
+      "Training Overview",
+      "Monitor assigned learning, completion, aging and recommended development."
+    )}
+
+
+    ${managerFilters()}
+
+
+    <div class="dashboard-grid four">
+
+      ${metricCard(
+        "Assigned",
+        "594",
+        "Training assignments"
+      )}
+
+      ${metricCard(
+        "Completed",
+        "545",
+        "91% completion"
+      )}
+
+      ${metricCard(
+        "In Progress",
+        "32",
+        "Current"
+      )}
+
+      ${metricCard(
+        "Overdue",
+        "17",
+        "Needs follow-up"
+      )}
+
+    </div>
+
+
+    <div class="training-layout">
+
+      <section class="dashboard-card">
 
         <span class="section-label">
-          PERFORMANCE THEMES
+          ASSIGNED TRAINING
         </span>
 
         <h3>
-          Areas to focus on
+          Team learning plan
         </h3>
 
-        ${severityRow(
-          "Refund SLA knowledge",
-          "Detected across 3 locations",
-          "High",
-          "high"
-        )}
 
-        ${severityRow(
-          "Customer verification consistency",
-          "Detected across 2 locations",
-          "Medium",
-          "medium"
-        )}
+        <div class="manager-training-header">
 
-        ${severityRow(
-          "Escalation handling",
-          "Detected across 2 locations",
-          "Medium",
-          "medium"
-        )}
+          <span>
+            Training
+          </span>
+
+          <span>
+            Assigned
+          </span>
+
+          <span>
+            Completed
+          </span>
+
+          <span>
+            In Progress
+          </span>
+
+          <span>
+            Overdue
+          </span>
+
+          <span>
+            Avg Aging
+          </span>
+
+        </div>
+
+
+        ${managerTrainingOverview
+          .map(
+            item =>
+              managerTrainingRow(
+                item
+              )
+          )
+          .join("")}
 
       </section>
 
 
-      <section class="analysis-section">
+      <section class="dashboard-card recommended-panel">
 
         <span class="section-label">
-          LOCATIONS REQUIRING INTERVENTION
+          RECOMMENDED TRAINING
         </span>
 
         <h3>
-          Prioritised by severity
+          Performance-driven recommendations
         </h3>
 
-        ${locationSeverityRow(
-          "City Centre Deira",
-          "72%",
-          "Critical",
-          "critical"
+        ${managerRecommendedTrainingRow(
+          "Refund Handling Refresher",
+          "34 Ambassadors",
+          "Refund SLA knowledge gap",
+          "High"
         )}
 
-        ${locationSeverityRow(
-          "City Centre Mirdif",
-          "79%",
-          "High",
-          "high"
+        ${managerRecommendedTrainingRow(
+          "Service Recovery Essentials",
+          "18 Ambassadors",
+          "Resolution quality",
+          "Medium"
         )}
 
-        ${locationSeverityRow(
-          "Mall of the Emirates",
-          "84%",
-          "Medium",
-          "medium"
+        ${managerRecommendedTrainingRow(
+          "Customer Verification Refresher",
+          "11 Ambassadors",
+          "SOP adherence",
+          "Medium"
         )}
 
       </section>
@@ -3700,6 +4556,983 @@ function showManagerAnalysisResult() {
 
 }
 
+
+function managerTrainingRow(item) {
+
+  return `
+    <div class="manager-training-row">
+
+      <strong>
+        ${item.training}
+      </strong>
+
+      <span>
+        ${item.assigned}
+      </span>
+
+      <span>
+        ${item.completed}
+      </span>
+
+      <span>
+        ${item.inProgress}
+      </span>
+
+      <strong class="${
+        item.overdue > 5
+          ? "score-attention"
+          : ""
+      }">
+        ${item.overdue}
+      </strong>
+
+      <span>
+        ${item.avgAging}
+      </span>
+
+    </div>
+  `;
+
+}
+
+
+function managerRecommendedTrainingRow(
+  title,
+  affected,
+  reason,
+  priority
+) {
+
+  return `
+    <div class="manager-recommended-training">
+
+      <div>
+
+        <strong>
+          ${title}
+        </strong>
+
+        <span>
+          ${reason}
+        </span>
+
+      </div>
+
+      <div>
+
+        <strong>
+          ${affected}
+        </strong>
+
+        <span class="severity-pill ${
+          priority.toLowerCase()
+        }">
+          ${priority}
+        </span>
+
+      </div>
+
+      <button class="small-button">
+        Review
+      </button>
+
+    </div>
+  `;
+
+}
+
+
+/* =========================================================
+   BU LEAD KNOWLEDGE GAPS
+========================================================= */
+
+function managerKnowledgeGapsPage() {
+
+  return `
+    ${pageTitle(
+      "TRAINING & KNOWLEDGE",
+      "Knowledge Gaps",
+      "Identify recurring knowledge themes affecting Ambassador performance."
+    )}
+
+
+    ${managerFilters()}
+
+
+    <section class="dashboard-card">
+
+      <div class="knowledge-gap-header">
+
+        <span>
+          Knowledge Theme
+        </span>
+
+        <span>
+          Ambassadors Affected
+        </span>
+
+        <span>
+          Avg Knowledge Score
+        </span>
+
+        <span>
+          Related Performance
+        </span>
+
+        <span>
+          Trend
+        </span>
+
+        <span>
+          Action
+        </span>
+
+      </div>
+
+
+      ${managerKnowledgeGaps
+        .map(
+          gap =>
+            managerKnowledgeGapRow(
+              gap
+            )
+        )
+        .join("")}
+
+    </section>
+  `;
+
+}
+
+
+function managerKnowledgeGapRow(gap) {
+
+  return `
+    <div class="knowledge-gap-row">
+
+      <strong>
+        ${gap.theme}
+      </strong>
+
+      <span>
+        ${gap.ambassadors}
+      </span>
+
+      <strong class="${
+        gap.knowledgeScore < 80
+          ? "score-attention"
+          : "score-good"
+      }">
+        ${gap.knowledgeScore}%
+      </strong>
+
+      <span>
+        ${gap.relatedPerformance}
+      </span>
+
+      <span>
+        ${gap.trend}
+      </span>
+
+      <button class="small-button">
+        Review
+      </button>
+
+    </div>
+  `;
+
+}
+
+
+/* =========================================================
+   BU LEAD ONBOARDING / OFFBOARDING
+========================================================= */
+
+function managerOnboardingPage() {
+
+  return `
+    ${pageTitle(
+      "AMBASSADOR PROGRAM",
+      "Onboarding & Offboarding",
+      "Track task completion across the Ambassador lifecycle."
+    )}
+
+
+    ${managerFilters()}
+
+
+    <section class="dashboard-card lifecycle-section">
+
+      <span class="section-label">
+        ONBOARDING JOURNEYS
+      </span>
+
+      <h3>
+        Ambassadors joining the programme
+      </h3>
+
+
+      ${onboardingJourneys
+        .map(
+          journey =>
+            lifecycleJourneyCard(
+              journey,
+              "Onboarding"
+            )
+        )
+        .join("")}
+
+    </section>
+
+
+    <section class="dashboard-card lifecycle-section">
+
+      <span class="section-label">
+        OFFBOARDING JOURNEYS
+      </span>
+
+      <h3>
+        Ambassadors leaving the programme
+      </h3>
+
+
+      ${offboardingJourneys
+        .map(
+          journey =>
+            lifecycleJourneyCard(
+              journey,
+              "Offboarding"
+            )
+        )
+        .join("")}
+
+    </section>
+  `;
+
+}
+
+
+function lifecycleJourneyCard(
+  journey,
+  type
+) {
+
+  return `
+    <div class="lifecycle-card">
+
+      <div class="lifecycle-person">
+
+        <div class="mini-avatar">
+          ${journey.name
+            .split(" ")
+            .map(word => word[0])
+            .join("")
+            .slice(0,2)}
+        </div>
+
+        <div>
+
+          <strong>
+            ${journey.name}
+          </strong>
+
+          <span>
+            Staff ID ${journey.staffId}
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div class="lifecycle-steps">
+
+        ${journey.steps
+          .map(
+            step =>
+              lifecycleStep(
+                step[0],
+                step[1]
+              )
+          )
+          .join("")}
+
+      </div>
+
+
+      <button class="small-button">
+        View ${type}
+      </button>
+
+    </div>
+  `;
+
+}
+
+
+function lifecycleStep(
+  label,
+  status
+) {
+
+  const className =
+    status === "Complete"
+      ? "complete"
+      : status === "In Progress"
+        ? "progress"
+        : "pending";
+
+
+  return `
+    <div class="lifecycle-step ${className}">
+
+      <span class="lifecycle-dot">
+        ${
+          status === "Complete"
+            ? "✓"
+            : status === "In Progress"
+              ? "•"
+              : "○"
+        }
+      </span>
+
+      <div>
+
+        <strong>
+          ${label}
+        </strong>
+
+        <small>
+          ${status}
+        </small>
+
+      </div>
+
+    </div>
+  `;
+
+}
+
+
+/* =========================================================
+   BU LEAD ACQUISITION
+========================================================= */
+
+function managerAcquisitionPage() {
+
+  const onboarded = 1842;
+  const target = 2100;
+
+  const achievement =
+    Math.round(
+      (onboarded / target) * 100
+    );
+
+  const remaining =
+    target - onboarded;
+
+
+  return `
+    ${pageTitle(
+      "AMBASSADOR PROGRAM",
+      "SHARE Acquisition",
+      "Track members onboarded through Ambassador activity."
+    )}
+
+
+    ${managerFilters()}
+
+
+    <section class="manager-acquisition-hero">
+
+      <div>
+
+        <span class="section-label light-label">
+          SHARE ACQUISITION
+        </span>
+
+        <h2>
+          ${onboarded.toLocaleString()} members onboarded
+        </h2>
+
+        <p>
+          Entertainment UAE · ${currentPerformancePeriod.preset}
+        </p>
+
+      </div>
+
+
+      <div class="acquisition-hero-score">
+
+        <strong>
+          ${achievement}%
+        </strong>
+
+        <span>
+          of target
+        </span>
+
+      </div>
+
+
+      <div class="manager-acquisition-progress">
+
+        <div
+          class="manager-acquisition-progress-fill"
+          style="--manager-acquisition-progress:${achievement}%"
+        ></div>
+
+      </div>
+
+
+      <div class="acquisition-hero-footer">
+
+        <span>
+          Target: ${target.toLocaleString()}
+        </span>
+
+        <span>
+          Remaining: ${remaining.toLocaleString()}
+        </span>
+
+      </div>
+
+    </section>
+
+
+    <div class="dashboard-grid four">
+
+      ${metricCard(
+        "Members Onboarded",
+        onboarded.toLocaleString(),
+        "Current period"
+      )}
+
+      ${metricCard(
+        "Target",
+        target.toLocaleString(),
+        "Entertainment UAE"
+      )}
+
+      ${metricCard(
+        "Achievement",
+        `${achievement}%`,
+        "Of target"
+      )}
+
+      ${metricCard(
+        "Active Ambassadors",
+        "238",
+        "Eligible population"
+      )}
+
+    </div>
+
+
+    <section class="dashboard-card">
+
+      <span class="section-label">
+        AMBASSADOR LEADERBOARD
+      </span>
+
+      <h3>
+        Member onboarding contribution
+      </h3>
+
+
+      <div class="leaderboard-header">
+
+        <span>
+          Rank
+        </span>
+
+        <span>
+          Ambassador
+        </span>
+
+        <span>
+          Brand
+        </span>
+
+        <span>
+          Location
+        </span>
+
+        <span>
+          Members Onboarded
+        </span>
+
+        <span>
+          % Target
+        </span>
+
+      </div>
+
+
+      ${[
+        ["1", "Noor Hassan", "VOX Cinemas", "City Centre Mirdif", "48", "96%"],
+        ["2", "Sami Omar", "VOX Cinemas", "City Centre Al Zahia", "44", "88%"],
+        ["3", "Layla Haddad", "VOX Cinemas", "Mall of the Emirates", "42", "84%"],
+        ["4", "Rania Ali", "VOX Cinemas", "City Centre Deira", "29", "58%"],
+        ["5", "Sara Khan", "VOX Cinemas", "City Centre Deira", "21", "42%"]
+      ]
+        .map(
+          row =>
+            leaderboardRow(
+              ...row
+            )
+        )
+        .join("")}
+
+    </section>
+  `;
+
+}
+
+
+function leaderboardRow(
+  rank,
+  name,
+  brand,
+  location,
+  members,
+  target
+) {
+
+  return `
+    <div class="leaderboard-row">
+
+      <strong class="rank-cell">
+        ${rank}
+      </strong>
+
+      <strong>
+        ${name}
+      </strong>
+
+      <span>
+        ${brand}
+      </span>
+
+      <span>
+        ${location}
+      </span>
+
+      <strong>
+        ${members}
+      </strong>
+
+      <strong>
+        ${target}
+      </strong>
+
+    </div>
+  `;
+
+}
+
+
+/* =========================================================
+   BU LEAD COMMUNICATIONS
+========================================================= */
+
+function managerCommunicationsPage() {
+
+  return `
+    ${pageTitle(
+      "AMBASSADOR PROGRAM",
+      "Communications",
+      "Broadcast updates and measure Ambassador engagement."
+    )}
+
+
+    ${managerFilters()}
+
+
+    <section class="communications-hero">
+
+      <div>
+
+        <span class="section-label light-label">
+          BROADCASTS & INTERACTIVE FEED
+        </span>
+
+        <h2>
+          Engage your Ambassador community
+        </h2>
+
+        <p>
+          Share announcements and updates, then track views, likes and comments.
+        </p>
+
+      </div>
+
+      <button
+        class="white-action-button"
+        onclick="showNewBroadcast()"
+      >
+        + New Broadcast
+      </button>
+
+    </section>
+
+
+    <div
+      id="broadcast-compose-area"
+    ></div>
+
+
+    <div class="dashboard-grid four">
+
+      ${metricCard(
+        "Broadcasts",
+        "12",
+        "This period"
+      )}
+
+      ${metricCard(
+        "Reach",
+        "94%",
+        "Average"
+      )}
+
+      ${metricCard(
+        "Engagement",
+        "39%",
+        "Likes + comments"
+      )}
+
+      ${metricCard(
+        "Comments",
+        "86",
+        "This period"
+      )}
+
+    </div>
+
+
+    <section class="dashboard-card">
+
+      <span class="section-label">
+        RECENT COMMUNICATIONS
+      </span>
+
+      <h3>
+        Broadcast engagement
+      </h3>
+
+
+      <div class="communications-header">
+
+        <span>
+          Broadcast
+        </span>
+
+        <span>
+          Reach
+        </span>
+
+        <span>
+          Views
+        </span>
+
+        <span>
+          Likes
+        </span>
+
+        <span>
+          Comments
+        </span>
+
+        <span>
+          Action
+        </span>
+
+      </div>
+
+
+      ${communicationsFeed
+        .map(
+          item =>
+            communicationsRow(
+              item
+            )
+        )
+        .join("")}
+
+    </section>
+
+
+    <section class="notice-card">
+
+      <strong>
+        Engagement reporting
+      </strong>
+
+      <p>
+        Future-state engagement points can feed Ambassador profiles and BU / Brand leaderboards.
+        This prototype currently demonstrates the reporting experience only.
+      </p>
+
+    </section>
+  `;
+
+}
+
+
+function communicationsRow(item) {
+
+  return `
+    <div class="communications-row">
+
+      <div>
+
+        <strong>
+          ${item.title}
+        </strong>
+
+        <span>
+          ${item.type} · ${item.date}
+        </span>
+
+      </div>
+
+      <span>
+        ${item.reach}
+      </span>
+
+      <strong>
+        ${item.views}
+      </strong>
+
+      <strong>
+        ${item.likes}
+      </strong>
+
+      <strong>
+        ${item.comments}
+      </strong>
+
+      <button class="small-button">
+        View
+      </button>
+
+    </div>
+  `;
+
+}
+
+
+function showNewBroadcast() {
+
+  const area =
+    document.getElementById(
+      "broadcast-compose-area"
+    );
+
+  if (!area) return;
+
+
+  area.innerHTML = `
+    <section class="dashboard-card broadcast-composer">
+
+      <span class="section-label">
+        NEW BROADCAST
+      </span>
+
+      <h3>
+        Create Ambassador update
+      </h3>
+
+      <div class="broadcast-form-grid">
+
+        <div class="mock-field">
+          <label>
+            Audience
+          </label>
+
+          <div>
+            Entertainment UAE
+          </div>
+        </div>
+
+        <div class="mock-field">
+          <label>
+            Brand
+          </label>
+
+          <div>
+            All Brands
+          </div>
+        </div>
+
+        <div class="mock-field wide">
+          <label>
+            Title
+          </label>
+
+          <div>
+            Enter broadcast title
+          </div>
+        </div>
+
+        <div class="mock-field wide">
+          <label>
+            Message
+          </label>
+
+          <div class="mock-textarea">
+            Enter announcement or update
+          </div>
+        </div>
+
+      </div>
+
+      <button class="primary-small">
+        Publish Broadcast
+      </button>
+
+    </section>
+  `;
+
+}
+
+
+/* =========================================================
+   BU LEAD AMBASSADOR HUB
+========================================================= */
+
+function managerHubPage() {
+
+  return `
+    ${pageTitle(
+      "AMBASSADOR PROGRAM",
+      "Ambassador Hub",
+      "Track feedback, suggestions and Ambassador-led submissions."
+    )}
+
+
+    ${managerFilters()}
+
+
+    <div class="dashboard-grid four">
+
+      ${ambassadorHubSubmissions
+        .map(
+          item =>
+            hubMetricCard(
+              item
+            )
+        )
+        .join("")}
+
+    </div>
+
+
+    <section class="dashboard-card">
+
+      <span class="section-label">
+        SUBMISSION FLOW
+      </span>
+
+      <h3>
+        Ambassador Hub → Alida
+      </h3>
+
+      <div class="hub-flow">
+
+        <span>
+          Ambassador Submission
+        </span>
+
+        <b>
+          →
+        </b>
+
+        <span>
+          SHARE Lens
+        </span>
+
+        <b>
+          →
+        </b>
+
+        <span>
+          Categorisation
+        </span>
+
+        <b>
+          →
+        </b>
+
+        <span>
+          Alida Integration
+        </span>
+
+        <b>
+          →
+        </b>
+
+        <span>
+          Reporting & Follow-up
+        </span>
+
+      </div>
+
+    </section>
+
+
+    <section class="notice-card">
+
+      <strong>
+        Integration placeholder: Alida
+      </strong>
+
+      <p>
+        Feedback, Suggestions, In-Store Training and SHARE Walls are represented
+        as future Alida-connected submission categories in this prototype.
+      </p>
+
+    </section>
+  `;
+
+}
+
+
+function hubMetricCard(item) {
+
+  return `
+    <section class="dashboard-card hub-metric-card">
+
+      <span class="section-label">
+        ${item.type}
+      </span>
+
+      <strong>
+        ${item.submissions}
+      </strong>
+
+      <div class="hub-card-meta">
+
+        <span>
+          ${item.open} open
+        </span>
+
+        <span>
+          ${item.integration}
+        </span>
+
+      </div>
+
+    </section>
+  `;
+
+}
+
+
+/* =========================================================
+   SERVICE DELIVERY - CURRENT VERSION PRESERVED
+========================================================= */
 
 function serviceHome() {
 
@@ -3709,6 +5542,7 @@ function serviceHome() {
       "Service Delivery",
       "Cross-location visibility across Service Delivery, Training & Knowledge and the Ambassador Program."
     )}
+
 
     <div class="dashboard-grid four">
 
@@ -3751,11 +5585,12 @@ function servicePerformance() {
       "Identify systemic themes and MAF mall locations requiring intervention."
     )}
 
+
     <section class="overall-analysis-card">
 
       <div>
 
-        <span class="section-label">
+        <span class="section-label light-label">
           GROUP AI ANALYSIS
         </span>
 
@@ -3764,21 +5599,23 @@ function servicePerformance() {
         </h2>
 
         <p>
-          Analyse performance, audit, training and knowledge
-          signals across MAF mall locations.
+          Analyse performance, audit, training and knowledge signals across MAF mall locations.
         </p>
 
       </div>
+
 
       <button
         class="analyse-overall-button"
         onclick="runServiceAnalysis()"
       >
+
         <span class="overall-ai-icon">
           ✦
         </span>
 
         <div>
+
           <strong>
             Analyse Group Performance
           </strong>
@@ -3786,7 +5623,9 @@ function servicePerformance() {
           <small>
             Finds themes and priority interventions
           </small>
+
         </div>
+
       </button>
 
     </section>
@@ -3798,6 +5637,293 @@ function servicePerformance() {
     >
       Run Analyse Group Performance to start.
     </div>
+  `;
+
+}
+
+
+function auditPage() {
+
+  return `
+    ${pageTitle(
+      "SERVICE DELIVERY",
+      "Audit & Service Pulse",
+      "Service Audit and Service Pulse reporting."
+    )}
+
+    <section class="dashboard-card">
+
+      <span class="section-label">
+        SERVICE PULSE
+      </span>
+
+      <h3>
+        Service Delivery persona review next
+      </h3>
+
+      <p>
+        The detailed Service Pulse reporting model will be implemented
+        during the Service Delivery persona update using the report shared by Ops.
+      </p>
+
+    </section>
+  `;
+
+}
+
+
+/* =========================================================
+   ADMIN - CURRENT VERSION PRESERVED
+========================================================= */
+
+function adminHome() {
+
+  return `
+    ${pageTitle(
+      "PLATFORM ADMINISTRATION",
+      "SHARE Lens Platform",
+      "Manage identity, access, AI agents and integrations."
+    )}
+
+
+    <div class="dashboard-grid four">
+
+      ${metricCard(
+        "Platform Users",
+        "1,124",
+        "All roles"
+      )}
+
+      ${metricCard(
+        "Active Ambassadors",
+        "812",
+        "Current"
+      )}
+
+      ${metricCard(
+        "AI Agents",
+        "13",
+        "Configured"
+      )}
+
+      ${metricCard(
+        "Integrations",
+        "9",
+        "Prototype"
+      )}
+
+    </div>
+  `;
+
+}
+
+
+/* =========================================================
+   AI ANALYSIS
+========================================================= */
+
+function runManagerAnalysis() {
+
+  runAnimation({
+
+    outputId:
+      "manager-agent-output",
+
+    title:
+      "Analysing Entertainment UAE",
+
+    steps: [
+
+      {
+        id:
+          "manager-performance",
+        title:
+          "Performance Agent",
+        message:
+          "Assessing Service Quality, SOP Adherence and Compliance."
+      },
+
+      {
+        id:
+          "manager-pattern",
+        title:
+          "Pattern Agent",
+        message:
+          "Finding recurring themes across your filtered population."
+      },
+
+      {
+        id:
+          "manager-knowledge",
+        title:
+          "Knowledge Gap Agent",
+        message:
+          "Linking recurring performance issues to knowledge gaps."
+      },
+
+      {
+        id:
+          "manager-intervention",
+        title:
+          "Intervention Agent",
+        message:
+          "Prioritising locations, teams and Ambassadors requiring intervention."
+      },
+
+      {
+        id:
+          "manager-combined",
+        title:
+          "Combined Analysis",
+        message:
+          "Preparing recommended actions for the current scope."
+      }
+
+    ],
+
+    onComplete:
+      showManagerAnalysisResult
+
+  });
+
+}
+
+
+function showManagerAnalysisResult() {
+
+  const output =
+    document.getElementById(
+      "manager-agent-output"
+    );
+
+  if (!output) return;
+
+
+  output.innerHTML = `
+    ${analysisHeader(
+      "BU AI ANALYSIS",
+      "3 priority themes identified",
+      86,
+      "Entertainment UAE · Current filtered scope"
+    )}
+
+
+    <div class="dashboard-grid two no-bottom">
+
+      <section class="analysis-section">
+
+        <span class="section-label">
+          RECURRING THEMES
+        </span>
+
+        <h3>
+          Areas affecting performance
+        </h3>
+
+        ${severityRow(
+          "Refund SLA knowledge",
+          "34 Ambassadors · 3 locations",
+          "High",
+          "high"
+        )}
+
+        ${severityRow(
+          "Customer verification consistency",
+          "18 Ambassadors · 2 locations",
+          "Medium",
+          "medium"
+        )}
+
+        ${severityRow(
+          "Service recovery",
+          "11 Ambassadors · 2 locations",
+          "Medium",
+          "medium"
+        )}
+
+      </section>
+
+
+      <section class="analysis-section">
+
+        <span class="section-label">
+          PRIORITY LOCATIONS
+        </span>
+
+        <h3>
+          Where intervention is required
+        </h3>
+
+        ${locationSeverityRow(
+          "City Centre Deira",
+          "8 Ambassadors affected",
+          "Critical",
+          "critical"
+        )}
+
+        ${locationSeverityRow(
+          "City Centre Mirdif",
+          "5 Ambassadors affected",
+          "High",
+          "high"
+        )}
+
+        ${locationSeverityRow(
+          "Mall of the Emirates",
+          "3 Ambassadors affected",
+          "Medium",
+          "medium"
+        )}
+
+      </section>
+
+    </div>
+
+
+    <section class="intervention-focus">
+
+      <div class="severity-marker critical">
+        1
+      </div>
+
+      <div>
+
+        <span class="section-label">
+          RECOMMENDED INTERVENTION
+        </span>
+
+        <h3>
+          Refund SLA refresher for City Centre Deira
+        </h3>
+
+        <p>
+          Eight Ambassadors show a recurring refund timeline knowledge gap.
+          Assign targeted learning followed by a Knowledge Check and review performance again.
+        </p>
+
+      </div>
+
+      <div class="intervention-actions">
+
+        <strong>
+          Next Steps
+        </strong>
+
+        <span>
+          Assign targeted refresher
+        </span>
+
+        <span>
+          Trigger Knowledge Check
+        </span>
+
+        <span>
+          Reassess performance
+        </span>
+
+      </div>
+
+    </section>
   `;
 
 }
@@ -3853,15 +5979,6 @@ function runServiceAnalysis() {
 
       {
         id:
-          "service-action",
-        title:
-          "Next Best Action",
-        message:
-          "Prioritising recommended actions."
-      },
-
-      {
-        id:
           "service-combined",
         title:
           "Combined Analysis",
@@ -3896,221 +6013,12 @@ function showServiceAnalysisResult() {
       88,
       "MAF Mall Estate"
     )}
-
-    <div class="dashboard-grid two no-bottom">
-
-      <section class="analysis-section">
-
-        <span class="section-label">
-          EMERGING THEMES
-        </span>
-
-        ${themeResult(
-          "Refund SLA",
-          "3 locations",
-          "34 Ambassadors",
-          "Worsening",
-          "High"
-        )}
-
-        ${themeResult(
-          "Product Knowledge",
-          "5 locations",
-          "51 Ambassadors",
-          "Stable",
-          "Medium"
-        )}
-
-      </section>
-
-
-      <section class="analysis-section">
-
-        <span class="section-label">
-          LOCATION SEVERITY
-        </span>
-
-        ${locationSeverityRow(
-          "City Centre Deira",
-          "Entertainment",
-          "Critical",
-          "critical"
-        )}
-
-        ${locationSeverityRow(
-          "City Centre Mirdif",
-          "Entertainment",
-          "High",
-          "high"
-        )}
-
-        ${locationSeverityRow(
-          "Mall of the Emirates",
-          "Entertainment",
-          "Medium",
-          "medium"
-        )}
-
-      </section>
-
-    </div>
   `;
 
 }
 
 
-function auditPage() {
-
-  return `
-    ${pageTitle(
-      "SERVICE DELIVERY",
-      "Audit & Service Pulse",
-      "Service Audit and Mystery Shop findings across MAF mall locations."
-    )}
-
-    <section class="dashboard-card">
-
-      <span class="section-label">
-        SERVICE PULSE
-      </span>
-
-      <h3>
-        Prototype view
-      </h3>
-
-      <p>
-        Detailed Service Pulse reporting will be expanded during
-        the Service Delivery persona review.
-      </p>
-
-    </section>
-  `;
-
-}
-
-
-function adminHome() {
-
-  return `
-    ${pageTitle(
-      "PLATFORM ADMINISTRATION",
-      "SHARE Lens Platform",
-      "Manage identity, access, AI agents and integrations."
-    )}
-
-    <div class="dashboard-grid four">
-
-      ${metricCard(
-        "Platform Users",
-        "1,124",
-        "All roles"
-      )}
-
-      ${metricCard(
-        "Active Ambassadors",
-        "812",
-        "Current"
-      )}
-
-      ${metricCard(
-        "AI Agents",
-        "13",
-        "Configured"
-      )}
-
-      ${metricCard(
-        "Integrations",
-        "9",
-        "Prototype"
-      )}
-
-    </div>
-  `;
-
-}
-
-
-function usersAccessPage() {
-
-  return `
-    ${pageTitle(
-      "IDENTITY & ACCESS",
-      "Users & Access",
-      "Manage Staff ID, Microsoft SSO, roles and scope."
-    )}
-
-    <section class="dashboard-card">
-
-      ${userAccessRow(
-        "Layla Haddad",
-        "Staff ID 100245",
-        "Ambassador",
-        "VOX · Mall of the Emirates",
-        "Active"
-      )}
-
-      ${userAccessRow(
-        "Ahmed Salah",
-        "Entra ID",
-        "BU Lead / Trainer",
-        "Entertainment UAE",
-        "Active"
-      )}
-
-      ${userAccessRow(
-        "Marian Zakhary",
-        "Entra ID",
-        "Service Delivery",
-        "MAF Malls",
-        "Active"
-      )}
-
-    </section>
-  `;
-
-}
-
-
-function rolesPage() {
-
-  return genericRolePage(
-    "IDENTITY & ACCESS",
-    "Roles & Permissions",
-    "Role-based access used by the SHARE Lens prototype."
-  );
-
-}
-
-
-function aiAgentsPage() {
-
-  return genericRolePage(
-    "AI PLATFORM",
-    "AI Agents",
-    "Specialist AI capabilities used by SHARE Lens."
-  );
-
-}
-
-
-function integrationsPage() {
-
-  return genericRolePage(
-    "PLATFORM",
-    "Integrations",
-    "Prototype integration landscape."
-  );
-
-}
-
-
-/* =========================================================
-   AI ANIMATION
-========================================================= */
-
-function runAnimation(
-  config
-) {
+function runAnimation(config) {
 
   const output =
     document.getElementById(
@@ -4306,9 +6214,7 @@ function activateGenericStep(
       `step-${id}`
     );
 
-  if (
-    step
-  ) {
+  if (step) {
 
     step.classList.remove(
       "waiting",
@@ -4327,9 +6233,7 @@ function activateGenericStep(
       `status-${id}`
     );
 
-  if (
-    status
-  ) {
+  if (status) {
 
     status.textContent =
       "Running";
@@ -4342,9 +6246,7 @@ function activateGenericStep(
       `${outputId}-message`
     );
 
-  if (
-    messageNode
-  ) {
+  if (messageNode) {
 
     messageNode.textContent =
       message;
@@ -4354,18 +6256,14 @@ function activateGenericStep(
 }
 
 
-function completeGenericStep(
-  id
-) {
+function completeGenericStep(id) {
 
   const step =
     document.getElementById(
       `step-${id}`
     );
 
-  if (
-    step
-  ) {
+  if (step) {
 
     step.classList.remove(
       "waiting",
@@ -4384,9 +6282,7 @@ function completeGenericStep(
       `status-${id}`
     );
 
-  if (
-    status
-  ) {
+  if (status) {
 
     status.textContent =
       "Complete";
@@ -4400,9 +6296,7 @@ function completeGenericStep(
    ROUTING
 ========================================================= */
 
-function navigateTo(
-  page
-) {
+function navigateTo(page) {
 
   currentPage =
     page;
@@ -4449,90 +6343,48 @@ function navigateTo(
     "manager"
   ) {
 
-    if (
-      page === "home"
-    ) {
+    const pages = {
 
-      content =
-        managerHome();
+      home:
+        managerHome,
 
-    }
+      "team-performance":
+        managerPerformance,
 
-    else if (
-      page ===
-      "team-performance"
-    ) {
+      "team-attention":
+        managerRequiresAttentionPage,
 
-      content =
-        managerPerformance();
+      "training-overview":
+        managerTrainingOverviewPage,
 
-    }
+      "knowledge-gaps":
+        managerKnowledgeGapsPage,
 
-    else if (
-      page ===
-      "manager-onboarding"
-    ) {
+      "manager-knowledge":
+        managerKnowledgePage,
 
-      content =
-        managerOnboarding();
+      ambassadors:
+        managerAmbassadorsPage,
 
-    }
+      "manager-onboarding":
+        managerOnboardingPage,
 
-    else {
+      "manager-acquisition":
+        managerAcquisitionPage,
 
-      const configs = {
+      "manager-communications":
+        managerCommunicationsPage,
 
-        "team-actions": [
-          "SERVICE DELIVERY",
-          "Actions",
-          "Track interventions and follow-up activity."
-        ],
+      "manager-hub":
+        managerHubPage
 
-        "training-overview": [
-          "TRAINING & KNOWLEDGE",
-          "Training Overview",
-          "Training completion, aging and overdue learning."
-        ],
-
-        "knowledge-gaps": [
-          "TRAINING & KNOWLEDGE",
-          "Knowledge Gaps",
-          "Recurring knowledge opportunities across your population."
-        ],
-
-        "manager-knowledge": [
-          "TRAINING & KNOWLEDGE",
-          "Knowledge Base",
-          "Approved knowledge for your assigned population."
-        ],
-
-        ambassadors: [
-          "AMBASSADOR PROGRAM",
-          "Ambassadors",
-          "View your assigned Ambassador population."
-        ],
-
-        "manager-acquisition": [
-          "AMBASSADOR PROGRAM",
-          "Acquisition",
-          "Track SHARE members onboarded through Ambassador Personal QR Codes."
-        ],
-
-        "manager-recognition": [
-          "AMBASSADOR PROGRAM",
-          "Recognition",
-          "Recognise Ambassador contribution and programme impact."
-        ]
-
-      };
+    };
 
 
-      content =
-        genericRolePage(
-          ...configs[page]
-        );
-
-    }
+    content =
+      pages[page]
+        ? pages[page]()
+        : managerHome();
 
   }
 
@@ -4572,62 +6424,11 @@ function navigateTo(
 
     else {
 
-      const configs = {
-
-        "group-actions": [
-          "SERVICE DELIVERY",
-          "Actions",
-          "Track Service Delivery interventions."
-        ],
-
-        "group-training": [
-          "TRAINING & KNOWLEDGE",
-          "Training",
-          "Training performance across MAF mall locations."
-        ],
-
-        "group-knowledge": [
-          "TRAINING & KNOWLEDGE",
-          "Knowledge Base",
-          "Approved programme knowledge."
-        ],
-
-        "group-gaps": [
-          "TRAINING & KNOWLEDGE",
-          "Knowledge Gaps",
-          "Recurring knowledge themes."
-        ],
-
-        "group-ambassadors": [
-          "AMBASSADOR PROGRAM",
-          "Ambassadors",
-          "Ambassador population across MAF malls."
-        ],
-
-        "group-onboarding": [
-          "AMBASSADOR PROGRAM",
-          "Onboarding",
-          "Ambassador onboarding progression."
-        ],
-
-        "group-acquisition": [
-          "AMBASSADOR PROGRAM",
-          "Acquisition",
-          "Track SHARE members onboarded through Ambassador activity."
-        ],
-
-        "group-recognition": [
-          "AMBASSADOR PROGRAM",
-          "Recognition",
-          "Recognise Ambassador contribution and programme impact."
-        ]
-
-      };
-
-
       content =
         genericRolePage(
-          ...configs[page]
+          "SERVICE DELIVERY",
+          "Prototype View",
+          "This area will be expanded during the Service Delivery persona update."
         );
 
     }
@@ -4640,81 +6441,22 @@ function navigateTo(
     "admin"
   ) {
 
-    const pages = {
-
-      home:
-        adminHome,
-
-      "users-access":
-        usersAccessPage,
-
-      roles:
-        rolesPage,
-
-      "ai-agents":
-        aiAgentsPage,
-
-      integrations:
-        integrationsPage
-
-    };
-
-
     if (
-      pages[page]
+      page === "home"
     ) {
 
       content =
-        pages[page]();
+        adminHome();
 
     }
 
     else {
 
-      const configs = {
-
-        identity: [
-          "IDENTITY & ACCESS",
-          "Identity Providers",
-          "Staff ID and Microsoft SSO configuration."
-        ],
-
-        "agent-config": [
-          "AI PLATFORM",
-          "Agent Configuration",
-          "Configure agent prompts, models and orchestration."
-        ],
-
-        "knowledge-sources": [
-          "AI PLATFORM",
-          "Knowledge Sources",
-          "Configure approved retrieval sources."
-        ],
-
-        frameworks: [
-          "PLATFORM",
-          "Assessment Frameworks",
-          "Configure assessment templates and scoring."
-        ],
-
-        notifications: [
-          "PLATFORM",
-          "Notifications",
-          "Configure platform notifications."
-        ],
-
-        "audit-log": [
-          "PLATFORM",
-          "Audit Log",
-          "Review platform activity."
-        ]
-
-      };
-
-
       content =
         genericRolePage(
-          ...configs[page]
+          "PLATFORM ADMINISTRATION",
+          "Prototype View",
+          "This area will be expanded during the Platform Admin persona update."
         );
 
     }
@@ -4836,108 +6578,6 @@ function profileLine(
       <strong>
         ${value}
       </strong>
-
-    </div>
-  `;
-
-}
-
-
-function storeBar(
-  name,
-  score
-) {
-
-  return `
-    <div class="store-bar">
-
-      <span>
-        ${name}
-      </span>
-
-      <div class="bar-track">
-
-        <div
-          class="bar-fill"
-          style="width:${score}%"
-        ></div>
-
-      </div>
-
-      <strong>
-        ${score}%
-      </strong>
-
-    </div>
-  `;
-
-}
-
-
-function attentionRow(
-  name,
-  issue,
-  detail
-) {
-
-  return `
-    <div class="attention-row">
-
-      <strong>
-        ${name}
-      </strong>
-
-      <span>
-        ${issue}
-      </span>
-
-      <strong>
-        ${detail}
-      </strong>
-
-      <button class="small-button">
-        View
-      </button>
-
-    </div>
-  `;
-
-}
-
-
-function personOnboardingRow(
-  name,
-  staffId,
-  stage,
-  status
-) {
-
-  return `
-    <div class="generic-row">
-
-      <div>
-
-        <strong>
-          ${name}
-        </strong>
-
-        <small>
-          Staff ID ${staffId}
-        </small>
-
-      </div>
-
-      <span>
-        ${stage}
-      </span>
-
-      <strong>
-        ${status}
-      </strong>
-
-      <button class="small-button">
-        View
-      </button>
 
     </div>
   `;
@@ -5109,84 +6749,6 @@ function locationSeverityRow(
 }
 
 
-function themeResult(
-  title,
-  locations,
-  population,
-  trend,
-  severity
-) {
-
-  return `
-    <div class="theme-result">
-
-      <div>
-
-        <strong>
-          ${title}
-        </strong>
-
-        <span>
-          ${locations} · ${population}
-        </span>
-
-      </div>
-
-      <div class="theme-meta">
-
-        <span>
-          ${trend}
-        </span>
-
-        <strong>
-          ${severity}
-        </strong>
-
-      </div>
-
-    </div>
-  `;
-
-}
-
-
-function userAccessRow(
-  user,
-  identity,
-  role,
-  scope,
-  status
-) {
-
-  return `
-    <div class="admin-table-row">
-
-      <strong>
-        ${user}
-      </strong>
-
-      <span>
-        ${identity}
-      </span>
-
-      <span>
-        ${role}
-      </span>
-
-      <span>
-        ${scope}
-      </span>
-
-      <span class="status-block good">
-        ${status}
-      </span>
-
-    </div>
-  `;
-
-}
-
-
 function openPerformanceInteraction(
   interactionId
 ) {
@@ -5207,16 +6769,11 @@ function openPerformanceInteraction(
           `interaction-expand-${interactionId}`
         );
 
-      if (
-        node
-      ) {
+      if (node) {
 
         node.scrollIntoView({
-          behavior:
-            "smooth",
-
-          block:
-            "center"
+          behavior: "smooth",
+          block: "center"
         });
 
       }
@@ -5229,7 +6786,7 @@ function openPerformanceInteraction(
 
 
 /* =========================================================
-   EXPOSE FUNCTIONS
+   GLOBAL FUNCTIONS
 ========================================================= */
 
 window.signIn =
@@ -5267,6 +6824,12 @@ window.runServiceAnalysis =
 
 window.filterKnowledgeBase =
   filterKnowledgeBase;
+
+window.exportAmbassadorList =
+  exportAmbassadorList;
+
+window.showNewBroadcast =
+  showNewBroadcast;
 
 
 /* =========================================================
