@@ -1,5 +1,6 @@
 import { analyseInteraction } from "./agents/agentOrchestrator.js";
 
+
 const app = document.getElementById("app");
 
 let currentRole = null;
@@ -9,10 +10,21 @@ let selectedTrainingId = null;
 
 
 /* =========================================================
+   SHARED PERFORMANCE PERIOD
+========================================================= */
+
+const currentPerformancePeriod = {
+  from: "01 Oct 2026",
+  to: "14 Oct 2026"
+};
+
+
+/* =========================================================
    USERS
 ========================================================= */
 
 const prototypeUsers = {
+
   ambassador: {
     login: "100245",
     password: "demo123",
@@ -25,8 +37,9 @@ const prototypeUsers = {
     brand: "VOX Cinemas",
     store: "Mall of the Emirates",
     manager: "Ahmed Salah",
-    ambassadorStatus: "Bronze Status",
-    targetStatus: "Silver Status"
+    ambassadorStatus: "Active Ambassador",
+    shareMembersOnboarded: 42,
+    shareMemberTarget: 50
   },
 
   manager: {
@@ -59,6 +72,7 @@ const prototypeUsers = {
     identityType: "Microsoft Entra ID",
     scope: "Platform"
   }
+
 };
 
 
@@ -67,6 +81,7 @@ const prototypeUsers = {
 ========================================================= */
 
 const interactions = [
+
   {
     id: "INT-1001",
     date: "10 Oct 2026",
@@ -78,6 +93,7 @@ const interactions = [
     trainingTarget: "refund",
     trainingTitle: "Refund Handling Refresher",
     knowledgeTarget: "Refund Handling Knowledge Check",
+
     transcript: `
 Customer: I cancelled my booking yesterday but I still have not received my refund.
 Agent: Let me check that for you.
@@ -103,6 +119,7 @@ Agent: It depends on the bank.
     trainingTarget: "refund",
     trainingTitle: "Refund Handling Refresher",
     knowledgeTarget: "Refund Handling Knowledge Check",
+
     transcript: `
 Customer: My booking was cancelled. When will I receive the refund?
 Agent: I can check that for you.
@@ -125,6 +142,7 @@ Customer: Thank you.
     trainingTarget: "refund",
     trainingTitle: "Refund Handling Refresher",
     knowledgeTarget: "Refund Handling Knowledge Check",
+
     transcript: `
 Customer: I cancelled my tickets and need to know when the refund will arrive.
 Agent: I can help with that.
@@ -135,6 +153,7 @@ Customer: How many days does the refund take?
 Agent: Processing times vary depending on the bank.
 `
   }
+
 ];
 
 
@@ -143,6 +162,7 @@ Agent: Processing times vary depending on the bank.
 ========================================================= */
 
 const assignedTraining = [
+
   {
     id: "share-cx",
     title: "SHARE Customer Experience",
@@ -178,10 +198,12 @@ const assignedTraining = [
     description:
       "How to recover customer interactions when expectations have not been met."
   }
+
 ];
 
 
 const recommendedTraining = [
+
   {
     id: "refund",
     title: "Refund Handling Refresher",
@@ -193,6 +215,7 @@ const recommendedTraining = [
     description:
       "Refresh refund timelines, customer communication expectations and required process steps."
   }
+
 ];
 
 
@@ -201,90 +224,105 @@ const recommendedTraining = [
 ========================================================= */
 
 const knowledgeRepository = [
+
   {
     title: "Refund Process",
     category: "Refunds & Cancellations",
     type: "Process Guidance",
     updated: "02 Oct 2026"
   },
+
   {
     title: "Cancellation & Refund Policy",
     category: "Refunds & Cancellations",
     type: "Policy",
     updated: "12 Sep 2026"
   },
+
   {
     title: "Customer Verification",
     category: "Customer Service",
     type: "Service Guidance",
     updated: "19 Sep 2026"
   },
+
   {
     title: "Customer Escalation Process",
     category: "Customer Service",
     type: "SOP",
     updated: "25 Sep 2026"
   },
+
   {
     title: "Service Recovery Guidelines",
     category: "Customer Service",
     type: "Service Guidance",
     updated: "06 Oct 2026"
   },
+
   {
     title: "SHARE Benefits",
     category: "SHARE Benefits",
     type: "Product Knowledge",
     updated: "09 Oct 2026"
   },
+
   {
     title: "Earning SHARE Points",
     category: "SHARE Benefits",
     type: "Product Knowledge",
     updated: "01 Oct 2026"
   },
+
   {
     title: "Redeeming SHARE Points",
     category: "SHARE Benefits",
     type: "Product Knowledge",
     updated: "01 Oct 2026"
   },
+
   {
     title: "Ambassador Role & Responsibilities",
     category: "Ambassador Program",
     type: "Program Guide",
     updated: "05 Oct 2026"
   },
+
   {
     title: "Personal QR Code Guidelines",
     category: "Ambassador Program",
     type: "Program Guide",
     updated: "07 Oct 2026"
   },
+
   {
-    title: "Bronze, Silver & Gold Status",
+    title: "SHARE Member Onboarding Guide",
     category: "Ambassador Program",
     type: "Program Guide",
     updated: "08 Oct 2026"
   },
+
   {
     title: "Customer Data Protection",
     category: "Policies",
     type: "Policy",
     updated: "21 Sep 2026"
   },
+
   {
     title: "Complaint Handling",
     category: "SOPs",
     type: "SOP",
     updated: "29 Sep 2026"
   },
+
   {
     title: "Customer Communication Standards",
     category: "SOPs",
     type: "SOP",
     updated: "30 Sep 2026"
   }
+
 ];
 
 
@@ -293,15 +331,23 @@ const knowledgeRepository = [
 ========================================================= */
 
 const navigation = {
+
   ambassador: [
+
     {
       title: "",
-      items: [["home", "Home"]]
+      items: [
+        ["home", "Home"]
+      ]
     },
+
     {
       title: "Performance",
-      items: [["performance", "My Performance"]]
+      items: [
+        ["performance", "My Performance"]
+      ]
     },
+
     {
       title: "Training & Knowledge",
       items: [
@@ -309,17 +355,25 @@ const navigation = {
         ["knowledge", "Knowledge Base"]
       ]
     },
+
     {
       title: "Ambassador",
-      items: [["status", "My Status"]]
+      items: [
+        ["status", "My Status"]
+      ]
     }
+
   ],
 
   manager: [
+
     {
       title: "",
-      items: [["home", "Home"]]
+      items: [
+        ["home", "Home"]
+      ]
     },
+
     {
       title: "Service Delivery",
       items: [
@@ -327,6 +381,7 @@ const navigation = {
         ["team-actions", "Actions"]
       ]
     },
+
     {
       title: "Training & Knowledge",
       items: [
@@ -335,6 +390,7 @@ const navigation = {
         ["manager-knowledge", "Knowledge Base"]
       ]
     },
+
     {
       title: "Ambassador Program",
       items: [
@@ -344,13 +400,18 @@ const navigation = {
         ["manager-recognition", "Recognition"]
       ]
     }
+
   ],
 
   service: [
+
     {
       title: "",
-      items: [["home", "Home"]]
+      items: [
+        ["home", "Home"]
+      ]
     },
+
     {
       title: "Service Delivery",
       items: [
@@ -359,6 +420,7 @@ const navigation = {
         ["group-actions", "Actions"]
       ]
     },
+
     {
       title: "Training & Knowledge",
       items: [
@@ -367,6 +429,7 @@ const navigation = {
         ["group-gaps", "Knowledge Gaps"]
       ]
     },
+
     {
       title: "Ambassador Program",
       items: [
@@ -376,13 +439,18 @@ const navigation = {
         ["group-recognition", "Recognition"]
       ]
     }
+
   ],
 
   admin: [
+
     {
       title: "",
-      items: [["home", "Platform Overview"]]
+      items: [
+        ["home", "Platform Overview"]
+      ]
     },
+
     {
       title: "Identity & Access",
       items: [
@@ -391,6 +459,7 @@ const navigation = {
         ["identity", "Identity Providers"]
       ]
     },
+
     {
       title: "AI Platform",
       items: [
@@ -399,6 +468,7 @@ const navigation = {
         ["knowledge-sources", "Knowledge Sources"]
       ]
     },
+
     {
       title: "Platform",
       items: [
@@ -408,7 +478,9 @@ const navigation = {
         ["audit-log", "Audit Log"]
       ]
     }
+
   ]
+
 };
 
 
@@ -417,93 +489,145 @@ const navigation = {
 ========================================================= */
 
 function setLoginMessage(message, type = "error") {
-  const node = document.getElementById("login-error");
+
+  const node =
+    document.getElementById(
+      "login-error"
+    );
 
   if (!node) return;
 
   node.textContent = message;
-  node.className = `login-error ${type}`;
+  node.className =
+    `login-error ${type}`;
+
 }
 
 
 function signIn() {
-  const login = document
-    .getElementById("login-id")
-    .value
-    .trim()
-    .toLowerCase();
+
+  const login =
+    document
+      .getElementById("login-id")
+      .value
+      .trim()
+      .toLowerCase();
 
   const password =
-    document.getElementById("login-password").value;
+    document
+      .getElementById("login-password")
+      .value;
 
-  const matchedRole = Object.keys(prototypeUsers).find(role => {
-    const user = prototypeUsers[role];
 
-    return (
-      user.login.toLowerCase() === login &&
-      user.password === password
-    );
-  });
+  const matchedRole =
+    Object
+      .keys(prototypeUsers)
+      .find(role => {
+
+        const user =
+          prototypeUsers[role];
+
+        return (
+          user.login.toLowerCase() === login &&
+          user.password === password
+        );
+
+      });
+
 
   if (!matchedRole) {
+
     setLoginMessage(
       "The email / Staff ID or password is incorrect."
     );
+
     return;
+
   }
 
-  loginAsRole(matchedRole);
+
+  loginAsRole(
+    matchedRole
+  );
+
 }
 
 
 function continueWithSSO() {
-  const login = document
-    .getElementById("login-id")
-    .value
-    .trim()
-    .toLowerCase();
+
+  const login =
+    document
+      .getElementById("login-id")
+      .value
+      .trim()
+      .toLowerCase();
+
 
   if (!login) {
+
     setLoginMessage(
       "Enter your corporate email first to continue with Microsoft SSO.",
       "info"
     );
+
     return;
+
   }
 
-  const matchedRole = Object.keys(prototypeUsers).find(role => {
-    const user = prototypeUsers[role];
 
-    return (
-      user.identityType === "Microsoft Entra ID" &&
-      user.login.toLowerCase() === login
-    );
-  });
+  const matchedRole =
+    Object
+      .keys(prototypeUsers)
+      .find(role => {
+
+        const user =
+          prototypeUsers[role];
+
+        return (
+          user.identityType === "Microsoft Entra ID" &&
+          user.login.toLowerCase() === login
+        );
+
+      });
+
 
   if (!matchedRole) {
+
     setLoginMessage(
       "Microsoft SSO is available for the corporate prototype accounts. Ambassador access is demonstrated using Staff ID.",
       "info"
     );
+
     return;
+
   }
 
-  loginAsRole(matchedRole);
+
+  loginAsRole(
+    matchedRole
+  );
+
 }
 
 
 function loginAsRole(role) {
+
   currentRole = role;
   currentPage = "home";
   expandedInteractionId = null;
   selectedTrainingId = null;
 
-  navigateTo("home");
+  navigateTo(
+    "home"
+  );
+
 }
 
 
 function signOut() {
+
   location.reload();
+
 }
 
 
@@ -512,7 +636,12 @@ function signOut() {
 ========================================================= */
 
 function topBar() {
-  const user = prototypeUsers[currentRole];
+
+  const user =
+    prototypeUsers[
+      currentRole
+    ];
+
 
   return `
     <header class="topbar">
@@ -524,11 +653,19 @@ function topBar() {
         </div>
 
         <div class="topbar-brand">
-          <strong>SHARE Lens</strong>
-          <span>See. Understand. Act.</span>
+
+          <strong>
+            SHARE Lens
+          </strong>
+
+          <span>
+            See. Understand. Act.
+          </span>
+
         </div>
 
       </div>
+
 
       <div class="user-header">
 
@@ -541,8 +678,15 @@ function topBar() {
         </div>
 
         <div class="user-details">
-          <strong>${user.name}</strong>
-          <span>${user.role}</span>
+
+          <strong>
+            ${user.name}
+          </strong>
+
+          <span>
+            ${user.role}
+          </span>
+
         </div>
 
         <button
@@ -556,11 +700,17 @@ function topBar() {
 
     </header>
   `;
+
 }
 
 
 function sidebar() {
-  const groups = navigation[currentRole];
+
+  const groups =
+    navigation[
+      currentRole
+    ];
+
 
   return `
     <aside class="sidebar">
@@ -569,29 +719,40 @@ function sidebar() {
 
         ${
           group.title
-            ? `<div class="sidebar-title">${group.title}</div>`
+            ? `
+              <div class="sidebar-title">
+                ${group.title}
+              </div>
+            `
             : ""
         }
 
+
         ${group.items.map(item => `
+
           <div
             class="nav-item ${
-              currentPage === item[0] ? "active" : ""
+              currentPage === item[0]
+                ? "active"
+                : ""
             }"
             onclick="navigateTo('${item[0]}')"
           >
             ${item[1]}
           </div>
+
         `).join("")}
 
       `).join("")}
 
     </aside>
   `;
+
 }
 
 
 function renderShell(content) {
+
   app.innerHTML = `
     <div class="workspace">
 
@@ -609,6 +770,7 @@ function renderShell(content) {
 
     </div>
   `;
+
 }
 
 
@@ -617,6 +779,7 @@ function renderShell(content) {
 ========================================================= */
 
 function ambassadorHome() {
+
   return `
     ${pageTitle(
       "MY SHARE",
@@ -624,7 +787,9 @@ function ambassadorHome() {
       "Your Ambassador progress."
     )}
 
+
     ${ambassadorProgress()}
+
 
     <div class="dashboard-grid four">
 
@@ -655,6 +820,7 @@ function ambassadorHome() {
 
     </div>
 
+
     <div class="dashboard-grid two">
 
       <section class="dashboard-card">
@@ -667,11 +833,14 @@ function ambassadorHome() {
           What to review
         </h3>
 
+
         <div
           class="home-action-card attention"
           onclick="openPerformanceInteraction('INT-0984')"
         >
+
           <div>
+
             <strong>
               Cancellation Refund interaction
             </strong>
@@ -679,9 +848,13 @@ function ambassadorHome() {
             <p>
               Score 47% · Needs Attention
             </p>
+
           </div>
 
-          <span>Review →</span>
+          <span>
+            Review →
+          </span>
+
         </div>
 
 
@@ -689,7 +862,9 @@ function ambassadorHome() {
           class="home-action-card"
           onclick="openTrainingTarget('refund')"
         >
+
           <div>
+
             <strong>
               Refund Handling Refresher
             </strong>
@@ -697,9 +872,13 @@ function ambassadorHome() {
             <p>
               Recommended · 15 min
             </p>
+
           </div>
 
-          <span>Open →</span>
+          <span>
+            Open →
+          </span>
+
         </div>
 
       </section>
@@ -712,17 +891,17 @@ function ambassadorHome() {
         </span>
 
         <h3>
-          Ambassador status
+          Ambassador profile
         </h3>
 
         ${profileLine(
-          "Current Status",
-          "Bronze Status"
+          "Status",
+          "Active Ambassador"
         )}
 
         ${profileLine(
-          "Next Status",
-          "Silver Status"
+          "Members Onboarded",
+          "42"
         )}
 
         ${profileLine(
@@ -746,6 +925,7 @@ function ambassadorHome() {
 
     </div>
   `;
+
 }
 
 
@@ -754,12 +934,14 @@ function ambassadorHome() {
 ========================================================= */
 
 function ambassadorProgress() {
+
   return `
     <section class="ambassador-progress-card">
 
       <div class="progress-card-heading">
 
         <div>
+
           <span class="section-label">
             AMBASSADOR PROGRESS
           </span>
@@ -771,10 +953,11 @@ function ambassadorProgress() {
           <p>
             You have completed the core steps to become an active Ambassador.
           </p>
+
         </div>
 
-        <div class="current-status-pill">
-          Bronze Status
+        <div class="active-ambassador-pill">
+          ✓ Active Ambassador
         </div>
 
       </div>
@@ -782,56 +965,38 @@ function ambassadorProgress() {
 
       <div class="journey-step-track">
 
-        ${journeyStep("Onboarded")}
+        ${journeyStep(
+          "Onboarded"
+        )}
 
         ${journeyConnector()}
 
-        ${journeyStep("Mandatory Training")}
+        ${journeyStep(
+          "Mandatory Training"
+        )}
 
         ${journeyConnector()}
 
-        ${journeyStep("Knowledge Check")}
+        ${journeyStep(
+          "Knowledge Check"
+        )}
 
         ${journeyConnector()}
 
-        ${journeyStep("Personal QR Code")}
-
-      </div>
-
-
-      <div class="ambassador-status-summary">
-
-        <div class="status-achieved-icon">
-          ★
-        </div>
-
-        <div>
-          <span class="section-label">
-            CURRENT STATUS
-          </span>
-
-          <h3>
-            Bronze Status
-          </h3>
-
-          <p>
-            You are progressing toward Silver Status.
-          </p>
-        </div>
-
-        <div class="status-next">
-          <span>Next</span>
-          <strong>Silver Status</strong>
-        </div>
+        ${journeyStep(
+          "Personal QR Code"
+        )}
 
       </div>
 
     </section>
   `;
+
 }
 
 
 function journeyStep(label) {
+
   return `
     <div class="journey-step completed">
 
@@ -845,13 +1010,16 @@ function journeyStep(label) {
 
     </div>
   `;
+
 }
 
 
 function journeyConnector() {
+
   return `
     <div class="journey-step-connector complete"></div>
   `;
+
 }
 
 
@@ -860,6 +1028,7 @@ function journeyConnector() {
 ========================================================= */
 
 function ambassadorPerformance() {
+
   return `
     ${pageTitle(
       "PERFORMANCE",
@@ -867,11 +1036,19 @@ function ambassadorPerformance() {
       "See how you're performing and where to focus next."
     )}
 
+
     <div class="performance-period">
 
       <div>
-        <span>Assessment period</span>
-        <strong>01 Oct 2026 – 14 Oct 2026</strong>
+
+        <span>
+          Assessment period
+        </span>
+
+        <strong>
+          ${currentPerformancePeriod.from} – ${currentPerformancePeriod.to}
+        </strong>
+
       </div>
 
       <button>
@@ -931,33 +1108,57 @@ function ambassadorPerformance() {
 
       <div class="interaction-header">
 
-        <span>Interaction</span>
-        <span>Channel / Duration</span>
-        <span>Process / Theme</span>
-        <span>Score</span>
-        <span>Status</span>
-        <span>Action</span>
+        <span>
+          Interaction
+        </span>
+
+        <span>
+          Channel / Duration
+        </span>
+
+        <span>
+          Process / Theme
+        </span>
+
+        <span>
+          Score
+        </span>
+
+        <span>
+          Status
+        </span>
+
+        <span>
+          Action
+        </span>
 
       </div>
 
 
       ${interactions
         .map(interaction =>
-          interactionBlock(interaction)
+          interactionBlock(
+            interaction
+          )
         )
         .join("")}
 
     </section>
   `;
+
 }
 
 
 function interactionBlock(interaction) {
+
   const status =
-    getInteractionStatus(interaction.score);
+    getInteractionStatus(
+      interaction.score
+    );
 
   const isExpanded =
-    expandedInteractionId === interaction.id;
+    expandedInteractionId ===
+    interaction.id;
 
 
   const action =
@@ -979,7 +1180,9 @@ function interactionBlock(interaction) {
           class="analyse-button compact"
           onclick="analyseInlineInteraction('${interaction.id}')"
         >
-          <span>✦</span>
+          <span>
+            ✦
+          </span>
 
           ${
             isExpanded
@@ -996,32 +1199,67 @@ function interactionBlock(interaction) {
       <div class="interaction-row">
 
         <div>
-          <strong>${interaction.id}</strong>
-          <span>${interaction.date}</span>
+
+          <strong>
+            ${interaction.id}
+          </strong>
+
+          <span>
+            ${interaction.date}
+          </span>
+
         </div>
 
-        <div>
-          <strong>${interaction.channel}</strong>
-          <span>${interaction.duration}</span>
-        </div>
 
         <div>
-          <strong>${interaction.process}</strong>
-          <span>Customer interaction</span>
+
+          <strong>
+            ${interaction.channel}
+          </strong>
+
+          <span>
+            ${interaction.duration}
+          </span>
+
         </div>
+
+
+        <div>
+
+          <strong>
+            ${interaction.process}
+          </strong>
+
+          <span>
+            Customer interaction
+          </span>
+
+        </div>
+
 
         <div class="interaction-score ${
-          interaction.score < 50 ? "low" : ""
+          interaction.score < 50
+            ? "low"
+            : ""
         }">
+
           ${interaction.score}%
+
         </div>
 
+
         <div>
+
           <span class="status-block ${status.className}">
+
             ${status.icon}
+
             ${status.label}
+
           </span>
+
         </div>
+
 
         <div>
           ${action}
@@ -1033,58 +1271,105 @@ function interactionBlock(interaction) {
       <div
         id="interaction-expand-${interaction.id}"
         class="interaction-expand ${
-          isExpanded ? "open" : ""
+          isExpanded
+            ? "open"
+            : ""
         }"
       >
+
         ${
           isExpanded
-            ? renderExpandedInteraction(interaction)
+            ? renderExpandedInteraction(
+                interaction
+              )
             : ""
         }
+
       </div>
 
     </div>
   `;
+
 }
 
 
 function getInteractionStatus(score) {
-  if (score >= 90) {
+
+  if (
+    score >= 90
+  ) {
+
     return {
-      label: "Good Interaction",
-      className: "good",
-      icon: "✓"
+      label:
+        "Good Interaction",
+
+      className:
+        "good",
+
+      icon:
+        "✓"
     };
+
   }
 
-  if (score >= 50) {
+
+  if (
+    score >= 50
+  ) {
+
     return {
-      label: "Opportunity to Strengthen",
-      className: "strengthen",
-      icon: "↗"
+      label:
+        "Opportunity to Strengthen",
+
+      className:
+        "strengthen",
+
+      icon:
+        "↗"
     };
+
   }
+
 
   return {
-    label: "Needs Attention",
-    className: "attention",
-    icon: "!"
+    label:
+      "Needs Attention",
+
+    className:
+      "attention",
+
+    icon:
+      "!"
   };
+
 }
 
 
-function toggleInteractionDetails(interactionId) {
+function toggleInteractionDetails(
+  interactionId
+) {
+
   expandedInteractionId =
-    expandedInteractionId === interactionId
+    expandedInteractionId ===
+    interactionId
       ? null
       : interactionId;
 
-  navigateTo("performance");
+  navigateTo(
+    "performance"
+  );
+
 }
 
 
-function renderExpandedInteraction(interaction) {
-  if (interaction.score >= 90) {
+function renderExpandedInteraction(
+  interaction
+) {
+
+  if (
+    interaction.score >= 90
+  ) {
+
     return `
       <div class="good-interaction-detail">
 
@@ -1093,6 +1378,7 @@ function renderExpandedInteraction(interaction) {
         </div>
 
         <div>
+
           <span class="section-label">
             INTERACTION RESULT
           </span>
@@ -1106,10 +1392,12 @@ function renderExpandedInteraction(interaction) {
             Customer verification, communication and process handling
             were completed successfully.
           </p>
+
         </div>
 
       </div>
     `;
+
   }
 
 
@@ -1122,6 +1410,7 @@ function renderExpandedInteraction(interaction) {
       <div class="analysis-ready">
 
         <div>
+
           <span class="section-label">
             AI INTERACTION ANALYSIS
           </span>
@@ -1134,6 +1423,7 @@ function renderExpandedInteraction(interaction) {
             SHARE Lens will run the specialist agent team
             against this interaction.
           </p>
+
         </div>
 
         <button
@@ -1147,36 +1437,69 @@ function renderExpandedInteraction(interaction) {
 
     </div>
   `;
+
 }
 
 
-function analyseInlineInteraction(interactionId) {
-  if (expandedInteractionId === interactionId) {
-    expandedInteractionId = null;
-    navigateTo("performance");
+function analyseInlineInteraction(
+  interactionId
+) {
+
+  if (
+    expandedInteractionId ===
+    interactionId
+  ) {
+
+    expandedInteractionId =
+      null;
+
+    navigateTo(
+      "performance"
+    );
+
     return;
+
   }
 
-  expandedInteractionId = interactionId;
 
-  navigateTo("performance");
+  expandedInteractionId =
+    interactionId;
 
-  setTimeout(() => {
-    startInlineAnalysis(interactionId);
-  }, 100);
+  navigateTo(
+    "performance"
+  );
+
+
+  setTimeout(
+    () => {
+
+      startInlineAnalysis(
+        interactionId
+      );
+
+    },
+    100
+  );
+
 }
 
 
-function startInlineAnalysis(interactionId) {
+function startInlineAnalysis(
+  interactionId
+) {
+
   const interaction =
     interactions.find(
-      item => item.id === interactionId
+      item =>
+        item.id ===
+        interactionId
     );
 
   if (!interaction) return;
 
 
   runAnimation({
+
     outputId:
       `inline-analysis-${interaction.id}`,
 
@@ -1184,11 +1507,14 @@ function startInlineAnalysis(interactionId) {
       `Analysing ${interaction.id}`,
 
     steps: [
+
       {
         id:
           `evaluation-${interaction.id}`,
+
         title:
           "Evaluation Agent",
+
         message:
           "Reviewing service quality and customer handling."
       },
@@ -1196,8 +1522,10 @@ function startInlineAnalysis(interactionId) {
       {
         id:
           `sop-${interaction.id}`,
+
         title:
           "SOP Agent",
+
         message:
           "Checking required process steps."
       },
@@ -1205,8 +1533,10 @@ function startInlineAnalysis(interactionId) {
       {
         id:
           `compliance-${interaction.id}`,
+
         title:
           "Compliance Agent",
+
         message:
           "Checking mandatory controls and compliance."
       },
@@ -1214,21 +1544,34 @@ function startInlineAnalysis(interactionId) {
       {
         id:
           `combined-${interaction.id}`,
+
         title:
           "Combined Analysis",
+
         message:
           "Combining findings and identifying the next best action."
       }
+
     ],
 
-    onComplete: () => {
-      showInlineAnalysisResult(interaction);
-    }
+    onComplete:
+      () => {
+
+        showInlineAnalysisResult(
+          interaction
+        );
+
+      }
+
   });
+
 }
 
 
-function showInlineAnalysisResult(interaction) {
+function showInlineAnalysisResult(
+  interaction
+) {
+
   const output =
     document.getElementById(
       `inline-analysis-${interaction.id}`
@@ -1238,7 +1581,9 @@ function showInlineAnalysisResult(interaction) {
 
 
   const analysis =
-    analyseInteraction(interaction);
+    analyseInteraction(
+      interaction
+    );
 
   const urgent =
     interaction.score < 50;
@@ -1250,6 +1595,7 @@ function showInlineAnalysisResult(interaction) {
       <div class="inline-result-heading">
 
         <div>
+
           <span class="section-label">
             AI ANALYSIS COMPLETE
           </span>
@@ -1265,16 +1611,22 @@ function showInlineAnalysisResult(interaction) {
           <p>
             ${interaction.process} · ${interaction.score}%
           </p>
+
         </div>
 
+
         <span class="status-block ${
-          urgent ? "attention" : "strengthen"
+          urgent
+            ? "attention"
+            : "strengthen"
         }">
+
           ${
             urgent
               ? "! Needs Attention"
               : "↗ Opportunity to Strengthen"
           }
+
         </span>
 
       </div>
@@ -1350,6 +1702,7 @@ function showInlineAnalysisResult(interaction) {
         </div>
 
         <div>
+
           <span class="section-label">
             RECOMMENDED NEXT ACTION
           </span>
@@ -1362,6 +1715,7 @@ function showInlineAnalysisResult(interaction) {
             Review the relevant training and then complete the
             ${interaction.knowledgeTarget}.
           </p>
+
         </div>
 
         <button
@@ -1374,6 +1728,7 @@ function showInlineAnalysisResult(interaction) {
 
     </div>
   `;
+
 }
 
 
@@ -1382,6 +1737,7 @@ function showInlineAnalysisResult(interaction) {
 ========================================================= */
 
 function trainingPage() {
+
   return `
     ${pageTitle(
       "TRAINING & KNOWLEDGE",
@@ -1393,6 +1749,7 @@ function trainingPage() {
     <section class="completed-journey-card">
 
       <div>
+
         <span class="section-label">
           AMBASSADOR JOURNEY
         </span>
@@ -1405,6 +1762,7 @@ function trainingPage() {
           Onboarded, Mandatory Training, Knowledge Check and
           Personal QR Code are complete.
         </p>
+
       </div>
 
       <span class="status-block good">
@@ -1416,11 +1774,13 @@ function trainingPage() {
 
     <div class="training-layout">
 
+
       <section class="dashboard-card training-panel">
 
         <div class="training-panel-heading">
 
           <div>
+
             <span class="section-label">
               ASSIGNED TRAINING
             </span>
@@ -1432,6 +1792,7 @@ function trainingPage() {
             <p>
               Training assigned as part of your formal learning plan.
             </p>
+
           </div>
 
           <span class="training-count">
@@ -1444,8 +1805,11 @@ function trainingPage() {
         <div class="training-card-list">
 
           ${assignedTraining
-            .map(item =>
-              assignedTrainingCard(item)
+            .map(
+              item =>
+                assignedTrainingCard(
+                  item
+                )
             )
             .join("")}
 
@@ -1459,6 +1823,7 @@ function trainingPage() {
         <div class="training-panel-heading">
 
           <div>
+
             <span class="section-label">
               RECOMMENDED TRAINING
             </span>
@@ -1470,6 +1835,7 @@ function trainingPage() {
             <p>
               Development recommended from your recent performance.
             </p>
+
           </div>
 
           <span class="training-count recommended">
@@ -1482,8 +1848,11 @@ function trainingPage() {
         <div class="training-card-list">
 
           ${recommendedTraining
-            .map(item =>
-              recommendedTrainingCard(item)
+            .map(
+              item =>
+                recommendedTrainingCard(
+                  item
+                )
             )
             .join("")}
 
@@ -1497,9 +1866,12 @@ function trainingPage() {
     <section
       id="training-focus-panel"
       class="training-focus-panel ${
-        selectedTrainingId ? "visible" : ""
+        selectedTrainingId
+          ? "visible"
+          : ""
       }"
     >
+
       ${
         selectedTrainingId
           ? renderTrainingFocus(
@@ -1507,6 +1879,7 @@ function trainingPage() {
             )
           : ""
       }
+
     </section>
 
 
@@ -1524,13 +1897,21 @@ function trainingPage() {
         Recommended after completing the Refund Handling Refresher.
       </p>
 
+
       <div class="knowledge-check-meta">
-        <span>10 questions</span>
-        <span>Approx. 5 min</span>
+
+        <span>
+          10 questions
+        </span>
+
+        <span>
+          Approx. 5 min
+        </span>
 
         <span class="status-block strengthen">
           Recommended
         </span>
+
       </div>
 
       <button class="primary-small">
@@ -1539,10 +1920,14 @@ function trainingPage() {
 
     </section>
   `;
+
 }
 
 
-function assignedTrainingCard(item) {
+function assignedTrainingCard(
+  item
+) {
+
   return `
     <div
       id="training-${item.id}"
@@ -1552,16 +1937,29 @@ function assignedTrainingCard(item) {
       <div class="training-item-main">
 
         <div>
+
           <strong class="training-item-title">
             ${item.title}
           </strong>
 
           <div class="training-item-meta">
-            <span>${item.duration}</span>
-            <span>Assigned ${item.assigned}</span>
-            <span>Due ${item.due}</span>
+
+            <span>
+              ${item.duration}
+            </span>
+
+            <span>
+              Assigned ${item.assigned}
+            </span>
+
+            <span>
+              Due ${item.due}
+            </span>
+
           </div>
+
         </div>
+
 
         <span class="training-status ${
           item.status === "Completed"
@@ -1575,8 +1973,15 @@ function assignedTrainingCard(item) {
 
 
       <div class="training-aging">
-        <span>Aging</span>
-        <strong>${item.aging}</strong>
+
+        <span>
+          Aging
+        </span>
+
+        <strong>
+          ${item.aging}
+        </strong>
+
       </div>
 
 
@@ -1593,10 +1998,14 @@ function assignedTrainingCard(item) {
 
     </div>
   `;
+
 }
 
 
-function recommendedTrainingCard(item) {
+function recommendedTrainingCard(
+  item
+) {
+
   return `
     <div
       id="training-${item.id}"
@@ -1607,18 +2016,29 @@ function recommendedTrainingCard(item) {
         Performance recommendation
       </div>
 
+
       <div class="training-item-main">
 
         <div>
+
           <strong class="training-item-title">
             ${item.title}
           </strong>
 
           <div class="training-item-meta">
-            <span>${item.duration}</span>
-            <span>Recommended ${item.recommended}</span>
+
+            <span>
+              ${item.duration}
+            </span>
+
+            <span>
+              Recommended ${item.recommended}
+            </span>
+
           </div>
+
         </div>
+
 
         <span class="training-status recommended">
           Recommended
@@ -1641,42 +2061,75 @@ function recommendedTrainingCard(item) {
 
     </div>
   `;
+
 }
 
 
-function openTrainingTarget(trainingId) {
-  selectedTrainingId = trainingId;
+function openTrainingTarget(
+  trainingId
+) {
 
-  navigateTo("training");
+  selectedTrainingId =
+    trainingId;
 
-  setTimeout(() => {
-    const trainingCard =
-      document.getElementById(
-        `training-${trainingId}`
-      );
+  navigateTo(
+    "training"
+  );
 
-    const focusPanel =
-      document.getElementById(
-        "training-focus-panel"
-      );
 
-    if (trainingCard) {
-      trainingCard.classList.add(
-        "highlight-training"
-      );
-    }
+  setTimeout(
+    () => {
 
-    if (focusPanel) {
-      focusPanel.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-      });
-    }
-  }, 120);
+      const trainingCard =
+        document.getElementById(
+          `training-${trainingId}`
+        );
+
+      const focusPanel =
+        document.getElementById(
+          "training-focus-panel"
+        );
+
+
+      if (
+        trainingCard
+      ) {
+
+        trainingCard
+          .classList
+          .add(
+            "highlight-training"
+          );
+
+      }
+
+
+      if (
+        focusPanel
+      ) {
+
+        focusPanel
+          .scrollIntoView({
+            behavior:
+              "smooth",
+
+            block:
+              "center"
+          });
+
+      }
+
+    },
+    120
+  );
+
 }
 
 
-function renderTrainingFocus(trainingId) {
+function renderTrainingFocus(
+  trainingId
+) {
+
   const item =
     assignedTraining.find(
       training =>
@@ -1687,6 +2140,7 @@ function renderTrainingFocus(trainingId) {
       training =>
         training.id === trainingId
     );
+
 
   if (!item) return "";
 
@@ -1704,6 +2158,7 @@ function renderTrainingFocus(trainingId) {
       <div class="training-focus-heading">
 
         <div>
+
           <span class="section-label">
             ${
               isRecommended
@@ -1719,6 +2174,7 @@ function renderTrainingFocus(trainingId) {
           <p>
             ${item.description}
           </p>
+
         </div>
 
         <span class="training-focus-duration">
@@ -1732,6 +2188,7 @@ function renderTrainingFocus(trainingId) {
         isRecommended
           ? `
             <div class="training-source-callout">
+
               <strong>
                 Why this was recommended
               </strong>
@@ -1739,29 +2196,50 @@ function renderTrainingFocus(trainingId) {
               <p>
                 ${item.reason}
               </p>
+
             </div>
           `
           : `
             <div class="training-detail-grid">
 
               <div>
-                <span>Assigned</span>
-                <strong>${item.assigned}</strong>
+                <span>
+                  Assigned
+                </span>
+
+                <strong>
+                  ${item.assigned}
+                </strong>
               </div>
 
               <div>
-                <span>Due</span>
-                <strong>${item.due}</strong>
+                <span>
+                  Due
+                </span>
+
+                <strong>
+                  ${item.due}
+                </strong>
               </div>
 
               <div>
-                <span>Aging</span>
-                <strong>${item.aging}</strong>
+                <span>
+                  Aging
+                </span>
+
+                <strong>
+                  ${item.aging}
+                </strong>
               </div>
 
               <div>
-                <span>Status</span>
-                <strong>${item.status}</strong>
+                <span>
+                  Status
+                </span>
+
+                <strong>
+                  ${item.status}
+                </strong>
               </div>
 
             </div>
@@ -1770,15 +2248,18 @@ function renderTrainingFocus(trainingId) {
 
 
       <button class="start-training-button">
+
         ${
           item.status === "Completed"
             ? "Review Training"
             : "Start Training"
         }
+
       </button>
 
     </div>
   `;
+
 }
 
 
@@ -1787,6 +2268,7 @@ function renderTrainingFocus(trainingId) {
 ========================================================= */
 
 function knowledgePage() {
+
   return `
     ${pageTitle(
       "TRAINING & KNOWLEDGE",
@@ -1830,6 +2312,7 @@ function knowledgePage() {
       <div class="knowledge-repository-heading">
 
         <div>
+
           <span class="section-label">
             FULL KNOWLEDGE BASE
           </span>
@@ -1841,11 +2324,18 @@ function knowledgePage() {
           <p>
             Browse the complete approved knowledge repository.
           </p>
+
         </div>
 
+
         <div class="knowledge-count">
+
           ${knowledgeRepository.length}
-          <span>Articles</span>
+
+          <span>
+            Articles
+          </span>
+
         </div>
 
       </div>
@@ -1854,7 +2344,10 @@ function knowledgePage() {
       <div class="knowledge-toolbar">
 
         <div class="knowledge-search">
-          <span>⌕</span>
+
+          <span>
+            ⌕
+          </span>
 
           <input
             id="knowledge-search"
@@ -1862,6 +2355,7 @@ function knowledgePage() {
             placeholder="Search Knowledge Base"
             oninput="filterKnowledgeBase()"
           >
+
         </div>
 
 
@@ -1869,6 +2363,7 @@ function knowledgePage() {
           id="knowledge-category"
           onchange="filterKnowledgeBase()"
         >
+
           <option value="all">
             All Categories
           </option>
@@ -1896,28 +2391,48 @@ function knowledgePage() {
           <option value="SOPs">
             SOPs
           </option>
+
         </select>
 
       </div>
 
 
       <div class="knowledge-header">
-        <span>Knowledge Article</span>
-        <span>Category</span>
-        <span>Type</span>
-        <span>Updated</span>
-        <span>Action</span>
+
+        <span>
+          Knowledge Article
+        </span>
+
+        <span>
+          Category
+        </span>
+
+        <span>
+          Type
+        </span>
+
+        <span>
+          Updated
+        </span>
+
+        <span>
+          Action
+        </span>
+
       </div>
 
 
       <div id="knowledge-results">
+
         ${renderKnowledgeRows(
           knowledgeRepository
         )}
+
       </div>
 
     </section>
   `;
+
 }
 
 
@@ -1926,6 +2441,7 @@ function recommendedKnowledgeCard(
   category,
   reason
 ) {
+
   return `
     <div class="recommended-knowledge-card">
 
@@ -1934,13 +2450,19 @@ function recommendedKnowledgeCard(
       </span>
 
       <div>
+
         <span class="knowledge-category">
           ${category}
         </span>
 
-        <h3>${title}</h3>
+        <h3>
+          ${title}
+        </h3>
 
-        <p>${reason}</p>
+        <p>
+          ${reason}
+        </p>
+
       </div>
 
       <button class="small-button">
@@ -1949,39 +2471,68 @@ function recommendedKnowledgeCard(
 
     </div>
   `;
+
 }
 
 
-function renderKnowledgeRows(items) {
-  if (!items.length) {
+function renderKnowledgeRows(
+  items
+) {
+
+  if (
+    !items.length
+  ) {
+
     return `
       <div class="knowledge-empty">
         No knowledge articles match your search.
       </div>
     `;
+
   }
 
-  return items.map(item => `
-    <div class="knowledge-row">
 
-      <div>
-        <strong>${item.title}</strong>
-      </div>
+  return items
+    .map(
+      item => `
 
-      <span>${item.category}</span>
-      <span>${item.type}</span>
-      <span>${item.updated}</span>
+        <div class="knowledge-row">
 
-      <button class="small-button">
-        Open
-      </button>
+          <div>
 
-    </div>
-  `).join("");
+            <strong>
+              ${item.title}
+            </strong>
+
+          </div>
+
+          <span>
+            ${item.category}
+          </span>
+
+          <span>
+            ${item.type}
+          </span>
+
+          <span>
+            ${item.updated}
+          </span>
+
+          <button class="small-button">
+            Open
+          </button>
+
+        </div>
+
+      `
+    )
+    .join("");
+
 }
 
 
 function filterKnowledgeBase() {
+
   const searchNode =
     document.getElementById(
       "knowledge-search"
@@ -1997,17 +2548,21 @@ function filterKnowledgeBase() {
       "knowledge-results"
     );
 
+
   if (
     !searchNode ||
     !categoryNode ||
     !resultsNode
   ) {
+
     return;
+
   }
 
 
   const search =
-    searchNode.value
+    searchNode
+      .value
       .trim()
       .toLowerCase();
 
@@ -2016,36 +2571,45 @@ function filterKnowledgeBase() {
 
 
   const filtered =
-    knowledgeRepository.filter(item => {
-      const matchesSearch =
-        !search
-        ||
-        item.title
-          .toLowerCase()
-          .includes(search)
-        ||
-        item.category
-          .toLowerCase()
-          .includes(search)
-        ||
-        item.type
-          .toLowerCase()
-          .includes(search);
+    knowledgeRepository.filter(
+      item => {
 
-      const matchesCategory =
-        category === "all"
-        ||
-        item.category === category;
+        const matchesSearch =
+          !search
+          ||
+          item.title
+            .toLowerCase()
+            .includes(search)
+          ||
+          item.category
+            .toLowerCase()
+            .includes(search)
+          ||
+          item.type
+            .toLowerCase()
+            .includes(search);
 
-      return (
-        matchesSearch &&
-        matchesCategory
-      );
-    });
+
+        const matchesCategory =
+          category === "all"
+          ||
+          item.category === category;
+
+
+        return (
+          matchesSearch &&
+          matchesCategory
+        );
+
+      }
+    );
 
 
   resultsNode.innerHTML =
-    renderKnowledgeRows(filtered);
+    renderKnowledgeRows(
+      filtered
+    );
+
 }
 
 
@@ -2054,6 +2618,34 @@ function filterKnowledgeBase() {
 ========================================================= */
 
 function statusPage() {
+
+  const user =
+    prototypeUsers.ambassador;
+
+  const onboarded =
+    user.shareMembersOnboarded;
+
+  const target =
+    user.shareMemberTarget;
+
+  const remaining =
+    Math.max(
+      target - onboarded,
+      0
+    );
+
+  const achievement =
+    Math.min(
+      Math.round(
+        (
+          onboarded /
+          target
+        ) * 100
+      ),
+      100
+    );
+
+
   return `
     ${pageTitle(
       "AMBASSADOR",
@@ -2073,6 +2665,7 @@ function statusPage() {
           </div>
 
           <div>
+
             <h2>
               Layla Haddad
             </h2>
@@ -2080,6 +2673,7 @@ function statusPage() {
             <span class="status-block good">
               Active Ambassador
             </span>
+
           </div>
 
         </div>
@@ -2108,13 +2702,8 @@ function statusPage() {
           )}
 
           ${profileLine(
-            "Current Status",
-            "Bronze Status"
-          )}
-
-          ${profileLine(
-            "Next Status",
-            "Silver Status"
+            "Ambassador Status",
+            "Active"
           )}
 
         </div>
@@ -2144,7 +2733,7 @@ function statusPage() {
 
         <p>
           Use your Personal QR Code for attributable
-          SHARE acquisition activity.
+          SHARE member onboarding activity.
         </p>
 
       </section>
@@ -2152,46 +2741,275 @@ function statusPage() {
     </div>
 
 
-    <section class="dashboard-card">
+    <section class="share-impact-card">
 
-      <span class="section-label">
-        STATUS
-      </span>
+      <div class="share-impact-heading">
 
-      <h3>
-        Bronze Status achieved
-      </h3>
+        <div>
 
-      <p>
-        Your current Ambassador activity contributes toward
-        Silver Status.
-      </p>
+          <span class="section-label">
+            MY SHARE IMPACT
+          </span>
 
+          <h2>
+            SHARE Acquisition Progress
+          </h2>
 
-      <div class="status-cards">
+          <p>
+            Your SHARE member onboarding progress for the current performance period.
+          </p>
 
-        <div class="status-level achieved">
-          <span>Current</span>
-          <strong>Bronze Status</strong>
-          <small>Achieved</small>
         </div>
 
-        <div class="status-level next">
-          <span>Next</span>
-          <strong>Silver Status</strong>
-          <small>In progress</small>
+
+        <div class="period-pill">
+
+          <span>
+            Performance period
+          </span>
+
+          <strong>
+            ${currentPerformancePeriod.from} – ${currentPerformancePeriod.to}
+          </strong>
+
         </div>
 
-        <div class="status-level future">
-          <span>Future</span>
-          <strong>Gold Status</strong>
-          <small>Future status</small>
+      </div>
+
+
+      <div class="impact-metrics">
+
+        ${impactMetric(
+          "Members Onboarded",
+          onboarded,
+          "This period"
+        )}
+
+        ${impactMetric(
+          "Target",
+          target,
+          "Members"
+        )}
+
+        ${impactMetric(
+          "Achievement",
+          `${achievement}%`,
+          "Of target"
+        )}
+
+        ${impactMetric(
+          "Remaining",
+          remaining,
+          remaining === 1
+            ? "Member to target"
+            : "Members to target"
+        )}
+
+      </div>
+
+
+      <div class="acquisition-progress-section">
+
+        <div class="acquisition-progress-heading">
+
+          <div>
+
+            <span class="section-label">
+              PROGRESS TO TARGET
+            </span>
+
+            <h3>
+              ${onboarded} of ${target} members onboarded
+            </h3>
+
+          </div>
+
+          <strong class="achievement-value">
+            ${achievement}%
+          </strong>
+
+        </div>
+
+
+        <div class="acquisition-progress-track">
+
+          <div
+            class="acquisition-progress-fill"
+            style="--target-width:${achievement}%"
+          ></div>
+
+          <div
+            class="acquisition-marker halfway"
+            style="left:50%"
+          >
+            <span>
+              25
+            </span>
+          </div>
+
+          <div
+            class="acquisition-marker target"
+            style="left:100%"
+          >
+            <span>
+              ${target}
+            </span>
+          </div>
+
+        </div>
+
+
+        <div class="progress-scale">
+
+          <span>
+            0
+          </span>
+
+          <span>
+            Halfway
+          </span>
+
+          <span>
+            Target
+          </span>
+
+        </div>
+
+
+        <div class="impact-message">
+
+          <div class="impact-message-icon">
+            ✦
+          </div>
+
+          <div>
+
+            ${
+              remaining > 0
+                ? `
+                  <strong>
+                    ${remaining} ${
+                      remaining === 1
+                        ? "member"
+                        : "members"
+                    } away from your target
+                  </strong>
+
+                  <p>
+                    You have already achieved ${achievement}% of your SHARE onboarding target for this period.
+                  </p>
+                `
+                : `
+                  <strong>
+                    Target achieved
+                  </strong>
+
+                  <p>
+                    You have reached your SHARE member onboarding target for this period.
+                  </p>
+                `
+            }
+
+          </div>
+
+        </div>
+
+
+        <div class="impact-milestones">
+
+          ${impactMilestone(
+            "Started",
+            "Your first SHARE member onboarded",
+            true
+          )}
+
+          ${impactMilestone(
+            "Halfway",
+            "25 members onboarded",
+            onboarded >= 25
+          )}
+
+          ${impactMilestone(
+            "Target",
+            `${target} members onboarded`,
+            onboarded >= target
+          )}
+
         </div>
 
       </div>
 
     </section>
   `;
+
+}
+
+
+function impactMetric(
+  title,
+  value,
+  detail
+) {
+
+  return `
+    <div class="impact-metric">
+
+      <span>
+        ${title}
+      </span>
+
+      <strong>
+        ${value}
+      </strong>
+
+      <small>
+        ${detail}
+      </small>
+
+    </div>
+  `;
+
+}
+
+
+function impactMilestone(
+  title,
+  detail,
+  complete
+) {
+
+  return `
+    <div class="impact-milestone ${
+      complete
+        ? "complete"
+        : "pending"
+    }">
+
+      <div class="impact-milestone-icon">
+
+        ${
+          complete
+            ? "✓"
+            : "○"
+        }
+
+      </div>
+
+      <div>
+
+        <strong>
+          ${title}
+        </strong>
+
+        <span>
+          ${detail}
+        </span>
+
+      </div>
+
+    </div>
+  `;
+
 }
 
 
@@ -2200,6 +3018,7 @@ function statusPage() {
 ========================================================= */
 
 function managerHome() {
+
   return `
     ${pageTitle(
       "ENTERTAINMENT UAE",
@@ -2304,10 +3123,12 @@ function managerHome() {
 
     </div>
   `;
+
 }
 
 
 function managerPerformance() {
+
   return `
     ${pageTitle(
       "SERVICE DELIVERY",
@@ -2319,6 +3140,7 @@ function managerPerformance() {
     <section class="overall-analysis-card">
 
       <div>
+
         <span class="section-label">
           AI PERFORMANCE ANALYSIS
         </span>
@@ -2331,6 +3153,7 @@ function managerPerformance() {
           Analyse performance, training and knowledge signals
           across Entertainment UAE.
         </p>
+
       </div>
 
 
@@ -2338,11 +3161,13 @@ function managerPerformance() {
         class="analyse-overall-button"
         onclick="runManagerAnalysis()"
       >
+
         <span class="overall-ai-icon">
           ✦
         </span>
 
         <div>
+
           <strong>
             Analyse BU Performance
           </strong>
@@ -2350,7 +3175,9 @@ function managerPerformance() {
           <small>
             Finds themes, severity and intervention needs
           </small>
+
         </div>
+
       </button>
 
     </section>
@@ -2445,11 +3272,14 @@ function managerPerformance() {
 
     </section>
   `;
+
 }
 
 
 function runManagerAnalysis() {
+
   runAnimation({
+
     outputId:
       "manager-agent-output",
 
@@ -2457,55 +3287,74 @@ function runManagerAnalysis() {
       "Analysing Entertainment UAE",
 
     steps: [
+
       {
         id:
           "manager-performance",
+
         title:
           "Performance Agent",
+
         message:
           "Assessing performance, training and knowledge indicators."
       },
+
       {
         id:
           "manager-theme",
+
         title:
           "Theme Agent",
+
         message:
           "Grouping recurring themes across locations and Ambassadors."
       },
+
       {
         id:
           "manager-knowledge",
+
         title:
           "Knowledge Gap Agent",
+
         message:
           "Identifying recurring development gaps."
       },
+
       {
         id:
           "manager-intervention",
+
         title:
           "Intervention Agent",
+
         message:
           "Ranking MAF mall locations requiring intervention."
       },
+
       {
         id:
           "manager-combined",
+
         title:
           "Combined Analysis",
+
         message:
           "Preparing recommended areas of focus."
       }
+
     ],
 
     onComplete:
       showManagerAnalysisResult
+
   });
+
 }
 
 
 function showManagerAnalysisResult() {
+
   const output =
     document.getElementById(
       "manager-agent-output"
@@ -2515,6 +3364,7 @@ function showManagerAnalysisResult() {
 
 
   output.innerHTML = `
+
     ${analysisHeader(
       "BU AI ANALYSIS",
       "3 locations require intervention",
@@ -2602,6 +3452,7 @@ function showManagerAnalysisResult() {
       </div>
 
       <div>
+
         <span class="section-label">
           PRIORITY INTERVENTION
         </span>
@@ -2613,24 +3464,40 @@ function showManagerAnalysisResult() {
         <p>
           8 Ambassadors affected. Refund SLA is the dominant theme.
           Training completion is 71% and performance has declined
-          by 9% during the current period.
+          during the current period.
         </p>
+
       </div>
 
 
       <div class="intervention-actions">
-        <strong>Recommended</strong>
-        <span>Assign targeted refresher</span>
-        <span>Complete Knowledge Check</span>
-        <span>Trainer intervention within 3 days</span>
+
+        <strong>
+          Recommended
+        </strong>
+
+        <span>
+          Assign targeted refresher
+        </span>
+
+        <span>
+          Complete Knowledge Check
+        </span>
+
+        <span>
+          Trainer intervention
+        </span>
+
       </div>
 
     </section>
   `;
+
 }
 
 
 function managerOnboarding() {
+
   return `
     ${pageTitle(
       "AMBASSADOR PROGRAM",
@@ -2693,6 +3560,7 @@ function managerOnboarding() {
 
     </section>
   `;
+
 }
 
 
@@ -2701,6 +3569,7 @@ function managerOnboarding() {
 ========================================================= */
 
 function serviceHome() {
+
   return `
     ${pageTitle(
       "MAF MALLS",
@@ -2710,10 +3579,23 @@ function serviceHome() {
 
 
     <div class="filter-bar">
-      <span>Country: UAE</span>
-      <span>MAF Mall: All</span>
-      <span>Brand: All</span>
-      <span>Ambassador: All</span>
+
+      <span>
+        Country: UAE
+      </span>
+
+      <span>
+        MAF Mall: All
+      </span>
+
+      <span>
+        Brand: All
+      </span>
+
+      <span>
+        Ambassador: All
+      </span>
+
     </div>
 
 
@@ -2788,18 +3670,23 @@ function serviceHome() {
         </h3>
 
         <ul class="risk-list">
+
           <li>
             Refund SLA knowledge gap across three MAF mall locations
           </li>
+
           <li>
             22 Ambassadors have overdue learning
           </li>
+
           <li>
             3 locations are below performance threshold
           </li>
+
           <li>
             6 Ambassador onboarding journeys are delayed
           </li>
+
         </ul>
 
       </section>
@@ -2816,28 +3703,35 @@ function serviceHome() {
         </h3>
 
         <ul class="risk-list">
+
           <li>
             Assign targeted refund handling refresher
           </li>
+
           <li>
             Notify relevant BU trainers
           </li>
+
           <li>
             Prioritise low-performing MAF mall locations
           </li>
+
           <li>
             Follow up delayed Ambassador onboarding
           </li>
+
         </ul>
 
       </section>
 
     </div>
   `;
+
 }
 
 
 function servicePerformance() {
+
   return `
     ${pageTitle(
       "SERVICE DELIVERY",
@@ -2849,6 +3743,7 @@ function servicePerformance() {
     <section class="overall-analysis-card">
 
       <div>
+
         <span class="section-label">
           GROUP AI ANALYSIS
         </span>
@@ -2861,6 +3756,7 @@ function servicePerformance() {
           Analyse performance, audit, training and knowledge
           signals across MAF mall locations.
         </p>
+
       </div>
 
 
@@ -2868,11 +3764,13 @@ function servicePerformance() {
         class="analyse-overall-button"
         onclick="runServiceAnalysis()"
       >
+
         <span class="overall-ai-icon">
           ✦
         </span>
 
         <div>
+
           <strong>
             Analyse Group Performance
           </strong>
@@ -2880,7 +3778,9 @@ function servicePerformance() {
           <small>
             Finds themes and priority interventions
           </small>
+
         </div>
+
       </button>
 
     </section>
@@ -2981,11 +3881,14 @@ function servicePerformance() {
 
     </section>
   `;
+
 }
 
 
 function runServiceAnalysis() {
+
   runAnimation({
+
     outputId:
       "service-agent-output",
 
@@ -2993,63 +3896,85 @@ function runServiceAnalysis() {
       "Analysing MAF Mall Performance",
 
     steps: [
+
       {
         id:
           "service-performance",
+
         title:
           "Performance Agent",
+
         message:
           "Assessing performance across MAF mall locations."
       },
+
       {
         id:
           "service-pattern",
+
         title:
           "Pattern Agent",
+
         message:
           "Identifying recurring themes across locations."
       },
+
       {
         id:
           "service-severity",
+
         title:
           "Location Severity Agent",
+
         message:
           "Ranking locations by intervention need."
       },
+
       {
         id:
           "service-intervention",
+
         title:
           "Intervention Agent",
+
         message:
           "Matching issues to targeted interventions."
       },
+
       {
         id:
           "service-action",
+
         title:
           "Next Best Action",
+
         message:
           "Prioritising recommended actions."
       },
+
       {
         id:
           "service-combined",
+
         title:
           "Combined Analysis",
+
         message:
           "Preparing the Service Delivery view."
       }
+
     ],
 
     onComplete:
       showServiceAnalysisResult
+
   });
+
 }
 
 
 function showServiceAnalysisResult() {
+
   const output =
     document.getElementById(
       "service-agent-output"
@@ -3059,6 +3984,7 @@ function showServiceAnalysisResult() {
 
 
   output.innerHTML = `
+
     ${analysisHeader(
       "GROUP AI ANALYSIS",
       "Priority intervention required",
@@ -3156,6 +4082,7 @@ function showServiceAnalysisResult() {
       </div>
 
       <div>
+
         <span class="section-label">
           PRIORITY INTERVENTION
         </span>
@@ -3169,27 +4096,42 @@ function showServiceAnalysisResult() {
           Knowledge Checks, six repeated SOP misses and five
           Ambassadors with overdue learning.
         </p>
+
       </div>
 
 
       <div class="intervention-actions">
-        <strong>Next Best Action</strong>
-        <span>Assign Refund Handling refresher</span>
-        <span>Trigger Knowledge Check</span>
-        <span>BU trainer intervention</span>
-        <span>Reassess in 7 days</span>
+
+        <strong>
+          Next Best Action
+        </strong>
+
+        <span>
+          Assign Refund Handling refresher
+        </span>
+
+        <span>
+          Trigger Knowledge Check
+        </span>
+
+        <span>
+          BU trainer intervention
+        </span>
+
       </div>
 
     </section>
   `;
+
 }
 
 
 /* =========================================================
-   AUDIT & SERVICE PULSE
+   AUDIT
 ========================================================= */
 
 function auditPage() {
+
   return `
     ${pageTitle(
       "SERVICE DELIVERY",
@@ -3280,9 +4222,19 @@ function auditPage() {
 
 
       <div class="audit-theme-header">
-        <span>Theme</span>
-        <span>Locations</span>
-        <span>Severity</span>
+
+        <span>
+          Theme
+        </span>
+
+        <span>
+          Locations
+        </span>
+
+        <span>
+          Severity
+        </span>
+
       </div>
 
 
@@ -3330,17 +4282,49 @@ function auditPage() {
 
       <div class="audit-flow">
 
-        <span>Mystery Shop</span>
-        <b>→</b>
-        <span>Location Finding</span>
-        <b>→</b>
-        <span>Theme & Severity</span>
-        <b>→</b>
-        <span>Corrective Action</span>
-        <b>→</b>
-        <span>BU Performance</span>
-        <b>→</b>
-        <span>Service Delivery Performance</span>
+        <span>
+          Mystery Shop
+        </span>
+
+        <b>
+          →
+        </b>
+
+        <span>
+          Location Finding
+        </span>
+
+        <b>
+          →
+        </b>
+
+        <span>
+          Theme & Severity
+        </span>
+
+        <b>
+          →
+        </b>
+
+        <span>
+          Corrective Action
+        </span>
+
+        <b>
+          →
+        </b>
+
+        <span>
+          BU Performance
+        </span>
+
+        <b>
+          →
+        </b>
+
+        <span>
+          Service Delivery Performance
+        </span>
 
       </div>
 
@@ -3360,6 +4344,7 @@ function auditPage() {
 
     </section>
   `;
+
 }
 
 
@@ -3368,6 +4353,7 @@ function auditPage() {
 ========================================================= */
 
 function adminHome() {
+
   return `
     ${pageTitle(
       "PLATFORM ADMINISTRATION",
@@ -3477,12 +4463,16 @@ function adminHome() {
     </div>
 
 
-    <div id="admin-provisioning-output"></div>
+    <div
+      id="admin-provisioning-output"
+    ></div>
   `;
+
 }
 
 
 function showInviteAmbassador() {
+
   const output =
     document.getElementById(
       "admin-provisioning-output"
@@ -3532,10 +4522,12 @@ function showInviteAmbassador() {
 
     </section>
   `;
+
 }
 
 
 function showManualAmbassador() {
+
   const output =
     document.getElementById(
       "admin-provisioning-output"
@@ -3585,10 +4577,12 @@ function showManualAmbassador() {
 
     </section>
   `;
+
 }
 
 
 function usersAccessPage() {
+
   return `
     ${pageTitle(
       "IDENTITY & ACCESS",
@@ -3600,12 +4594,29 @@ function usersAccessPage() {
     <section class="dashboard-card">
 
       <div class="admin-table-header">
-        <span>User</span>
-        <span>Identity</span>
-        <span>Role</span>
-        <span>Scope</span>
-        <span>Status</span>
+
+        <span>
+          User
+        </span>
+
+        <span>
+          Identity
+        </span>
+
+        <span>
+          Role
+        </span>
+
+        <span>
+          Scope
+        </span>
+
+        <span>
+          Status
+        </span>
+
       </div>
+
 
       ${userAccessRow(
         "Layla Haddad",
@@ -3655,10 +4666,12 @@ function usersAccessPage() {
 
     </section>
   `;
+
 }
 
 
 function rolesPage() {
+
   return `
     ${pageTitle(
       "IDENTITY & ACCESS",
@@ -3718,10 +4731,12 @@ function rolesPage() {
 
     </div>
   `;
+
 }
 
 
 function aiAgentsPage() {
+
   return `
     ${pageTitle(
       "AI PLATFORM",
@@ -3770,10 +4785,12 @@ function aiAgentsPage() {
 
     </div>
   `;
+
 }
 
 
 function integrationsPage() {
+
   return `
     ${pageTitle(
       "PLATFORM",
@@ -3804,7 +4821,7 @@ function integrationsPage() {
 
       ${integrationCard(
         "Adjust",
-        "Acquisition attribution",
+        "SHARE member acquisition attribution",
         "Mock"
       )}
 
@@ -3828,14 +4845,18 @@ function integrationsPage() {
 
     </div>
   `;
+
 }
 
 
 /* =========================================================
-   AGENT ANIMATION
+   AI ANIMATION
 ========================================================= */
 
-function runAnimation(config) {
+function runAnimation(
+  config
+) {
+
   const output =
     document.getElementById(
       config.outputId
@@ -3855,6 +4876,7 @@ function runAnimation(config) {
       <div class="pipeline-heading">
 
         <div>
+
           <span class="section-label">
             AGENT-TO-AGENT ORCHESTRATION
           </span>
@@ -3862,6 +4884,7 @@ function runAnimation(config) {
           <h3>
             ${config.title}
           </h3>
+
         </div>
 
         <span class="pipeline-running-badge">
@@ -3873,27 +4896,34 @@ function runAnimation(config) {
 
       <div class="pipeline-steps">
 
-        ${config.steps.map((step, index) => `
+        ${config.steps.map(
+          (
+            step,
+            index
+          ) => `
 
-          ${
-            index > 0
-              ? `<div class="pipeline-line"></div>`
-              : ""
-          }
+            ${
+              index > 0
+                ? `
+                  <div class="pipeline-line"></div>
+                `
+                : ""
+            }
 
-          ${pipelineStep(
-            step.id,
-            index + 1,
-            step.title,
-            index === 0
-              ? "Running"
-              : "Waiting",
-            index === 0
-              ? "active"
-              : "waiting"
-          )}
+            ${pipelineStep(
+              step.id,
+              index + 1,
+              step.title,
+              index === 0
+                ? "Running"
+                : "Waiting",
+              index === 0
+                ? "active"
+                : "waiting"
+            )}
 
-        `).join("")}
+          `
+        ).join("")}
 
       </div>
 
@@ -3913,42 +4943,66 @@ function runAnimation(config) {
 
 
   config.steps.forEach(
-    (step, index) => {
+    (
+      step,
+      index
+    ) => {
 
       const startDelay =
         index * 1050;
 
 
-      if (index > 0) {
-        setTimeout(() => {
-          activateGenericStep(
-            config.outputId,
-            step.id,
-            step.message
-          );
-        }, startDelay);
+      if (
+        index > 0
+      ) {
+
+        setTimeout(
+          () => {
+
+            activateGenericStep(
+              config.outputId,
+              step.id,
+              step.message
+            );
+
+          },
+          startDelay
+        );
+
       }
 
 
-      setTimeout(() => {
-        completeGenericStep(
-          step.id
-        );
+      setTimeout(
+        () => {
+
+          completeGenericStep(
+            step.id
+          );
 
 
-        if (
-          index ===
-          config.steps.length - 1
-        ) {
-          setTimeout(() => {
-            config.onComplete();
-          }, 350);
-        }
+          if (
+            index ===
+            config.steps.length - 1
+          ) {
 
-      }, startDelay + 850);
+            setTimeout(
+              () => {
+
+                config.onComplete();
+
+              },
+              350
+            );
+
+          }
+
+        },
+        startDelay + 850
+      );
 
     }
   );
+
 }
 
 
@@ -3959,6 +5013,7 @@ function pipelineStep(
   status,
   state
 ) {
+
   return `
     <div
       id="step-${id}"
@@ -3970,15 +5025,20 @@ function pipelineStep(
       </div>
 
       <div>
-        <strong>${title}</strong>
+
+        <strong>
+          ${title}
+        </strong>
 
         <span id="status-${id}">
           ${status}
         </span>
+
       </div>
 
     </div>
   `;
+
 }
 
 
@@ -3987,12 +5047,16 @@ function activateGenericStep(
   id,
   message
 ) {
+
   const step =
     document.getElementById(
       `step-${id}`
     );
 
-  if (step) {
+  if (
+    step
+  ) {
+
     step.classList.remove(
       "waiting",
       "complete"
@@ -4001,6 +5065,7 @@ function activateGenericStep(
     step.classList.add(
       "active"
     );
+
   }
 
 
@@ -4009,8 +5074,13 @@ function activateGenericStep(
       `status-${id}`
     );
 
-  if (status) {
-    status.textContent = "Running";
+  if (
+    status
+  ) {
+
+    status.textContent =
+      "Running";
+
   }
 
 
@@ -4019,20 +5089,31 @@ function activateGenericStep(
       `${outputId}-message`
     );
 
-  if (messageNode) {
+  if (
+    messageNode
+  ) {
+
     messageNode.textContent =
       message;
+
   }
+
 }
 
 
-function completeGenericStep(id) {
+function completeGenericStep(
+  id
+) {
+
   const step =
     document.getElementById(
       `step-${id}`
     );
 
-  if (step) {
+  if (
+    step
+  ) {
+
     step.classList.remove(
       "waiting",
       "active"
@@ -4041,6 +5122,7 @@ function completeGenericStep(id) {
     step.classList.add(
       "complete"
     );
+
   }
 
 
@@ -4049,10 +5131,15 @@ function completeGenericStep(id) {
       `status-${id}`
     );
 
-  if (status) {
+  if (
+    status
+  ) {
+
     status.textContent =
       "Complete";
+
   }
+
 }
 
 
@@ -4060,57 +5147,88 @@ function completeGenericStep(id) {
    ROUTING
 ========================================================= */
 
-function navigateTo(page) {
-  currentPage = page;
+function navigateTo(
+  page
+) {
 
-  let content = "";
+  currentPage =
+    page;
+
+  let content =
+    "";
 
 
-  if (currentRole === "ambassador") {
+  if (
+    currentRole ===
+    "ambassador"
+  ) {
+
     const pages = {
+
       home:
         ambassadorHome,
+
       performance:
         ambassadorPerformance,
+
       training:
         trainingPage,
+
       knowledge:
         knowledgePage,
+
       status:
         statusPage
+
     };
+
 
     content =
       pages[page]
         ? pages[page]()
         : ambassadorHome();
+
   }
 
 
-  if (currentRole === "manager") {
-    if (page === "home") {
+  if (
+    currentRole ===
+    "manager"
+  ) {
+
+    if (
+      page === "home"
+    ) {
+
       content =
         managerHome();
+
     }
 
     else if (
       page ===
       "team-performance"
     ) {
+
       content =
         managerPerformance();
+
     }
 
     else if (
       page ===
       "manager-onboarding"
     ) {
+
       content =
         managerOnboarding();
+
     }
 
     else {
+
       const configs = {
+
         "team-actions": [
           "SERVICE DELIVERY",
           "Actions",
@@ -4144,47 +5262,66 @@ function navigateTo(page) {
         "manager-acquisition": [
           "AMBASSADOR PROGRAM",
           "Acquisition",
-          "Track Personal QR Code acquisition activity."
+          "Track SHARE members onboarded through Ambassador Personal QR Codes."
         ],
 
         "manager-recognition": [
           "AMBASSADOR PROGRAM",
           "Recognition",
-          "View Ambassador status and recognition."
+          "Recognise Ambassador contribution and programme impact."
         ]
+
       };
+
 
       content =
         genericRolePage(
           ...configs[page]
         );
+
     }
+
   }
 
 
-  if (currentRole === "service") {
-    if (page === "home") {
+  if (
+    currentRole ===
+    "service"
+  ) {
+
+    if (
+      page === "home"
+    ) {
+
       content =
         serviceHome();
+
     }
 
     else if (
       page ===
       "group-performance"
     ) {
+
       content =
         servicePerformance();
+
     }
 
     else if (
-      page === "audit"
+      page ===
+      "audit"
     ) {
+
       content =
         auditPage();
+
     }
 
     else {
+
       const configs = {
+
         "group-actions": [
           "SERVICE DELIVERY",
           "Actions",
@@ -4224,26 +5361,35 @@ function navigateTo(page) {
         "group-acquisition": [
           "AMBASSADOR PROGRAM",
           "Acquisition",
-          "Personal QR Code acquisition performance."
+          "Track SHARE members onboarded through Ambassador activity."
         ],
 
         "group-recognition": [
           "AMBASSADOR PROGRAM",
           "Recognition",
-          "Ambassador status and recognition."
+          "Recognise Ambassador contribution and programme impact."
         ]
+
       };
+
 
       content =
         genericRolePage(
           ...configs[page]
         );
+
     }
+
   }
 
 
-  if (currentRole === "admin") {
+  if (
+    currentRole ===
+    "admin"
+  ) {
+
     const pages = {
+
       home:
         adminHome,
 
@@ -4258,16 +5404,23 @@ function navigateTo(page) {
 
       integrations:
         integrationsPage
+
     };
 
 
-    if (pages[page]) {
+    if (
+      pages[page]
+    ) {
+
       content =
         pages[page]();
+
     }
 
     else {
+
       const configs = {
+
         identity: [
           "IDENTITY & ACCESS",
           "Identity Providers",
@@ -4303,6 +5456,7 @@ function navigateTo(page) {
           "Audit Log",
           "Review platform activity."
         ]
+
       };
 
 
@@ -4310,11 +5464,16 @@ function navigateTo(page) {
         genericRolePage(
           ...configs[page]
         );
+
     }
+
   }
 
 
-  renderShell(content);
+  renderShell(
+    content
+  );
+
 }
 
 
@@ -4327,6 +5486,7 @@ function genericRolePage(
   title,
   description
 ) {
+
   return `
     ${pageTitle(
       label,
@@ -4340,7 +5500,9 @@ function genericRolePage(
         PROTOTYPE VIEW
       </span>
 
-      <h3>${title}</h3>
+      <h3>
+        ${title}
+      </h3>
 
       <p>
         This section represents the role-specific capability
@@ -4349,6 +5511,7 @@ function genericRolePage(
 
     </section>
   `;
+
 }
 
 
@@ -4357,6 +5520,7 @@ function pageTitle(
   title,
   subtitle
 ) {
+
   return `
     <div class="page-heading">
 
@@ -4364,12 +5528,17 @@ function pageTitle(
         ${label}
       </span>
 
-      <h1>${title}</h1>
+      <h1>
+        ${title}
+      </h1>
 
-      <p>${subtitle}</p>
+      <p>
+        ${subtitle}
+      </p>
 
     </div>
   `;
+
 }
 
 
@@ -4378,15 +5547,25 @@ function metricCard(
   value,
   detail
 ) {
+
   return `
     <section class="dashboard-card metric-card">
 
-      <span>${title}</span>
-      <strong>${value}</strong>
-      <small>${detail}</small>
+      <span>
+        ${title}
+      </span>
+
+      <strong>
+        ${value}
+      </strong>
+
+      <small>
+        ${detail}
+      </small>
 
     </section>
   `;
+
 }
 
 
@@ -4396,16 +5575,28 @@ function clickableMetricCard(
   detail,
   target
 ) {
+
   return `
     <section
       class="dashboard-card metric-card clickable-card"
       onclick="navigateTo('${target}')"
     >
-      <span>${title}</span>
-      <strong>${value}</strong>
-      <small>${detail} →</small>
+
+      <span>
+        ${title}
+      </span>
+
+      <strong>
+        ${value}
+      </strong>
+
+      <small>
+        ${detail} →
+      </small>
+
     </section>
   `;
+
 }
 
 
@@ -4416,6 +5607,7 @@ function pillarCard(
   detail,
   target
 ) {
+
   return `
     <section class="dashboard-card pillar-card">
 
@@ -4427,9 +5619,13 @@ function pillarCard(
         ${value}
       </strong>
 
-      <h3>${metric}</h3>
+      <h3>
+        ${metric}
+      </h3>
 
-      <p>${detail}</p>
+      <p>
+        ${detail}
+      </p>
 
       <button
         class="text-button"
@@ -4440,6 +5636,7 @@ function pillarCard(
 
     </section>
   `;
+
 }
 
 
@@ -4447,14 +5644,21 @@ function profileLine(
   label,
   value
 ) {
+
   return `
     <div class="profile-line">
 
-      <span>${label}</span>
-      <strong>${value}</strong>
+      <span>
+        ${label}
+      </span>
+
+      <strong>
+        ${value}
+      </strong>
 
     </div>
   `;
+
 }
 
 
@@ -4462,10 +5666,13 @@ function statusLine(
   label,
   value
 ) {
+
   return `
     <div class="profile-line">
 
-      <span>${label}</span>
+      <span>
+        ${label}
+      </span>
 
       <span class="status-block good">
         ${value}
@@ -4473,6 +5680,7 @@ function statusLine(
 
     </div>
   `;
+
 }
 
 
@@ -4480,22 +5688,30 @@ function storeBar(
   name,
   score
 ) {
+
   return `
     <div class="store-bar">
 
-      <span>${name}</span>
+      <span>
+        ${name}
+      </span>
 
       <div class="bar-track">
+
         <div
           class="bar-fill"
           style="width:${score}%"
         ></div>
+
       </div>
 
-      <strong>${score}%</strong>
+      <strong>
+        ${score}%
+      </strong>
 
     </div>
   `;
+
 }
 
 
@@ -4504,12 +5720,21 @@ function attentionRow(
   issue,
   detail
 ) {
+
   return `
     <div class="attention-row">
 
-      <strong>${name}</strong>
-      <span>${issue}</span>
-      <strong>${detail}</strong>
+      <strong>
+        ${name}
+      </strong>
+
+      <span>
+        ${issue}
+      </span>
+
+      <strong>
+        ${detail}
+      </strong>
 
       <button class="small-button">
         View
@@ -4517,6 +5742,7 @@ function attentionRow(
 
     </div>
   `;
+
 }
 
 
@@ -4526,16 +5752,29 @@ function personOnboardingRow(
   stage,
   status
 ) {
+
   return `
     <div class="generic-row">
 
       <div>
-        <strong>${name}</strong>
-        <small>Staff ID ${staffId}</small>
+
+        <strong>
+          ${name}
+        </strong>
+
+        <small>
+          Staff ID ${staffId}
+        </small>
+
       </div>
 
-      <span>${stage}</span>
-      <strong>${status}</strong>
+      <span>
+        ${stage}
+      </span>
+
+      <strong>
+        ${status}
+      </strong>
 
       <button class="small-button">
         View
@@ -4543,6 +5782,7 @@ function personOnboardingRow(
 
     </div>
   `;
+
 }
 
 
@@ -4551,6 +5791,7 @@ function agentTeamMember(
   title,
   description
 ) {
+
   return `
     <div class="agent-team-card">
 
@@ -4559,12 +5800,20 @@ function agentTeamMember(
       </div>
 
       <div>
-        <strong>${title}</strong>
-        <span>${description}</span>
+
+        <strong>
+          ${title}
+        </strong>
+
+        <span>
+          ${description}
+        </span>
+
       </div>
 
     </div>
   `;
+
 }
 
 
@@ -4573,15 +5822,25 @@ function analysisMiniCard(
   score,
   detail
 ) {
+
   return `
     <div class="analysis-agent-card">
 
-      <span>${title}</span>
-      <strong>${score}</strong>
-      <small>${detail}</small>
+      <span>
+        ${title}
+      </span>
+
+      <strong>
+        ${score}
+      </strong>
+
+      <small>
+        ${detail}
+      </small>
 
     </div>
   `;
+
 }
 
 
@@ -4591,25 +5850,39 @@ function analysisHeader(
   score,
   subtitle
 ) {
+
   return `
     <div class="analysis-result-header">
 
       <div>
+
         <span class="section-label">
           ${label}
         </span>
 
-        <h2>${title}</h2>
-        <p>${subtitle}</p>
+        <h2>
+          ${title}
+        </h2>
+
+        <p>
+          ${subtitle}
+        </p>
+
       </div>
 
       <div class="analysis-score">
+
         ${score}%
-        <span>Overall</span>
+
+        <span>
+          Overall
+        </span>
+
       </div>
 
     </div>
   `;
+
 }
 
 
@@ -4619,12 +5892,20 @@ function severityRow(
   severity,
   className
 ) {
+
   return `
     <div class="severity-row">
 
       <div>
-        <strong>${title}</strong>
-        <span>${detail}</span>
+
+        <strong>
+          ${title}
+        </strong>
+
+        <span>
+          ${detail}
+        </span>
+
       </div>
 
       <span class="severity-pill ${className}">
@@ -4633,6 +5914,7 @@ function severityRow(
 
     </div>
   `;
+
 }
 
 
@@ -4642,12 +5924,20 @@ function locationSeverityRow(
   severity,
   className
 ) {
+
   return `
     <div class="location-severity-row">
 
       <div>
-        <strong>${title}</strong>
-        <span>${detail}</span>
+
+        <strong>
+          ${title}
+        </strong>
+
+        <span>
+          ${detail}
+        </span>
+
       </div>
 
       <span class="severity-pill ${className}">
@@ -4656,6 +5946,7 @@ function locationSeverityRow(
 
     </div>
   `;
+
 }
 
 
@@ -4666,23 +5957,37 @@ function themeResult(
   trend,
   severity
 ) {
+
   return `
     <div class="theme-result">
 
       <div>
-        <strong>${title}</strong>
+
+        <strong>
+          ${title}
+        </strong>
+
         <span>
           ${locations} · ${population}
         </span>
+
       </div>
 
       <div class="theme-meta">
-        <span>${trend}</span>
-        <strong>${severity}</strong>
+
+        <span>
+          ${trend}
+        </span>
+
+        <strong>
+          ${severity}
+        </strong>
+
       </div>
 
     </div>
   `;
+
 }
 
 
@@ -4692,11 +5997,17 @@ function auditRow(
   status,
   className
 ) {
+
   return `
     <div class="audit-row">
 
-      <strong>${location}</strong>
-      <strong>${score}</strong>
+      <strong>
+        ${location}
+      </strong>
+
+      <strong>
+        ${score}
+      </strong>
 
       <span class="status-block ${className}">
         ${status}
@@ -4708,6 +6019,7 @@ function auditRow(
 
     </div>
   `;
+
 }
 
 
@@ -4717,11 +6029,17 @@ function auditThemeRow(
   severity,
   className
 ) {
+
   return `
     <div class="audit-theme-row">
 
-      <strong>${theme}</strong>
-      <span>${locations}</span>
+      <strong>
+        ${theme}
+      </strong>
+
+      <span>
+        ${locations}
+      </span>
 
       <span class="severity-pill ${className}">
         ${severity}
@@ -4729,6 +6047,7 @@ function auditThemeRow(
 
     </div>
   `;
+
 }
 
 
@@ -4739,13 +6058,25 @@ function userAccessRow(
   scope,
   status
 ) {
+
   return `
     <div class="admin-table-row">
 
-      <strong>${user}</strong>
-      <span>${identity}</span>
-      <span>${role}</span>
-      <span>${scope}</span>
+      <strong>
+        ${user}
+      </strong>
+
+      <span>
+        ${identity}
+      </span>
+
+      <span>
+        ${role}
+      </span>
+
+      <span>
+        ${scope}
+      </span>
 
       <span class="status-block ${
         status === "Active"
@@ -4757,6 +6088,7 @@ function userAccessRow(
 
     </div>
   `;
+
 }
 
 
@@ -4765,6 +6097,7 @@ function roleCard(
   identity,
   permissions
 ) {
+
   return `
     <section class="dashboard-card">
 
@@ -4772,19 +6105,24 @@ function roleCard(
         ${identity}
       </span>
 
-      <h3>${role}</h3>
+      <h3>
+        ${role}
+      </h3>
 
       <ul class="risk-list">
+
         ${permissions
           .map(
             item =>
               `<li>${item}</li>`
           )
           .join("")}
+
       </ul>
 
     </section>
   `;
+
 }
 
 
@@ -4793,6 +6131,7 @@ function agentCard(
   description,
   status
 ) {
+
   return `
     <section class="dashboard-card">
 
@@ -4812,12 +6151,17 @@ function agentCard(
 
       </div>
 
-      <h3>${name}</h3>
+      <h3>
+        ${name}
+      </h3>
 
-      <p>${description}</p>
+      <p>
+        ${description}
+      </p>
 
     </section>
   `;
+
 }
 
 
@@ -4826,6 +6170,7 @@ function integrationCard(
   purpose,
   status
 ) {
+
   return `
     <section class="dashboard-card">
 
@@ -4833,14 +6178,21 @@ function integrationCard(
         INTEGRATION
       </span>
 
-      <h3>${name}</h3>
+      <h3>
+        ${name}
+      </h3>
 
-      <p>${purpose}</p>
+      <p>
+        ${purpose}
+      </p>
 
-      <strong>${status}</strong>
+      <strong>
+        ${status}
+      </strong>
 
     </section>
   `;
+
 }
 
 
@@ -4848,44 +6200,67 @@ function mockInput(
   label,
   value
 ) {
+
   return `
     <div class="mock-field">
 
-      <label>${label}</label>
+      <label>
+        ${label}
+      </label>
 
-      <div>${value}</div>
+      <div>
+        ${value}
+      </div>
 
     </div>
   `;
+
 }
 
 
 function openPerformanceInteraction(
   interactionId
 ) {
+
   expandedInteractionId =
     interactionId;
 
-  navigateTo("performance");
+  navigateTo(
+    "performance"
+  );
 
-  setTimeout(() => {
-    const node =
-      document.getElementById(
-        `interaction-expand-${interactionId}`
-      );
 
-    if (node) {
-      node.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-      });
-    }
-  }, 100);
+  setTimeout(
+    () => {
+
+      const node =
+        document.getElementById(
+          `interaction-expand-${interactionId}`
+        );
+
+      if (
+        node
+      ) {
+
+        node.scrollIntoView({
+          behavior:
+            "smooth",
+
+          block:
+            "center"
+        });
+
+      }
+
+    },
+    100
+  );
+
 }
 
 
 /* =========================================================
-   WINDOW FUNCTIONS
+   EXPOSE FUNCTIONS
 ========================================================= */
 
 window.signIn =
@@ -4932,7 +6307,7 @@ window.filterKnowledgeBase =
 
 
 /* =========================================================
-   ENTER KEY
+   ENTER LOGIN
 ========================================================= */
 
 document.addEventListener(
@@ -4945,7 +6320,9 @@ document.addEventListener(
         "login-id"
       )
     ) {
+
       signIn();
+
     }
 
   }
