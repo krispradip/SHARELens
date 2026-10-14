@@ -5,11 +5,9 @@ const app = document.getElementById("app");
 let currentRole = null;
 let currentPage = "home";
 let expandedInteractionId = null;
-let selectedTrainingId = null;
-
 
 /* =========================================================
-   SHARED PERIOD
+   SHARED PERIOD / PERFORMANCE
 ========================================================= */
 
 const currentPerformancePeriod = {
@@ -18,13 +16,20 @@ const currentPerformancePeriod = {
   to: "14 Oct 2026"
 };
 
+const performanceSummary = {
+  score: 86,
+  assessedInteractions: 12,
+  visibleInteractions: 3,
+  serviceQuality: 86,
+  sopAdherence: 92,
+  compliance: 100
+};
 
 /* =========================================================
    USERS
 ========================================================= */
 
 const prototypeUsers = {
-
   ambassador: {
     login: "100245",
     password: "demo123",
@@ -37,7 +42,7 @@ const prototypeUsers = {
     brand: "VOX Cinemas",
     store: "Mall of the Emirates",
     manager: "Ahmed Salah",
-    ambassadorStatus: "Active Ambassador",
+    accountStatus: "Active Ambassador",
     shareMembersOnboarded: 42,
     shareMemberTarget: 50
   },
@@ -73,46 +78,46 @@ const prototypeUsers = {
     identityType: "Microsoft Entra ID",
     scope: "Platform"
   }
-
 };
-
 
 /* =========================================================
    DEFINITIONS
 ========================================================= */
 
 const metricDefinitions = {
-
   performance:
-    "Consolidated service performance for the selected period, informed by Service Quality, SOP Adherence and Compliance.",
+    "A consolidated view of service performance for the selected period. It is informed by Service Quality, SOP Adherence and Compliance. For an Ambassador, it is calculated across all assessed interactions in that period.",
 
   serviceQuality:
     "How well customer interactions are handled, including communication, issue understanding, resolution quality and customer handling.",
 
   sop:
-    "Whether the required service process steps were followed correctly.",
+    "How consistently the required service process steps were followed correctly.",
 
   compliance:
-    "Whether mandatory controls, policies and critical requirements were met.",
+    "Whether mandatory controls, policies and critical requirements were completed correctly.",
 
   knowledge:
-    "Average result from completed Knowledge Checks in the selected period.",
+    "The average result from completed Knowledge Checks in the selected period.",
 
   training:
-    "Completion status of assigned learning in the current learning plan.",
+    "The completion status of formal learning assigned to the Ambassador for the current learning plan.",
 
   acquisition:
-    "SHARE members onboarded through the Ambassador's Personal QR Code against the assigned target for the selected period."
+    "SHARE members onboarded through attributable Ambassador activity, including the Ambassador's Personal QR Code, against the target for the selected period.",
 
+  activeAmbassadors:
+    "Ambassadors currently active within the selected organisational scope.",
+
+  trainingCompletion:
+    "Percentage of assigned learning completed within the selected organisational scope and period."
 };
 
-
 /* =========================================================
-   INTERACTIONS
+   AMBASSADOR INTERACTIONS
 ========================================================= */
 
 const interactions = [
-
   {
     id: "INT-1001",
     date: "10 Oct 2026",
@@ -157,16 +162,13 @@ const interactions = [
     transcript:
       "Customer asked about a cancellation refund. The expected timeframe and next steps were not clearly explained."
   }
-
 ];
 
-
 /* =========================================================
-   AMBASSADOR TRAINING
+   TRAINING
 ========================================================= */
 
 const assignedTraining = [
-
   {
     id: "share-cx",
     title: "SHARE Customer Experience",
@@ -218,358 +220,88 @@ const assignedTraining = [
     description:
       "How to onboard SHARE members correctly and explain the programme."
   }
-
 ];
 
-
 const recommendedDevelopment = {
-
   id: "refund",
-
-  title:
-    "Refund Handling Refresher",
-
-  duration:
-    "15 min",
-
-  recommended:
-    "14 Oct 2026",
-
-  triggerInteractions: [
-    "INT-1001",
-    "INT-0984"
-  ],
-
+  title: "Refund Handling Refresher",
+  trainingDuration: "15 min",
+  recommended: "14 Oct 2026",
+  triggerInteractions: ["INT-1001", "INT-0984"],
   reason:
     "Recommended because refund timeline communication was identified as a recurring opportunity.",
-
   knowledgeCheck: {
-
-    title:
-      "Refund Handling Knowledge Check",
-
-    questions:
-      10,
-
-    duration:
-      "Approx. 5 min",
-
+    title: "Refund Handling Knowledge Check",
+    questions: 10,
+    duration: "5 min",
     purpose:
       "Verify that the refresher learning has been understood."
-
   }
-
 };
 
-
 /* =========================================================
-   KNOWLEDGE BASE
+   KNOWLEDGE REPOSITORY
 ========================================================= */
 
 const knowledgeRepository = [
-
-  [
-    "Refund Process",
-    "Refunds & Cancellations",
-    "Process Guidance",
-    "02 Oct 2026"
-  ],
-
-  [
-    "Cancellation & Refund Policy",
-    "Refunds & Cancellations",
-    "Policy",
-    "12 Sep 2026"
-  ],
-
-  [
-    "Customer Verification",
-    "Customer Service",
-    "Service Guidance",
-    "19 Sep 2026"
-  ],
-
-  [
-    "Customer Escalation Process",
-    "Customer Service",
-    "SOP",
-    "25 Sep 2026"
-  ],
-
-  [
-    "Service Recovery Guidelines",
-    "Customer Service",
-    "Service Guidance",
-    "06 Oct 2026"
-  ],
-
-  [
-    "SHARE Benefits",
-    "SHARE Benefits",
-    "Product Knowledge",
-    "09 Oct 2026"
-  ],
-
-  [
-    "Earning SHARE Points",
-    "SHARE Benefits",
-    "Product Knowledge",
-    "01 Oct 2026"
-  ],
-
-  [
-    "Redeeming SHARE Points",
-    "SHARE Benefits",
-    "Product Knowledge",
-    "01 Oct 2026"
-  ],
-
-  [
-    "Ambassador Role & Responsibilities",
-    "Ambassador Program",
-    "Program Guide",
-    "05 Oct 2026"
-  ],
-
-  [
-    "Personal QR Code Guidelines",
-    "Ambassador Program",
-    "Program Guide",
-    "07 Oct 2026"
-  ],
-
-  [
-    "SHARE Member Onboarding Guide",
-    "Ambassador Program",
-    "Program Guide",
-    "08 Oct 2026"
-  ],
-
-  [
-    "Customer Data Protection",
-    "Policies",
-    "Policy",
-    "21 Sep 2026"
-  ],
-
-  [
-    "Complaint Handling",
-    "SOPs",
-    "SOP",
-    "29 Sep 2026"
-  ],
-
-  [
-    "Customer Communication Standards",
-    "SOPs",
-    "SOP",
-    "30 Sep 2026"
-  ]
-
-].map(
-  (
-    [
-      title,
-      category,
-      type,
-      updated
-    ]
-  ) => ({
-    title,
-    category,
-    type,
-    updated
-  })
-);
-
+  ["Refund Process", "Refunds & Cancellations", "Process Guidance", "02 Oct 2026"],
+  ["Cancellation & Refund Policy", "Refunds & Cancellations", "Policy", "12 Sep 2026"],
+  ["Customer Verification", "Customer Service", "Service Guidance", "19 Sep 2026"],
+  ["Customer Escalation Process", "Customer Service", "SOP", "25 Sep 2026"],
+  ["Service Recovery Guidelines", "Customer Service", "Service Guidance", "06 Oct 2026"],
+  ["SHARE Benefits", "SHARE Benefits", "Product Knowledge", "09 Oct 2026"],
+  ["Earning SHARE Points", "SHARE Benefits", "Product Knowledge", "01 Oct 2026"],
+  ["Redeeming SHARE Points", "SHARE Benefits", "Product Knowledge", "01 Oct 2026"],
+  ["Ambassador Role & Responsibilities", "Ambassador Program", "Program Guide", "05 Oct 2026"],
+  ["Personal QR Code Guidelines", "Ambassador Program", "Program Guide", "07 Oct 2026"],
+  ["SHARE Member Onboarding Guide", "Ambassador Program", "Program Guide", "08 Oct 2026"],
+  ["Customer Data Protection", "Policies", "Policy", "21 Sep 2026"],
+  ["Complaint Handling", "SOPs", "SOP", "29 Sep 2026"],
+  ["Customer Communication Standards", "SOPs", "SOP", "30 Sep 2026"]
+].map(([title, category, type, updated]) => ({
+  title,
+  category,
+  type,
+  updated
+}));
 
 /* =========================================================
-   BU LEAD DATA
+   MANAGER DATA
 ========================================================= */
 
 const managerPerformanceBreakdown = [
-
-  [
-    "BU",
-    "Entertainment",
-    86,
-    238
-  ],
-
-  [
-    "Brand",
-    "VOX Cinemas",
-    87,
-    172
-  ],
-
-  [
-    "Mall",
-    "Mall of the Emirates",
-    91,
-    38
-  ],
-
-  [
-    "Mall",
-    "City Centre Mirdif",
-    88,
-    31
-  ],
-
-  [
-    "Mall",
-    "City Centre Deira",
-    74,
-    27
-  ],
-
-  [
-    "Mall",
-    "City Centre Al Zahia",
-    86,
-    24
-  ]
-
-].map(
-  (
-    [
-      level,
-      name,
-      score,
-      ambassadors
-    ]
-  ) => ({
-    level,
-    name,
-    score,
-    ambassadors
-  })
-);
-
+  ["BU", "Entertainment", 86, 238],
+  ["Brand", "VOX Cinemas", 87, 172],
+  ["Mall", "Mall of the Emirates", 91, 38],
+  ["Mall", "City Centre Mirdif", 88, 31],
+  ["Mall", "City Centre Deira", 74, 27],
+  ["Mall", "City Centre Al Zahia", 86, 24]
+].map(([level, name, score, ambassadors]) => ({
+  level,
+  name,
+  score,
+  ambassadors
+}));
 
 const managerAttentionItems = [
-
-  [
-    "Critical",
-    "City Centre Deira",
-    "Refund SLA knowledge",
-    "8 Ambassadors"
-  ],
-
-  [
-    "High",
-    "City Centre Mirdif",
-    "Training overdue",
-    "5 Ambassadors"
-  ],
-
-  [
-    "Medium",
-    "Mall of the Emirates",
-    "Service Recovery",
-    "3 Ambassadors"
-  ]
-
-].map(
-  (
-    [
-      severity,
-      location,
-      issue,
-      affected
-    ]
-  ) => ({
-    severity,
-    location,
-    issue,
-    affected
-  })
-);
-
+  ["Critical", "City Centre Deira", "Refund SLA knowledge", "8 Ambassadors"],
+  ["High", "City Centre Mirdif", "Training overdue", "5 Ambassadors"],
+  ["Medium", "Mall of the Emirates", "Service Recovery", "3 Ambassadors"]
+].map(([severity, location, issue, affected]) => ({
+  severity,
+  location,
+  issue,
+  affected
+}));
 
 const ambassadorPopulation = [
-
-  [
-    "Layla Haddad",
-    "100245",
-    "Entertainment",
-    "VOX Cinemas",
-    "Mall of the Emirates",
-    "VOX MOE",
-    86,
-    100,
-    42,
-    "Active"
-  ],
-
-  [
-    "Noor Hassan",
-    "100822",
-    "Entertainment",
-    "VOX Cinemas",
-    "City Centre Mirdif",
-    "VOX CCM",
-    91,
-    100,
-    48,
-    "Active"
-  ],
-
-  [
-    "Rania Ali",
-    "100845",
-    "Entertainment",
-    "VOX Cinemas",
-    "City Centre Deira",
-    "VOX CCD",
-    74,
-    82,
-    29,
-    "Active"
-  ],
-
-  [
-    "Sami Omar",
-    "100901",
-    "Entertainment",
-    "VOX Cinemas",
-    "City Centre Al Zahia",
-    "VOX CCAZ",
-    88,
-    94,
-    44,
-    "Active"
-  ],
-
-  [
-    "Sara Khan",
-    "100928",
-    "Entertainment",
-    "VOX Cinemas",
-    "City Centre Deira",
-    "VOX CCD",
-    72,
-    69,
-    21,
-    "Active"
-  ]
-
+  ["Layla Haddad", "100245", "Entertainment", "VOX Cinemas", "Mall of the Emirates", "VOX MOE", 86, 100, 42, "Active"],
+  ["Noor Hassan", "100822", "Entertainment", "VOX Cinemas", "City Centre Mirdif", "VOX CCM", 91, 100, 48, "Active"],
+  ["Rania Ali", "100845", "Entertainment", "VOX Cinemas", "City Centre Deira", "VOX CCD", 74, 82, 29, "Active"],
+  ["Sami Omar", "100901", "Entertainment", "VOX Cinemas", "City Centre Al Zahia", "VOX CCAZ", 88, 94, 44, "Active"],
+  ["Sara Khan", "100928", "Entertainment", "VOX Cinemas", "City Centre Deira", "VOX CCD", 72, 69, 21, "Active"]
 ].map(
-  (
-    [
-      name,
-      staffId,
-      bu,
-      brand,
-      mall,
-      location,
-      performance,
-      training,
-      members,
-      status
-    ]
-  ) => ({
+  ([name, staffId, bu, brand, mall, location, performance, training, members, status]) => ({
     name,
     staffId,
     bu,
@@ -583,261 +315,79 @@ const ambassadorPopulation = [
   })
 );
 
-
 const managerKnowledgeGaps = [
-
-  [
-    "Refund SLA",
-    34,
-    72,
-    "Service Quality",
-    "Declining"
-  ],
-
-  [
-    "Customer Verification",
-    18,
-    81,
-    "SOP Adherence",
-    "Stable"
-  ],
-
-  [
-    "SHARE Benefits",
-    11,
-    84,
-    "Member Acquisition",
-    "Improving"
-  ]
-
-].map(
-  (
-    [
-      theme,
-      ambassadors,
-      knowledgeScore,
-      relatedPerformance,
-      trend
-    ]
-  ) => ({
-    theme,
-    ambassadors,
-    knowledgeScore,
-    relatedPerformance,
-    trend
-  })
-);
-
+  ["Refund SLA", 34, 72, "Service Quality", "Declining"],
+  ["Customer Verification", 18, 81, "SOP Adherence", "Stable"],
+  ["SHARE Benefits", 11, 84, "Member Acquisition", "Improving"]
+].map(([theme, ambassadors, knowledgeScore, relatedPerformance, trend]) => ({
+  theme,
+  ambassadors,
+  knowledgeScore,
+  relatedPerformance,
+  trend
+}));
 
 const managerTrainingOverview = [
-
-  [
-    "SHARE Customer Experience",
-    238,
-    224,
-    9,
-    5,
-    "4 days"
-  ],
-
-  [
-    "Service Recovery Essentials",
-    118,
-    91,
-    19,
-    8,
-    "6 days"
-  ],
-
-  [
-    "Product Knowledge",
-    238,
-    230,
-    4,
-    4,
-    "3 days"
-  ]
-
-].map(
-  (
-    [
-      training,
-      assigned,
-      completed,
-      inProgress,
-      overdue,
-      avgAging
-    ]
-  ) => ({
-    training,
-    assigned,
-    completed,
-    inProgress,
-    overdue,
-    avgAging
-  })
-);
-
+  ["SHARE Customer Experience", 238, 224, 9, 5, "4 days"],
+  ["Service Recovery Essentials", 118, 91, 19, 8, "6 days"],
+  ["Product Knowledge", 238, 230, 4, 4, "3 days"]
+].map(([training, assigned, completed, inProgress, overdue, avgAging]) => ({
+  training,
+  assigned,
+  completed,
+  inProgress,
+  overdue,
+  avgAging
+}));
 
 /* =========================================================
    COMMUNICATIONS / HUB
 ========================================================= */
 
 const communicationsFeed = [
-
-  [
-    "SHARE Member Week",
-    "Announcement",
-    "13 Oct 2026",
-    "221 / 238",
-    198,
-    74,
-    18
-  ],
-
-  [
-    "New Service Recovery Guide",
-    "Knowledge Update",
-    "09 Oct 2026",
-    "238 / 238",
-    215,
-    61,
-    11
-  ]
-
-].map(
-  (
-    [
-      title,
-      type,
-      date,
-      reach,
-      views,
-      likes,
-      comments
-    ]
-  ) => ({
-    title,
-    type,
-    date,
-    reach,
-    views,
-    likes,
-    comments
-  })
-);
-
+  ["SHARE Member Week", "Announcement", "13 Oct 2026", "221 / 238", 198, 74, 18],
+  ["New Service Recovery Guide", "Knowledge Update", "09 Oct 2026", "238 / 238", 215, 61, 11]
+].map(([title, type, date, reach, views, likes, comments]) => ({
+  title,
+  type,
+  date,
+  reach,
+  views,
+  likes,
+  comments
+}));
 
 const ambassadorHubSubmissions = [
-
-  [
-    "Feedback",
-    18,
-    4,
-    "Alida"
-  ],
-
-  [
-    "Suggestion",
-    24,
-    7,
-    "Alida"
-  ],
-
-  [
-    "In-Store Training",
-    13,
-    2,
-    "Alida"
-  ],
-
-  [
-    "SHARE Walls",
-    9,
-    1,
-    "Alida"
-  ]
-
-].map(
-  (
-    [
-      type,
-      submissions,
-      open,
-      integration
-    ]
-  ) => ({
-    type,
-    submissions,
-    open,
-    integration
-  })
-);
-
+  ["Feedback", 18, 4, "Alida"],
+  ["Suggestion", 24, 7, "Alida"],
+  ["In-Store Training", 13, 2, "Alida"],
+  ["SHARE Walls", 9, 1, "Alida"]
+].map(([type, submissions, open, integration]) => ({
+  type,
+  submissions,
+  open,
+  integration
+}));
 
 /* =========================================================
    SERVICE PULSE
 ========================================================= */
 
 const servicePulseRows = [
-
-  [
-    "Mall of the Emirates",
-    "Entertainment",
-    "VOX Cinemas",
-    "91%",
-    "On Track"
-  ],
-
-  [
-    "City Centre Mirdif",
-    "Entertainment",
-    "VOX Cinemas",
-    "82%",
-    "Opportunity to Strengthen"
-  ],
-
-  [
-    "City Centre Deira",
-    "Entertainment",
-    "VOX Cinemas",
-    "71%",
-    "Needs Attention"
-  ],
-
-  [
-    "City Centre Al Zahia",
-    "Entertainment",
-    "VOX Cinemas",
-    "88%",
-    "Opportunity to Strengthen"
-  ]
-
+  ["Mall of the Emirates", "Entertainment", "VOX Cinemas", "91%", "On Track"],
+  ["City Centre Mirdif", "Entertainment", "VOX Cinemas", "82%", "Opportunity to Strengthen"],
+  ["City Centre Deira", "Entertainment", "VOX Cinemas", "71%", "Needs Attention"],
+  ["City Centre Al Zahia", "Entertainment", "VOX Cinemas", "88%", "Opportunity to Strengthen"]
 ];
-
 
 /* =========================================================
    NAVIGATION
 ========================================================= */
 
 const navigation = {
-
   ambassador: [
-
-    {
-      title: "",
-      items: [
-        ["home", "Home"]
-      ]
-    },
-
-    {
-      title: "Performance",
-      items: [
-        ["performance", "My Performance"]
-      ]
-    },
-
+    { title: "", items: [["home", "Home"]] },
+    { title: "Performance", items: [["performance", "My Performance"]] },
     {
       title: "Training & Knowledge",
       items: [
@@ -845,26 +395,11 @@ const navigation = {
         ["knowledge", "Knowledge Base"]
       ]
     },
-
-    {
-      title: "Ambassador",
-      items: [
-        ["status", "My Status"]
-      ]
-    }
-
+    { title: "Ambassador", items: [["status", "My Status"]] }
   ],
 
-
   manager: [
-
-    {
-      title: "",
-      items: [
-        ["home", "Home"]
-      ]
-    },
-
+    { title: "", items: [["home", "Home"]] },
     {
       title: "Performance",
       items: [
@@ -872,7 +407,6 @@ const navigation = {
         ["team-attention", "Requires Attention"]
       ]
     },
-
     {
       title: "Training & Knowledge",
       items: [
@@ -881,7 +415,6 @@ const navigation = {
         ["manager-knowledge", "Knowledge Base"]
       ]
     },
-
     {
       title: "Ambassador Program",
       items: [
@@ -892,19 +425,10 @@ const navigation = {
         ["manager-hub", "Ambassador Hub"]
       ]
     }
-
   ],
 
-
   service: [
-
-    {
-      title: "",
-      items: [
-        ["home", "Home"]
-      ]
-    },
-
+    { title: "", items: [["home", "Home"]] },
     {
       title: "Service Delivery",
       items: [
@@ -915,7 +439,6 @@ const navigation = {
         ["group-actions", "Actions"]
       ]
     },
-
     {
       title: "Training & Knowledge",
       items: [
@@ -924,7 +447,6 @@ const navigation = {
         ["group-knowledge", "Knowledge Base"]
       ]
     },
-
     {
       title: "Ambassador Program",
       items: [
@@ -936,19 +458,10 @@ const navigation = {
         ["group-recognition", "Recognition / Leaderboard"]
       ]
     }
-
   ],
 
-
   admin: [
-
-    {
-      title: "",
-      items: [
-        ["home", "Platform Overview"]
-      ]
-    },
-
+    { title: "", items: [["home", "Platform Overview"]] },
     {
       title: "Identity & Access",
       items: [
@@ -957,7 +470,6 @@ const navigation = {
         ["identity", "Identity Providers"]
       ]
     },
-
     {
       title: "AI Platform",
       items: [
@@ -966,7 +478,6 @@ const navigation = {
         ["knowledge-sources", "Knowledge Sources"]
       ]
     },
-
     {
       title: "Platform",
       items: [
@@ -976,216 +487,124 @@ const navigation = {
         ["audit-log", "Audit Log"]
       ]
     }
-
   ]
-
 };
-
 
 /* =========================================================
    AUTH
 ========================================================= */
 
-function setLoginMessage(
-  message,
-  type = "error"
-) {
-
-  const node =
-    document.getElementById(
-      "login-error"
-    );
-
+function setLoginMessage(message, type = "error") {
+  const node = document.getElementById("login-error");
   if (!node) return;
 
-  node.textContent =
-    message;
-
-  node.className =
-    `login-error ${type}`;
-
+  node.textContent = message;
+  node.className = `login-error ${type}`;
 }
-
 
 function signIn() {
+  const login = document
+    .getElementById("login-id")
+    .value
+    .trim()
+    .toLowerCase();
 
-  const login =
-    document
-      .getElementById("login-id")
-      .value
-      .trim()
-      .toLowerCase();
+  const password = document.getElementById("login-password").value;
 
-  const password =
-    document
-      .getElementById("login-password")
-      .value;
+  const matchedRole = Object.keys(prototypeUsers).find(role => {
+    const user = prototypeUsers[role];
 
-
-  const matchedRole =
-    Object
-      .keys(prototypeUsers)
-      .find(
-        role => {
-
-          const user =
-            prototypeUsers[
-              role
-            ];
-
-          return (
-            user.login.toLowerCase() === login &&
-            user.password === password
-          );
-
-        }
-      );
-
+    return (
+      user.login.toLowerCase() === login &&
+      user.password === password
+    );
+  });
 
   if (!matchedRole) {
-
-    setLoginMessage(
-      "The email / Staff ID or password is incorrect."
-    );
-
+    setLoginMessage("The email / Staff ID or password is incorrect.");
     return;
-
   }
 
-
-  loginAsRole(
-    matchedRole
-  );
-
+  loginAsRole(matchedRole);
 }
 
-
 function continueWithSSO() {
-
-  const login =
-    document
-      .getElementById("login-id")
-      .value
-      .trim()
-      .toLowerCase();
-
+  const login = document
+    .getElementById("login-id")
+    .value
+    .trim()
+    .toLowerCase();
 
   if (!login) {
-
     setLoginMessage(
       "Enter your corporate email first to continue with Microsoft SSO.",
       "info"
     );
-
     return;
-
   }
 
+  const matchedRole = Object.keys(prototypeUsers).find(role => {
+    const user = prototypeUsers[role];
 
-  const matchedRole =
-    Object
-      .keys(prototypeUsers)
-      .find(
-        role => {
-
-          const user =
-            prototypeUsers[
-              role
-            ];
-
-          return (
-            user.identityType === "Microsoft Entra ID" &&
-            user.login.toLowerCase() === login
-          );
-
-        }
-      );
-
+    return (
+      user.identityType === "Microsoft Entra ID" &&
+      user.login.toLowerCase() === login
+    );
+  });
 
   if (!matchedRole) {
-
     setLoginMessage(
       "Microsoft SSO is available for the corporate prototype accounts. Ambassador access is demonstrated using Staff ID.",
       "info"
     );
-
     return;
-
   }
 
-
-  loginAsRole(
-    matchedRole
-  );
-
+  loginAsRole(matchedRole);
 }
 
+function loginAsRole(role) {
+  currentRole = role;
+  currentPage = "home";
+  expandedInteractionId = null;
 
-function loginAsRole(
-  role
-) {
-
-  currentRole =
-    role;
-
-  currentPage =
-    "home";
-
-  expandedInteractionId =
-    null;
-
-  selectedTrainingId =
-    null;
-
-  navigateTo(
-    "home"
-  );
-
+  navigateTo("home");
 }
-
 
 function signOut() {
-
   location.reload();
-
 }
 
-
 /* =========================================================
-   SHELL
+   SHELL + MOBILE NAVIGATION
 ========================================================= */
 
 function topBar() {
-
-  const user =
-    prototypeUsers[
-      currentRole
-    ];
-
+  const user = prototypeUsers[currentRole];
 
   return `
     <header class="topbar">
 
       <div class="topbar-left">
 
+        <button
+          class="mobile-menu-button"
+          onclick="toggleMobileNav()"
+          aria-label="Open navigation"
+        >
+          ☰
+        </button>
+
         <div class="topbar-logo">
           SL
         </div>
 
         <div class="topbar-brand">
-
-          <strong>
-            SHARE Lens
-          </strong>
-
-          <span>
-            See. Understand. Act.
-          </span>
-
+          <strong>SHARE Lens</strong>
+          <span>See. Understand. Act.</span>
         </div>
 
       </div>
-
 
       <div class="user-header">
 
@@ -1198,15 +617,8 @@ function topBar() {
         </div>
 
         <div class="user-details">
-
-          <strong>
-            ${user.name}
-          </strong>
-
-          <span>
-            ${user.role}
-          </span>
-
+          <strong>${user.name}</strong>
+          <span>${user.role}</span>
         </div>
 
         <button
@@ -1220,72 +632,68 @@ function topBar() {
 
     </header>
   `;
-
 }
 
-
 function sidebar() {
-
-  const groups =
-    navigation[
-      currentRole
-    ];
-
+  const groups = navigation[currentRole];
 
   return `
-    <aside class="sidebar">
+    <aside
+      id="sidebar"
+      class="sidebar"
+    >
 
-      ${groups.map(
-        group => `
+      <div class="mobile-sidebar-header">
 
-          ${
-            group.title
-              ? `
-                <div class="sidebar-title">
-                  ${group.title}
-                </div>
-              `
-              : ""
-          }
+        <div>
+          <strong>SHARE Lens</strong>
+          <span>${prototypeUsers[currentRole].role}</span>
+        </div>
 
-          ${group.items.map(
-            item => `
+        <button onclick="closeMobileNav()">
+          ×
+        </button>
 
-              <div
-                class="nav-item ${
-                  currentPage === item[0]
-                    ? "active"
-                    : ""
-                }"
-                onclick="navigateTo('${item[0]}')"
-              >
-                ${item[1]}
-              </div>
+      </div>
 
-            `
-          ).join("")}
+      ${groups.map(group => `
+        ${
+          group.title
+            ? `<div class="sidebar-title">${group.title}</div>`
+            : ""
+        }
 
-        `
-      ).join("")}
+        ${group.items.map(item => `
+          <div
+            class="nav-item ${currentPage === item[0] ? "active" : ""}"
+            onclick="navigateTo('${item[0]}')"
+          >
+            ${item[1]}
+          </div>
+        `).join("")}
+      `).join("")}
 
     </aside>
   `;
-
 }
 
-
-function renderShell(
-  content
-) {
-
+function renderShell(content) {
   app.innerHTML = `
-    <div class="workspace">
+    <div
+      id="workspace"
+      class="workspace"
+    >
 
       ${topBar()}
 
       <div class="workspace-body">
 
         ${sidebar()}
+
+        <div
+          class="mobile-nav-overlay"
+          onclick="closeMobileNav()"
+        ></div>
 
         <main class="content">
           ${content}
@@ -1295,21 +703,27 @@ function renderShell(
 
     </div>
   `;
-
 }
 
+function toggleMobileNav() {
+  const workspace = document.getElementById("workspace");
+  if (!workspace) return;
+
+  workspace.classList.toggle("mobile-nav-open");
+}
+
+function closeMobileNav() {
+  const workspace = document.getElementById("workspace");
+  if (!workspace) return;
+
+  workspace.classList.remove("mobile-nav-open");
+}
 
 /* =========================================================
    COMMON UI
 ========================================================= */
 
-function pageTitle(
-  label,
-  title,
-  subtitle,
-  right = ""
-) {
-
+function pageTitle(label, title, subtitle, right = "") {
   return `
     <div class="page-heading page-heading-row">
 
@@ -1333,40 +747,52 @@ function pageTitle(
 
     </div>
   `;
-
 }
 
-
-function infoIcon(
-  text
-) {
-
-  const clean =
-    text.replace(
-      /"/g,
-      "&quot;"
-    );
-
+function infoIcon(text) {
   return `
-    <button
-      class="info-icon"
-      title="${clean}"
-      aria-label="${clean}"
-    >
-      i
-    </button>
-  `;
+    <span class="info-wrap">
 
+      <button
+        class="info-icon"
+        onclick="toggleInfo(event)"
+        aria-label="View definition"
+      >
+        i
+      </button>
+
+      <span class="metric-popover">
+        ${text}
+      </span>
+
+    </span>
+  `;
 }
 
+function toggleInfo(event) {
+  event.stopPropagation();
 
-function metricCard(
-  title,
-  value,
-  detail,
-  definition = ""
-) {
+  const wrap = event.currentTarget.closest(".info-wrap");
+  if (!wrap) return;
 
+  document.querySelectorAll(".info-wrap.open").forEach(item => {
+    if (item !== wrap) {
+      item.classList.remove("open");
+    }
+  });
+
+  wrap.classList.toggle("open");
+}
+
+document.addEventListener("click", event => {
+  if (!event.target.closest(".info-wrap")) {
+    document.querySelectorAll(".info-wrap.open").forEach(item => {
+      item.classList.remove("open");
+    });
+  }
+});
+
+function metricCard(title, value, detail, definition = "") {
   return `
     <section class="dashboard-card metric-card">
 
@@ -1378,9 +804,7 @@ function metricCard(
 
         ${
           definition
-            ? infoIcon(
-                definition
-              )
+            ? infoIcon(definition)
             : ""
         }
 
@@ -1396,42 +820,126 @@ function metricCard(
 
     </section>
   `;
-
 }
 
+function profileLine(label, value) {
+  return `
+    <div class="profile-line">
+
+      <span>
+        ${label}
+      </span>
+
+      <strong>
+        ${value}
+      </strong>
+
+    </div>
+  `;
+}
+
+function showToast(message) {
+  let toast = document.getElementById("prototype-toast");
+
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "prototype-toast";
+    toast.className = "prototype-toast";
+    document.body.appendChild(toast);
+  }
+
+  toast.textContent = message;
+  toast.classList.add("visible");
+
+  setTimeout(() => {
+    toast.classList.remove("visible");
+  }, 2500);
+}
 
 /* =========================================================
    AMBASSADOR HOME
 ========================================================= */
 
+function compactJourney() {
+  return `
+    <div class="compact-journey">
+
+      <div class="compact-journey-heading">
+        <span>Ambassador Journey</span>
+        <strong>Complete</strong>
+      </div>
+
+      <div class="compact-journey-track">
+
+        ${compactJourneyStep("Onboarded")}
+        ${compactJourneyLine()}
+        ${compactJourneyStep("Mandatory Training")}
+        ${compactJourneyLine()}
+        ${compactJourneyStep("Knowledge Check")}
+        ${compactJourneyLine()}
+        ${compactJourneyStep("Personal QR Code")}
+
+      </div>
+
+    </div>
+  `;
+}
+
+function compactJourneyStep(label) {
+  return `
+    <div class="compact-journey-step">
+
+      <span class="compact-journey-check">
+        ✓
+      </span>
+
+      <span class="compact-journey-label">
+        ${label}
+      </span>
+
+    </div>
+  `;
+}
+
+function compactJourneyLine() {
+  return `
+    <div class="compact-journey-line"></div>
+  `;
+}
+
 function ambassadorHome() {
+  const user = prototypeUsers.ambassador;
 
-  const user =
-    prototypeUsers.ambassador;
-
-  const achievement =
-    Math.round(
-      (
-        user.shareMembersOnboarded /
-        user.shareMemberTarget
-      ) * 100
-    );
+  const achievement = Math.round(
+    (user.shareMembersOnboarded / user.shareMemberTarget) * 100
+  );
 
   const remaining =
     user.shareMemberTarget -
     user.shareMembersOnboarded;
 
-
   return `
-    ${pageTitle(
-      "MY SHARE",
-      "Good morning, Layla",
-      "Your Ambassador progress."
-    )}
+    <div class="ambassador-home-header">
 
+      <div class="ambassador-home-title">
 
-    ${ambassadorProgress()}
+        <span class="section-label">
+          MY SHARE
+        </span>
 
+        <h1>
+          Good morning, Layla
+        </h1>
+
+        <p>
+          Your Ambassador progress.
+        </p>
+
+      </div>
+
+      ${compactJourney()}
+
+    </div>
 
     <div class="home-kpi-grid">
 
@@ -1468,7 +976,6 @@ function ambassadorHome() {
 
     </div>
 
-
     <div class="dashboard-grid two">
 
       <section class="dashboard-card">
@@ -1480,7 +987,6 @@ function ambassadorHome() {
         <h3>
           What to review
         </h3>
-
 
         <div
           class="home-action-card attention"
@@ -1505,10 +1011,9 @@ function ambassadorHome() {
 
         </div>
 
-
         <div
           class="home-action-card"
-          onclick="openTrainingTarget('refund')"
+          onclick="navigateTo('training')"
         >
 
           <div>
@@ -1530,7 +1035,6 @@ function ambassadorHome() {
         </div>
 
       </section>
-
 
       <section class="dashboard-card">
 
@@ -1573,18 +1077,9 @@ function ambassadorHome() {
 
     </div>
   `;
-
 }
 
-
-function homeMetricCard(
-  title,
-  value,
-  detail,
-  target,
-  definition
-) {
-
+function homeMetricCard(title, value, detail, target, definition) {
   return `
     <section
       class="dashboard-card home-metric-card"
@@ -1597,9 +1092,7 @@ function homeMetricCard(
           ${title}
         </span>
 
-        ${infoIcon(
-          definition
-        )}
+        ${infoIcon(definition)}
 
       </div>
 
@@ -1621,17 +1114,9 @@ function homeMetricCard(
 
     </section>
   `;
-
 }
 
-
-function homeAcquisitionCard(
-  onboarded,
-  target,
-  achievement,
-  remaining
-) {
-
+function homeAcquisitionCard(onboarded, target, achievement, remaining) {
   return `
     <section
       class="dashboard-card home-metric-card acquisition-home-card"
@@ -1646,9 +1131,7 @@ function homeAcquisitionCard(
             SHARE Acquisition
           </span>
 
-          ${infoIcon(
-            metricDefinitions.acquisition
-          )}
+          ${infoIcon(metricDefinitions.acquisition)}
 
         </div>
 
@@ -1658,19 +1141,19 @@ function homeAcquisitionCard(
 
       </div>
 
-
       <strong class="home-acquisition-value">
+
         ${onboarded}
 
         <span>
           / ${target}
         </span>
+
       </strong>
 
       <div class="home-acquisition-caption">
         Members onboarded
       </div>
-
 
       <div class="mini-progress-track">
 
@@ -1680,7 +1163,6 @@ function homeAcquisitionCard(
         ></div>
 
       </div>
-
 
       <div class="home-acquisition-footer">
 
@@ -1696,105 +1178,7 @@ function homeAcquisitionCard(
 
     </section>
   `;
-
 }
-
-
-/* =========================================================
-   AMBASSADOR JOURNEY
-========================================================= */
-
-function ambassadorProgress() {
-
-  return `
-    <section class="ambassador-progress-card">
-
-      <div class="progress-card-heading">
-
-        <div>
-
-          <span class="section-label">
-            AMBASSADOR PROGRESS
-          </span>
-
-          <h2>
-            Ambassador journey complete
-          </h2>
-
-          <p>
-            You have completed the core steps to become an active Ambassador.
-          </p>
-
-        </div>
-
-        <div class="active-ambassador-pill">
-          ✓ Active Ambassador
-        </div>
-
-      </div>
-
-
-      <div class="journey-step-track">
-
-        ${journeyStep(
-          "Onboarded"
-        )}
-
-        ${journeyConnector()}
-
-        ${journeyStep(
-          "Mandatory Training"
-        )}
-
-        ${journeyConnector()}
-
-        ${journeyStep(
-          "Knowledge Check"
-        )}
-
-        ${journeyConnector()}
-
-        ${journeyStep(
-          "Personal QR Code"
-        )}
-
-      </div>
-
-    </section>
-  `;
-
-}
-
-
-function journeyStep(
-  label
-) {
-
-  return `
-    <div class="journey-step completed">
-
-      <div class="journey-step-icon">
-        ✓
-      </div>
-
-      <span>
-        ${label}
-      </span>
-
-    </div>
-  `;
-
-}
-
-
-function journeyConnector() {
-
-  return `
-    <div class="journey-step-connector complete"></div>
-  `;
-
-}
-
 
 /* =========================================================
    AMBASSADOR PERFORMANCE
@@ -1807,7 +1191,6 @@ function performanceMetricCard(
   detail,
   definition
 ) {
-
   return `
     <section class="dashboard-card performance-metric-card">
 
@@ -1823,9 +1206,7 @@ function performanceMetricCard(
             ${category}
           </small>
 
-          ${infoIcon(
-            definition
-          )}
+          ${infoIcon(definition)}
 
         </div>
 
@@ -1841,12 +1222,9 @@ function performanceMetricCard(
 
     </section>
   `;
-
 }
 
-
 function periodControls() {
-
   return `
     <div class="interaction-period-controls">
 
@@ -1873,12 +1251,9 @@ function periodControls() {
 
     </div>
   `;
-
 }
 
-
 function ambassadorPerformance() {
-
   return `
     ${pageTitle(
       "PERFORMANCE",
@@ -1886,14 +1261,13 @@ function ambassadorPerformance() {
       "Understand your performance, what is driving it and what to do next."
     )}
 
-
-    <div class="dashboard-grid four performance-diagnostics performance-cards-top">
+    <div class="dashboard-grid four performance-cards-top">
 
       ${performanceMetricCard(
         "Performance Score",
         "86%",
         "Overall",
-        "Consolidated result for the selected period.",
+        `Calculated across ${performanceSummary.assessedInteractions} assessed interactions in the selected period.`,
         metricDefinitions.performance
       )}
 
@@ -1923,7 +1297,6 @@ function ambassadorPerformance() {
 
     </div>
 
-
     <section class="overall-ai-strip">
 
       <div class="overall-ai-copy">
@@ -1937,11 +1310,11 @@ function ambassadorPerformance() {
         </h2>
 
         <p>
-          ${metricDefinitions.performance}
+          Based on all ${performanceSummary.assessedInteractions} assessed interactions in the selected period.
+          Run Analyse Overall to understand what is driving your score and identify recurring themes.
         </p>
 
       </div>
-
 
       <button
         class="analyse-overall-button"
@@ -1959,7 +1332,7 @@ function ambassadorPerformance() {
           </strong>
 
           <small>
-            Find recurring themes across assessed interactions
+            Find patterns across all assessed interactions
           </small>
 
         </div>
@@ -1968,14 +1341,10 @@ function ambassadorPerformance() {
 
     </section>
 
-
     <div
       id="ambassador-overall-output"
-      class="agent-output compact-output empty-state"
-    >
-      Run Analyse Overall to understand what is driving your score.
-    </div>
-
+      class="agent-output compact-output hidden-output"
+    ></div>
 
     <section class="dashboard-card performance-table-card">
 
@@ -1992,7 +1361,10 @@ function ambassadorPerformance() {
           </h3>
 
           <p>
-            Recent assessed interactions. The overall score is based on all assessed interactions in the selected period.
+            Showing ${performanceSummary.visibleInteractions} most recent of
+            ${performanceSummary.assessedInteractions} assessed interactions.
+            The 86% Overall Performance Score is calculated across all
+            ${performanceSummary.assessedInteractions}, not only the three shown below.
           </p>
 
         </div>
@@ -2001,61 +1373,28 @@ function ambassadorPerformance() {
 
       </div>
 
-
       <div class="interaction-header">
 
-        <span>
-          Interaction
-        </span>
-
-        <span>
-          Channel / Duration
-        </span>
-
-        <span>
-          Process / Theme
-        </span>
-
-        <span>
-          Score
-        </span>
-
-        <span>
-          Status
-        </span>
-
-        <span>
-          Action
-        </span>
+        <span>Interaction</span>
+        <span>Channel / Duration</span>
+        <span>Process / Theme</span>
+        <span>Score</span>
+        <span>Status</span>
+        <span>Action</span>
 
       </div>
 
-
-      ${interactions
-        .map(
-          interactionBlock
-        )
-        .join("")}
+      ${interactions.map(interactionBlock).join("")}
 
     </section>
   `;
-
 }
 
-
-function interactionBlock(
-  interaction
-) {
-
-  const status =
-    getInteractionStatus(
-      interaction.score
-    );
+function interactionBlock(interaction) {
+  const status = getInteractionStatus(interaction.score);
 
   const isExpanded =
-    expandedInteractionId ===
-    interaction.id;
-
+    expandedInteractionId === interaction.id;
 
   const action =
     interaction.score >= 90
@@ -2064,11 +1403,7 @@ function interactionBlock(
           class="details-button"
           onclick="toggleInteractionDetails('${interaction.id}')"
         >
-          ${
-            isExpanded
-              ? "Collapse Details"
-              : "View Details"
-          }
+          ${isExpanded ? "Collapse Details" : "View Details"}
         </button>
       `
       : `
@@ -2076,194 +1411,100 @@ function interactionBlock(
           class="analyse-button compact"
           onclick="analyseInlineInteraction('${interaction.id}')"
         >
-
-          <span>
-            ✦
-          </span>
-
-          ${
-            isExpanded
-              ? "Collapse Analysis"
-              : "Analyse Interaction"
-          }
-
+          <span>✦</span>
+          ${isExpanded ? "Collapse Analysis" : "Analyse Interaction"}
         </button>
       `;
-
 
   return `
     <div class="interaction-block">
 
       <div class="interaction-row">
 
-        <div>
-
-          <strong>
-            ${interaction.id}
-          </strong>
-
-          <span>
-            ${interaction.date}
-          </span>
-
+        <div data-label="Interaction">
+          <strong>${interaction.id}</strong>
+          <span>${interaction.date}</span>
         </div>
 
-
-        <div>
-
-          <strong>
-            ${interaction.channel}
-          </strong>
-
-          <span>
-            ${interaction.duration}
-          </span>
-
+        <div data-label="Channel / Duration">
+          <strong>${interaction.channel}</strong>
+          <span>${interaction.duration}</span>
         </div>
 
-
-        <div>
-
-          <strong>
-            ${interaction.process}
-          </strong>
-
-          <span>
-            Customer interaction
-          </span>
-
+        <div data-label="Process / Theme">
+          <strong>${interaction.process}</strong>
+          <span>Customer interaction</span>
         </div>
 
-
-        <div class="interaction-score ${
-          interaction.score < 50
-            ? "low"
-            : ""
-        }">
+        <div
+          data-label="Score"
+          class="interaction-score ${interaction.score < 50 ? "low" : ""}"
+        >
           ${interaction.score}%
         </div>
 
-
-        <div>
-
+        <div data-label="Status">
           <span class="status-block ${status.className}">
             ${status.icon} ${status.label}
           </span>
-
         </div>
 
-
-        <div>
+        <div data-label="Action">
           ${action}
         </div>
 
       </div>
 
-
       <div
         id="interaction-expand-${interaction.id}"
-        class="interaction-expand ${
-          isExpanded
-            ? "open"
-            : ""
-        }"
+        class="interaction-expand ${isExpanded ? "open" : ""}"
       >
-
         ${
           isExpanded
-            ? renderExpandedInteraction(
-                interaction
-              )
+            ? renderExpandedInteraction(interaction)
             : ""
         }
-
       </div>
 
     </div>
   `;
-
 }
 
-
-function getInteractionStatus(
-  score
-) {
-
-  if (
-    score >= 90
-  ) {
-
+function getInteractionStatus(score) {
+  if (score >= 90) {
     return {
-      label:
-        "Good Interaction",
-
-      className:
-        "good",
-
-      icon:
-        "✓"
+      label: "Good Interaction",
+      className: "good",
+      icon: "✓"
     };
-
   }
 
-
-  if (
-    score >= 50
-  ) {
-
+  if (score >= 50) {
     return {
-      label:
-        "Opportunity to Strengthen",
-
-      className:
-        "strengthen",
-
-      icon:
-        "↗"
+      label: "Opportunity to Strengthen",
+      className: "strengthen",
+      icon: "↗"
     };
-
   }
-
 
   return {
-    label:
-      "Needs Attention",
-
-    className:
-      "attention",
-
-    icon:
-      "!"
+    label: "Needs Attention",
+    className: "attention",
+    icon: "!"
   };
-
 }
 
-
-function toggleInteractionDetails(
-  interactionId
-) {
-
+function toggleInteractionDetails(interactionId) {
   expandedInteractionId =
-    expandedInteractionId ===
-    interactionId
+    expandedInteractionId === interactionId
       ? null
       : interactionId;
 
-  navigateTo(
-    "performance"
-  );
-
+  navigateTo("performance");
 }
 
-
-function renderExpandedInteraction(
-  interaction
-) {
-
-  if (
-    interaction.score >= 90
-  ) {
-
+function renderExpandedInteraction(interaction) {
+  if (interaction.score >= 90) {
     return `
       <div class="good-interaction-detail">
 
@@ -2289,9 +1530,7 @@ function renderExpandedInteraction(
 
       </div>
     `;
-
   }
-
 
   return `
     <div
@@ -2317,7 +1556,6 @@ function renderExpandedInteraction(
 
         </div>
 
-
         <button
           class="start-analysis-button"
           onclick="startInlineAnalysis('${interaction.id}')"
@@ -2329,156 +1567,80 @@ function renderExpandedInteraction(
 
     </div>
   `;
-
 }
 
-
-function analyseInlineInteraction(
-  interactionId
-) {
-
-  if (
-    expandedInteractionId ===
-    interactionId
-  ) {
-
-    expandedInteractionId =
-      null;
-
-    navigateTo(
-      "performance"
-    );
-
+function analyseInlineInteraction(interactionId) {
+  if (expandedInteractionId === interactionId) {
+    expandedInteractionId = null;
+    navigateTo("performance");
     return;
-
   }
 
+  expandedInteractionId = interactionId;
 
-  expandedInteractionId =
-    interactionId;
+  navigateTo("performance");
 
-  navigateTo(
-    "performance"
-  );
-
-
-  setTimeout(
-    () => {
-
-      startInlineAnalysis(
-        interactionId
-      );
-
-    },
-    100
-  );
-
+  setTimeout(() => {
+    startInlineAnalysis(interactionId);
+  }, 100);
 }
 
-
-function startInlineAnalysis(
-  interactionId
-) {
-
-  const interaction =
-    interactions.find(
-      item =>
-        item.id === interactionId
-    );
+function startInlineAnalysis(interactionId) {
+  const interaction = interactions.find(
+    item => item.id === interactionId
+  );
 
   if (!interaction) return;
 
-
   runAnimation({
+    outputId: `inline-analysis-${interaction.id}`,
 
-    outputId:
-      `inline-analysis-${interaction.id}`,
-
-    title:
-      `Analysing ${interaction.id}`,
+    title: `Analysing ${interaction.id}`,
 
     steps: [
-
       {
-        id:
-          `evaluation-${interaction.id}`,
-
-        title:
-          "Evaluation Agent",
-
+        id: `evaluation-${interaction.id}`,
+        title: "Evaluation Agent",
         message:
           "Reviewing service quality and customer handling."
       },
-
       {
-        id:
-          `sop-${interaction.id}`,
-
-        title:
-          "SOP Agent",
-
+        id: `sop-${interaction.id}`,
+        title: "SOP Agent",
         message:
           "Checking required process steps."
       },
-
       {
-        id:
-          `compliance-${interaction.id}`,
-
-        title:
-          "Compliance Agent",
-
+        id: `compliance-${interaction.id}`,
+        title: "Compliance Agent",
         message:
           "Checking mandatory controls and compliance."
       },
-
       {
-        id:
-          `combined-${interaction.id}`,
-
-        title:
-          "Combined Analysis",
-
+        id: `combined-${interaction.id}`,
+        title: "Combined Analysis",
         message:
           "Combining findings and identifying the next best action."
       }
-
     ],
 
-    onComplete:
-      () => {
-
-        showInlineAnalysisResult(
-          interaction
-        );
-
-      }
-
+    onComplete: () => {
+      showInlineAnalysisResult(interaction);
+    }
   });
-
 }
 
-
-function showInlineAnalysisResult(
-  interaction
-) {
-
-  const output =
-    document.getElementById(
-      `inline-analysis-${interaction.id}`
-    );
+function showInlineAnalysisResult(interaction) {
+  const output = document.getElementById(
+    `inline-analysis-${interaction.id}`
+  );
 
   if (!output) return;
 
-
-  const analysis =
-    analyseInteraction(
-      interaction
-    );
+  const analysis = analyseInteraction(interaction);
 
   const urgent =
     interaction.score < 50;
-
 
   output.innerHTML = `
     <div class="inline-analysis-result">
@@ -2505,23 +1667,15 @@ function showInlineAnalysisResult(
 
         </div>
 
-
-        <span class="status-block ${
-          urgent
-            ? "attention"
-            : "strengthen"
-        }">
-
+        <span class="status-block ${urgent ? "attention" : "strengthen"}">
           ${
             urgent
               ? "! Needs Attention"
               : "↗ Opportunity to Strengthen"
           }
-
         </span>
 
       </div>
-
 
       <div class="inline-analysis-grid">
 
@@ -2541,7 +1695,6 @@ function showInlineAnalysisResult(
 
         </section>
 
-
         <section class="analysis-callout warning">
 
           <span class="section-label">
@@ -2559,7 +1712,6 @@ function showInlineAnalysisResult(
         </section>
 
       </div>
-
 
       <div class="analysis-score-row">
 
@@ -2583,7 +1735,6 @@ function showInlineAnalysisResult(
 
       </div>
 
-
       <div class="recommended-development">
 
         <div class="recommendation-icon">
@@ -2601,14 +1752,12 @@ function showInlineAnalysisResult(
           </h3>
 
           <p>
-            Triggered by ${interaction.id}. Complete the refresher, then the ${interaction.knowledgeTarget}.
+            Triggered by ${interaction.id}. Complete the 15 min refresher and then the 5 min ${interaction.knowledgeTarget}.
           </p>
 
         </div>
 
-        <button
-          onclick="openTrainingTarget('${interaction.trainingTarget}')"
-        >
+        <button onclick="navigateTo('training')">
           Go to Training
         </button>
 
@@ -2616,100 +1765,66 @@ function showInlineAnalysisResult(
 
     </div>
   `;
-
 }
 
-
-/* =========================================================
-   AMBASSADOR OVERALL AI ANALYSIS
-========================================================= */
-
 function runAmbassadorOverallAnalysis() {
+  const output = document.getElementById(
+    "ambassador-overall-output"
+  );
+
+  if (output) {
+    output.classList.remove("hidden-output");
+  }
 
   runAnimation({
+    outputId: "ambassador-overall-output",
 
-    outputId:
-      "ambassador-overall-output",
-
-    title:
-      "Analysing overall performance",
+    title: "Analysing overall performance",
 
     steps: [
-
       {
-        id:
-          "amb-performance",
-
-        title:
-          "Evaluation Agent",
-
+        id: "amb-performance",
+        title: "Evaluation Agent",
         message:
-          "Reviewing assessed interactions across the selected period."
+          `Reviewing ${performanceSummary.assessedInteractions} assessed interactions across the selected period.`
       },
-
       {
-        id:
-          "amb-sop",
-
-        title:
-          "SOP Agent",
-
+        id: "amb-sop",
+        title: "SOP Agent",
         message:
           "Looking for repeated SOP adherence patterns."
       },
-
       {
-        id:
-          "amb-compliance",
-
-        title:
-          "Compliance Agent",
-
+        id: "amb-compliance",
+        title: "Compliance Agent",
         message:
           "Checking recurring compliance findings."
       },
-
       {
-        id:
-          "amb-theme",
-
-        title:
-          "Pattern Agent",
-
+        id: "amb-theme",
+        title: "Pattern Agent",
         message:
           "Linking themes back to interaction evidence."
       },
-
       {
-        id:
-          "amb-combined",
-
-        title:
-          "Combined Analysis",
-
+        id: "amb-combined",
+        title: "Combined Analysis",
         message:
           "Preparing the overall performance summary and next action."
       }
-
     ],
 
     onComplete:
       showAmbassadorOverallResult
-
   });
-
 }
 
-
 function showAmbassadorOverallResult() {
-
-  const output =
-    document.getElementById(
-      "ambassador-overall-output"
-    );
+  const output = document.getElementById(
+    "ambassador-overall-output"
+  );
 
   if (!output) return;
-
 
   output.innerHTML = `
     <div class="overall-analysis-result">
@@ -2727,7 +1842,8 @@ function showAmbassadorOverallResult() {
           </h2>
 
           <p>
-            Detected across multiple assessed interactions in the selected period.
+            Identified across the full ${performanceSummary.assessedInteractions}-interaction assessment set.
+            The recent interactions below show examples of the underlying evidence.
           </p>
 
         </div>
@@ -2744,23 +1860,17 @@ function showAmbassadorOverallResult() {
 
       </div>
 
-
       <div class="evidence-links">
 
-        <button
-          onclick="openPerformanceInteraction('INT-1001')"
-        >
+        <button onclick="openPerformanceInteraction('INT-1001')">
           INT-1001 · 86%
         </button>
 
-        <button
-          onclick="openPerformanceInteraction('INT-0984')"
-        >
+        <button onclick="openPerformanceInteraction('INT-0984')">
           INT-0984 · 47%
         </button>
 
       </div>
-
 
       <div class="recommended-development compact-recommendation">
 
@@ -2779,14 +1889,12 @@ function showAmbassadorOverallResult() {
           </h3>
 
           <p>
-            Review the refresher first, then complete the knowledge check to verify learning.
+            Complete the 15 min refresher first, then the 5 min knowledge check to verify learning.
           </p>
 
         </div>
 
-        <button
-          onclick="openTrainingTarget('refund')"
-        >
+        <button onclick="navigateTo('training')">
           Go to Training
         </button>
 
@@ -2794,16 +1902,9 @@ function showAmbassadorOverallResult() {
 
     </div>
   `;
-
 }
 
-
-function analysisMiniCard(
-  title,
-  score,
-  detail
-) {
-
+function analysisMiniCard(title, score, detail) {
   return `
     <div class="analysis-agent-card">
 
@@ -2821,23 +1922,19 @@ function analysisMiniCard(
 
     </div>
   `;
-
 }
-
 
 /* =========================================================
    AMBASSADOR TRAINING
 ========================================================= */
 
 function trainingPage() {
-
   return `
     ${pageTitle(
       "TRAINING & KNOWLEDGE",
       "My Training",
       "Your assigned learning and performance-linked development."
     )}
-
 
     <div class="training-layout">
 
@@ -2856,7 +1953,7 @@ function trainingPage() {
             </h3>
 
             <p>
-              Formal learning assigned as part of your plan.
+              Formal learning assigned as part of your learning plan.
             </p>
 
           </div>
@@ -2867,19 +1964,15 @@ function trainingPage() {
 
         </div>
 
-
         <div class="training-card-list">
 
           ${assignedTraining
-            .map(
-              assignedTrainingCard
-            )
+            .map(assignedTrainingCard)
             .join("")}
 
         </div>
 
       </section>
-
 
       <section class="dashboard-card training-panel recommended-panel">
 
@@ -2896,7 +1989,7 @@ function trainingPage() {
             </h3>
 
             <p>
-              Training and knowledge verification are presented as one connected pathway.
+              A connected development pathway: refresh the topic, then verify learning.
             </p>
 
           </div>
@@ -2907,7 +2000,6 @@ function trainingPage() {
 
         </div>
 
-
         ${recommendedDevelopmentCard(
           recommendedDevelopment
         )}
@@ -2915,35 +2007,10 @@ function trainingPage() {
       </section>
 
     </div>
-
-
-    <section
-      id="training-focus-panel"
-      class="training-focus-panel ${
-        selectedTrainingId
-          ? "visible"
-          : ""
-      }"
-    >
-
-      ${
-        selectedTrainingId
-          ? renderTrainingFocus(
-              selectedTrainingId
-            )
-          : ""
-      }
-
-    </section>
   `;
-
 }
 
-
-function trainingStatusCircle(
-  item
-) {
-
+function trainingStatusCircle(item) {
   return `
     <div class="training-status-circle ${item.dueClass}">
 
@@ -2953,19 +2020,11 @@ function trainingStatusCircle(
 
     </div>
   `;
-
 }
 
-
-function assignedTrainingCard(
-  item
-) {
-
+function assignedTrainingCard(item) {
   return `
-    <div
-      id="training-${item.id}"
-      class="training-item-card"
-    >
+    <div class="training-item-card">
 
       <div class="training-item-main">
 
@@ -2993,12 +2052,9 @@ function assignedTrainingCard(
 
         </div>
 
-        ${trainingStatusCircle(
-          item
-        )}
+        ${trainingStatusCircle(item)}
 
       </div>
-
 
       <div class="due-state-row ${item.dueClass}">
 
@@ -3016,35 +2072,24 @@ function assignedTrainingCard(
 
       </div>
 
-
       <button
         class="training-open-button"
-        onclick="openTrainingTarget('${item.id}')"
+        onclick="showToast('${item.status === "Completed" ? "Opening training review" : "Opening assigned training"}')"
       >
-
         ${
           item.status === "Completed"
             ? "Review"
             : "Open"
         }
-
       </button>
 
     </div>
   `;
-
 }
 
-
-function recommendedDevelopmentCard(
-  item
-) {
-
+function recommendedDevelopmentCard(item) {
   return `
-    <div
-      id="training-${item.id}"
-      class="development-path-card"
-    >
+    <div class="development-path-card">
 
       <div class="development-step">
 
@@ -3052,45 +2097,47 @@ function recommendedDevelopmentCard(
           1
         </div>
 
-        <div>
+        <div class="development-step-content">
 
-          <span class="section-label">
-            LEARN / REFRESH
-          </span>
+          <div class="development-title-row">
 
-          <h3>
-            ${item.title}
-          </h3>
+            <div>
+
+              <span class="section-label">
+                LEARN / REFRESH
+              </span>
+
+              <h3>
+                ${item.title}
+              </h3>
+
+            </div>
+
+            <span class="duration-pill">
+              ${item.trainingDuration}
+            </span>
+
+          </div>
 
           <p>
             ${item.reason}
           </p>
 
-
           <div class="trigger-links">
 
-            Triggered by:
+            <span>
+              Triggered by:
+            </span>
 
-            ${item.triggerInteractions
-              .map(
-                id => `
-                  <button
-                    onclick="openPerformanceInteraction('${id}')"
-                  >
-                    ${id}
-                  </button>
-                `
-              )
-              .join("")}
+            ${item.triggerInteractions.map(id => `
+              <button onclick="openPerformanceInteraction('${id}')">
+                ${id}
+              </button>
+            `).join("")}
 
           </div>
 
-
           <div class="training-item-meta">
-
-            <span>
-              ${item.duration}
-            </span>
 
             <span>
               Recommended ${item.recommended}
@@ -3100,21 +2147,22 @@ function recommendedDevelopmentCard(
 
         </div>
 
-
         <button
           class="training-open-button primary"
-          onclick="openTrainingTarget('${item.id}')"
+          onclick="showToast('Opening Refund Handling Refresher')"
         >
-          Open Training
+          Start Training
         </button>
 
       </div>
 
-
       <div class="development-connector">
-        Then
-      </div>
 
+        <span>
+          Then verify learning
+        </span>
+
+      </div>
 
       <div class="development-step knowledge-step">
 
@@ -3122,20 +2170,31 @@ function recommendedDevelopmentCard(
           2
         </div>
 
-        <div>
+        <div class="development-step-content">
 
-          <span class="section-label">
-            VERIFY LEARNING
-          </span>
+          <div class="development-title-row">
 
-          <h3>
-            ${item.knowledgeCheck.title}
-          </h3>
+            <div>
+
+              <span class="section-label">
+                KNOWLEDGE CHECK
+              </span>
+
+              <h3>
+                ${item.knowledgeCheck.title}
+              </h3>
+
+            </div>
+
+            <span class="duration-pill">
+              ${item.knowledgeCheck.duration}
+            </span>
+
+          </div>
 
           <p>
             ${item.knowledgeCheck.purpose}
           </p>
-
 
           <div class="training-item-meta">
 
@@ -3143,228 +2202,28 @@ function recommendedDevelopmentCard(
               ${item.knowledgeCheck.questions} questions
             </span>
 
-            <span>
-              ${item.knowledgeCheck.duration}
-            </span>
-
           </div>
 
         </div>
 
-        <button class="training-open-button">
-          Start Knowledge Check
+        <button
+          class="training-open-button"
+          onclick="showToast('Opening Refund Handling Knowledge Check')"
+        >
+          Start Check
         </button>
 
       </div>
 
     </div>
   `;
-
 }
-
-
-function openTrainingTarget(
-  trainingId
-) {
-
-  selectedTrainingId =
-    trainingId;
-
-  navigateTo(
-    "training"
-  );
-
-
-  setTimeout(
-    () => {
-
-      const trainingCard =
-        document.getElementById(
-          `training-${trainingId}`
-        );
-
-      const focusPanel =
-        document.getElementById(
-          "training-focus-panel"
-        );
-
-
-      if (
-        trainingCard
-      ) {
-
-        trainingCard
-          .classList
-          .add(
-            "highlight-training"
-          );
-
-      }
-
-
-      if (
-        focusPanel
-      ) {
-
-        focusPanel
-          .scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-          });
-
-      }
-
-    },
-    120
-  );
-
-}
-
-
-function renderTrainingFocus(
-  trainingId
-) {
-
-  if (
-    trainingId === "refund"
-  ) {
-
-    return `
-      <div class="training-focus-content">
-
-        <div class="training-focus-heading">
-
-          <div>
-
-            <span class="section-label">
-              RECOMMENDED DEVELOPMENT
-            </span>
-
-            <h2>
-              ${recommendedDevelopment.title}
-            </h2>
-
-            <p>
-              ${recommendedDevelopment.reason}
-            </p>
-
-          </div>
-
-          <span class="training-focus-duration">
-            ${recommendedDevelopment.duration}
-          </span>
-
-        </div>
-
-
-        <div class="training-source-callout">
-
-          <strong>
-            Why this was recommended
-          </strong>
-
-          <p>
-            Evidence from ${recommendedDevelopment.triggerInteractions.join(" and ")} indicates a recurring opportunity around refund timeline communication.
-          </p>
-
-        </div>
-
-
-        <button class="start-training-button">
-          Start Training
-        </button>
-
-      </div>
-    `;
-
-  }
-
-
-  const item =
-    assignedTraining.find(
-      training =>
-        training.id === trainingId
-    );
-
-
-  if (!item) return "";
-
-
-  return `
-    <div class="training-focus-content">
-
-      <div class="training-focus-heading">
-
-        <div>
-
-          <span class="section-label">
-            ASSIGNED TRAINING
-          </span>
-
-          <h2>
-            ${item.title}
-          </h2>
-
-          <p>
-            ${item.description}
-          </p>
-
-        </div>
-
-        <span class="training-focus-duration">
-          ${item.duration}
-        </span>
-
-      </div>
-
-
-      <div class="training-detail-grid">
-
-        <div>
-          <span>Assigned</span>
-          <strong>${item.assigned}</strong>
-        </div>
-
-        <div>
-          <span>Due</span>
-          <strong>${item.due}</strong>
-        </div>
-
-        <div>
-          <span>Due status</span>
-          <strong>${item.dueState}</strong>
-        </div>
-
-        <div>
-          <span>Status</span>
-          <strong>${item.status}</strong>
-        </div>
-
-      </div>
-
-
-      <button class="start-training-button">
-
-        ${
-          item.status === "Completed"
-            ? "Review Training"
-            : "Start Training"
-        }
-
-      </button>
-
-    </div>
-  `;
-
-}
-
 
 /* =========================================================
    KNOWLEDGE BASE
 ========================================================= */
 
 function knowledgePage() {
-
   return `
     ${pageTitle(
       "TRAINING & KNOWLEDGE",
@@ -3374,12 +2233,9 @@ function knowledgePage() {
 
     ${knowledgeRepositorySection()}
   `;
-
 }
 
-
 function knowledgeRepositorySection() {
-
   return `
     <section class="dashboard-card knowledge-repository">
 
@@ -3401,7 +2257,6 @@ function knowledgeRepositorySection() {
 
         </div>
 
-
         <div class="knowledge-count">
 
           ${knowledgeRepository.length}
@@ -3413,7 +2268,6 @@ function knowledgeRepositorySection() {
         </div>
 
       </div>
-
 
       <div class="knowledge-toolbar">
 
@@ -3431,7 +2285,6 @@ function knowledgeRepositorySection() {
           >
 
         </div>
-
 
         <select
           id="knowledge-category"
@@ -3470,7 +2323,6 @@ function knowledgeRepositorySection() {
 
       </div>
 
-
       <div class="knowledge-header">
 
         <span>
@@ -3495,7 +2347,6 @@ function knowledgeRepositorySection() {
 
       </div>
 
-
       <div id="knowledge-results">
 
         ${renderKnowledgeRows(
@@ -3506,154 +2357,98 @@ function knowledgeRepositorySection() {
 
     </section>
   `;
-
 }
 
-
-function renderKnowledgeRows(
-  items
-) {
-
-  if (
-    !items.length
-  ) {
-
+function renderKnowledgeRows(items) {
+  if (!items.length) {
     return `
       <div class="knowledge-empty">
         No knowledge articles match your search.
       </div>
     `;
-
   }
 
+  return items.map(item => `
+    <div class="knowledge-row">
 
-  return items
-    .map(
-      item => `
+      <div data-label="Knowledge Article">
+        <strong>${item.title}</strong>
+      </div>
 
-        <div class="knowledge-row">
+      <span data-label="Category">
+        ${item.category}
+      </span>
 
-          <div>
-            <strong>
-              ${item.title}
-            </strong>
-          </div>
+      <span data-label="Type">
+        ${item.type}
+      </span>
 
-          <span>
-            ${item.category}
-          </span>
+      <span data-label="Updated">
+        ${item.updated}
+      </span>
 
-          <span>
-            ${item.type}
-          </span>
+      <button
+        class="small-button"
+        onclick="showToast('Opening ${item.title}')"
+      >
+        Open
+      </button>
 
-          <span>
-            ${item.updated}
-          </span>
-
-          <button class="small-button">
-            Open
-          </button>
-
-        </div>
-
-      `
-    )
-    .join("");
-
+    </div>
+  `).join("");
 }
-
 
 function filterKnowledgeBase() {
+  const searchNode = document.getElementById(
+    "knowledge-search"
+  );
 
-  const searchNode =
-    document.getElementById(
-      "knowledge-search"
-    );
+  const categoryNode = document.getElementById(
+    "knowledge-category"
+  );
 
-  const categoryNode =
-    document.getElementById(
-      "knowledge-category"
-    );
+  const resultsNode = document.getElementById(
+    "knowledge-results"
+  );
 
-  const resultsNode =
-    document.getElementById(
-      "knowledge-results"
-    );
-
-
-  if (
-    !searchNode ||
-    !categoryNode ||
-    !resultsNode
-  ) {
-
+  if (!searchNode || !categoryNode || !resultsNode) {
     return;
-
   }
 
+  const search = searchNode
+    .value
+    .trim()
+    .toLowerCase();
 
-  const search =
-    searchNode
-      .value
-      .trim()
-      .toLowerCase();
+  const category = categoryNode.value;
 
-  const category =
-    categoryNode.value;
+  const filtered = knowledgeRepository.filter(item => {
+    const matchesSearch =
+      !search ||
+      item.title.toLowerCase().includes(search) ||
+      item.category.toLowerCase().includes(search) ||
+      item.type.toLowerCase().includes(search);
 
+    const matchesCategory =
+      category === "all" ||
+      item.category === category;
 
-  const filtered =
-    knowledgeRepository.filter(
-      item => {
-
-        const matchesSearch =
-          !search
-          ||
-          item.title
-            .toLowerCase()
-            .includes(search)
-          ||
-          item.category
-            .toLowerCase()
-            .includes(search)
-          ||
-          item.type
-            .toLowerCase()
-            .includes(search);
-
-
-        const matchesCategory =
-          category === "all"
-          ||
-          item.category === category;
-
-
-        return (
-          matchesSearch &&
-          matchesCategory
-        );
-
-      }
+    return (
+      matchesSearch &&
+      matchesCategory
     );
-
+  });
 
   resultsNode.innerHTML =
-    renderKnowledgeRows(
-      filtered
-    );
-
+    renderKnowledgeRows(filtered);
 }
-
 
 /* =========================================================
    MY STATUS
 ========================================================= */
 
 function statusPage() {
-
-  const user =
-    prototypeUsers.ambassador;
+  const user = prototypeUsers.ambassador;
 
   const onboarded =
     user.shareMembersOnboarded;
@@ -3662,22 +2457,15 @@ function statusPage() {
     user.shareMemberTarget;
 
   const remaining =
-    Math.max(
-      target - onboarded,
-      0
-    );
+    Math.max(target - onboarded, 0);
 
   const achievement =
     Math.min(
       Math.round(
-        (
-          onboarded /
-          target
-        ) * 100
+        (onboarded / target) * 100
       ),
       100
     );
-
 
   return `
     ${pageTitle(
@@ -3686,8 +2474,7 @@ function statusPage() {
       "Your profile, Personal QR Code and SHARE impact."
     )}
 
-
-    <div class="dashboard-grid two">
+    <div class="status-top-grid">
 
       <section class="dashboard-card">
 
@@ -3711,7 +2498,6 @@ function statusPage() {
 
         </div>
 
-
         <div class="profile-details">
 
           ${profileLine(
@@ -3734,28 +2520,29 @@ function statusPage() {
             "Mall of the Emirates"
           )}
 
-          ${profileLine(
-            "Ambassador Status",
-            "Active"
-          )}
-
         </div>
 
       </section>
 
+      <section class="dashboard-card qr-card compact-qr-card">
 
-      <section class="dashboard-card qr-card">
+        <div>
 
-        <span class="section-label">
-          PERSONAL QR CODE
-        </span>
+          <span class="section-label">
+            PERSONAL QR CODE
+          </span>
 
-        <h3>
-          Active
-        </h3>
+          <h3>
+            Active
+          </h3>
 
+          <p>
+            Use your Personal QR Code for attributable SHARE member onboarding.
+          </p>
 
-        <div class="active-qr-wrapper">
+        </div>
+
+        <div class="active-qr-wrapper compact-qr">
 
           <img
             class="share-qr-image"
@@ -3765,156 +2552,84 @@ function statusPage() {
 
         </div>
 
-        <p>
-          Use your Personal QR Code for attributable SHARE member onboarding activity.
-        </p>
-
       </section>
 
     </div>
 
+    <section class="share-impact-compact">
 
-    <section class="share-impact-card">
-
-      <div class="share-impact-heading">
+      <div class="share-impact-compact-heading">
 
         <div>
 
-          <span class="section-label">
+          <span class="section-label light-label">
             MY SHARE IMPACT
           </span>
 
           <h2>
-            SHARE Acquisition Progress
+            SHARE Acquisition
           </h2>
 
           <p>
-            Your SHARE member onboarding progress for the current performance period.
+            ${currentPerformancePeriod.from} – ${currentPerformancePeriod.to}
           </p>
 
         </div>
 
+        <div class="impact-compact-summary">
 
-        <div class="period-pill">
+          <div>
+            <strong>${onboarded}</strong>
+            <span>Onboarded</span>
+          </div>
 
-          <span>
-            Performance period
+          <div>
+            <strong>${target}</strong>
+            <span>Target</span>
+          </div>
+
+          <div>
+            <strong>${achievement}%</strong>
+            <span>Achievement</span>
+          </div>
+
+          <div>
+            <strong>${remaining}</strong>
+            <span>Remaining</span>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="compact-progress-track">
+
+        <div
+          class="compact-progress-fill"
+          style="--compact-progress:${achievement}%"
+        ></div>
+
+      </div>
+
+      <div class="compact-impact-footer">
+
+        <span>
+          <b>${onboarded} of ${target}</b> members onboarded
+        </span>
+
+        <div class="compact-milestones">
+
+          <span class="done">
+            ✓ Started
           </span>
 
-          <strong>
-            ${currentPerformancePeriod.from} – ${currentPerformancePeriod.to}
-          </strong>
+          <span class="${onboarded >= 25 ? "done" : ""}">
+            ${onboarded >= 25 ? "✓" : "○"} Halfway
+          </span>
 
-        </div>
-
-      </div>
-
-
-      <div class="impact-metrics">
-
-        ${impactMetric(
-          "Members Onboarded",
-          onboarded,
-          "This period"
-        )}
-
-        ${impactMetric(
-          "Target",
-          target,
-          "Members"
-        )}
-
-        ${impactMetric(
-          "Achievement",
-          `${achievement}%`,
-          "Of target"
-        )}
-
-        ${impactMetric(
-          "Remaining",
-          remaining,
-          "Members to target"
-        )}
-
-      </div>
-
-
-      <div class="acquisition-progress-section">
-
-        <div class="acquisition-progress-heading">
-
-          <div>
-
-            <span class="section-label">
-              PROGRESS TO TARGET
-            </span>
-
-            <h3>
-              ${onboarded} of ${target} members onboarded
-            </h3>
-
-          </div>
-
-          <strong class="achievement-value">
-            ${achievement}%
-          </strong>
-
-        </div>
-
-
-        <div class="acquisition-progress-track">
-
-          <div
-            class="acquisition-progress-fill"
-            style="--target-width:${achievement}%"
-          ></div>
-
-        </div>
-
-
-        <div class="impact-message">
-
-          <div class="impact-message-icon">
-            ✦
-          </div>
-
-          <div>
-
-            <strong>
-              ${remaining} members away from your target
-            </strong>
-
-            <p>
-              You have achieved ${achievement}% of your SHARE onboarding target for this period.
-            </p>
-
-          </div>
-
-        </div>
-
-
-        <div class="impact-milestones">
-
-          ${impactMilestone(
-            "Started",
-            "Your first SHARE member onboarded",
-            true
-          )}
-
-          ${impactMilestone(
-            "Halfway",
-            `${Math.round(target / 2)} members onboarded`,
-            onboarded >=
-              Math.round(
-                target / 2
-              )
-          )}
-
-          ${impactMilestone(
-            "Target",
-            `${target} members onboarded`,
-            onboarded >= target
-          )}
+          <span class="${onboarded >= target ? "done" : ""}">
+            ${onboarded >= target ? "✓" : "○"} Target
+          </span>
 
         </div>
 
@@ -3922,111 +2637,15 @@ function statusPage() {
 
     </section>
   `;
-
 }
-
-
-function profileLine(
-  label,
-  value
-) {
-
-  return `
-    <div class="profile-line">
-
-      <span>
-        ${label}
-      </span>
-
-      <strong>
-        ${value}
-      </strong>
-
-    </div>
-  `;
-
-}
-
-
-function impactMetric(
-  title,
-  value,
-  detail
-) {
-
-  return `
-    <div class="impact-metric">
-
-      <span>
-        ${title}
-      </span>
-
-      <strong>
-        ${value}
-      </strong>
-
-      <small>
-        ${detail}
-      </small>
-
-    </div>
-  `;
-
-}
-
-
-function impactMilestone(
-  title,
-  detail,
-  complete
-) {
-
-  return `
-    <div class="impact-milestone ${
-      complete
-        ? "complete"
-        : "pending"
-    }">
-
-      <div class="impact-milestone-icon">
-
-        ${
-          complete
-            ? "✓"
-            : "○"
-        }
-
-      </div>
-
-      <div>
-
-        <strong>
-          ${title}
-        </strong>
-
-        <span>
-          ${detail}
-        </span>
-
-      </div>
-
-    </div>
-  `;
-
-}
-
 
 /* =========================================================
    MANAGEMENT FILTERS
 ========================================================= */
 
-function managementFilters(
-  scopeType = "manager"
-) {
-
+function managementFilters(scopeType = "manager") {
   const isService =
     scopeType === "service";
-
 
   return `
     <section class="manager-filter-bar">
@@ -4046,7 +2665,6 @@ function managementFilters(
 
       </div>
 
-
       <div class="filter-field">
 
         <label>
@@ -4056,11 +2674,7 @@ function managementFilters(
         <select>
 
           <option>
-            ${
-              isService
-                ? "All Countries"
-                : "UAE"
-            }
+            ${isService ? "All Countries" : "UAE"}
           </option>
 
           <option>
@@ -4079,7 +2693,6 @@ function managementFilters(
 
       </div>
 
-
       <div class="filter-field">
 
         <label>
@@ -4089,11 +2702,7 @@ function managementFilters(
         <select>
 
           <option>
-            ${
-              isService
-                ? "All BUs"
-                : "Entertainment"
-            }
+            ${isService ? "All BUs" : "Entertainment"}
           </option>
 
           <option>
@@ -4103,7 +2712,6 @@ function managementFilters(
         </select>
 
       </div>
-
 
       <div class="filter-field">
 
@@ -4117,7 +2725,6 @@ function managementFilters(
         </select>
 
       </div>
-
 
       <div class="filter-field">
 
@@ -4134,7 +2741,6 @@ function managementFilters(
         </select>
 
       </div>
-
 
       <div class="filter-field">
 
@@ -4154,7 +2760,6 @@ function managementFilters(
 
     </section>
 
-
     <div class="scope-notice">
 
       <div class="scope-icon">
@@ -4164,74 +2769,49 @@ function managementFilters(
       <div>
 
         <strong>
-
           ${
             isService
               ? "Cross-BU Service Delivery visibility"
               : "Scoped to Entertainment UAE"
           }
-
         </strong>
 
         <span>
-
           ${
             isService
               ? "You can analyse authorised data across countries, BUs, brands, malls, locations and Ambassadors."
               : "You only see Ambassadors, locations and performance data within your assigned BU scope."
           }
-
         </span>
 
       </div>
 
     </div>
   `;
-
 }
-
 
 function managerFilters() {
-
-  return managementFilters(
-    "manager"
-  );
-
+  return managementFilters("manager");
 }
-
 
 function serviceFilters() {
-
-  return managementFilters(
-    "service"
-  );
-
+  return managementFilters("service");
 }
-
 
 /* =========================================================
    BU LEAD HOME
 ========================================================= */
 
 function managerHome() {
+  const onboarded = 1842;
+  const target = 2100;
 
-  const onboarded =
-    1842;
-
-  const target =
-    2100;
-
-  const achievement =
-    Math.round(
-      (
-        onboarded /
-        target
-      ) * 100
-    );
+  const achievement = Math.round(
+    (onboarded / target) * 100
+  );
 
   const remaining =
     target - onboarded;
-
 
   return `
     ${pageTitle(
@@ -4240,9 +2820,7 @@ function managerHome() {
       "Understand how your teams are performing and where attention is required."
     )}
 
-
     ${managerFilters()}
-
 
     <div class="dashboard-grid four">
 
@@ -4250,21 +2828,21 @@ function managerHome() {
         "Overall Performance Score",
         "86%",
         "Strong",
-        metricDefinitions.performance
+        "The aggregated service performance of Ambassadors in the currently selected BU, Brand, Mall or Location scope."
       )}
 
       ${metricCard(
         "Active Ambassadors",
         "238",
         "Within your scope",
-        "Ambassadors currently active within the selected BU Lead scope."
+        metricDefinitions.activeAmbassadors
       )}
 
       ${metricCard(
         "Training Completion",
         "91%",
         "Current period",
-        metricDefinitions.training
+        metricDefinitions.trainingCompletion
       )}
 
       ${managerAcquisitionSummaryCard(
@@ -4275,7 +2853,6 @@ function managerHome() {
       )}
 
     </div>
-
 
     <div class="dashboard-grid two">
 
@@ -4308,19 +2885,13 @@ function managerHome() {
 
         </div>
 
-
         <div class="manager-performance-list">
-
           ${managerPerformanceBreakdown
-            .map(
-              managerPerformanceRow
-            )
+            .map(managerPerformanceRow)
             .join("")}
-
         </div>
 
       </section>
-
 
       <section class="dashboard-card">
 
@@ -4351,17 +2922,13 @@ function managerHome() {
 
         </div>
 
-
         ${managerAttentionItems
-          .map(
-            managerAttentionRow
-          )
+          .map(managerAttentionRow)
           .join("")}
 
       </section>
 
     </div>
-
 
     <section class="manager-home-acquisition compact-banner">
 
@@ -4381,7 +2948,6 @@ function managerHome() {
 
       </div>
 
-
       <div class="manager-acquisition-right">
 
         <strong>
@@ -4394,7 +2960,6 @@ function managerHome() {
 
       </div>
 
-
       <div class="manager-progress-track">
 
         <div
@@ -4403,7 +2968,6 @@ function managerHome() {
         ></div>
 
       </div>
-
 
       <button
         class="manager-progress-link"
@@ -4414,9 +2978,7 @@ function managerHome() {
 
     </section>
   `;
-
 }
-
 
 function managerAcquisitionSummaryCard(
   onboarded,
@@ -4424,11 +2986,10 @@ function managerAcquisitionSummaryCard(
   achievement,
   remaining
 ) {
-
   return `
     <section
       class="dashboard-card manager-acquisition-kpi"
-      onclick="navigateTo('manager-acquisition')"
+      onclick="navigateTo('${currentRole === "service" ? "group-acquisition" : "manager-acquisition"}')"
     >
 
       <div class="manager-kpi-top">
@@ -4439,9 +3000,7 @@ function managerAcquisitionSummaryCard(
             SHARE Members Onboarded
           </span>
 
-          ${infoIcon(
-            metricDefinitions.acquisition
-          )}
+          ${infoIcon(metricDefinitions.acquisition)}
 
         </div>
 
@@ -4451,11 +3010,9 @@ function managerAcquisitionSummaryCard(
 
       </div>
 
-
       <strong>
         ${onboarded.toLocaleString()}
       </strong>
-
 
       <div class="tiny-progress-track">
 
@@ -4465,7 +3022,6 @@ function managerAcquisitionSummaryCard(
         ></div>
 
       </div>
-
 
       <div class="manager-kpi-footer">
 
@@ -4481,18 +3037,13 @@ function managerAcquisitionSummaryCard(
 
     </section>
   `;
-
 }
 
-
-function managerPerformanceRow(
-  item
-) {
-
+function managerPerformanceRow(item) {
   return `
     <div class="manager-performance-row">
 
-      <div>
+      <div data-label="Organisation">
 
         <span class="hierarchy-pill">
           ${item.level}
@@ -4504,8 +3055,10 @@ function managerPerformanceRow(
 
       </div>
 
-
-      <div class="manager-row-population">
+      <div
+        class="manager-row-population"
+        data-label="Ambassadors"
+      >
 
         <span>
           Ambassadors
@@ -4517,8 +3070,10 @@ function managerPerformanceRow(
 
       </div>
 
-
-      <div class="manager-row-score">
+      <div
+        class="manager-row-score"
+        data-label="Performance"
+      >
 
         <strong>
           ${item.score}%
@@ -4527,11 +3082,7 @@ function managerPerformanceRow(
         <div class="mini-score-track">
 
           <div
-            class="mini-score-fill ${
-              item.score < 80
-                ? "attention"
-                : ""
-            }"
+            class="mini-score-fill ${item.score < 80 ? "attention" : ""}"
             style="width:${item.score}%"
           ></div>
 
@@ -4539,32 +3090,29 @@ function managerPerformanceRow(
 
       </div>
 
-
       <button
         class="small-button"
-        onclick="navigateTo('team-performance')"
+        onclick="navigateTo('${currentRole === "service" ? "group-performance" : "team-performance"}')"
       >
         Drill Down
       </button>
 
     </div>
   `;
-
 }
 
-
-function managerAttentionRow(
-  item
-) {
-
+function managerAttentionRow(item) {
   return `
     <div class="manager-attention-row">
 
-      <span class="severity-pill ${item.severity.toLowerCase()}">
+      <span
+        data-label="Severity"
+        class="severity-pill ${item.severity.toLowerCase()}"
+      >
         ${item.severity}
       </span>
 
-      <div>
+      <div data-label="Location">
 
         <strong>
           ${item.location}
@@ -4576,7 +3124,7 @@ function managerAttentionRow(
 
       </div>
 
-      <span>
+      <span data-label="Affected">
         ${item.affected}
       </span>
 
@@ -4586,16 +3134,13 @@ function managerAttentionRow(
 
     </div>
   `;
-
 }
 
-
 /* =========================================================
-   BU LEAD PERFORMANCE
+   MANAGER PERFORMANCE
 ========================================================= */
 
 function managerPerformance() {
-
   return `
     ${pageTitle(
       "PERFORMANCE",
@@ -4603,9 +3148,7 @@ function managerPerformance() {
       "Drill into performance by BU, Brand, Mall, Store / Location and Ambassador."
     )}
 
-
     ${managerFilters()}
-
 
     <div class="dashboard-grid four">
 
@@ -4613,7 +3156,7 @@ function managerPerformance() {
         "Overall Performance Score",
         "86%",
         "Strong",
-        metricDefinitions.performance
+        "Aggregated service performance for Ambassadors in the current filtered scope."
       )}
 
       ${metricCard(
@@ -4639,7 +3182,6 @@ function managerPerformance() {
 
     </div>
 
-
     <section class="overall-analysis-card">
 
       <div>
@@ -4657,7 +3199,6 @@ function managerPerformance() {
         </p>
 
       </div>
-
 
       <button
         class="analyse-overall-button"
@@ -4684,7 +3225,6 @@ function managerPerformance() {
 
     </section>
 
-
     <section class="dashboard-card">
 
       <div class="card-heading-row">
@@ -4705,67 +3245,31 @@ function managerPerformance() {
 
         </div>
 
-
         <select class="inline-selector">
-
-          <option>
-            BU
-          </option>
-
-          <option>
-            Brand
-          </option>
-
-          <option>
-            Mall
-          </option>
-
-          <option>
-            Store / Location
-          </option>
-
-          <option>
-            Ambassador
-          </option>
-
+          <option>BU</option>
+          <option>Brand</option>
+          <option>Mall</option>
+          <option>Store / Location</option>
+          <option>Ambassador</option>
         </select>
 
       </div>
 
-
       <div class="manager-drill-header">
 
-        <span>
-          Level
-        </span>
-
-        <span>
-          Name
-        </span>
-
-        <span>
-          Ambassadors
-        </span>
-
-        <span>
-          Performance
-        </span>
-
-        <span>
-          Action
-        </span>
+        <span>Level</span>
+        <span>Name</span>
+        <span>Ambassadors</span>
+        <span>Performance</span>
+        <span>Action</span>
 
       </div>
 
-
       ${managerPerformanceBreakdown
-        .map(
-          managerDrillRow
-        )
+        .map(managerDrillRow)
         .join("")}
 
     </section>
-
 
     <section class="dashboard-card manager-ai-section">
 
@@ -4776,7 +3280,6 @@ function managerPerformance() {
       <h3>
         BU performance agent team
       </h3>
-
 
       <div class="agent-team-strip manager-team">
 
@@ -4812,7 +3315,6 @@ function managerPerformance() {
 
       </div>
 
-
       <div
         id="manager-agent-output"
         class="agent-output empty-state"
@@ -4822,34 +3324,28 @@ function managerPerformance() {
 
     </section>
   `;
-
 }
 
-
-function managerDrillRow(
-  item
-) {
-
+function managerDrillRow(item) {
   return `
     <div class="manager-drill-row">
 
-      <span>
+      <span data-label="Level">
         ${item.level}
       </span>
 
-      <strong>
+      <strong data-label="Name">
         ${item.name}
       </strong>
 
-      <span>
+      <span data-label="Ambassadors">
         ${item.ambassadors}
       </span>
 
-      <strong class="${
-        item.score < 80
-          ? "score-attention"
-          : "score-good"
-      }">
+      <strong
+        data-label="Performance"
+        class="${item.score < 80 ? "score-attention" : "score-good"}"
+      >
         ${item.score}%
       </strong>
 
@@ -4859,16 +3355,13 @@ function managerDrillRow(
 
     </div>
   `;
-
 }
 
-
 /* =========================================================
-   REQUIRES ATTENTION
+   ATTENTION
 ========================================================= */
 
 function managerRequiresAttentionPage() {
-
   return `
     ${pageTitle(
       "PERFORMANCE",
@@ -4876,9 +3369,7 @@ function managerRequiresAttentionPage() {
       "Prioritised issues within your assigned Entertainment UAE scope."
     )}
 
-
     ${managerFilters()}
-
 
     <div class="dashboard-grid four">
 
@@ -4912,80 +3403,56 @@ function managerRequiresAttentionPage() {
 
     </div>
 
-
     <section class="dashboard-card">
 
       <div class="attention-table-header">
 
-        <span>
-          Severity
-        </span>
-
-        <span>
-          Location
-        </span>
-
-        <span>
-          Area
-        </span>
-
-        <span>
-          Affected
-        </span>
-
-        <span>
-          Action
-        </span>
+        <span>Severity</span>
+        <span>Location</span>
+        <span>Area</span>
+        <span>Affected</span>
+        <span>Action</span>
 
       </div>
 
+      ${managerAttentionItems.map(item => `
+        <div class="attention-table-row">
 
-      ${managerAttentionItems
-        .map(
-          item => `
+          <span
+            data-label="Severity"
+            class="severity-pill ${item.severity.toLowerCase()}"
+          >
+            ${item.severity}
+          </span>
 
-            <div class="attention-table-row">
+          <strong data-label="Location">
+            ${item.location}
+          </strong>
 
-              <span class="severity-pill ${item.severity.toLowerCase()}">
-                ${item.severity}
-              </span>
+          <span data-label="Area">
+            ${item.issue}
+          </span>
 
-              <strong>
-                ${item.location}
-              </strong>
+          <span data-label="Affected">
+            ${item.affected}
+          </span>
 
-              <span>
-                ${item.issue}
-              </span>
+          <button class="small-button">
+            Review
+          </button>
 
-              <span>
-                ${item.affected}
-              </span>
-
-              <button class="small-button">
-                Review
-              </button>
-
-            </div>
-
-          `
-        )
-        .join("")}
+        </div>
+      `).join("")}
 
     </section>
   `;
-
 }
-
 
 /* =========================================================
    AMBASSADOR POPULATION
 ========================================================= */
 
-function managerAmbassadorsPage(
-  isService = false
-) {
-
+function managerAmbassadorsPage(isService = false) {
   return `
     ${pageTitle(
       "AMBASSADOR PROGRAM",
@@ -4993,13 +3460,11 @@ function managerAmbassadorsPage(
       "View and manage the Ambassador population within the selected scope."
     )}
 
-
     ${
       isService
         ? serviceFilters()
         : managerFilters()
     }
-
 
     <section class="dashboard-card population-card">
 
@@ -5012,13 +3477,11 @@ function managerAmbassadorsPage(
           </span>
 
           <h3>
-
             ${
               isService
                 ? "Cross-BU population"
                 : "Entertainment UAE"
             }
-
           </h3>
 
           <p>
@@ -5026,7 +3489,6 @@ function managerAmbassadorsPage(
           </p>
 
         </div>
-
 
         <button
           class="export-button"
@@ -5037,66 +3499,36 @@ function managerAmbassadorsPage(
 
       </div>
 
-
       <div
         id="export-message"
         class="export-message"
       ></div>
 
-
       <div class="population-header">
 
-        <span>
-          Ambassador
-        </span>
-
-        <span>
-          BU / Brand
-        </span>
-
-        <span>
-          Mall / Location
-        </span>
-
-        <span>
-          Performance
-        </span>
-
-        <span>
-          Training
-        </span>
-
-        <span>
-          Members Onboarded
-        </span>
-
-        <span>
-          Status
-        </span>
+        <span>Ambassador</span>
+        <span>BU / Brand</span>
+        <span>Mall / Location</span>
+        <span>Performance</span>
+        <span>Training</span>
+        <span>Members Onboarded</span>
+        <span>Status</span>
 
       </div>
 
-
       ${ambassadorPopulation
-        .map(
-          ambassadorPopulationRow
-        )
+        .map(ambassadorPopulationRow)
         .join("")}
 
     </section>
   `;
-
 }
 
-
-function ambassadorPopulationRow(
-  ambassador
-) {
-
+function ambassadorPopulationRow(ambassador) {
   return `
     <div class="population-row">
 
-      <div>
+      <div data-label="Ambassador">
 
         <strong>
           ${ambassador.name}
@@ -5108,8 +3540,7 @@ function ambassadorPopulationRow(
 
       </div>
 
-
-      <div>
+      <div data-label="BU / Brand">
 
         <strong>
           ${ambassador.bu}
@@ -5121,8 +3552,7 @@ function ambassadorPopulationRow(
 
       </div>
 
-
-      <div>
+      <div data-label="Mall / Location">
 
         <strong>
           ${ambassador.mall}
@@ -5134,45 +3564,38 @@ function ambassadorPopulationRow(
 
       </div>
 
-
-      <strong class="${
-        ambassador.performance < 80
-          ? "score-attention"
-          : "score-good"
-      }">
+      <strong
+        data-label="Performance"
+        class="${ambassador.performance < 80 ? "score-attention" : "score-good"}"
+      >
         ${ambassador.performance}%
       </strong>
 
-
-      <strong>
+      <strong data-label="Training">
         ${ambassador.training}%
       </strong>
 
-
-      <strong>
+      <strong data-label="Members Onboarded">
         ${ambassador.members}
       </strong>
 
-
-      <span class="status-block good">
+      <span
+        data-label="Status"
+        class="status-block good"
+      >
         ${ambassador.status}
       </span>
 
     </div>
   `;
-
 }
 
-
 function exportAmbassadorList() {
-
-  const message =
-    document.getElementById(
-      "export-message"
-    );
+  const message = document.getElementById(
+    "export-message"
+  );
 
   if (!message) return;
-
 
   message.innerHTML = `
     <strong>
@@ -5184,22 +3607,14 @@ function exportAmbassadorList() {
     </span>
   `;
 
-
-  message.classList.add(
-    "visible"
-  );
-
+  message.classList.add("visible");
 }
-
 
 /* =========================================================
    TRAINING OVERVIEW
 ========================================================= */
 
-function managerTrainingOverviewPage(
-  isService = false
-) {
-
+function managerTrainingOverviewPage(isService = false) {
   return `
     ${pageTitle(
       "TRAINING & KNOWLEDGE",
@@ -5207,13 +3622,11 @@ function managerTrainingOverviewPage(
       "Monitor assigned learning, completion, overdue learning and recommended development."
     )}
 
-
     ${
       isService
         ? serviceFilters()
         : managerFilters()
     }
-
 
     <div class="dashboard-grid four">
 
@@ -5247,7 +3660,6 @@ function managerTrainingOverviewPage(
 
     </div>
 
-
     <div class="training-layout">
 
       <section class="dashboard-card">
@@ -5260,7 +3672,6 @@ function managerTrainingOverviewPage(
           Team learning plan
         </h3>
 
-
         <div class="manager-training-header">
 
           <span>Training</span>
@@ -5272,15 +3683,11 @@ function managerTrainingOverviewPage(
 
         </div>
 
-
         ${managerTrainingOverview
-          .map(
-            managerTrainingRow
-          )
+          .map(managerTrainingRow)
           .join("")}
 
       </section>
-
 
       <section class="dashboard-card recommended-panel">
 
@@ -5291,7 +3698,6 @@ function managerTrainingOverviewPage(
         <h3>
           Performance-driven recommendations
         </h3>
-
 
         ${managerRecommendedTrainingRow(
           "Refund Handling Refresher",
@@ -5318,50 +3724,42 @@ function managerTrainingOverviewPage(
 
     </div>
   `;
-
 }
 
-
-function managerTrainingRow(
-  item
-) {
-
+function managerTrainingRow(item) {
   return `
     <div class="manager-training-row">
 
-      <strong>
+      <strong data-label="Training">
         ${item.training}
       </strong>
 
-      <span>
+      <span data-label="Assigned">
         ${item.assigned}
       </span>
 
-      <span>
+      <span data-label="Completed">
         ${item.completed}
       </span>
 
-      <span>
+      <span data-label="In Progress">
         ${item.inProgress}
       </span>
 
-      <strong class="${
-        item.overdue > 5
-          ? "score-attention"
-          : ""
-      }">
+      <strong
+        data-label="Overdue"
+        class="${item.overdue > 5 ? "score-attention" : ""}"
+      >
         ${item.overdue}
       </strong>
 
-      <span>
+      <span data-label="Avg Aging">
         ${item.avgAging}
       </span>
 
     </div>
   `;
-
 }
-
 
 function managerRecommendedTrainingRow(
   title,
@@ -5369,7 +3767,6 @@ function managerRecommendedTrainingRow(
   reason,
   priority
 ) {
-
   return `
     <div class="manager-recommended-training">
 
@@ -5403,18 +3800,13 @@ function managerRecommendedTrainingRow(
 
     </div>
   `;
-
 }
-
 
 /* =========================================================
    KNOWLEDGE GAPS
 ========================================================= */
 
-function managerKnowledgeGapsPage(
-  isService = false
-) {
-
+function managerKnowledgeGapsPage(isService = false) {
   return `
     ${pageTitle(
       "TRAINING & KNOWLEDGE",
@@ -5422,99 +3814,63 @@ function managerKnowledgeGapsPage(
       "Identify recurring knowledge themes affecting Ambassador performance."
     )}
 
-
     ${
       isService
         ? serviceFilters()
         : managerFilters()
     }
 
-
     <section class="dashboard-card">
 
       <div class="knowledge-gap-header">
 
-        <span>
-          Knowledge Theme
-        </span>
-
-        <span>
-          Ambassadors Affected
-        </span>
-
-        <span>
-          Avg Knowledge Score
-        </span>
-
-        <span>
-          Related Performance
-        </span>
-
-        <span>
-          Trend
-        </span>
-
-        <span>
-          Action
-        </span>
+        <span>Knowledge Theme</span>
+        <span>Ambassadors Affected</span>
+        <span>Avg Knowledge Score</span>
+        <span>Related Performance</span>
+        <span>Trend</span>
+        <span>Action</span>
 
       </div>
 
+      ${managerKnowledgeGaps.map(gap => `
+        <div class="knowledge-gap-row">
 
-      ${managerKnowledgeGaps
-        .map(
-          gap => `
+          <strong data-label="Knowledge Theme">
+            ${gap.theme}
+          </strong>
 
-            <div class="knowledge-gap-row">
+          <span data-label="Ambassadors Affected">
+            ${gap.ambassadors}
+          </span>
 
-              <strong>
-                ${gap.theme}
-              </strong>
+          <strong
+            data-label="Avg Knowledge Score"
+            class="${gap.knowledgeScore < 80 ? "score-attention" : "score-good"}"
+          >
+            ${gap.knowledgeScore}%
+          </strong>
 
-              <span>
-                ${gap.ambassadors}
-              </span>
+          <span data-label="Related Performance">
+            ${gap.relatedPerformance}
+          </span>
 
-              <strong class="${
-                gap.knowledgeScore < 80
-                  ? "score-attention"
-                  : "score-good"
-              }">
-                ${gap.knowledgeScore}%
-              </strong>
+          <span data-label="Trend">
+            ${gap.trend}
+          </span>
 
-              <span>
-                ${gap.relatedPerformance}
-              </span>
+          <button class="small-button">
+            Review
+          </button>
 
-              <span>
-                ${gap.trend}
-              </span>
-
-              <button class="small-button">
-                Review
-              </button>
-
-            </div>
-
-          `
-        )
-        .join("")}
+        </div>
+      `).join("")}
 
     </section>
   `;
-
 }
 
-
-/* =========================================================
-   MANAGEMENT KNOWLEDGE
-========================================================= */
-
-function managerKnowledgePage(
-  isService = false
-) {
-
+function managerKnowledgePage(isService = false) {
   return `
     ${pageTitle(
       "TRAINING & KNOWLEDGE",
@@ -5530,149 +3886,53 @@ function managerKnowledgePage(
 
     ${knowledgeRepositorySection()}
   `;
-
 }
-
 
 /* =========================================================
    ONBOARDING / OFFBOARDING
 ========================================================= */
 
-function lifecyclePage(
-  isService = false
-) {
-
+function lifecyclePage(isService = false) {
   const onboarding = [
-
     {
-      name:
-        "Noor Hassan",
-
-      staffId:
-        "100822",
-
+      name: "Noor Hassan",
+      staffId: "100822",
       steps: [
-
-        [
-          "Account Created",
-          "Complete"
-        ],
-
-        [
-          "First Login",
-          "Complete"
-        ],
-
-        [
-          "Mandatory Training",
-          "In Progress"
-        ],
-
-        [
-          "Knowledge Check",
-          "Pending"
-        ],
-
-        [
-          "Personal QR Code",
-          "Pending"
-        ],
-
-        [
-          "Active",
-          "Pending"
-        ]
-
+        ["Account Created", "Complete"],
+        ["First Login", "Complete"],
+        ["Mandatory Training", "In Progress"],
+        ["Knowledge Check", "Pending"],
+        ["Personal QR Code", "Pending"],
+        ["Active", "Pending"]
       ]
     },
-
-
     {
-      name:
-        "Rania Ali",
-
-      staffId:
-        "100845",
-
+      name: "Rania Ali",
+      staffId: "100845",
       steps: [
-
-        [
-          "Account Created",
-          "Complete"
-        ],
-
-        [
-          "First Login",
-          "Complete"
-        ],
-
-        [
-          "Mandatory Training",
-          "Complete"
-        ],
-
-        [
-          "Knowledge Check",
-          "Pending"
-        ],
-
-        [
-          "Personal QR Code",
-          "Pending"
-        ],
-
-        [
-          "Active",
-          "Pending"
-        ]
-
+        ["Account Created", "Complete"],
+        ["First Login", "Complete"],
+        ["Mandatory Training", "Complete"],
+        ["Knowledge Check", "Pending"],
+        ["Personal QR Code", "Pending"],
+        ["Active", "Pending"]
       ]
     }
-
   ];
-
 
   const offboarding = [
-
     {
-      name:
-        "Omar Faris",
-
-      staffId:
-        "100312",
-
+      name: "Omar Faris",
+      staffId: "100312",
       steps: [
-
-        [
-          "Offboarding Initiated",
-          "Complete"
-        ],
-
-        [
-          "Access Disabled",
-          "Complete"
-        ],
-
-        [
-          "Personal QR Code Deactivated",
-          "Complete"
-        ],
-
-        [
-          "Outstanding Tasks Closed",
-          "In Progress"
-        ],
-
-        [
-          "Offboarded",
-          "Pending"
-        ]
-
+        ["Offboarding Initiated", "Complete"],
+        ["Access Disabled", "Complete"],
+        ["Personal QR Code Deactivated", "Complete"],
+        ["Outstanding Tasks Closed", "In Progress"],
+        ["Offboarded", "Pending"]
       ]
     }
-
   ];
-
 
   return `
     ${pageTitle(
@@ -5681,13 +3941,11 @@ function lifecyclePage(
       "Track task completion across the Ambassador lifecycle."
     )}
 
-
     ${
       isService
         ? serviceFilters()
         : managerFilters()
     }
-
 
     <section class="dashboard-card lifecycle-section">
 
@@ -5699,19 +3957,16 @@ function lifecyclePage(
         Ambassadors joining the programme
       </h3>
 
-
       ${onboarding
-        .map(
-          journey =>
-            lifecycleJourneyCard(
-              journey,
-              "Onboarding"
-            )
+        .map(journey =>
+          lifecycleJourneyCard(
+            journey,
+            "Onboarding"
+          )
         )
         .join("")}
 
     </section>
-
 
     <section class="dashboard-card lifecycle-section">
 
@@ -5723,41 +3978,25 @@ function lifecyclePage(
         Ambassadors leaving the programme
       </h3>
 
-
       ${offboarding
-        .map(
-          journey =>
-            lifecycleJourneyCard(
-              journey,
-              "Offboarding"
-            )
+        .map(journey =>
+          lifecycleJourneyCard(
+            journey,
+            "Offboarding"
+          )
         )
         .join("")}
 
     </section>
   `;
-
 }
 
-
-function lifecycleJourneyCard(
-  journey,
-  type
-) {
-
-  const initials =
-    journey.name
-      .split(" ")
-      .map(
-        word =>
-          word[0]
-      )
-      .join("")
-      .slice(
-        0,
-        2
-      );
-
+function lifecycleJourneyCard(journey, type) {
+  const initials = journey.name
+    .split(" ")
+    .map(word => word[0])
+    .join("")
+    .slice(0, 2);
 
   return `
     <div class="lifecycle-card">
@@ -5782,21 +4021,18 @@ function lifecycleJourneyCard(
 
       </div>
 
-
       <div class="lifecycle-steps">
 
         ${journey.steps
-          .map(
-            step =>
-              lifecycleStep(
-                step[0],
-                step[1]
-              )
+          .map(step =>
+            lifecycleStep(
+              step[0],
+              step[1]
+            )
           )
           .join("")}
 
       </div>
-
 
       <button class="small-button">
         View ${type}
@@ -5804,22 +4040,15 @@ function lifecycleJourneyCard(
 
     </div>
   `;
-
 }
 
-
-function lifecycleStep(
-  label,
-  status
-) {
-
+function lifecycleStep(label, status) {
   const className =
     status === "Complete"
       ? "complete"
       : status === "In Progress"
         ? "progress"
         : "pending";
-
 
   return `
     <div class="lifecycle-step ${className}">
@@ -5850,18 +4079,13 @@ function lifecycleStep(
 
     </div>
   `;
-
 }
-
 
 /* =========================================================
    ACQUISITION
 ========================================================= */
 
-function acquisitionPage(
-  isService = false
-) {
-
+function acquisitionPage(isService = false) {
   const onboarded =
     isService
       ? 7320
@@ -5872,17 +4096,12 @@ function acquisitionPage(
       ? 8200
       : 2100;
 
-  const achievement =
-    Math.round(
-      (
-        onboarded /
-        target
-      ) * 100
-    );
+  const achievement = Math.round(
+    (onboarded / target) * 100
+  );
 
   const remaining =
     target - onboarded;
-
 
   return `
     ${pageTitle(
@@ -5891,13 +4110,11 @@ function acquisitionPage(
       "Track members onboarded through Ambassador activity."
     )}
 
-
     ${
       isService
         ? serviceFilters()
         : managerFilters()
     }
-
 
     <section class="manager-acquisition-hero">
 
@@ -5912,19 +4129,15 @@ function acquisitionPage(
         </h2>
 
         <p>
-
           ${
             isService
-              ? "Selected enterprise scope"
+              ? "Selected Service Delivery scope"
               : "Entertainment UAE"
           }
-
           · ${currentPerformancePeriod.preset}
-
         </p>
 
       </div>
-
 
       <div class="acquisition-hero-score">
 
@@ -5938,7 +4151,6 @@ function acquisitionPage(
 
       </div>
 
-
       <div class="manager-acquisition-progress">
 
         <div
@@ -5947,7 +4159,6 @@ function acquisitionPage(
         ></div>
 
       </div>
-
 
       <div class="acquisition-hero-footer">
 
@@ -5963,7 +4174,6 @@ function acquisitionPage(
 
     </section>
 
-
     <section class="dashboard-card">
 
       <span class="section-label">
@@ -5973,7 +4183,6 @@ function acquisitionPage(
       <h3>
         Member onboarding contribution
       </h3>
-
 
       <div class="leaderboard-header">
 
@@ -5986,68 +4195,19 @@ function acquisitionPage(
 
       </div>
 
-
       ${[
-
-        [
-          "1",
-          "Noor Hassan",
-          "VOX Cinemas",
-          "City Centre Mirdif",
-          "48",
-          "96%"
-        ],
-
-        [
-          "2",
-          "Sami Omar",
-          "VOX Cinemas",
-          "City Centre Al Zahia",
-          "44",
-          "88%"
-        ],
-
-        [
-          "3",
-          "Layla Haddad",
-          "VOX Cinemas",
-          "Mall of the Emirates",
-          "42",
-          "84%"
-        ],
-
-        [
-          "4",
-          "Rania Ali",
-          "VOX Cinemas",
-          "City Centre Deira",
-          "29",
-          "58%"
-        ],
-
-        [
-          "5",
-          "Sara Khan",
-          "VOX Cinemas",
-          "City Centre Deira",
-          "21",
-          "42%"
-        ]
-
-      ]
-        .map(
-          row =>
-            leaderboardRow(
-              ...row
-            )
-        )
-        .join("")}
+        ["1", "Noor Hassan", "VOX Cinemas", "City Centre Mirdif", "48", "96%"],
+        ["2", "Sami Omar", "VOX Cinemas", "City Centre Al Zahia", "44", "88%"],
+        ["3", "Layla Haddad", "VOX Cinemas", "Mall of the Emirates", "42", "84%"],
+        ["4", "Rania Ali", "VOX Cinemas", "City Centre Deira", "29", "58%"],
+        ["5", "Sara Khan", "VOX Cinemas", "City Centre Deira", "21", "42%"]
+      ].map(row =>
+        leaderboardRow(...row)
+      ).join("")}
 
     </section>
   `;
-
 }
-
 
 function leaderboardRow(
   rank,
@@ -6057,48 +4217,45 @@ function leaderboardRow(
   members,
   target
 ) {
-
   return `
     <div class="leaderboard-row">
 
-      <strong class="rank-cell">
+      <strong
+        data-label="Rank"
+        class="rank-cell"
+      >
         ${rank}
       </strong>
 
-      <strong>
+      <strong data-label="Ambassador">
         ${name}
       </strong>
 
-      <span>
+      <span data-label="Brand">
         ${brand}
       </span>
 
-      <span>
+      <span data-label="Location">
         ${location}
       </span>
 
-      <strong>
+      <strong data-label="Members Onboarded">
         ${members}
       </strong>
 
-      <strong>
+      <strong data-label="% Target">
         ${target}
       </strong>
 
     </div>
   `;
-
 }
-
 
 /* =========================================================
    COMMUNICATIONS
 ========================================================= */
 
-function communicationsPage(
-  isService = false
-) {
-
+function communicationsPage(isService = false) {
   return `
     ${pageTitle(
       "AMBASSADOR PROGRAM",
@@ -6106,13 +4263,11 @@ function communicationsPage(
       "Broadcast updates and measure Ambassador engagement."
     )}
 
-
     ${
       isService
         ? serviceFilters()
         : managerFilters()
     }
-
 
     <section class="communications-hero">
 
@@ -6141,9 +4296,7 @@ function communicationsPage(
 
     </section>
 
-
     <div id="broadcast-compose-area"></div>
-
 
     <div class="dashboard-grid four">
 
@@ -6177,7 +4330,6 @@ function communicationsPage(
 
     </div>
 
-
     <section class="dashboard-card">
 
       <span class="section-label">
@@ -6188,44 +4340,22 @@ function communicationsPage(
         Broadcast engagement
       </h3>
 
-
       <div class="communications-header">
 
-        <span>
-          Broadcast
-        </span>
-
-        <span>
-          Reach
-        </span>
-
-        <span>
-          Views
-        </span>
-
-        <span>
-          Likes
-        </span>
-
-        <span>
-          Comments
-        </span>
-
-        <span>
-          Action
-        </span>
+        <span>Broadcast</span>
+        <span>Reach</span>
+        <span>Views</span>
+        <span>Likes</span>
+        <span>Comments</span>
+        <span>Action</span>
 
       </div>
 
-
       ${communicationsFeed
-        .map(
-          communicationsRow
-        )
+        .map(communicationsRow)
         .join("")}
 
     </section>
-
 
     <section class="notice-card">
 
@@ -6234,23 +4364,18 @@ function communicationsPage(
       </strong>
 
       <p>
-        Engagement points can feed Ambassador profiles and BU / Brand leaderboards. This prototype demonstrates the reporting experience.
+        Engagement points can feed Ambassador profiles and BU / Brand leaderboards.
       </p>
 
     </section>
   `;
-
 }
 
-
-function communicationsRow(
-  item
-) {
-
+function communicationsRow(item) {
   return `
     <div class="communications-row">
 
-      <div>
+      <div data-label="Broadcast">
 
         <strong>
           ${item.title}
@@ -6262,19 +4387,19 @@ function communicationsRow(
 
       </div>
 
-      <span>
+      <span data-label="Reach">
         ${item.reach}
       </span>
 
-      <strong>
+      <strong data-label="Views">
         ${item.views}
       </strong>
 
-      <strong>
+      <strong data-label="Likes">
         ${item.likes}
       </strong>
 
-      <strong>
+      <strong data-label="Comments">
         ${item.comments}
       </strong>
 
@@ -6284,19 +4409,14 @@ function communicationsRow(
 
     </div>
   `;
-
 }
 
-
 function showNewBroadcast() {
-
-  const area =
-    document.getElementById(
-      "broadcast-compose-area"
-    );
+  const area = document.getElementById(
+    "broadcast-compose-area"
+  );
 
   if (!area) return;
-
 
   area.innerHTML = `
     <section class="dashboard-card broadcast-composer">
@@ -6308,7 +4428,6 @@ function showNewBroadcast() {
       <h3>
         Create Ambassador update
       </h3>
-
 
       <div class="broadcast-form-grid">
 
@@ -6324,7 +4443,6 @@ function showNewBroadcast() {
 
         </div>
 
-
         <div class="mock-field">
 
           <label>
@@ -6337,7 +4455,6 @@ function showNewBroadcast() {
 
         </div>
 
-
         <div class="mock-field wide">
 
           <label>
@@ -6349,7 +4466,6 @@ function showNewBroadcast() {
           </div>
 
         </div>
-
 
         <div class="mock-field wide">
 
@@ -6365,25 +4481,19 @@ function showNewBroadcast() {
 
       </div>
 
-
       <button class="primary-small">
         Publish Broadcast
       </button>
 
     </section>
   `;
-
 }
-
 
 /* =========================================================
    AMBASSADOR HUB
 ========================================================= */
 
-function hubPage(
-  isService = false
-) {
-
+function hubPage(isService = false) {
   return `
     ${pageTitle(
       "AMBASSADOR PROGRAM",
@@ -6391,24 +4501,19 @@ function hubPage(
       "Track feedback, suggestions and Ambassador-led submissions."
     )}
 
-
     ${
       isService
         ? serviceFilters()
         : managerFilters()
     }
 
-
     <div class="dashboard-grid four">
 
       ${ambassadorHubSubmissions
-        .map(
-          hubMetricCard
-        )
+        .map(hubMetricCard)
         .join("")}
 
     </div>
-
 
     <section class="dashboard-card">
 
@@ -6420,49 +4525,21 @@ function hubPage(
         Ambassador Hub → Alida
       </h3>
 
-
       <div class="hub-flow">
 
-        <span>
-          Ambassador Submission
-        </span>
-
-        <b>
-          →
-        </b>
-
-        <span>
-          SHARE Lens
-        </span>
-
-        <b>
-          →
-        </b>
-
-        <span>
-          Categorisation
-        </span>
-
-        <b>
-          →
-        </b>
-
-        <span>
-          Alida Integration
-        </span>
-
-        <b>
-          →
-        </b>
-
-        <span>
-          Reporting & Follow-up
-        </span>
+        <span>Ambassador Submission</span>
+        <b>→</b>
+        <span>SHARE Lens</span>
+        <b>→</b>
+        <span>Categorisation</span>
+        <b>→</b>
+        <span>Alida Integration</span>
+        <b>→</b>
+        <span>Reporting & Follow-up</span>
 
       </div>
 
     </section>
-
 
     <section class="notice-card">
 
@@ -6476,14 +4553,9 @@ function hubPage(
 
     </section>
   `;
-
 }
 
-
-function hubMetricCard(
-  item
-) {
-
+function hubMetricCard(item) {
   return `
     <section class="dashboard-card hub-metric-card">
 
@@ -6509,33 +4581,22 @@ function hubMetricCard(
 
     </section>
   `;
-
 }
-
 
 /* =========================================================
    SERVICE DELIVERY HOME
 ========================================================= */
 
 function serviceHome() {
+  const onboarded = 7320;
+  const target = 8200;
 
-  const onboarded =
-    7320;
-
-  const target =
-    8200;
-
-  const achievement =
-    Math.round(
-      (
-        onboarded /
-        target
-      ) * 100
-    );
+  const achievement = Math.round(
+    (onboarded / target) * 100
+  );
 
   const remaining =
     target - onboarded;
-
 
   return `
     ${pageTitle(
@@ -6544,9 +4605,7 @@ function serviceHome() {
       "Cross-BU visibility across service performance, Service Pulse, training, knowledge and the Ambassador Program."
     )}
 
-
     ${serviceFilters()}
-
 
     <div class="dashboard-grid four">
 
@@ -6554,21 +4613,21 @@ function serviceHome() {
         "Overall Performance Score",
         "88%",
         "Strong",
-        metricDefinitions.performance
+        "Aggregated service performance for the currently selected Service Delivery scope."
       )}
 
       ${metricCard(
         "Active Ambassadors",
         "850",
         "Selected scope",
-        "Active Ambassadors in the selected Service Delivery scope."
+        metricDefinitions.activeAmbassadors
       )}
 
       ${metricCard(
         "Training Completion",
         "91%",
         "Current period",
-        metricDefinitions.training
+        metricDefinitions.trainingCompletion
       )}
 
       ${managerAcquisitionSummaryCard(
@@ -6579,7 +4638,6 @@ function serviceHome() {
       )}
 
     </div>
-
 
     <div class="dashboard-grid two">
 
@@ -6612,15 +4670,11 @@ function serviceHome() {
 
         </div>
 
-
         ${managerPerformanceBreakdown
-          .map(
-            managerPerformanceRow
-          )
+          .map(managerPerformanceRow)
           .join("")}
 
       </section>
-
 
       <section class="dashboard-card">
 
@@ -6651,17 +4705,13 @@ function serviceHome() {
 
         </div>
 
-
         ${managerAttentionItems
-          .map(
-            managerAttentionRow
-          )
+          .map(managerAttentionRow)
           .join("")}
 
       </section>
 
     </div>
-
 
     <div class="dashboard-grid two">
 
@@ -6683,7 +4733,6 @@ function serviceHome() {
 
         </div>
 
-
         <div class="pulse-mini-stats">
 
           <span>
@@ -6703,7 +4752,6 @@ function serviceHome() {
 
         </div>
 
-
         <button
           class="small-button"
           onclick="navigateTo('service-pulse')"
@@ -6712,7 +4760,6 @@ function serviceHome() {
         </button>
 
       </section>
-
 
       <section class="manager-home-acquisition compact-banner embedded-banner">
 
@@ -6732,7 +4779,6 @@ function serviceHome() {
 
         </div>
 
-
         <div class="manager-acquisition-right">
 
           <strong>
@@ -6744,7 +4790,6 @@ function serviceHome() {
           </span>
 
         </div>
-
 
         <div class="manager-progress-track">
 
@@ -6759,16 +4804,13 @@ function serviceHome() {
 
     </div>
   `;
-
 }
-
 
 /* =========================================================
    SERVICE PERFORMANCE
 ========================================================= */
 
 function servicePerformance() {
-
   return `
     ${pageTitle(
       "SERVICE DELIVERY",
@@ -6776,9 +4818,7 @@ function servicePerformance() {
       "Analyse service performance across the selected organisational scope."
     )}
 
-
     ${serviceFilters()}
-
 
     <div class="dashboard-grid four">
 
@@ -6786,7 +4826,7 @@ function servicePerformance() {
         "Overall Performance Score",
         "88%",
         "Strong",
-        metricDefinitions.performance
+        "Aggregated service performance for the current filtered Service Delivery scope."
       )}
 
       ${metricCard(
@@ -6812,7 +4852,6 @@ function servicePerformance() {
 
     </div>
 
-
     <section class="overall-analysis-card">
 
       <div>
@@ -6830,7 +4869,6 @@ function servicePerformance() {
         </p>
 
       </div>
-
 
       <button
         class="analyse-overall-button"
@@ -6857,7 +4895,6 @@ function servicePerformance() {
 
     </section>
 
-
     <section class="dashboard-card">
 
       <div class="card-heading-row">
@@ -6878,71 +4915,32 @@ function servicePerformance() {
 
         </div>
 
-
         <select class="inline-selector">
-
-          <option>
-            Country
-          </option>
-
-          <option>
-            BU
-          </option>
-
-          <option>
-            Brand
-          </option>
-
-          <option>
-            Mall
-          </option>
-
-          <option>
-            Store / Location
-          </option>
-
-          <option>
-            Ambassador
-          </option>
-
+          <option>Country</option>
+          <option>BU</option>
+          <option>Brand</option>
+          <option>Mall</option>
+          <option>Store / Location</option>
+          <option>Ambassador</option>
         </select>
 
       </div>
 
-
       <div class="manager-drill-header">
 
-        <span>
-          Level
-        </span>
-
-        <span>
-          Name
-        </span>
-
-        <span>
-          Ambassadors
-        </span>
-
-        <span>
-          Performance
-        </span>
-
-        <span>
-          Action
-        </span>
+        <span>Level</span>
+        <span>Name</span>
+        <span>Ambassadors</span>
+        <span>Performance</span>
+        <span>Action</span>
 
       </div>
 
-
       ${managerPerformanceBreakdown
-        .map(
-          managerDrillRow
-        )
+        .map(managerDrillRow)
         .join("")}
 
     </section>
-
 
     <section class="dashboard-card manager-ai-section">
 
@@ -6953,7 +4951,6 @@ function servicePerformance() {
       <h3>
         Service Delivery agent team
       </h3>
-
 
       <div class="agent-team-strip service-team">
 
@@ -6995,7 +4992,6 @@ function servicePerformance() {
 
       </div>
 
-
       <div
         id="service-agent-output"
         class="agent-output empty-state"
@@ -7005,16 +5001,13 @@ function servicePerformance() {
 
     </section>
   `;
-
 }
 
-
 /* =========================================================
-   SERVICE REQUIRES ATTENTION
+   SERVICE ATTENTION
 ========================================================= */
 
 function serviceAttentionPage() {
-
   return `
     ${pageTitle(
       "SERVICE DELIVERY",
@@ -7022,9 +5015,7 @@ function serviceAttentionPage() {
       "Priority issues across the selected Service Delivery scope."
     )}
 
-
     ${serviceFilters()}
-
 
     <div class="dashboard-grid four">
 
@@ -7058,78 +5049,56 @@ function serviceAttentionPage() {
 
     </div>
 
-
     <section class="dashboard-card">
 
       <div class="attention-table-header">
 
-        <span>
-          Severity
-        </span>
-
-        <span>
-          Location
-        </span>
-
-        <span>
-          Area
-        </span>
-
-        <span>
-          Affected
-        </span>
-
-        <span>
-          Action
-        </span>
+        <span>Severity</span>
+        <span>Location</span>
+        <span>Area</span>
+        <span>Affected</span>
+        <span>Action</span>
 
       </div>
 
+      ${managerAttentionItems.map(item => `
+        <div class="attention-table-row">
 
-      ${managerAttentionItems
-        .map(
-          item => `
+          <span
+            data-label="Severity"
+            class="severity-pill ${item.severity.toLowerCase()}"
+          >
+            ${item.severity}
+          </span>
 
-            <div class="attention-table-row">
+          <strong data-label="Location">
+            ${item.location}
+          </strong>
 
-              <span class="severity-pill ${item.severity.toLowerCase()}">
-                ${item.severity}
-              </span>
+          <span data-label="Area">
+            ${item.issue}
+          </span>
 
-              <strong>
-                ${item.location}
-              </strong>
+          <span data-label="Affected">
+            ${item.affected}
+          </span>
 
-              <span>
-                ${item.issue}
-              </span>
+          <button class="small-button">
+            Review
+          </button>
 
-              <span>
-                ${item.affected}
-              </span>
-
-              <button class="small-button">
-                Review
-              </button>
-
-            </div>
-
-          `
-        )
-        .join("")}
+        </div>
+      `).join("")}
 
     </section>
   `;
-
 }
-
 
 /* =========================================================
    SERVICE PULSE
 ========================================================= */
 
 function servicePulsePage() {
-
   return `
     ${pageTitle(
       "SERVICE DELIVERY",
@@ -7137,9 +5106,7 @@ function servicePulsePage() {
       "Create templates, review submissions and report Service Pulse performance."
     )}
 
-
     ${serviceFilters()}
-
 
     <div class="tab-bar">
 
@@ -7156,7 +5123,6 @@ function servicePulsePage() {
       </button>
 
     </div>
-
 
     <div class="dashboard-grid four">
 
@@ -7190,7 +5156,6 @@ function servicePulsePage() {
 
     </div>
 
-
     <div class="dashboard-grid two">
 
       <section class="dashboard-card">
@@ -7215,7 +5180,6 @@ function servicePulsePage() {
         </div>
 
       </section>
-
 
       <section class="dashboard-card">
 
@@ -7251,7 +5215,6 @@ function servicePulsePage() {
 
     </div>
 
-
     <section class="dashboard-card">
 
       <div class="card-heading-row">
@@ -7267,7 +5230,7 @@ function servicePulsePage() {
           </h3>
 
           <p>
-            Cleaned-up reporting view based on the current SafetyCulture reporting concept.
+            Reporting view based on the current Service Pulse structure.
           </p>
 
         </div>
@@ -7278,94 +5241,62 @@ function servicePulsePage() {
 
       </div>
 
-
       <div class="service-pulse-header">
 
-        <span>
-          Location
-        </span>
-
-        <span>
-          BU
-        </span>
-
-        <span>
-          Brand
-        </span>
-
-        <span>
-          Score
-        </span>
-
-        <span>
-          Status
-        </span>
-
-        <span>
-          Action
-        </span>
+        <span>Location</span>
+        <span>BU</span>
+        <span>Brand</span>
+        <span>Score</span>
+        <span>Status</span>
+        <span>Action</span>
 
       </div>
 
+      ${servicePulseRows.map(row => `
+        <div class="service-pulse-row">
 
-      ${servicePulseRows
-        .map(
-          row => `
+          <strong data-label="Location">
+            ${row[0]}
+          </strong>
 
-            <div class="service-pulse-row">
+          <span data-label="BU">
+            ${row[1]}
+          </span>
 
-              <strong>
-                ${row[0]}
-              </strong>
+          <span data-label="Brand">
+            ${row[2]}
+          </span>
 
-              <span>
-                ${row[1]}
-              </span>
+          <strong data-label="Score">
+            ${row[3]}
+          </strong>
 
-              <span>
-                ${row[2]}
-              </span>
+          <span
+            data-label="Status"
+            class="status-block ${
+              row[4] === "Needs Attention"
+                ? "attention"
+                : row[4] === "On Track"
+                  ? "good"
+                  : "strengthen"
+            }"
+          >
+            ${row[4]}
+          </span>
 
-              <strong>
-                ${row[3]}
-              </strong>
+          <button class="small-button">
+            View
+          </button>
 
-              <span class="status-block ${
-                row[4] === "Needs Attention"
-                  ? "attention"
-                  : row[4] === "On Track"
-                    ? "good"
-                    : "strengthen"
-              }">
-                ${row[4]}
-              </span>
-
-              <button class="small-button">
-                View
-              </button>
-
-            </div>
-
-          `
-        )
-        .join("")}
+        </div>
+      `).join("")}
 
     </section>
   `;
-
 }
 
-
-function servicePulseSectionRow(
-  name,
-  score
-) {
-
-  const value =
-    parseFloat(
-      score
-    );
-
+function servicePulseSectionRow(name, score) {
+  const value = parseFloat(score);
 
   return `
     <div class="pulse-section-row">
@@ -7377,11 +5308,7 @@ function servicePulseSectionRow(
       <div class="bar-track">
 
         <div
-          class="bar-fill ${
-            value < 60
-              ? "bar-low"
-              : ""
-          }"
+          class="bar-fill ${value < 60 ? "bar-low" : ""}"
           style="width:${value}%"
         ></div>
 
@@ -7393,16 +5320,13 @@ function servicePulseSectionRow(
 
     </div>
   `;
-
 }
 
-
 /* =========================================================
-   SERVICE AUDIT / MYSTERY SHOP
+   AUDIT / MYSTERY SHOP
 ========================================================= */
 
 function auditPage() {
-
   return `
     ${pageTitle(
       "SERVICE DELIVERY",
@@ -7410,9 +5334,7 @@ function auditPage() {
       "Review audit and Mystery Shop findings and their impact on performance."
     )}
 
-
     ${serviceFilters()}
-
 
     <div class="dashboard-grid four">
 
@@ -7446,7 +5368,6 @@ function auditPage() {
 
     </div>
 
-
     <section class="dashboard-card">
 
       <span class="section-label">
@@ -7457,57 +5378,23 @@ function auditPage() {
         How audit findings feed performance
       </h3>
 
-
       <div class="hub-flow">
 
-        <span>
-          Mystery Shop / Audit
-        </span>
-
-        <b>
-          →
-        </b>
-
-        <span>
-          Store / Mall Finding
-        </span>
-
-        <b>
-          →
-        </b>
-
-        <span>
-          Theme + Severity
-        </span>
-
-        <b>
-          →
-        </b>
-
-        <span>
-          Corrective Action
-        </span>
-
-        <b>
-          →
-        </b>
-
-        <span>
-          BU Performance
-        </span>
-
-        <b>
-          →
-        </b>
-
-        <span>
-          Service Delivery Performance
-        </span>
+        <span>Mystery Shop / Audit</span>
+        <b>→</b>
+        <span>Store / Mall Finding</span>
+        <b>→</b>
+        <span>Theme + Severity</span>
+        <b>→</b>
+        <span>Corrective Action</span>
+        <b>→</b>
+        <span>BU Performance</span>
+        <b>→</b>
+        <span>Service Delivery Performance</span>
 
       </div>
 
     </section>
-
 
     <section class="notice-card">
 
@@ -7521,100 +5408,62 @@ function auditPage() {
 
     </section>
   `;
-
 }
-
 
 /* =========================================================
    MANAGER AI
 ========================================================= */
 
 function runManagerAnalysis() {
-
   runAnimation({
+    outputId: "manager-agent-output",
 
-    outputId:
-      "manager-agent-output",
-
-    title:
-      "Analysing Entertainment UAE",
+    title: "Analysing Entertainment UAE",
 
     steps: [
-
       {
-        id:
-          "manager-performance",
-
-        title:
-          "Performance Agent",
-
+        id: "manager-performance",
+        title: "Performance Agent",
         message:
           "Assessing Service Quality, SOP Adherence and Compliance."
       },
-
       {
-        id:
-          "manager-pattern",
-
-        title:
-          "Pattern Agent",
-
+        id: "manager-pattern",
+        title: "Pattern Agent",
         message:
           "Finding recurring themes across the filtered population."
       },
-
       {
-        id:
-          "manager-knowledge",
-
-        title:
-          "Knowledge Gap Agent",
-
+        id: "manager-knowledge",
+        title: "Knowledge Gap Agent",
         message:
           "Linking performance issues to knowledge gaps."
       },
-
       {
-        id:
-          "manager-intervention",
-
-        title:
-          "Intervention Agent",
-
+        id: "manager-intervention",
+        title: "Intervention Agent",
         message:
           "Prioritising teams and Ambassadors requiring intervention."
       },
-
       {
-        id:
-          "manager-combined",
-
-        title:
-          "Combined Analysis",
-
+        id: "manager-combined",
+        title: "Combined Analysis",
         message:
           "Preparing recommended actions."
       }
-
     ],
 
     onComplete:
       showManagerAnalysisResult
-
   });
-
 }
 
-
 function showManagerAnalysisResult() {
-
-  const output =
-    document.getElementById(
-      "manager-agent-output"
-    );
+  const output = document.getElementById(
+    "manager-agent-output"
+  );
 
   if (!output) return;
-
 
   output.innerHTML = `
     ${analysisHeader(
@@ -7623,7 +5472,6 @@ function showManagerAnalysisResult() {
       86,
       "Entertainment UAE · Current filtered scope"
     )}
-
 
     <div class="dashboard-grid two no-bottom">
 
@@ -7660,7 +5508,6 @@ function showManagerAnalysisResult() {
 
       </section>
 
-
       <section class="analysis-section">
 
         <span class="section-label">
@@ -7696,111 +5543,68 @@ function showManagerAnalysisResult() {
 
     </div>
   `;
-
 }
-
 
 /* =========================================================
    SERVICE AI
 ========================================================= */
 
 function runServiceAnalysis() {
-
   runAnimation({
+    outputId: "service-agent-output",
 
-    outputId:
-      "service-agent-output",
-
-    title:
-      "Analysing Service Delivery scope",
+    title: "Analysing Service Delivery scope",
 
     steps: [
-
       {
-        id:
-          "service-performance",
-
-        title:
-          "Performance Agent",
-
+        id: "service-performance",
+        title: "Performance Agent",
         message:
           "Assessing performance across the selected scope."
       },
-
       {
-        id:
-          "service-pattern",
-
-        title:
-          "Pattern Agent",
-
+        id: "service-pattern",
+        title: "Pattern Agent",
         message:
           "Identifying systemic versus isolated themes."
       },
-
       {
-        id:
-          "service-severity",
-
-        title:
-          "Location Severity Agent",
-
+        id: "service-severity",
+        title: "Location Severity Agent",
         message:
           "Ranking locations by intervention need."
       },
-
       {
-        id:
-          "service-intervention",
-
-        title:
-          "Intervention Agent",
-
+        id: "service-intervention",
+        title: "Intervention Agent",
         message:
           "Matching issues to targeted interventions."
       },
-
       {
-        id:
-          "service-action",
-
-        title:
-          "Next Best Action",
-
+        id: "service-action",
+        title: "Next Best Action",
         message:
           "Prioritising recommended actions."
       },
-
       {
-        id:
-          "service-combined",
-
-        title:
-          "Combined Analysis",
-
+        id: "service-combined",
+        title: "Combined Analysis",
         message:
           "Preparing the Service Delivery view."
       }
-
     ],
 
     onComplete:
       showServiceAnalysisResult
-
   });
-
 }
 
-
 function showServiceAnalysisResult() {
-
-  const output =
-    document.getElementById(
-      "service-agent-output"
-    );
+  const output = document.getElementById(
+    "service-agent-output"
+  );
 
   if (!output) return;
-
 
   output.innerHTML = `
     ${analysisHeader(
@@ -7809,7 +5613,6 @@ function showServiceAnalysisResult() {
       88,
       "Current Service Delivery scope"
     )}
-
 
     <div class="dashboard-grid two no-bottom">
 
@@ -7838,7 +5641,6 @@ function showServiceAnalysisResult() {
         )}
 
       </section>
-
 
       <section class="analysis-section">
 
@@ -7875,23 +5677,19 @@ function showServiceAnalysisResult() {
 
     </div>
   `;
-
 }
-
 
 /* =========================================================
    ADMIN
 ========================================================= */
 
 function adminHome() {
-
   return `
     ${pageTitle(
       "PLATFORM ADMINISTRATION",
       "SHARE Lens Platform",
       "Manage identity, access, AI agents and integrations."
     )}
-
 
     <div class="dashboard-grid four">
 
@@ -7925,129 +5723,61 @@ function adminHome() {
 
     </div>
   `;
-
 }
 
-
 function integrationsPage() {
-
   const integrations = [
-
-    [
-      "Mitti / SafetyCulture",
-      "Training / Service Pulse",
-      "Prototype"
-    ],
-
-    [
-      "Knowmax",
-      "Knowledge Base",
-      "Prototype"
-    ],
-
-    [
-      "Infobip",
-      "Communications",
-      "Prototype"
-    ],
-
-    [
-      "Adjust",
-      "Acquisition attribution",
-      "Prototype"
-    ],
-
-    [
-      "Alida",
-      "Ambassador Hub submissions",
-      "Placeholder"
-    ],
-
-    [
-      "OneView",
-      "Customer / service context",
-      "Placeholder"
-    ],
-
-    [
-      "Asana",
-      "Action / task connectivity",
-      "Placeholder"
-    ],
-
-    [
-      "HR / Staff Master",
-      "Identity and organisational scope",
-      "Prototype"
-    ],
-
-    [
-      "Genesys",
-      "Customer interactions",
-      "Planned"
-    ]
-
+    ["Mitti / SafetyCulture", "Training / Service Pulse", "Prototype"],
+    ["Knowmax", "Knowledge Base", "Prototype"],
+    ["Infobip", "Communications", "Prototype"],
+    ["Adjust", "Acquisition attribution", "Prototype"],
+    ["Alida", "Ambassador Hub submissions", "Placeholder"],
+    ["OneView", "Customer / service context", "Placeholder"],
+    ["Asana", "Action / task connectivity", "Placeholder"],
+    ["HR / Staff Master", "Identity and organisational scope", "Prototype"],
+    ["Genesys", "Customer interactions", "Planned"]
   ];
-
 
   return `
     ${pageTitle(
       "PLATFORM",
       "Integrations",
-      "Prototype representation of the integration landscape, including Reem's requested placeholders."
+      "Prototype representation of the integration landscape."
     )}
-
 
     <div class="dashboard-grid three">
 
-      ${integrations
-        .map(
-          item => `
+      ${integrations.map(item => `
+        <section class="dashboard-card">
 
-            <section class="dashboard-card">
+          <span class="section-label">
+            INTEGRATION
+          </span>
 
-              <span class="section-label">
-                INTEGRATION
-              </span>
+          <h3>
+            ${item[0]}
+          </h3>
 
-              <h3>
-                ${item[0]}
-              </h3>
+          <p>
+            ${item[1]}
+          </p>
 
-              <p>
-                ${item[1]}
-              </p>
+          <span class="status-block ${item[2] === "Placeholder" ? "strengthen" : "good"}">
+            ${item[2]}
+          </span>
 
-              <span class="status-block ${
-                item[2] === "Placeholder"
-                  ? "strengthen"
-                  : "good"
-              }">
-                ${item[2]}
-              </span>
-
-            </section>
-
-          `
-        )
-        .join("")}
+        </section>
+      `).join("")}
 
     </div>
   `;
-
 }
 
-
 /* =========================================================
-   GENERIC PAGE
+   GENERIC
 ========================================================= */
 
-function genericRolePage(
-  label,
-  title,
-  description
-) {
-
+function genericRolePage(label, title, description) {
   return `
     ${pageTitle(
       label,
@@ -8071,30 +5801,23 @@ function genericRolePage(
 
     </section>
   `;
-
 }
 
-
 /* =========================================================
-   AI ANIMATION
+   AI PIPELINE
 ========================================================= */
 
-function runAnimation(
-  config
-) {
-
-  const output =
-    document.getElementById(
-      config.outputId
-    );
+function runAnimation(config) {
+  const output = document.getElementById(
+    config.outputId
+  );
 
   if (!output) return;
 
-
   output.classList.remove(
-    "empty-state"
+    "empty-state",
+    "hidden-output"
   );
-
 
   output.innerHTML = `
     <div class="agent-pipeline">
@@ -8119,40 +5842,25 @@ function runAnimation(
 
       </div>
 
-
       <div class="pipeline-steps">
 
-        ${config.steps
-          .map(
-            (
-              step,
-              index
-            ) => `
+        ${config.steps.map((step, index) => `
+          ${
+            index > 0
+              ? `<div class="pipeline-line"></div>`
+              : ""
+          }
 
-              ${
-                index > 0
-                  ? `<div class="pipeline-line"></div>`
-                  : ""
-              }
-
-              ${pipelineStep(
-                step.id,
-                index + 1,
-                step.title,
-                index === 0
-                  ? "Running"
-                  : "Waiting",
-                index === 0
-                  ? "active"
-                  : "waiting"
-              )}
-
-            `
-          )
-          .join("")}
+          ${pipelineStep(
+            step.id,
+            index + 1,
+            step.title,
+            index === 0 ? "Running" : "Waiting",
+            index === 0 ? "active" : "waiting"
+          )}
+        `).join("")}
 
       </div>
-
 
       <div class="pipeline-status">
 
@@ -8167,66 +5875,32 @@ function runAnimation(
     </div>
   `;
 
+  config.steps.forEach((step, index) => {
+    const startDelay =
+      index * 900;
 
-  config.steps.forEach(
-    (
-      step,
-      index
-    ) => {
-
-      const startDelay =
-        index * 900;
-
-
-      if (
-        index > 0
-      ) {
-
-        setTimeout(
-          () => {
-
-            activateGenericStep(
-              config.outputId,
-              step.id,
-              step.message
-            );
-
-          },
-          startDelay
+    if (index > 0) {
+      setTimeout(() => {
+        activateGenericStep(
+          config.outputId,
+          step.id,
+          step.message
         );
-
-      }
-
-
-      setTimeout(
-        () => {
-
-          completeGenericStep(
-            step.id
-          );
-
-
-          if (
-            index ===
-            config.steps.length - 1
-          ) {
-
-            setTimeout(
-              config.onComplete,
-              300
-            );
-
-          }
-
-        },
-        startDelay + 700
-      );
-
+      }, startDelay);
     }
-  );
 
+    setTimeout(() => {
+      completeGenericStep(step.id);
+
+      if (index === config.steps.length - 1) {
+        setTimeout(
+          config.onComplete,
+          300
+        );
+      }
+    }, startDelay + 700);
+  });
 }
-
 
 function pipelineStep(
   id,
@@ -8235,7 +5909,6 @@ function pipelineStep(
   status,
   state
 ) {
-
   return `
     <div
       id="step-${id}"
@@ -8260,25 +5933,18 @@ function pipelineStep(
 
     </div>
   `;
-
 }
-
 
 function activateGenericStep(
   outputId,
   id,
   message
 ) {
+  const step = document.getElementById(
+    `step-${id}`
+  );
 
-  const step =
-    document.getElementById(
-      `step-${id}`
-    );
-
-  if (
-    step
-  ) {
-
+  if (step) {
     step.classList.remove(
       "waiting",
       "complete"
@@ -8287,55 +5953,33 @@ function activateGenericStep(
     step.classList.add(
       "active"
     );
-
   }
 
+  const status = document.getElementById(
+    `status-${id}`
+  );
 
-  const status =
-    document.getElementById(
-      `status-${id}`
-    );
-
-  if (
-    status
-  ) {
-
+  if (status) {
     status.textContent =
       "Running";
-
   }
 
+  const messageNode = document.getElementById(
+    `${outputId}-message`
+  );
 
-  const messageNode =
-    document.getElementById(
-      `${outputId}-message`
-    );
-
-  if (
-    messageNode
-  ) {
-
+  if (messageNode) {
     messageNode.textContent =
       message;
-
   }
-
 }
 
+function completeGenericStep(id) {
+  const step = document.getElementById(
+    `step-${id}`
+  );
 
-function completeGenericStep(
-  id
-) {
-
-  const step =
-    document.getElementById(
-      `step-${id}`
-    );
-
-  if (
-    step
-  ) {
-
+  if (step) {
     step.classList.remove(
       "waiting",
       "active"
@@ -8344,37 +5988,23 @@ function completeGenericStep(
     step.classList.add(
       "complete"
     );
-
   }
 
+  const status = document.getElementById(
+    `status-${id}`
+  );
 
-  const status =
-    document.getElementById(
-      `status-${id}`
-    );
-
-  if (
-    status
-  ) {
-
+  if (status) {
     status.textContent =
       "Complete";
-
   }
-
 }
-
-
-/* =========================================================
-   AI HELPERS
-========================================================= */
 
 function agentTeamMember(
   number,
   title,
   description
 ) {
-
   return `
     <div class="agent-team-card">
 
@@ -8396,9 +6026,7 @@ function agentTeamMember(
 
     </div>
   `;
-
 }
-
 
 function analysisHeader(
   label,
@@ -8406,7 +6034,6 @@ function analysisHeader(
   score,
   subtitle
 ) {
-
   return `
     <div class="analysis-result-header">
 
@@ -8438,9 +6065,7 @@ function analysisHeader(
 
     </div>
   `;
-
 }
-
 
 function severityRow(
   title,
@@ -8448,7 +6073,6 @@ function severityRow(
   severity,
   className
 ) {
-
   return `
     <div class="severity-row">
 
@@ -8470,9 +6094,7 @@ function severityRow(
 
     </div>
   `;
-
 }
-
 
 function locationSeverityRow(
   title,
@@ -8480,7 +6102,6 @@ function locationSeverityRow(
   severity,
   className
 ) {
-
   return `
     <div class="location-severity-row">
 
@@ -8502,177 +6123,94 @@ function locationSeverityRow(
 
     </div>
   `;
-
 }
 
-
-function openPerformanceInteraction(
-  interactionId
-) {
-
+function openPerformanceInteraction(interactionId) {
   expandedInteractionId =
     interactionId;
 
-  navigateTo(
-    "performance"
-  );
+  navigateTo("performance");
 
+  setTimeout(() => {
+    const node = document.getElementById(
+      `interaction-expand-${interactionId}`
+    );
 
-  setTimeout(
-    () => {
-
-      const node =
-        document.getElementById(
-          `interaction-expand-${interactionId}`
-        );
-
-      if (
-        node
-      ) {
-
-        node.scrollIntoView({
-          behavior: "smooth",
-          block: "center"
-        });
-
-      }
-
-    },
-    100
-  );
-
+    if (node) {
+      node.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    }
+  }, 100);
 }
-
 
 /* =========================================================
    ROUTING
 ========================================================= */
 
-function navigateTo(
-  page
-) {
+function navigateTo(page) {
+  currentPage = page;
 
-  currentPage =
-    page;
+  closeMobileNav();
 
-  let content =
-    "";
+  let content = "";
 
-
-  if (
-    currentRole === "ambassador"
-  ) {
-
+  if (currentRole === "ambassador") {
     const pages = {
-
-      home:
-        ambassadorHome,
-
-      performance:
-        ambassadorPerformance,
-
-      training:
-        trainingPage,
-
-      knowledge:
-        knowledgePage,
-
-      status:
-        statusPage
-
+      home: ambassadorHome,
+      performance: ambassadorPerformance,
+      training: trainingPage,
+      knowledge: knowledgePage,
+      status: statusPage
     };
-
 
     content =
       pages[page]
         ? pages[page]()
         : ambassadorHome();
-
   }
 
-
-  if (
-    currentRole === "manager"
-  ) {
-
+  if (currentRole === "manager") {
     const pages = {
-
-      home:
-        managerHome,
-
-      "team-performance":
-        managerPerformance,
-
-      "team-attention":
-        managerRequiresAttentionPage,
+      home: managerHome,
+      "team-performance": managerPerformance,
+      "team-attention": managerRequiresAttentionPage,
 
       "training-overview":
-        () =>
-          managerTrainingOverviewPage(
-            false
-          ),
+        () => managerTrainingOverviewPage(false),
 
       "knowledge-gaps":
-        () =>
-          managerKnowledgeGapsPage(
-            false
-          ),
+        () => managerKnowledgeGapsPage(false),
 
       "manager-knowledge":
-        () =>
-          managerKnowledgePage(
-            false
-          ),
+        () => managerKnowledgePage(false),
 
       ambassadors:
-        () =>
-          managerAmbassadorsPage(
-            false
-          ),
+        () => managerAmbassadorsPage(false),
 
       "manager-onboarding":
-        () =>
-          lifecyclePage(
-            false
-          ),
+        () => lifecyclePage(false),
 
       "manager-acquisition":
-        () =>
-          acquisitionPage(
-            false
-          ),
+        () => acquisitionPage(false),
 
       "manager-communications":
-        () =>
-          communicationsPage(
-            false
-          ),
+        () => communicationsPage(false),
 
       "manager-hub":
-        () =>
-          hubPage(
-            false
-          )
-
+        () => hubPage(false)
     };
-
 
     content =
       pages[page]
         ? pages[page]()
         : managerHome();
-
   }
 
-
-  if (
-    currentRole === "service"
-  ) {
-
+  if (currentRole === "service") {
     const pages = {
-
-      home:
-        serviceHome,
+      home: serviceHome,
 
       "group-performance":
         servicePerformance,
@@ -8687,86 +6225,52 @@ function navigateTo(
         auditPage,
 
       "group-training":
-        () =>
-          managerTrainingOverviewPage(
-            true
-          ),
+        () => managerTrainingOverviewPage(true),
 
       "group-gaps":
-        () =>
-          managerKnowledgeGapsPage(
-            true
-          ),
+        () => managerKnowledgeGapsPage(true),
 
       "group-knowledge":
-        () =>
-          managerKnowledgePage(
-            true
-          ),
+        () => managerKnowledgePage(true),
 
       "group-ambassadors":
-        () =>
-          managerAmbassadorsPage(
-            true
-          ),
+        () => managerAmbassadorsPage(true),
 
       "group-onboarding":
-        () =>
-          lifecyclePage(
-            true
-          ),
+        () => lifecyclePage(true),
 
       "group-acquisition":
-        () =>
-          acquisitionPage(
-            true
-          ),
+        () => acquisitionPage(true),
 
       "group-communications":
-        () =>
-          communicationsPage(
-            true
-          ),
+        () => communicationsPage(true),
 
       "group-hub":
-        () =>
-          hubPage(
-            true
-          ),
+        () => hubPage(true),
 
       "group-actions":
-        () =>
-          genericRolePage(
-            "SERVICE DELIVERY",
-            "Actions",
-            "Track corrective actions and follow-up across the selected scope."
-          ),
+        () => genericRolePage(
+          "SERVICE DELIVERY",
+          "Actions",
+          "Track corrective actions and follow-up across the selected scope."
+        ),
 
       "group-recognition":
-        () =>
-          genericRolePage(
-            "AMBASSADOR PROGRAM",
-            "Recognition / Leaderboard",
-            "View recognition, acquisition and engagement leaderboards across the selected scope."
-          )
-
+        () => genericRolePage(
+          "AMBASSADOR PROGRAM",
+          "Recognition / Leaderboard",
+          "View recognition, acquisition and engagement leaderboards across the selected scope."
+        )
     };
-
 
     content =
       pages[page]
         ? pages[page]()
         : serviceHome();
-
   }
 
-
-  if (
-    currentRole === "admin"
-  ) {
-
+  if (currentRole === "admin") {
     const pages = {
-
       home:
         adminHome,
 
@@ -8774,110 +6278,93 @@ function navigateTo(
         integrationsPage,
 
       "users-access":
-        () =>
-          genericRolePage(
-            "IDENTITY & ACCESS",
-            "Users & Access",
-            "Manage Staff ID, Microsoft SSO, roles and organisational scope."
-          ),
+        () => genericRolePage(
+          "IDENTITY & ACCESS",
+          "Users & Access",
+          "Manage Staff ID, Microsoft SSO, roles and organisational scope."
+        ),
 
       roles:
-        () =>
-          genericRolePage(
-            "IDENTITY & ACCESS",
-            "Roles & Permissions",
-            "Configure role-based access and visibility."
-          ),
+        () => genericRolePage(
+          "IDENTITY & ACCESS",
+          "Roles & Permissions",
+          "Configure role-based access and visibility."
+        ),
 
       identity:
-        () =>
-          genericRolePage(
-            "IDENTITY & ACCESS",
-            "Identity Providers",
-            "Configure Staff ID and Microsoft Entra ID."
-          ),
+        () => genericRolePage(
+          "IDENTITY & ACCESS",
+          "Identity Providers",
+          "Configure Staff ID and Microsoft Entra ID."
+        ),
 
       "ai-agents":
-        () =>
-          genericRolePage(
-            "AI PLATFORM",
-            "AI Agents",
-            "View specialist AI capabilities and orchestration."
-          ),
+        () => genericRolePage(
+          "AI PLATFORM",
+          "AI Agents",
+          "View specialist AI capabilities and orchestration."
+        ),
 
       "agent-config":
-        () =>
-          genericRolePage(
-            "AI PLATFORM",
-            "Agent Configuration",
-            "Configure prompts, models and orchestration."
-          ),
+        () => genericRolePage(
+          "AI PLATFORM",
+          "Agent Configuration",
+          "Configure prompts, models and orchestration."
+        ),
 
       "knowledge-sources":
-        () =>
-          genericRolePage(
-            "AI PLATFORM",
-            "Knowledge Sources",
-            "Configure approved retrieval sources."
-          ),
+        () => genericRolePage(
+          "AI PLATFORM",
+          "Knowledge Sources",
+          "Configure approved retrieval sources."
+        ),
 
       frameworks:
-        () =>
-          genericRolePage(
-            "PLATFORM",
-            "Assessment Frameworks",
-            "Configure assessment templates and scoring."
-          ),
+        () => genericRolePage(
+          "PLATFORM",
+          "Assessment Frameworks",
+          "Configure assessment templates and scoring."
+        ),
 
       notifications:
-        () =>
-          genericRolePage(
-            "PLATFORM",
-            "Notifications",
-            "Configure notifications and alerts."
-          ),
+        () => genericRolePage(
+          "PLATFORM",
+          "Notifications",
+          "Configure notifications and alerts."
+        ),
 
       "audit-log":
-        () =>
-          genericRolePage(
-            "PLATFORM",
-            "Audit Log",
-            "Review platform activity."
-          )
-
+        () => genericRolePage(
+          "PLATFORM",
+          "Audit Log",
+          "Review platform activity."
+        )
     };
-
 
     content =
       pages[page]
         ? pages[page]()
         : adminHome();
-
   }
 
-
-  renderShell(
-    content
-  );
-
+  renderShell(content);
 }
-
 
 /* =========================================================
    GLOBAL FUNCTIONS
 ========================================================= */
 
-window.signIn =
-  signIn;
+window.signIn = signIn;
+window.continueWithSSO = continueWithSSO;
+window.signOut = signOut;
 
-window.continueWithSSO =
-  continueWithSSO;
+window.navigateTo = navigateTo;
 
-window.signOut =
-  signOut;
+window.toggleMobileNav = toggleMobileNav;
+window.closeMobileNav = closeMobileNav;
 
-window.navigateTo =
-  navigateTo;
+window.toggleInfo = toggleInfo;
+window.showToast = showToast;
 
 window.toggleInteractionDetails =
   toggleInteractionDetails;
@@ -8887,9 +6374,6 @@ window.analyseInlineInteraction =
 
 window.startInlineAnalysis =
   startInlineAnalysis;
-
-window.openTrainingTarget =
-  openTrainingTarget;
 
 window.openPerformanceInteraction =
   openPerformanceInteraction;
@@ -8912,7 +6396,6 @@ window.exportAmbassadorList =
 window.showNewBroadcast =
   showNewBroadcast;
 
-
 /* =========================================================
    ENTER LOGIN
 ========================================================= */
@@ -8920,17 +6403,11 @@ window.showNewBroadcast =
 document.addEventListener(
   "keydown",
   event => {
-
     if (
       event.key === "Enter" &&
-      document.getElementById(
-        "login-id"
-      )
+      document.getElementById("login-id")
     ) {
-
       signIn();
-
     }
-
   }
 );
