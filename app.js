@@ -1232,10 +1232,7 @@ function topBar() {
 
       <div class="user-header">
 
-        <div class="identity-pill">
-          ${user.identityType}
-        </div>
-
+    
         <div class="user-avatar">
           ${user.initials}
         </div>
