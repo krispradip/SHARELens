@@ -7,7 +7,7 @@ const app = document.getElementById("app");
    BUILD
 ========================================================= */
 
-const APP_VERSION = "0.11.0";
+const APP_VERSION = "0.11.1";
 const APP_BUILD_DATE = "15 Oct 2026";
 
 const SHARE_POINT_AED_VALUE = 0.10;
@@ -632,7 +632,6 @@ const managerKnowledgeGaps = [
 
 /* =========================================================
    SERVICE PULSE
-   Actual exported sample structure
 ========================================================= */
 
 const servicePulseSubmissionsData = [
@@ -940,10 +939,6 @@ const servicePulseSubmissionsData = [
 ];
 
 
-/* =========================================================
-   SERVICE PULSE QUESTION MODEL
-========================================================= */
-
 const servicePulseScenarios = [
 
   {
@@ -1009,12 +1004,6 @@ const servicePulseScenarios = [
 
 ];
 
-
-/*
-  Prototype behaviour analytics.
-  These represent the intended SHARE Lens analytics model.
-  They are not presented as final production KPI values.
-*/
 
 const servicePulseBehaviourAnalytics = [
 
@@ -1375,7 +1364,9 @@ function setLoginMessage(message, type = "error") {
   if (!node) return;
 
   node.textContent = message;
-  node.className = `login-error ${type}`;
+
+  node.className =
+    `login-error ${type}`;
 
 }
 
@@ -1473,9 +1464,11 @@ function continueWithSSO() {
 function loginAsRole(role) {
 
   currentRole = role;
+
   currentPage = "home";
 
   expandedInteractionId = null;
+
   notificationDrawerOpen = false;
 
   renderCurrentPage();
@@ -1491,7 +1484,7 @@ function signOut() {
 
 
 /* =========================================================
-   SHELL
+   TOP BAR
 ========================================================= */
 
 function topBar() {
@@ -1508,6 +1501,7 @@ function topBar() {
         <button
           class="mobile-menu-button"
           onclick="toggleMobileNav()"
+          aria-label="Open navigation"
         >
           ☰
         </button>
@@ -1547,11 +1541,13 @@ function topBar() {
               <button
                 class="notification-button"
                 onclick="toggleNotificationDrawer()"
+                aria-label="Notifications"
               >
+
                 ◇
 
                 ${
-                  unreadNotifications
+                  unreadNotifications > 0
                     ? `
                       <span class="notification-count">
                         ${unreadNotifications}
@@ -1596,6 +1592,10 @@ function topBar() {
 }
 
 
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
 function sidebar() {
 
   return `
@@ -1606,11 +1606,21 @@ function sidebar() {
 
       <div class="mobile-sidebar-header">
 
-        <strong>
-          SHARE Lens
-        </strong>
+        <div>
 
-        <button onclick="closeMobileNav()">
+          <strong>
+            SHARE Lens
+          </strong>
+
+          <span>
+            ${prototypeUsers[currentRole].role}
+          </span>
+
+        </div>
+
+        <button
+          onclick="closeMobileNav()"
+        >
           ×
         </button>
 
@@ -1629,6 +1639,7 @@ function sidebar() {
               `
               : ""
           }
+
 
           ${group.items
             .map(item => `
@@ -1669,6 +1680,10 @@ function sidebar() {
 
 }
 
+
+/* =========================================================
+   SHELL
+========================================================= */
 
 function renderShell(content) {
 
@@ -1750,7 +1765,11 @@ function closeMobileNav() {
    COMMON UI
 ========================================================= */
 
-function pageTitle(label, title, subtitle) {
+function pageTitle(
+  label,
+  title,
+  subtitle
+) {
 
   return `
     <div class="page-heading">
@@ -1814,13 +1833,19 @@ function toggleInfo(event) {
     .forEach(item => {
 
       if (item !== wrap) {
-        item.classList.remove("open");
+
+        item.classList.remove(
+          "open"
+        );
+
       }
 
     });
 
 
-  wrap.classList.toggle("open");
+  wrap.classList.toggle(
+    "open"
+  );
 
 }
 
@@ -1840,7 +1865,11 @@ document.addEventListener(
           ".info-wrap.open"
         )
         .forEach(item => {
-          item.classList.remove("open");
+
+          item.classList.remove(
+            "open"
+          );
+
         });
 
     }
@@ -1887,7 +1916,10 @@ function metricCard(
 }
 
 
-function profileLine(label, value) {
+function profileLine(
+  label,
+  value
+) {
 
   return `
     <div class="profile-line">
@@ -1917,7 +1949,9 @@ function showToast(message) {
   if (!toast) {
 
     toast =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
     toast.id =
       "prototype-toast";
@@ -1925,12 +1959,16 @@ function showToast(message) {
     toast.className =
       "prototype-toast";
 
-    document.body.appendChild(toast);
+    document.body.appendChild(
+      toast
+    );
 
   }
 
 
-  toast.textContent = message;
+  toast.textContent =
+    message;
+
 
   toast.classList.add(
     "visible"
@@ -1949,7 +1987,7 @@ function showToast(message) {
 
 
 /* =========================================================
-   NOTIFICATION DRAWER
+   NOTIFICATIONS
 ========================================================= */
 
 function notificationDrawer() {
@@ -1998,6 +2036,7 @@ function notificationDrawer() {
 
       ${ambassadorNotifications
         .map(item => `
+
           <div class="notification-item">
 
             <div class="notification-type-icon">
@@ -2024,6 +2063,7 @@ function notificationDrawer() {
             </div>
 
           </div>
+
         `)
         .join("")}
 
@@ -2090,7 +2130,7 @@ function handleNotificationAction(target) {
 
 
 /* =========================================================
-   AMBASSADOR HOME
+   AMBASSADOR JOURNEY
 ========================================================= */
 
 function compactJourney() {
@@ -2120,29 +2160,32 @@ function compactJourney() {
 
       <div class="compact-journey-track">
 
-        ${steps.map((step, index) => `
+        ${steps.map(
+          (step, index) => `
 
-          <div class="compact-journey-step">
+            <div class="compact-journey-step">
 
-            <span class="compact-journey-check">
-              ✓
-            </span>
+              <span class="compact-journey-check">
+                ✓
+              </span>
 
-            <span class="compact-journey-label">
-              ${step}
-            </span>
+              <span class="compact-journey-label">
+                ${step}
+              </span>
 
-          </div>
+            </div>
 
-          ${
-            index < steps.length - 1
-              ? `
-                <div class="compact-journey-line"></div>
-              `
-              : ""
-          }
+            ${
+              index <
+              steps.length - 1
+                ? `
+                  <div class="compact-journey-line"></div>
+                `
+                : ""
+            }
 
-        `).join("")}
+          `
+        ).join("")}
 
       </div>
 
@@ -2152,10 +2195,15 @@ function compactJourney() {
 }
 
 
+/* =========================================================
+   AMBASSADOR HOME
+========================================================= */
+
 function ambassadorHome() {
 
   const user =
     prototypeUsers.ambassador;
+
 
   const achievement =
     Math.round(
@@ -2216,6 +2264,7 @@ function ambassadorHome() {
         metricDefinitions.training
       )}
 
+
       <section
         class="dashboard-card home-metric-card"
         onclick="navigateTo('status')"
@@ -2235,6 +2284,7 @@ function ambassadorHome() {
 
         <strong>
           ${user.shareMembersOnboarded}
+
           <small>
             / ${user.shareMemberTarget}
           </small>
@@ -2538,7 +2588,7 @@ function ambassadorPerformance() {
 
           <p>
             Showing 3 most recent of 12 assessed interactions.
-            The 86% overall score is calculated across all 12.
+            The 86% Overall Performance Score is calculated across all 12 assessed interactions, not only the three shown below.
           </p>
 
         </div>
@@ -2607,6 +2657,7 @@ function interactionBlock(interaction) {
       interaction.score
     );
 
+
   const expanded =
     expandedInteractionId ===
     interaction.id;
@@ -2629,6 +2680,7 @@ function interactionBlock(interaction) {
 
         </div>
 
+
         <div data-label="Channel">
 
           <strong>
@@ -2641,9 +2693,11 @@ function interactionBlock(interaction) {
 
         </div>
 
+
         <strong data-label="Process">
           ${interaction.process}
         </strong>
+
 
         <strong
           data-label="Score"
@@ -2656,12 +2710,14 @@ function interactionBlock(interaction) {
           ${interaction.score}%
         </strong>
 
+
         <span
           data-label="Status"
           class="status-block ${status.className}"
         >
           ${status.label}
         </span>
+
 
         <button
           class="${
@@ -2749,6 +2805,7 @@ function toggleInteractionDetails(id) {
       ? null
       : id;
 
+
   navigateTo(
     "performance",
     {
@@ -2766,6 +2823,7 @@ function analyseInlineInteraction(id) {
       ? null
       : id;
 
+
   navigateTo(
     "performance",
     {
@@ -2776,7 +2834,9 @@ function analyseInlineInteraction(id) {
 }
 
 
-function renderExpandedInteraction(interaction) {
+function renderExpandedInteraction(
+  interaction
+) {
 
   if (interaction.score >= 90) {
 
@@ -2848,6 +2908,7 @@ function startInlineAnalysis(id) {
         item.id === id
     );
 
+
   if (!interaction) return;
 
 
@@ -2860,92 +2921,110 @@ function startInlineAnalysis(id) {
   if (!output) return;
 
 
-  output.innerHTML = `
-    <div class="agent-running">
-      ✦ Evaluation Agent → SOP Agent → Compliance Agent → Combined Analysis
-    </div>
-  `;
+  output.innerHTML =
+    buildAgentPipeline(
+      "Interaction Analysis",
+      [
+        "Evaluation Agent",
+        "SOP Agent",
+        "Compliance Agent",
+        "Combined Analysis"
+      ],
+      "interaction-pipeline"
+    );
 
 
-  setTimeout(() => {
+  animatePipeline(
+    "interaction-pipeline",
+    [
+      "Reviewing service quality and customer handling...",
+      "Checking required service process steps...",
+      "Checking mandatory controls and compliance...",
+      "Combining findings and preparing the next action..."
+    ],
+    () => {
 
-    const analysis =
-      analyseInteraction(
-        interaction
-      );
-
-
-    output.innerHTML = `
-      <div class="inline-analysis-result">
-
-        <span class="section-label">
-          AI ANALYSIS COMPLETE
-        </span>
-
-        <h3>
-          ${
-            interaction.score < 50
-              ? "Needs Attention"
-              : "Opportunity to Strengthen"
-          }
-        </h3>
+      const analysis =
+        analyseInteraction(
+          interaction
+        );
 
 
-        <div class="analysis-score-row">
+      output.innerHTML = `
+        <div class="inline-analysis-result">
 
-          ${analysisMiniCard(
-            "Service Quality",
-            `${analysis.evaluation.score}%`
-          )}
+          <span class="section-label">
+            AI ANALYSIS COMPLETE
+          </span>
 
-          ${analysisMiniCard(
-            "SOP Adherence",
-            `${analysis.sop.compliance}%`
-          )}
-
-          ${analysisMiniCard(
-            "Compliance",
-            `${analysis.compliance.complianceScore}%`
-          )}
-
-        </div>
+          <h3>
+            ${
+              interaction.score < 50
+                ? "Needs Attention"
+                : "Opportunity to Strengthen"
+            }
+          </h3>
 
 
-        <div class="recommended-development">
+          <div class="analysis-score-row">
 
-          <div>
+            ${analysisMiniCard(
+              "Service Quality",
+              `${analysis.evaluation.score}%`
+            )}
 
-            <span class="section-label">
-              RECOMMENDED NEXT ACTION
-            </span>
+            ${analysisMiniCard(
+              "SOP Adherence",
+              `${analysis.sop.compliance}%`
+            )}
 
-            <h3>
-              ${interaction.trainingTitle}
-            </h3>
-
-            <p>
-              Complete the 15 min refresher and then the 5 min Knowledge Check.
-            </p>
+            ${analysisMiniCard(
+              "Compliance",
+              `${analysis.compliance.complianceScore}%`
+            )}
 
           </div>
 
-          <button
-            onclick="navigateTo('training')"
-          >
-            Go to Training
-          </button>
+
+          <div class="recommended-development">
+
+            <div>
+
+              <span class="section-label">
+                RECOMMENDED NEXT ACTION
+              </span>
+
+              <h3>
+                ${interaction.trainingTitle}
+              </h3>
+
+              <p>
+                Complete the 15 min refresher and then the 5 min Knowledge Check.
+              </p>
+
+            </div>
+
+            <button
+              onclick="navigateTo('training')"
+            >
+              Go to Training
+            </button>
+
+          </div>
 
         </div>
+      `;
 
-      </div>
-    `;
-
-  }, 900);
+    }
+  );
 
 }
 
 
-function analysisMiniCard(title, value) {
+function analysisMiniCard(
+  title,
+  value
+) {
 
   return `
     <div class="analysis-agent-card">
@@ -2971,6 +3050,7 @@ function runAmbassadorOverallAnalysis() {
       "ambassador-overall-output"
     );
 
+
   if (!output) return;
 
 
@@ -2979,37 +3059,295 @@ function runAmbassadorOverallAnalysis() {
   );
 
 
-  output.innerHTML = `
-    <div class="agent-running">
-      ✦ Evaluation Agent → SOP Agent → Compliance Agent → Pattern Agent → Combined Analysis
+  output.innerHTML =
+    buildAgentPipeline(
+      "Analysing Overall Performance",
+      [
+        "Evaluation Agent",
+        "SOP Agent",
+        "Compliance Agent",
+        "Pattern Agent",
+        "Combined Analysis"
+      ],
+      "ambassador-overall-pipeline"
+    );
+
+
+  animatePipeline(
+    "ambassador-overall-pipeline",
+    [
+      "Reviewing all assessed interactions in the selected period...",
+      "Checking recurring SOP adherence patterns...",
+      "Checking recurring compliance findings...",
+      "Identifying themes across assessed interactions...",
+      "Preparing overall findings and recommended development..."
+    ],
+    () => {
+
+      output.innerHTML = `
+        <span class="section-label">
+          OVERALL AI ANALYSIS
+        </span>
+
+        <h3>
+          Recurring opportunity: refund timeline communication
+        </h3>
+
+        <p>
+          Identified across the full 12-interaction assessment population, including INT-1001 and INT-0984.
+        </p>
+
+        <button
+          class="primary-small"
+          onclick="navigateTo('training')"
+        >
+          Open Recommended Development
+        </button>
+      `;
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   GENERIC AI PIPELINE
+========================================================= */
+
+function buildAgentPipeline(
+  title,
+  agents,
+  prefix
+) {
+
+  return `
+    <div class="agent-pipeline">
+
+      <div class="pipeline-heading">
+
+        <div>
+
+          <span class="section-label">
+            AGENT-TO-AGENT ORCHESTRATION
+          </span>
+
+          <h3>
+            ${title}
+          </h3>
+
+        </div>
+
+        <span class="pipeline-running-badge">
+          AI team running
+        </span>
+
+      </div>
+
+
+      <div class="pipeline-steps">
+
+        ${agents.map(
+          (agent, index) => `
+
+            ${
+              index > 0
+                ? `
+                  <div class="pipeline-line"></div>
+                `
+                : ""
+            }
+
+            <div
+              id="${prefix}-${index}"
+              class="pipeline-step ${
+                index === 0
+                  ? "active"
+                  : "waiting"
+              }"
+            >
+
+              <div class="pipeline-number">
+                ${index + 1}
+              </div>
+
+              <div>
+
+                <strong>
+                  ${agent}
+                </strong>
+
+                <span class="pipeline-step-status">
+                  ${
+                    index === 0
+                      ? "Running"
+                      : "Waiting"
+                  }
+                </span>
+
+              </div>
+
+            </div>
+
+          `
+        ).join("")}
+
+      </div>
+
+
+      <div class="pipeline-status">
+
+        <div class="processing-dot"></div>
+
+        <span id="${prefix}-message">
+          Starting analysis...
+        </span>
+
+      </div>
+
     </div>
   `;
 
+}
 
-  setTimeout(() => {
 
-    output.innerHTML = `
-      <span class="section-label">
-        OVERALL AI ANALYSIS
-      </span>
+function animatePipeline(
+  prefix,
+  messages,
+  onComplete
+) {
 
-      <h3>
-        Recurring opportunity: refund timeline communication
-      </h3>
+  messages.forEach(
+    (message, index) => {
 
-      <p>
-        Identified across the full 12-interaction assessment population, including INT-1001 and INT-0984.
-      </p>
+      const startDelay =
+        index * 850;
 
-      <button
-        class="primary-small"
-        onclick="navigateTo('training')"
-      >
-        Open Recommended Development
-      </button>
-    `;
 
-  }, 1200);
+      if (index > 0) {
+
+        setTimeout(() => {
+
+          const node =
+            document.getElementById(
+              `${prefix}-${index}`
+            );
+
+
+          if (!node) return;
+
+
+          node.classList.remove(
+            "waiting",
+            "complete"
+          );
+
+
+          node.classList.add(
+            "active"
+          );
+
+
+          const status =
+            node.querySelector(
+              ".pipeline-step-status"
+            );
+
+
+          if (status) {
+
+            status.textContent =
+              "Running";
+
+          }
+
+
+          const messageNode =
+            document.getElementById(
+              `${prefix}-message`
+            );
+
+
+          if (messageNode) {
+
+            messageNode.textContent =
+              message;
+
+          }
+
+        }, startDelay);
+
+      } else {
+
+        const messageNode =
+          document.getElementById(
+            `${prefix}-message`
+          );
+
+
+        if (messageNode) {
+
+          messageNode.textContent =
+            message;
+
+        }
+
+      }
+
+
+      setTimeout(() => {
+
+        const node =
+          document.getElementById(
+            `${prefix}-${index}`
+          );
+
+
+        if (node) {
+
+          node.classList.remove(
+            "active",
+            "waiting"
+          );
+
+
+          node.classList.add(
+            "complete"
+          );
+
+
+          const status =
+            node.querySelector(
+              ".pipeline-step-status"
+            );
+
+
+          if (status) {
+
+            status.textContent =
+              "Complete";
+
+          }
+
+        }
+
+
+        if (
+          index ===
+          messages.length - 1
+        ) {
+
+          setTimeout(
+            onComplete,
+            350
+          );
+
+        }
+
+      }, startDelay + 620);
+
+    }
+  );
 
 }
 
@@ -3159,6 +3497,27 @@ function recommendedDevelopmentCard() {
           ${recommendedDevelopment.reason}
         </p>
 
+        <div class="training-trigger-links">
+
+          <span>
+            Linked evidence:
+          </span>
+
+          ${recommendedDevelopment
+            .triggerInteractions
+            .map(id => `
+
+              <button
+                onclick="openPerformanceInteraction('${id}')"
+              >
+                ${id}
+              </button>
+
+            `)
+            .join("")}
+
+        </div>
+
       </div>
 
       <span class="duration-pill">
@@ -3277,7 +3636,9 @@ function knowledgeCheckPage() {
 
       </div>
 
-      <div id="knowledge-answer-feedback"></div>
+      <div
+        id="knowledge-answer-feedback"
+      ></div>
 
     </section>
   `;
@@ -3285,7 +3646,10 @@ function knowledgeCheckPage() {
 }
 
 
-function knowledgeAnswer(letter, text) {
+function knowledgeAnswer(
+  letter,
+  text
+) {
 
   return `
     <button
@@ -3309,7 +3673,14 @@ function knowledgeAnswer(letter, text) {
 
 function answerKnowledgeQuestion(letter) {
 
-  if (knowledgeCheckAnswered) return;
+  if (
+    knowledgeCheckAnswered
+  ) {
+
+    return;
+
+  }
+
 
   knowledgeCheckAnswered = true;
 
@@ -3321,6 +3692,13 @@ function answerKnowledgeQuestion(letter) {
 
 
   if (!output) return;
+
+
+  if (letter === "B") {
+
+    knowledgeCheckScore += 1;
+
+  }
 
 
   output.innerHTML = `
@@ -3357,13 +3735,22 @@ function answerKnowledgeQuestion(letter) {
 
 function nextKnowledgeQuestion() {
 
-  knowledgeCheckAnswered = false;
+  knowledgeCheckAnswered =
+    false;
 
-  if (knowledgeCheckQuestion < 10) {
+
+  if (
+    knowledgeCheckQuestion < 10
+  ) {
+
     knowledgeCheckQuestion += 1;
+
   }
 
-  navigateTo("knowledge-check");
+
+  navigateTo(
+    "knowledge-check"
+  );
 
 }
 
@@ -3406,7 +3793,12 @@ function knowledgeRepositorySection(
             Approved knowledge
           </h3>
 
+          <p>
+            Browse the complete approved knowledge repository.
+          </p>
+
         </div>
+
 
         ${
           canManage
@@ -3498,9 +3890,29 @@ function knowledgeEditor() {
   return `
     <div class="knowledge-editor">
 
-      <strong>
-        Add / Update Knowledge Article
-      </strong>
+      <div class="card-heading-row">
+
+        <div>
+
+          <span class="section-label">
+            ARTICLE MANAGEMENT
+          </span>
+
+          <h3>
+            Add / Update Knowledge Article
+          </h3>
+
+        </div>
+
+        <button
+          class="small-button"
+          onclick="toggleKnowledgeEditor()"
+        >
+          Close
+        </button>
+
+      </div>
+
 
       <div class="editor-grid">
 
@@ -3524,7 +3936,28 @@ function knowledgeEditor() {
           "Service Delivery"
         )}
 
+        ${editorField(
+          "Audience",
+          "Ambassadors"
+        )}
+
+        ${editorField(
+          "Status",
+          "Draft Update"
+        )}
+
+        ${editorField(
+          "Effective Date",
+          "15 Oct 2026"
+        )}
+
+        ${editorField(
+          "Scope",
+          "Entertainment UAE"
+        )}
+
       </div>
+
 
       <button
         class="primary-small"
@@ -3539,7 +3972,10 @@ function knowledgeEditor() {
 }
 
 
-function editorField(label, value) {
+function editorField(
+  label,
+  value
+) {
 
   return `
     <div class="mock-field">
@@ -3573,99 +4009,135 @@ function renderKnowledgeRows(
   canManage
 ) {
 
-  return items.map(item => `
+  return items
+    .map(item => `
 
-    <div class="knowledge-row">
+      <div class="knowledge-row">
 
-      <div>
+        <div>
 
-        <strong>
-          ${item.title}
-        </strong>
+          <strong>
+            ${item.title}
+          </strong>
+
+          <span>
+            ${item.category}
+          </span>
+
+        </div>
 
         <span>
-          ${item.category}
+          ${item.type}
         </span>
 
-      </div>
+        <span>
+          ${item.version} · ${item.updated}
+        </span>
 
-      <span>
-        ${item.type}
-      </span>
+        <div class="knowledge-actions">
 
-      <span>
-        ${item.version} · ${item.updated}
-      </span>
+          <button
+            class="small-button"
+          >
+            Open
+          </button>
 
-      <div class="knowledge-actions">
+          ${
+            canManage
+              ? `
+                <button
+                  class="small-button"
+                  onclick="toggleKnowledgeEditor()"
+                >
+                  Update
+                </button>
+              `
+              : ""
+          }
 
-        <button class="small-button">
-          Open
-        </button>
-
-        ${
-          canManage
-            ? `
-              <button
-                class="small-button"
-                onclick="toggleKnowledgeEditor()"
-              >
-                Update
-              </button>
-            `
-            : ""
-        }
+        </div>
 
       </div>
 
-    </div>
-
-  `).join("");
+    `)
+    .join("");
 
 }
 
 
-function filterKnowledgeBase(canManage) {
+function filterKnowledgeBase(
+  canManage
+) {
+
+  const searchNode =
+    document.getElementById(
+      "knowledge-search"
+    );
+
+
+  const categoryNode =
+    document.getElementById(
+      "knowledge-category"
+    );
+
+
+  const resultsNode =
+    document.getElementById(
+      "knowledge-results"
+    );
+
+
+  if (
+    !searchNode ||
+    !categoryNode ||
+    !resultsNode
+  ) {
+
+    return;
+
+  }
+
 
   const search =
-    document
-      .getElementById(
-        "knowledge-search"
-      )
+    searchNode
       .value
       .toLowerCase();
 
 
   const category =
-    document
-      .getElementById(
-        "knowledge-category"
-      )
-      .value;
+    categoryNode.value;
 
 
   const filtered =
     knowledgeRepository.filter(item => {
 
+      const matchesSearch =
+        !search ||
+        item.title
+          .toLowerCase()
+          .includes(search) ||
+        item.category
+          .toLowerCase()
+          .includes(search) ||
+        item.type
+          .toLowerCase()
+          .includes(search);
+
+
+      const matchesCategory =
+        category === "all" ||
+        item.category === category;
+
+
       return (
-        (
-          !search ||
-          item.title
-            .toLowerCase()
-            .includes(search)
-        ) &&
-        (
-          category === "all" ||
-          item.category === category
-        )
+        matchesSearch &&
+        matchesCategory
       );
 
     });
 
 
-  document.getElementById(
-    "knowledge-results"
-  ).innerHTML =
+  resultsNode.innerHTML =
     renderKnowledgeRows(
       filtered,
       canManage
@@ -3683,12 +4155,21 @@ function statusPage() {
   const user =
     prototypeUsers.ambassador;
 
+
   const achievement =
     Math.round(
       (
         user.shareMembersOnboarded /
         user.shareMemberTarget
       ) * 100
+    );
+
+
+  const remaining =
+    Math.max(
+      user.shareMemberTarget -
+      user.shareMembersOnboarded,
+      0
     );
 
 
@@ -3796,11 +4277,23 @@ function statusPage() {
             Impact from members you acquired
           </h2>
 
+          <p>
+            ${currentPerformancePeriod.from} – ${currentPerformancePeriod.to}
+          </p>
+
         </div>
 
-        <strong>
-          ${achievement}% of target
-        </strong>
+        <div class="contribution-target">
+
+          <strong>
+            ${achievement}%
+          </strong>
+
+          <span>
+            ${remaining} members to target
+          </span>
+
+        </div>
 
       </div>
 
@@ -3815,7 +4308,9 @@ function statusPage() {
 
         ${darkContributionCard(
           "Member Spend",
-          formatAED(user.memberSpend),
+          formatAED(
+            user.memberSpend
+          ),
           metricDefinitions.memberSpend
         )}
 
@@ -3836,6 +4331,16 @@ function statusPage() {
           ),
           metricDefinitions.pointsValue
         )}
+
+      </div>
+
+
+      <div class="status-progress-track">
+
+        <div
+          class="status-progress-fill"
+          style="width:${achievement}%"
+        ></div>
 
       </div>
 
@@ -3886,17 +4391,29 @@ function sharePointsCalculator() {
   return `
     <section class="dashboard-card share-points-card">
 
-      <span class="section-label">
-        MEMBER SHARE POINTS CALCULATOR
-      </span>
+      <div class="card-heading-row">
 
-      <h3>
-        Calculate points for a member transaction
-      </h3>
+        <div>
 
-      <p>
-        Calculates SHARE Points earned by the member, not points owned by the Ambassador.
-      </p>
+          <span class="section-label">
+            MEMBER SHARE POINTS CALCULATOR
+          </span>
+
+          <h3>
+            Calculate points for a member transaction
+          </h3>
+
+          <p>
+            Calculates SHARE Points earned by the member, not points owned by the Ambassador.
+          </p>
+
+        </div>
+
+        ${infoIcon(
+          metricDefinitions.sharePoints
+        )}
+
+      </div>
 
 
       <div class="share-calculator-controls">
@@ -3910,11 +4427,13 @@ function sharePointsCalculator() {
           <input
             id="share-transaction"
             type="number"
+            min="0"
             value="1000"
             oninput="calculateSharePoints()"
           >
 
         </div>
+
 
         <div>
 
@@ -3951,6 +4470,7 @@ function sharePointsCalculator() {
 
         </div>
 
+
         <div>
 
           <label>
@@ -3977,11 +4497,18 @@ function sharePointsCalculator() {
       </div>
 
 
-      <div
-        id="share-selected-rule"
-        class="earn-rule-banner"
-      >
-        30 SHARE Points per AED 100 spent
+      <div class="earn-rule-banner">
+
+        <span class="section-label">
+          SELECTED EARNING RULE
+        </span>
+
+        <strong
+          id="share-selected-rule"
+        >
+          30 SHARE Points per AED 100 spent
+        </strong>
+
       </div>
 
 
@@ -3993,11 +4520,18 @@ function sharePointsCalculator() {
             Base Points
           </span>
 
-          <strong id="share-base-points">
+          <strong
+            id="share-base-points"
+          >
             300
           </strong>
 
+          <small>
+            Standard member earn
+          </small>
+
         </div>
+
 
         <div class="points-result-card">
 
@@ -4005,11 +4539,18 @@ function sharePointsCalculator() {
             Bonus / Promo Points
           </span>
 
-          <strong id="share-bonus-points">
+          <strong
+            id="share-bonus-points"
+          >
             0
           </strong>
 
+          <small>
+            Additional promotional points
+          </small>
+
         </div>
+
 
         <div class="points-result-card total">
 
@@ -4017,11 +4558,18 @@ function sharePointsCalculator() {
             Total SHARE Points
           </span>
 
-          <strong id="share-total-points">
+          <strong
+            id="share-total-points"
+          >
             300
           </strong>
 
+          <small>
+            Earned by the member
+          </small>
+
         </div>
+
 
         <div class="points-result-card value">
 
@@ -4029,9 +4577,15 @@ function sharePointsCalculator() {
             Estimated Points Value
           </span>
 
-          <strong id="share-points-value">
+          <strong
+            id="share-points-value"
+          >
             AED 30
           </strong>
+
+          <small>
+            Prototype value conversion
+          </small>
 
         </div>
 
@@ -4045,12 +4599,39 @@ function sharePointsCalculator() {
 
 function calculateSharePoints() {
 
+  const transactionNode =
+    document.getElementById(
+      "share-transaction"
+    );
+
+
+  const typeNode =
+    document.getElementById(
+      "share-transaction-type"
+    );
+
+
+  const promoNode =
+    document.getElementById(
+      "share-promo"
+    );
+
+
+  if (
+    !transactionNode ||
+    !typeNode ||
+    !promoNode
+  ) {
+
+    return;
+
+  }
+
+
   const transactionValue =
     Math.max(
       Number(
-        document.getElementById(
-          "share-transaction"
-        ).value
+        transactionNode.value
       ) || 0,
       0
     );
@@ -4058,17 +4639,13 @@ function calculateSharePoints() {
 
   const category =
     shareEarnRates[
-      document.getElementById(
-        "share-transaction-type"
-      ).value
+      typeNode.value
     ];
 
 
   const multiplier =
     Number(
-      document.getElementById(
-        "share-promo"
-      ).value
+      promoNode.value
     );
 
 
@@ -4082,7 +4659,9 @@ function calculateSharePoints() {
 
   const bonus =
     base *
-    (multiplier - 1);
+    (
+      multiplier - 1
+    );
 
 
   const total =
@@ -4207,7 +4786,8 @@ function managementFilters(
           "All Locations",
           "VOX MOE",
           "VOX CCM",
-          "VOX CCD"
+          "VOX CCD",
+          "VOX CCAZ"
         ]
       )}
 
@@ -4252,11 +4832,13 @@ function filterField(
 
       <select>
 
-        ${values.map(value => `
-          <option>
-            ${value}
-          </option>
-        `).join("")}
+        ${values
+          .map(value => `
+            <option>
+              ${value}
+            </option>
+          `)
+          .join("")}
 
       </select>
 
@@ -4315,7 +4897,13 @@ function managerHome() {
     </div>
 
 
-    ${performanceBreakdownSection()}
+    <div class="dashboard-grid two">
+
+      ${performanceBreakdownSection()}
+
+      ${requiresAttentionSummary(false)}
+
+    </div>
 
 
     ${contributionSummary(
@@ -4388,6 +4976,77 @@ function performanceBreakdownSection() {
 }
 
 
+function requiresAttentionSummary(
+  service
+) {
+
+  return `
+    <section class="dashboard-card">
+
+      <div class="card-heading-row">
+
+        <div>
+
+          <span class="section-label">
+            REQUIRES ATTENTION
+          </span>
+
+          <h3>
+            Priority areas
+          </h3>
+
+        </div>
+
+        <button
+          class="small-button"
+          onclick="navigateTo('${
+            service
+              ? "group-attention"
+              : "team-attention"
+          }')"
+        >
+          View All
+        </button>
+
+      </div>
+
+
+      ${managerAttentionItems
+        .map(item => `
+          <div class="manager-attention-row">
+
+            <span
+              class="severity-pill ${item.severity.toLowerCase()}"
+            >
+              ${item.severity}
+            </span>
+
+            <div>
+
+              <strong>
+                ${item.location}
+              </strong>
+
+              <span>
+                ${item.issue}
+              </span>
+
+            </div>
+
+            <span>
+              ${item.affected}
+            </span>
+
+          </div>
+        `)
+        .join("")}
+
+    </section>
+  `;
+
+}
+
+
 function contributionSummary(
   scope,
   title,
@@ -4425,7 +5084,9 @@ function contributionSummary(
 
         ${metricCard(
           "Members Acquired",
-          formatNumber(scope.members),
+          formatNumber(
+            scope.members
+          ),
           `${Math.round(
             scope.members /
             scope.target *
@@ -4436,14 +5097,18 @@ function contributionSummary(
 
         ${metricCard(
           "Member Spend",
-          formatAED(scope.memberSpend),
+          formatAED(
+            scope.memberSpend
+          ),
           "Attributed spend",
           metricDefinitions.memberSpend
         )}
 
         ${metricCard(
           "SHARE Points Earned by Members",
-          formatPoints(scope.memberPoints),
+          formatPoints(
+            scope.memberPoints
+          ),
           "Points earned by members",
           metricDefinitions.memberPoints
         )}
@@ -4468,7 +5133,7 @@ function contributionSummary(
 
 
 /* =========================================================
-   MANAGER PERFORMANCE / ATTENTION
+   MANAGER PERFORMANCE
 ========================================================= */
 
 function managerPerformance() {
@@ -4481,6 +5146,7 @@ function managerPerformance() {
     )}
 
     ${managementFilters(false)}
+
 
     <div class="dashboard-grid four">
 
@@ -4514,6 +5180,7 @@ function managerPerformance() {
 
     </div>
 
+
     ${managementAI("manager")}
 
     ${performanceBreakdownSection()}
@@ -4523,6 +5190,18 @@ function managerPerformance() {
 
 
 function managementAI(type) {
+
+  const outputId =
+    type === "manager"
+      ? "manager-agent-output"
+      : "service-agent-output";
+
+
+  const handler =
+    type === "manager"
+      ? "runManagerAnalysis()"
+      : "runServiceAnalysis()";
+
 
   return `
     <section class="overall-ai-strip">
@@ -4537,15 +5216,15 @@ function managementAI(type) {
           Analyse current filtered view
         </h2>
 
+        <p>
+          Identify recurring themes, severity and recommended interventions.
+        </p>
+
       </div>
 
       <button
         class="analyse-overall-button"
-        onclick="${
-          type === "manager"
-            ? "runManagerAnalysis()"
-            : "runServiceAnalysis()"
-        }"
+        onclick="${handler}"
       >
         ✦ Analyse Current View
       </button>
@@ -4554,11 +5233,7 @@ function managementAI(type) {
 
 
     <div
-      id="${
-        type === "manager"
-          ? "manager-agent-output"
-          : "service-agent-output"
-      }"
+      id="${outputId}"
       class="agent-output"
     >
       Run analysis to identify recurring patterns.
@@ -4568,49 +5243,88 @@ function managementAI(type) {
 }
 
 
+/* =========================================================
+   ATTENTION
+========================================================= */
+
 function attentionPage(service) {
 
   return `
     ${pageTitle(
       "PERFORMANCE",
       "Requires Attention",
-      "Priority issues requiring intervention."
+      service
+        ? "Priority issues across the authorised Service Delivery scope."
+        : "Priority issues within your Entertainment UAE scope."
     )}
 
     ${managementFilters(service)}
 
 
+    <div class="dashboard-grid four">
+
+      ${metricCard(
+        "Critical",
+        service ? "3" : "1",
+        "Immediate intervention"
+      )}
+
+      ${metricCard(
+        "High",
+        service ? "9" : "4",
+        "Priority follow-up"
+      )}
+
+      ${metricCard(
+        "Medium",
+        service ? "18" : "7",
+        "Monitor"
+      )}
+
+      ${metricCard(
+        "Ambassadors Impacted",
+        service ? "96" : "34",
+        "Selected scope"
+      )}
+
+    </div>
+
+
     <section class="dashboard-card">
 
-      ${managerAttentionItems.map(item => `
-        <div class="manager-attention-row">
+      ${managerAttentionItems
+        .map(item => `
+          <div class="manager-attention-row full">
 
-          <span class="severity-pill ${item.severity.toLowerCase()}">
-            ${item.severity}
-          </span>
-
-          <div>
-
-            <strong>
-              ${item.location}
-            </strong>
-
-            <span>
-              ${item.issue}
+            <span
+              class="severity-pill ${item.severity.toLowerCase()}"
+            >
+              ${item.severity}
             </span>
 
+            <div>
+
+              <strong>
+                ${item.location}
+              </strong>
+
+              <span>
+                ${item.issue}
+              </span>
+
+            </div>
+
+            <span>
+              ${item.affected}
+            </span>
+
+            <button class="small-button">
+              Review
+            </button>
+
           </div>
-
-          <span>
-            ${item.affected}
-          </span>
-
-          <button class="small-button">
-            Review
-          </button>
-
-        </div>
-      `).join("")}
+        `)
+        .join("")}
 
     </section>
   `;
@@ -4662,11 +5376,25 @@ function ambassadorsPage(service) {
 
       <div class="population-table">
 
+        <div class="population-header">
+
+          <span>Ambassador</span>
+          <span>Brand</span>
+          <span>Location</span>
+          <span>Performance</span>
+          <span>Members</span>
+          <span>Member Spend</span>
+          <span>Member Points</span>
+          <span>Points Value</span>
+
+        </div>
+
+
         ${ambassadorContribution
           .map(item => `
             <div class="population-row">
 
-              <div>
+              <div data-label="Ambassador">
 
                 <strong>
                   ${item.name}
@@ -4678,35 +5406,35 @@ function ambassadorsPage(service) {
 
               </div>
 
-              <span>
+              <span data-label="Brand">
                 ${item.brand}
               </span>
 
-              <span>
+              <span data-label="Location">
                 ${item.mall}
               </span>
 
-              <strong>
+              <strong data-label="Performance">
                 ${item.performance}%
               </strong>
 
-              <strong>
-                ${item.members} members
+              <strong data-label="Members">
+                ${item.members}
               </strong>
 
-              <strong>
+              <strong data-label="Member Spend">
                 ${formatAED(
                   item.memberSpend
                 )}
               </strong>
 
-              <strong>
+              <strong data-label="Member Points">
                 ${formatPoints(
                   item.memberPoints
-                )} pts
+                )}
               </strong>
 
-              <strong>
+              <strong data-label="Points Value">
                 ${formatAED(
                   pointsToAED(
                     item.memberPoints
@@ -4742,21 +5470,23 @@ function exportAmbassadorList() {
 
 
   const rows =
-    ambassadorContribution.map(item => [
+    ambassadorContribution.map(
+      item => [
 
-      item.name,
-      item.staffId,
-      item.bu,
-      item.brand,
-      item.mall,
-      item.members,
-      item.memberSpend,
-      item.memberPoints,
-      pointsToAED(
-        item.memberPoints
-      )
+        item.name,
+        item.staffId,
+        item.bu,
+        item.brand,
+        item.mall,
+        item.members,
+        item.memberSpend,
+        item.memberPoints,
+        pointsToAED(
+          item.memberPoints
+        )
 
-    ]);
+      ]
+    );
 
 
   const csv =
@@ -4778,26 +5508,45 @@ function exportAmbassadorList() {
     new Blob(
       [csv],
       {
-        type: "text/csv"
+        type:
+          "text/csv;charset=utf-8"
       }
     );
 
 
   const url =
-    URL.createObjectURL(blob);
+    URL.createObjectURL(
+      blob
+    );
 
 
   const link =
-    document.createElement("a");
+    document.createElement(
+      "a"
+    );
+
 
   link.href = url;
+
 
   link.download =
     "share-lens-ambassador-population.csv";
 
+
+  document.body.appendChild(
+    link
+  );
+
+
   link.click();
 
-  URL.revokeObjectURL(url);
+
+  link.remove();
+
+
+  URL.revokeObjectURL(
+    url
+  );
 
 }
 
@@ -4814,6 +5563,15 @@ function acquisitionPage(service) {
       : managerAcquisitionScope;
 
 
+  const achievement =
+    Math.round(
+      (
+        scope.members /
+        scope.target
+      ) * 100
+    );
+
+
   return `
     ${pageTitle(
       "AMBASSADOR PROGRAM",
@@ -4828,21 +5586,27 @@ function acquisitionPage(service) {
 
       ${metricCard(
         "Members Acquired",
-        formatNumber(scope.members),
-        "Selected scope",
+        formatNumber(
+          scope.members
+        ),
+        `${achievement}% of target`,
         metricDefinitions.acquisition
       )}
 
       ${metricCard(
         "Member Spend",
-        formatAED(scope.memberSpend),
+        formatAED(
+          scope.memberSpend
+        ),
         "Attributed transaction value",
         metricDefinitions.memberSpend
       )}
 
       ${metricCard(
         "SHARE Points Earned by Members",
-        formatPoints(scope.memberPoints),
+        formatPoints(
+          scope.memberPoints
+        ),
         "Points belong to members",
         metricDefinitions.memberPoints
       )}
@@ -4861,6 +5625,42 @@ function acquisitionPage(service) {
     </div>
 
 
+    <section class="acquisition-target-card">
+
+      <div>
+
+        <span class="section-label light-label">
+          ACQUISITION TARGET
+        </span>
+
+        <h2>
+          ${formatNumber(
+            scope.members
+          )}
+          of
+          ${formatNumber(
+            scope.target
+          )}
+          members
+        </h2>
+
+      </div>
+
+      <strong>
+        ${achievement}%
+      </strong>
+
+      <div class="acquisition-target-track">
+
+        <div
+          style="width:${achievement}%"
+        ></div>
+
+      </div>
+
+    </section>
+
+
     <section class="dashboard-card">
 
       <span class="section-label">
@@ -4871,36 +5671,52 @@ function acquisitionPage(service) {
         Contribution by Ambassador
       </h3>
 
+      <p>
+        SHARE Points belong to the members. The contribution is attributed to the Ambassador who acquired them.
+      </p>
+
+
+      <div class="contribution-table-header">
+
+        <span>Ambassador</span>
+        <span>Location</span>
+        <span>Members</span>
+        <span>Member Spend</span>
+        <span>Member Points</span>
+        <span>Points Value</span>
+
+      </div>
+
 
       ${ambassadorContribution
         .map(item => `
           <div class="contribution-table-row">
 
-            <strong>
+            <strong data-label="Ambassador">
               ${item.name}
             </strong>
 
-            <span>
+            <span data-label="Location">
               ${item.mall}
             </span>
 
-            <strong>
+            <strong data-label="Members">
               ${item.members}
             </strong>
 
-            <strong>
+            <strong data-label="Member Spend">
               ${formatAED(
                 item.memberSpend
               )}
             </strong>
 
-            <strong>
+            <strong data-label="Member Points">
               ${formatPoints(
                 item.memberPoints
               )}
             </strong>
 
-            <strong>
+            <strong data-label="Points Value">
               ${formatAED(
                 pointsToAED(
                   item.memberPoints
@@ -4919,7 +5735,7 @@ function acquisitionPage(service) {
 
 
 /* =========================================================
-   TRAINING / KNOWLEDGE MANAGEMENT
+   MANAGEMENT TRAINING
 ========================================================= */
 
 function managementTrainingPage(service) {
@@ -4928,7 +5744,7 @@ function managementTrainingPage(service) {
     ${pageTitle(
       "TRAINING & KNOWLEDGE",
       "Training Overview",
-      "Monitor completion, in-progress and overdue learning."
+      "Monitor completion, in-progress learning and overdue learning."
     )}
 
     ${managementFilters(service)}
@@ -4936,10 +5752,29 @@ function managementTrainingPage(service) {
 
     <div class="dashboard-grid four">
 
-      ${metricCard("Assigned", "594", "Assignments")}
-      ${metricCard("Completed", "545", "91% completion")}
-      ${metricCard("In Progress", "32", "Current")}
-      ${metricCard("Overdue", "17", "Needs follow-up")}
+      ${metricCard(
+        "Assigned",
+        "594",
+        "Training assignments"
+      )}
+
+      ${metricCard(
+        "Completed",
+        "545",
+        "91% completion"
+      )}
+
+      ${metricCard(
+        "In Progress",
+        "32",
+        "Current"
+      )}
+
+      ${metricCard(
+        "Overdue",
+        "17",
+        "Needs follow-up"
+      )}
 
     </div>
 
@@ -4961,10 +5796,15 @@ function managementTrainingPage(service) {
         </span>
 
         <span>
+          9 in progress
+        </span>
+
+        <span>
           5 overdue
         </span>
 
       </div>
+
 
       <div class="management-list-row">
 
@@ -4981,7 +5821,36 @@ function managementTrainingPage(service) {
         </span>
 
         <span>
+          19 in progress
+        </span>
+
+        <span>
           8 overdue
+        </span>
+
+      </div>
+
+
+      <div class="management-list-row">
+
+        <strong>
+          Product Knowledge
+        </strong>
+
+        <span>
+          238 assigned
+        </span>
+
+        <span>
+          230 completed
+        </span>
+
+        <span>
+          4 in progress
+        </span>
+
+        <span>
+          4 overdue
         </span>
 
       </div>
@@ -4991,6 +5860,10 @@ function managementTrainingPage(service) {
 
 }
 
+
+/* =========================================================
+   KNOWLEDGE GAPS
+========================================================= */
 
 function knowledgeGapsPage(service) {
 
@@ -5041,7 +5914,7 @@ function knowledgeGapsPage(service) {
 
 
 /* =========================================================
-   LIFECYCLE / COMMS / HUB
+   LIFECYCLE
 ========================================================= */
 
 function lifecyclePage(service) {
@@ -5076,28 +5949,50 @@ function lifecyclePage(service) {
           ["Knowledge Check", "Pending"],
           ["Personal QR Code", "Pending"],
           ["Active", "Pending"]
+        ]
+          .map(step => `
+            <div class="lifecycle-step">
 
-        ].map(step => `
-          <div class="lifecycle-step">
+              <strong>
+                ${step[0]}
+              </strong>
 
-            <strong>
-              ${step[0]}
-            </strong>
+              <span>
+                ${step[1]}
+              </span>
 
-            <span>
-              ${step[1]}
-            </span>
-
-          </div>
-        `).join("")}
+            </div>
+          `)
+          .join("")}
 
       </div>
+
+    </section>
+
+
+    <section class="dashboard-card lifecycle-secondary">
+
+      <span class="section-label">
+        OFFBOARDING
+      </span>
+
+      <h3>
+        Controlled access removal
+      </h3>
+
+      <p>
+        Disable programme access, deactivate QR attribution, close open tasks and preserve the audit trail.
+      </p>
 
     </section>
   `;
 
 }
 
+
+/* =========================================================
+   COMMUNICATIONS
+========================================================= */
 
 function communicationsPage(service) {
 
@@ -5123,16 +6018,25 @@ function communicationsPage(service) {
           Engage the Ambassador community
         </h2>
 
+        <p>
+          Share announcements, knowledge updates and recognition while tracking engagement.
+        </p>
+
       </div>
 
       <button
         class="analyse-overall-button"
-        onclick="showToast('Prototype broadcast composer opened')"
+        onclick="showBroadcastComposer()"
       >
         + New Broadcast
       </button>
 
     </section>
+
+
+    <div
+      id="broadcast-composer"
+    ></div>
 
 
     <section class="dashboard-card">
@@ -5148,13 +6052,17 @@ function communicationsPage(service) {
               </strong>
 
               <span>
-                ${item.type}
+                ${item.type} · ${item.date}
               </span>
 
             </div>
 
             <span>
               ${item.reach} reach
+            </span>
+
+            <span>
+              ${item.views} views
             </span>
 
             <span>
@@ -5175,6 +6083,69 @@ function communicationsPage(service) {
 }
 
 
+function showBroadcastComposer() {
+
+  const output =
+    document.getElementById(
+      "broadcast-composer"
+    );
+
+
+  if (!output) return;
+
+
+  output.innerHTML = `
+    <section class="dashboard-card broadcast-compose-card">
+
+      <span class="section-label">
+        NEW BROADCAST
+      </span>
+
+      <h3>
+        Create Ambassador update
+      </h3>
+
+      <div class="editor-grid">
+
+        ${editorField(
+          "Audience",
+          "Current filtered scope"
+        )}
+
+        ${editorField(
+          "Type",
+          "Announcement"
+        )}
+
+        ${editorField(
+          "Engagement",
+          "Likes + Comments"
+        )}
+
+        ${editorField(
+          "Status",
+          "Draft"
+        )}
+
+      </div>
+
+      <button
+        class="primary-small"
+        onclick="showToast('Prototype broadcast published')"
+      >
+        Publish Broadcast
+      </button>
+
+    </section>
+  `;
+
+}
+
+
+/* =========================================================
+   AMBASSADOR HUB
+========================================================= */
+
 function hubPage(service) {
 
   return `
@@ -5189,18 +6160,29 @@ function hubPage(service) {
 
     <div class="dashboard-grid four">
 
-      ${ambassadorHubSubmissions.map(item =>
-        metricCard(
-          item.type,
-          item.submissions,
-          `${item.open} open · ${item.integration}`
+      ${ambassadorHubSubmissions
+        .map(item =>
+          metricCard(
+            item.type,
+            item.submissions,
+            `${item.open} open · ${item.integration}`
+          )
         )
-      ).join("")}
+        .join("")}
 
     </div>
 
 
     <section class="dashboard-card">
+
+      <span class="section-label">
+        SUBMISSION FLOW
+      </span>
+
+      <h3>
+        Ambassador Hub → Alida
+      </h3>
+
 
       <div class="hub-flow">
 
@@ -5287,18 +6269,31 @@ function serviceHome() {
 
       ${performanceBreakdownSection()}
 
+
       <section class="dashboard-card">
 
-        <span class="section-label">
-          SERVICE PULSE
-        </span>
+        <div class="card-heading-row">
 
-        <h3>
-          ${servicePulseOverallScore().toFixed(2)}%
-        </h3>
+          <div>
+
+            <span class="section-label">
+              SERVICE PULSE
+            </span>
+
+            <h3>
+              ${servicePulseOverallScore().toFixed(2)}%
+            </h3>
+
+          </div>
+
+          <span class="status-block attention">
+            Needs Attention
+          </span>
+
+        </div>
 
         <p>
-          Average score across ${servicePulseSubmissionsData.length} assessments in the sample dataset.
+          Average score across ${servicePulseSubmissionsData.length} assessments in the current prototype dataset.
         </p>
 
         <button
@@ -5371,6 +6366,7 @@ function servicePerformance() {
 
     </div>
 
+
     ${managementAI("service")}
 
     ${performanceBreakdownSection()}
@@ -5406,10 +6402,13 @@ function uniqueCount(
 
   return new Set(
     data
-      .map(item => item[key])
+      .map(item =>
+        item[key]
+      )
       .filter(value =>
         value &&
         value !== "Not captured" &&
+        value !== "N/A" &&
         value !== "Location not captured"
       )
   ).size;
@@ -5428,34 +6427,41 @@ function groupServicePulse(
   data.forEach(item => {
 
     const value =
-      item[key] || "Not captured";
+      item[key] ||
+      "Not captured";
 
 
     if (!groups[value]) {
+
       groups[value] = [];
+
     }
 
 
-    groups[value].push(item);
+    groups[value].push(
+      item
+    );
 
   });
 
 
   return Object
     .entries(groups)
-    .map(([name, records]) => ({
+    .map(
+      ([name, records]) => ({
 
-      name,
+        name,
 
-      assessments:
-        records.length,
+        assessments:
+          records.length,
 
-      score:
-        servicePulseOverallScore(
-          records
-        )
+        score:
+          servicePulseOverallScore(
+            records
+          )
 
-    }))
+      })
+    )
     .sort(
       (a, b) =>
         b.score - a.score
@@ -5571,11 +6577,13 @@ function pulseSelect(
         onchange="renderServicePulseFilteredView()"
       >
 
-        ${values.map(value => `
-          <option>
-            ${value}
-          </option>
-        `).join("")}
+        ${values
+          .map(value => `
+            <option>
+              ${value}
+            </option>
+          `)
+          .join("")}
 
       </select>
 
@@ -5615,28 +6623,29 @@ function getServicePulseFilteredData() {
     "All Scenarios";
 
 
-  return servicePulseSubmissionsData.filter(item => {
+  return servicePulseSubmissionsData
+    .filter(item => {
 
-    return (
-      (
-        bu === "All BUs" ||
-        item.bu === bu
-      ) &&
-      (
-        brand === "All Brands" ||
-        item.brand === brand
-      ) &&
-      (
-        location === "All Locations" ||
-        item.location === location
-      ) &&
-      (
-        scenario === "All Scenarios" ||
-        item.scenario === scenario
-      )
-    );
+      return (
+        (
+          bu === "All BUs" ||
+          item.bu === bu
+        ) &&
+        (
+          brand === "All Brands" ||
+          item.brand === brand
+        ) &&
+        (
+          location === "All Locations" ||
+          item.location === location
+        ) &&
+        (
+          scenario === "All Scenarios" ||
+          item.scenario === scenario
+        )
+      );
 
-  });
+    });
 
 }
 
@@ -5665,7 +6674,7 @@ function servicePulsePage() {
       </strong>
 
       <span>
-        Source structure mirrors the current assessment: Visit Details → Scenario → Questions → Notes → Score.
+        Visit Details → Scenario → Questions → Notes → Score
       </span>
 
     </div>
@@ -5696,7 +6705,9 @@ function servicePulsePage() {
     </div>
 
 
-    <div id="service-pulse-content">
+    <div
+      id="service-pulse-content"
+    >
       ${servicePulseTabContent()}
     </div>
   `;
@@ -5728,8 +6739,13 @@ function pulseTabButton(
 
 function setServicePulseTab(tab) {
 
-  servicePulseTab = tab;
-  servicePulseDetailId = null;
+  servicePulseTab =
+    tab;
+
+
+  servicePulseDetailId =
+    null;
+
 
   renderCurrentPage();
 
@@ -5743,7 +6759,9 @@ function renderServicePulseFilteredView() {
       "service-pulse-content"
     );
 
+
   if (!content) return;
+
 
   content.innerHTML =
     servicePulseTabContent();
@@ -5757,22 +6775,34 @@ function servicePulseTabContent() {
     getServicePulseFilteredData();
 
 
-  if (servicePulseTab === "submissions") {
+  if (
+    servicePulseTab === "submissions"
+  ) {
+
     return servicePulseSubmissionsView(
       data
     );
+
   }
 
 
-  if (servicePulseTab === "questions") {
+  if (
+    servicePulseTab === "questions"
+  ) {
+
     return servicePulseQuestionView(
       data
     );
+
   }
 
 
-  if (servicePulseTab === "templates") {
+  if (
+    servicePulseTab === "templates"
+  ) {
+
     return servicePulseTemplatesView();
+
   }
 
 
@@ -5787,7 +6817,9 @@ function servicePulseTabContent() {
    SERVICE PULSE DASHBOARD
 ========================================================= */
 
-function servicePulseDashboard(data) {
+function servicePulseDashboard(
+  data
+) {
 
   const overall =
     servicePulseOverallScore(
@@ -5949,7 +6981,9 @@ function servicePulseDashboard(data) {
 
       ${data
         .slice(0, 6)
-        .map(servicePulseSubmissionRow)
+        .map(
+          servicePulseSubmissionRow
+        )
         .join("")}
 
     </section>
@@ -5978,39 +7012,41 @@ function servicePulseGroupedCard(
 
       ${
         items.length
-          ? items.map(item => `
+          ? items
+              .map(item => `
 
-              <div class="pulse-ranking-row">
+                <div class="pulse-ranking-row">
 
-                <div>
+                  <div>
 
-                  <strong>
-                    ${item.name}
-                  </strong>
+                    <strong>
+                      ${item.name}
+                    </strong>
 
-                  <span>
-                    ${item.assessments} assessments
-                  </span>
+                    <span>
+                      ${item.assessments} assessments
+                    </span>
+
+                  </div>
+
+                  <div class="pulse-score-side">
+
+                    <strong>
+                      ${item.score.toFixed(1)}%
+                    </strong>
+
+                    <span
+                      class="status-block ${pulseStatusClass(item.score)}"
+                    >
+                      ${pulseStatusLabel(item.score)}
+                    </span>
+
+                  </div>
 
                 </div>
 
-                <div class="pulse-score-side">
-
-                  <strong>
-                    ${item.score.toFixed(1)}%
-                  </strong>
-
-                  <span
-                    class="status-block ${pulseStatusClass(item.score)}"
-                  >
-                    ${pulseStatusLabel(item.score)}
-                  </span>
-
-                </div>
-
-              </div>
-
-            `).join("")
+              `)
+              .join("")
           : `
             <div class="empty-state">
               No assessment data in this filtered view.
@@ -6024,7 +7060,9 @@ function servicePulseGroupedCard(
 }
 
 
-function servicePulseScenarioCard(data) {
+function servicePulseScenarioCard(
+  data
+) {
 
   const groups =
     groupServicePulse(
@@ -6045,29 +7083,31 @@ function servicePulseScenarioCard(data) {
       </h3>
 
 
-      ${groups.map(item => `
+      ${groups
+        .map(item => `
 
-        <div class="pulse-ranking-row">
+          <div class="pulse-ranking-row">
 
-          <div>
+            <div>
+
+              <strong>
+                ${item.name}
+              </strong>
+
+              <span>
+                ${item.assessments} assessments
+              </span>
+
+            </div>
 
             <strong>
-              ${item.name}
+              ${item.score.toFixed(1)}%
             </strong>
-
-            <span>
-              ${item.assessments} assessments
-            </span>
 
           </div>
 
-          <strong>
-            ${item.score.toFixed(1)}%
-          </strong>
-
-        </div>
-
-      `).join("")}
+        `)
+        .join("")}
 
     </section>
   `;
@@ -6081,9 +7121,11 @@ function pulseStatusClass(score) {
     return "good";
   }
 
+
   if (score >= 70) {
     return "strengthen";
   }
+
 
   return "attention";
 
@@ -6096,9 +7138,11 @@ function pulseStatusLabel(score) {
     return "Strong";
   }
 
+
   if (score >= 70) {
     return "Opportunity";
   }
+
 
   return "Needs Attention";
 
@@ -6106,7 +7150,7 @@ function pulseStatusLabel(score) {
 
 
 /* =========================================================
-   QUESTION / BEHAVIOUR ANALYTICS
+   SERVICE PULSE BEHAVIOURS
 ========================================================= */
 
 function servicePulseBehaviourSummary() {
@@ -6196,25 +7240,11 @@ function servicePulseQuestionView() {
 
       <div class="pulse-question-header">
 
-        <span>
-          Behaviour
-        </span>
-
-        <span>
-          Yes
-        </span>
-
-        <span>
-          No
-        </span>
-
-        <span>
-          N/A
-        </span>
-
-        <span>
-          Status
-        </span>
+        <span>Behaviour</span>
+        <span>Yes</span>
+        <span>No</span>
+        <span>N/A</span>
+        <span>Status</span>
 
       </div>
 
@@ -6320,7 +7350,9 @@ function servicePulseQuestionView() {
    SERVICE PULSE SUBMISSIONS
 ========================================================= */
 
-function servicePulseSubmissionsView(data) {
+function servicePulseSubmissionsView(
+  data
+) {
 
   return `
     <section class="dashboard-card">
@@ -6363,7 +7395,9 @@ function servicePulseSubmissionsView(data) {
 
 
       ${data
-        .map(servicePulseSubmissionRow)
+        .map(
+          servicePulseSubmissionRow
+        )
         .join("")}
 
     </section>
@@ -6381,7 +7415,9 @@ function servicePulseSubmissionsView(data) {
 }
 
 
-function servicePulseSubmissionRow(item) {
+function servicePulseSubmissionRow(
+  item
+) {
 
   const score =
     percentage(
@@ -6456,7 +7492,9 @@ function servicePulseSubmissionRow(item) {
 
 function openServicePulseDetail(id) {
 
-  servicePulseDetailId = id;
+  servicePulseDetailId =
+    id;
+
 
   renderCurrentPage();
 
@@ -6480,10 +7518,10 @@ function openServicePulseDetail(id) {
 function servicePulseDetailView(id) {
 
   const item =
-    servicePulseSubmissionsData.find(
-      record =>
+    servicePulseSubmissionsData
+      .find(record =>
         record.id === id
-    );
+      );
 
 
   if (!item) return "";
@@ -6497,10 +7535,10 @@ function servicePulseDetailView(id) {
 
 
   const scenario =
-    servicePulseScenarios.find(item2 =>
-      item.scenario.includes(
-        item2.title
-      )
+    servicePulseScenarios.find(
+      scenarioItem =>
+        item.scenario ===
+        scenarioItem.title
     );
 
 
@@ -6662,7 +7700,9 @@ function assessmentDetail(
 
 function closeServicePulseDetail() {
 
-  servicePulseDetailId = null;
+  servicePulseDetailId =
+    null;
+
 
   renderCurrentPage();
 
@@ -6728,24 +7768,46 @@ function exportServicePulse() {
     new Blob(
       [csv],
       {
-        type: "text/csv"
+        type:
+          "text/csv;charset=utf-8"
       }
     );
 
 
   const url =
-    URL.createObjectURL(blob);
+    URL.createObjectURL(
+      blob
+    );
 
 
   const link =
-    document.createElement("a");
+    document.createElement(
+      "a"
+    );
 
-  link.href = url;
-  link.download = "share-lens-service-pulse.csv";
+
+  link.href =
+    url;
+
+
+  link.download =
+    "share-lens-service-pulse.csv";
+
+
+  document.body.appendChild(
+    link
+  );
+
 
   link.click();
 
-  URL.revokeObjectURL(url);
+
+  link.remove();
+
+
+  URL.revokeObjectURL(
+    url
+  );
 
 }
 
@@ -6802,23 +7864,25 @@ function servicePulseTemplatesView() {
         </div>
 
 
-        ${servicePulseScenarios.map(
-          (scenario, index) => `
+        ${servicePulseScenarios
+          .map(
+            (scenario, index) => `
 
-            <div class="template-section">
+              <div class="template-section">
 
-              <strong>
-                ${index + 2}. ${scenario.title}
-              </strong>
+                <strong>
+                  ${index + 2}. ${scenario.title}
+                </strong>
 
-              <span>
-                ${scenario.questions.length} applicable questions
-              </span>
+                <span>
+                  ${scenario.questions.length} applicable questions
+                </span>
 
-            </div>
+              </div>
 
-          `
-        ).join("")}
+            `
+          )
+          .join("")}
 
 
         <div class="template-section">
@@ -6858,7 +7922,7 @@ function servicePulseTemplatesView() {
       </strong>
 
       <p>
-        SHARE Lens currently reads the score and totalScore supplied by the assessment record. Production scoring rules, question weighting and treatment of N/A responses should be configured with the approved Service Pulse template.
+        SHARE Lens currently reads the score and total score supplied by each assessment record. Production scoring, question weighting and treatment of N/A responses should follow the formally approved Service Pulse configuration.
       </p>
 
     </section>
@@ -6878,6 +7942,7 @@ function runServicePulseAI() {
       "service-pulse-ai-output"
     );
 
+
   if (!output) return;
 
 
@@ -6886,17 +7951,98 @@ function runServicePulseAI() {
   );
 
 
+  output.innerHTML =
+    buildAgentPipeline(
+      "Analysing Service Pulse",
+      [
+        "Assessment Agent",
+        "Pattern Agent",
+        "Location Severity Agent",
+        "Behaviour Agent",
+        "Next Best Action"
+      ],
+      "service-pulse-pipeline"
+    );
+
+
+  animatePipeline(
+    "service-pulse-pipeline",
+    [
+      "Reviewing assessment scores, scenarios and individual responses...",
+      "Looking for recurring behaviour patterns across assessments...",
+      "Comparing performance across business units, brands and locations...",
+      "Identifying which SHARE behaviours are driving the results...",
+      "Preparing the recommended next best action..."
+    ],
+    showServicePulseAIResult
+  );
+
+}
+
+
+function showServicePulseAIResult() {
+
+  const output =
+    document.getElementById(
+      "service-pulse-ai-output"
+    );
+
+
+  if (!output) return;
+
+
+  const filteredData =
+    getServicePulseFilteredData();
+
+
+  const overallScore =
+    servicePulseOverallScore(
+      filteredData
+    );
+
+
+  const locationGroups =
+    groupServicePulse(
+      filteredData,
+      "location"
+    );
+
+
+  const scenarioGroups =
+    groupServicePulse(
+      filteredData,
+      "scenario"
+    );
+
+
+  const weakestLocation =
+    [...locationGroups]
+      .sort(
+        (a, b) =>
+          a.score - b.score
+      )[0];
+
+
+  const weakestScenario =
+    [...scenarioGroups]
+      .sort(
+        (a, b) =>
+          a.score - b.score
+      )[0];
+
+
+  const weakestBehaviour =
+    [...servicePulseBehaviourAnalytics]
+      .sort(
+        (a, b) =>
+          a.yes - b.yes
+      )[0];
+
+
   output.innerHTML = `
-    <div class="agent-running">
-      ✦ Assessment Agent → Pattern Agent → Location Severity Agent → Behaviour Agent → Next Best Action
-    </div>
-  `;
+    <div class="pulse-ai-result">
 
-
-  setTimeout(() => {
-
-    output.innerHTML = `
-      <div class="pulse-ai-result">
+      <div class="pulse-ai-result-header">
 
         <div>
 
@@ -6904,43 +8050,178 @@ function runServicePulseAI() {
             SERVICE PULSE AI ANALYSIS
           </span>
 
-          <h3>
-            Primary opportunity: proactive SHARE conversation
-          </h3>
+          <h2>
+            Primary opportunity:
+            ${weakestBehaviour.behaviour}
+          </h2>
 
           <p>
-            The current prototype analysis identifies initiation of the SHARE conversation as the weakest recurring behaviour in the selected assessment view.
+            SHARE Lens analysed ${filteredData.length} assessments in the current filtered view. Overall Service Pulse performance is ${overallScore.toFixed(2)}%.
           </p>
 
         </div>
 
-
-        <div class="dashboard-grid three">
-
-          ${metricCard(
-            "Behaviour",
-            "69%",
-            "Initiate SHARE conversation"
-          )}
-
-          ${metricCard(
-            "Priority",
-            "High",
-            "Targeted coaching"
-          )}
-
-          ${metricCard(
-            "Next Action",
-            "Refresher",
-            "SHARE conversation guide"
-          )}
-
-        </div>
+        <span
+          class="status-block ${pulseStatusClass(overallScore)}"
+        >
+          ${pulseStatusLabel(overallScore)}
+        </span>
 
       </div>
-    `;
 
-  }, 1200);
+
+      <div class="dashboard-grid four pulse-ai-result-cards">
+
+        ${metricCard(
+          "Overall Service Pulse",
+          `${overallScore.toFixed(2)}%`,
+          `${filteredData.length} assessments`
+        )}
+
+        ${metricCard(
+          "Weakest Behaviour",
+          `${weakestBehaviour.yes}%`,
+          weakestBehaviour.behaviour
+        )}
+
+        ${metricCard(
+          "Lowest Location",
+          weakestLocation
+            ? `${weakestLocation.score.toFixed(1)}%`
+            : "N/A",
+          weakestLocation
+            ? weakestLocation.name
+            : "No location data"
+        )}
+
+        ${metricCard(
+          "Weakest Scenario",
+          weakestScenario
+            ? `${weakestScenario.score.toFixed(1)}%`
+            : "N/A",
+          weakestScenario
+            ? weakestScenario.name
+            : "No scenario data"
+        )}
+
+      </div>
+
+
+      <div class="pulse-ai-insight-grid">
+
+        <section class="pulse-ai-insight">
+
+          <span class="section-label">
+            WHAT IS DRIVING IT
+          </span>
+
+          <h3>
+            ${weakestBehaviour.behaviour}
+          </h3>
+
+          <p>
+            ${100 - weakestBehaviour.yes}% of the current prototype behaviour sample does not demonstrate this expected SHARE behaviour.
+          </p>
+
+        </section>
+
+
+        <section class="pulse-ai-insight">
+
+          <span class="section-label">
+            WHERE TO LOOK
+          </span>
+
+          <h3>
+            ${
+              weakestLocation
+                ? weakestLocation.name
+                : "Location analysis"
+            }
+          </h3>
+
+          <p>
+            ${
+              weakestLocation
+                ? `${weakestLocation.name} currently has the lowest average Service Pulse score at ${weakestLocation.score.toFixed(1)}%.`
+                : "Use the location filters to identify the lowest-performing locations."
+            }
+          </p>
+
+        </section>
+
+
+        <section class="pulse-ai-insight">
+
+          <span class="section-label">
+            CUSTOMER JOURNEY
+          </span>
+
+          <h3>
+            ${
+              weakestScenario
+                ? weakestScenario.name
+                : "Scenario analysis"
+            }
+          </h3>
+
+          <p>
+            ${
+              weakestScenario
+                ? `This scenario currently has the lowest average score at ${weakestScenario.score.toFixed(1)}%.`
+                : "Review scenario performance to identify journey-level gaps."
+            }
+          </p>
+
+        </section>
+
+
+        <section class="pulse-ai-insight recommended-action-insight">
+
+          <span class="section-label">
+            NEXT BEST ACTION
+          </span>
+
+          <h3>
+            Targeted SHARE behaviour refresher
+          </h3>
+
+          <p>
+            Assign focused learning to the affected population, follow with a Knowledge Check and validate improvement in the next Service Pulse cycle.
+          </p>
+
+        </section>
+
+      </div>
+
+
+      <div class="pulse-ai-actions">
+
+        <button
+          class="small-button"
+          onclick="setServicePulseTab('questions')"
+        >
+          View Question Analysis
+        </button>
+
+        <button
+          class="small-button"
+          onclick="setServicePulseTab('submissions')"
+        >
+          View Assessments
+        </button>
+
+        <button
+          class="primary-small"
+          onclick="navigateTo('group-training')"
+        >
+          Review Training
+        </button>
+
+      </div>
+
+    </div>
+  `;
 
 }
 
@@ -7007,7 +8288,7 @@ function auditPage() {
 
 
 /* =========================================================
-   AI ANALYSIS
+   MANAGEMENT AI
 ========================================================= */
 
 function runManagerAnalysis() {
@@ -7017,33 +8298,49 @@ function runManagerAnalysis() {
       "manager-agent-output"
     );
 
+
   if (!output) return;
 
 
-  output.innerHTML = `
-    <div class="agent-running">
-      ✦ Performance Agent → Pattern Agent → Knowledge Gap Agent → Intervention Agent
-    </div>
-  `;
+  output.innerHTML =
+    buildAgentPipeline(
+      "Analysing Entertainment UAE",
+      [
+        "Performance Agent",
+        "Pattern Agent",
+        "Knowledge Gap Agent",
+        "Intervention Agent"
+      ],
+      "manager-pipeline"
+    );
 
 
-  setTimeout(() => {
+  animatePipeline(
+    "manager-pipeline",
+    [
+      "Reviewing performance across the selected BU scope...",
+      "Identifying recurring patterns...",
+      "Linking patterns to knowledge gaps...",
+      "Preparing the recommended intervention..."
+    ],
+    () => {
 
-    output.innerHTML = `
-      <span class="section-label">
-        BU AI ANALYSIS
-      </span>
+      output.innerHTML = `
+        <span class="section-label">
+          BU AI ANALYSIS
+        </span>
 
-      <h3>
-        Refund SLA knowledge is the highest recurring opportunity.
-      </h3>
+        <h3>
+          Refund SLA knowledge is the highest recurring opportunity.
+        </h3>
 
-      <p>
-        34 Ambassadors across 3 locations are contributing to the pattern.
-      </p>
-    `;
+        <p>
+          34 Ambassadors across 3 locations are contributing to the pattern.
+        </p>
+      `;
 
-  }, 1100);
+    }
+  );
 
 }
 
@@ -7055,29 +8352,49 @@ function runServiceAnalysis() {
       "service-agent-output"
     );
 
+
   if (!output) return;
 
 
-  output.innerHTML = `
-    <div class="agent-running">
-      ✦ Performance Agent → Pattern Agent → Location Severity Agent → Intervention Agent
-    </div>
-  `;
+  output.innerHTML =
+    buildAgentPipeline(
+      "Analysing Service Delivery Scope",
+      [
+        "Performance Agent",
+        "Pattern Agent",
+        "Location Severity Agent",
+        "Intervention Agent"
+      ],
+      "service-performance-pipeline"
+    );
 
 
-  setTimeout(() => {
+  animatePipeline(
+    "service-performance-pipeline",
+    [
+      "Reviewing performance across the selected organisational scope...",
+      "Identifying systemic patterns...",
+      "Ranking affected locations by severity...",
+      "Preparing the recommended intervention..."
+    ],
+    () => {
 
-    output.innerHTML = `
-      <span class="section-label">
-        SERVICE DELIVERY AI ANALYSIS
-      </span>
+      output.innerHTML = `
+        <span class="section-label">
+          SERVICE DELIVERY AI ANALYSIS
+        </span>
 
-      <h3>
-        Refund SLA remains the highest recurring cross-location theme.
-      </h3>
-    `;
+        <h3>
+          Refund SLA remains the highest recurring cross-location theme.
+        </h3>
 
-  }, 1100);
+        <p>
+          City Centre Deira currently shows the highest severity within the prototype dataset.
+        </p>
+      `;
+
+    }
+  );
 
 }
 
@@ -7171,11 +8488,13 @@ function integrationsPage() {
               ${item[1]}
             </p>
 
-            <span class="status-block ${
-              item[2] === "Placeholder"
-                ? "strengthen"
-                : "good"
-            }">
+            <span
+              class="status-block ${
+                item[2] === "Placeholder"
+                  ? "strengthen"
+                  : "good"
+              }"
+            >
               ${item[2]}
             </span>
 
@@ -7184,6 +8503,23 @@ function integrationsPage() {
         .join("")}
 
     </div>
+
+
+    <section class="dashboard-card">
+
+      <span class="section-label">
+        SHARE PROGRAMME CONFIGURATION
+      </span>
+
+      <h3>
+        Points-value conversion
+      </h3>
+
+      <p>
+        The prototype currently uses <strong>1 SHARE Point = AED ${SHARE_POINT_AED_VALUE.toFixed(2)}</strong> for estimated monetary-value reporting.
+      </p>
+
+    </section>
   `;
 
 }
@@ -7240,16 +8576,22 @@ function navigateTo(
     !options.preserveInteraction
   ) {
 
-    expandedInteractionId = null;
+    expandedInteractionId =
+      null;
 
   }
 
 
-  currentPage = page;
+  currentPage =
+    page;
 
-  notificationDrawerOpen = false;
+
+  notificationDrawerOpen =
+    false;
+
 
   closeMobileNav();
+
 
   renderCurrentPage();
 
@@ -7258,7 +8600,9 @@ function navigateTo(
 
 function openPerformanceInteraction(id) {
 
-  expandedInteractionId = id;
+  expandedInteractionId =
+    id;
+
 
   navigateTo(
     "performance",
@@ -7266,6 +8610,20 @@ function openPerformanceInteraction(id) {
       preserveInteraction: true
     }
   );
+
+
+  setTimeout(() => {
+
+    document
+      .getElementById(
+        `inline-analysis-${id}`
+      )
+      ?.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+
+  }, 100);
 
 }
 
@@ -7275,7 +8633,9 @@ function renderCurrentPage() {
   let content = "";
 
 
-  if (currentRole === "ambassador") {
+  if (
+    currentRole === "ambassador"
+  ) {
 
     const pages = {
 
@@ -7308,7 +8668,9 @@ function renderCurrentPage() {
   }
 
 
-  if (currentRole === "manager") {
+  if (
+    currentRole === "manager"
+  ) {
 
     const pages = {
 
@@ -7331,18 +8693,17 @@ function renderCurrentPage() {
           knowledgeGapsPage(false),
 
       "manager-knowledge":
-        () =>
-          `
-            ${pageTitle(
-              "TRAINING & KNOWLEDGE",
-              "Knowledge Base",
-              "Browse and maintain approved knowledge."
-            )}
+        () => `
+          ${pageTitle(
+            "TRAINING & KNOWLEDGE",
+            "Knowledge Base",
+            "Browse and maintain approved knowledge."
+          )}
 
-            ${managementFilters(false)}
+          ${managementFilters(false)}
 
-            ${knowledgeRepositorySection(true)}
-          `,
+          ${knowledgeRepositorySection(true)}
+        `,
 
       ambassadors:
         () =>
@@ -7375,7 +8736,9 @@ function renderCurrentPage() {
   }
 
 
-  if (currentRole === "service") {
+  if (
+    currentRole === "service"
+  ) {
 
     const pages = {
 
@@ -7404,18 +8767,17 @@ function renderCurrentPage() {
           knowledgeGapsPage(true),
 
       "group-knowledge":
-        () =>
-          `
-            ${pageTitle(
-              "TRAINING & KNOWLEDGE",
-              "Knowledge Base",
-              "Browse and maintain approved knowledge."
-            )}
+        () => `
+          ${pageTitle(
+            "TRAINING & KNOWLEDGE",
+            "Knowledge Base",
+            "Browse and maintain approved knowledge."
+          )}
 
-            ${managementFilters(true)}
+          ${managementFilters(true)}
 
-            ${knowledgeRepositorySection(true)}
-          `,
+          ${knowledgeRepositorySection(true)}
+        `,
 
       "group-ambassadors":
         () =>
@@ -7460,7 +8822,9 @@ function renderCurrentPage() {
   }
 
 
-  if (currentRole === "admin") {
+  if (
+    currentRole === "admin"
+  ) {
 
     const pages = {
 
@@ -7471,8 +8835,15 @@ function renderCurrentPage() {
         integrationsPage,
 
       "knowledge-sources":
-        () =>
-          knowledgeRepositorySection(true),
+        () => `
+          ${pageTitle(
+            "AI PLATFORM",
+            "Knowledge Sources",
+            "Manage approved knowledge sources used by SHARE Lens."
+          )}
+
+          ${knowledgeRepositorySection(true)}
+        `,
 
       "users-access":
         () =>
@@ -7562,47 +8933,95 @@ function renderCurrentPage() {
    GLOBAL FUNCTIONS
 ========================================================= */
 
-window.signIn = signIn;
-window.continueWithSSO = continueWithSSO;
-window.signOut = signOut;
+window.signIn =
+  signIn;
 
-window.navigateTo = navigateTo;
+window.continueWithSSO =
+  continueWithSSO;
 
-window.toggleMobileNav = toggleMobileNav;
-window.closeMobileNav = closeMobileNav;
+window.signOut =
+  signOut;
 
-window.toggleInfo = toggleInfo;
+window.navigateTo =
+  navigateTo;
 
-window.showToast = showToast;
+window.toggleMobileNav =
+  toggleMobileNav;
 
-window.toggleNotificationDrawer = toggleNotificationDrawer;
-window.handleNotificationAction = handleNotificationAction;
+window.closeMobileNav =
+  closeMobileNav;
 
-window.toggleInteractionDetails = toggleInteractionDetails;
-window.analyseInlineInteraction = analyseInlineInteraction;
-window.startInlineAnalysis = startInlineAnalysis;
-window.openPerformanceInteraction = openPerformanceInteraction;
+window.toggleInfo =
+  toggleInfo;
 
-window.runAmbassadorOverallAnalysis = runAmbassadorOverallAnalysis;
-window.runManagerAnalysis = runManagerAnalysis;
-window.runServiceAnalysis = runServiceAnalysis;
+window.showToast =
+  showToast;
 
-window.answerKnowledgeQuestion = answerKnowledgeQuestion;
-window.nextKnowledgeQuestion = nextKnowledgeQuestion;
+window.toggleNotificationDrawer =
+  toggleNotificationDrawer;
 
-window.filterKnowledgeBase = filterKnowledgeBase;
-window.toggleKnowledgeEditor = toggleKnowledgeEditor;
+window.handleNotificationAction =
+  handleNotificationAction;
 
-window.calculateSharePoints = calculateSharePoints;
+window.toggleInteractionDetails =
+  toggleInteractionDetails;
 
-window.exportAmbassadorList = exportAmbassadorList;
+window.analyseInlineInteraction =
+  analyseInlineInteraction;
 
-window.setServicePulseTab = setServicePulseTab;
-window.renderServicePulseFilteredView = renderServicePulseFilteredView;
-window.openServicePulseDetail = openServicePulseDetail;
-window.closeServicePulseDetail = closeServicePulseDetail;
-window.exportServicePulse = exportServicePulse;
-window.runServicePulseAI = runServicePulseAI;
+window.startInlineAnalysis =
+  startInlineAnalysis;
+
+window.openPerformanceInteraction =
+  openPerformanceInteraction;
+
+window.runAmbassadorOverallAnalysis =
+  runAmbassadorOverallAnalysis;
+
+window.runManagerAnalysis =
+  runManagerAnalysis;
+
+window.runServiceAnalysis =
+  runServiceAnalysis;
+
+window.answerKnowledgeQuestion =
+  answerKnowledgeQuestion;
+
+window.nextKnowledgeQuestion =
+  nextKnowledgeQuestion;
+
+window.filterKnowledgeBase =
+  filterKnowledgeBase;
+
+window.toggleKnowledgeEditor =
+  toggleKnowledgeEditor;
+
+window.calculateSharePoints =
+  calculateSharePoints;
+
+window.exportAmbassadorList =
+  exportAmbassadorList;
+
+window.showBroadcastComposer =
+  showBroadcastComposer;
+
+window.setServicePulseTab =
+  setServicePulseTab;
+
+window.renderServicePulseFilteredView =
+  renderServicePulseFilteredView;
+
+window.openServicePulseDetail =
+  openServicePulseDetail;
+
+window.closeServicePulseDetail =
+  closeServicePulseDetail;
+
+window.exportServicePulse =
+  exportServicePulse;
+
+window.runServicePulseAI =
+  runServicePulseAI;
 
 
 /* =========================================================
