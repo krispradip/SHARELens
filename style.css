@@ -1401,7 +1401,7 @@ select {
 
 
 /* =========================================================
-   INFO POPOVERS
+   INFO
 ========================================================= */
 
 .info-wrap {
@@ -3693,7 +3693,7 @@ span:not(.status-block) {
 
 
 /* =========================================================
-   STATUS + POINTS
+   STATUS + SHARE POINTS
 ========================================================= */
 
 .status-top-grid {
@@ -3969,7 +3969,8 @@ span:not(.status-block) {
 
   margin:
     16px
-    0;
+    0
+    12px;
 }
 
 
@@ -4042,6 +4043,66 @@ span:not(.status-block) {
 }
 
 
+.earn-rule-banner {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 16px;
+
+  margin-bottom: 12px;
+
+  padding:
+    12px
+    14px;
+
+  border:
+    1px solid
+    #e5d2da;
+
+  border-radius: 9px;
+
+  background:
+    #fffafb;
+}
+
+
+.earn-rule-banner strong,
+.earn-rule-banner span {
+  display: block;
+}
+
+
+.earn-rule-banner strong {
+  margin-top: 2px;
+
+  color: var(--brand);
+
+  font-size: 14px;
+}
+
+
+.earn-rule-banner > span {
+  padding:
+    6px
+    9px;
+
+  border-radius: 999px;
+
+  background: var(--pink-soft);
+
+  color: var(--brand);
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  text-align: right;
+}
+
+
 .share-points-results {
   display: grid;
 
@@ -4102,6 +4163,11 @@ span:not(.status-block) {
   color: var(--brand);
 
   font-size: 26px;
+}
+
+
+.points-result-card.total strong {
+  font-size: 30px;
 }
 
 
@@ -5802,7 +5868,7 @@ div:first-child {
 
 
   .development-step >
-button {
+  button {
     grid-column:
       1 / -1;
 
@@ -5842,6 +5908,18 @@ button {
     grid-template-columns:
       1fr
       1fr;
+  }
+
+
+  .earn-rule-banner {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+
+  .earn-rule-banner > span {
+    text-align: left;
   }
 
 
@@ -6050,9 +6128,9 @@ button {
 
 
   .interaction-row >
-div,
+  div,
   .interaction-row >
-.interaction-score {
+  .interaction-score {
     display: grid;
 
     grid-template-columns:
@@ -6064,9 +6142,9 @@ div,
 
 
   .interaction-row >
-div::before,
+  div::before,
   .interaction-row >
-.interaction-score::before {
+  .interaction-score::before {
     content:
       attr(
         data-label
@@ -6142,7 +6220,7 @@ div::before,
 
 
   .knowledge-row >
-[data-label] {
+  [data-label] {
     display: grid;
 
     grid-template-columns:
@@ -6154,7 +6232,7 @@ div::before,
 
 
   .knowledge-row >
-[data-label]::before {
+  [data-label]::before {
     content:
       attr(
         data-label
