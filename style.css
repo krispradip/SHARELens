@@ -793,6 +793,9 @@ select {
       100vh - 72px
     );
 }
+.mobile-nav-overlay {
+  display: none;
+}
 
 
 .sidebar {
