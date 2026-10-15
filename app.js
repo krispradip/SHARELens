@@ -1231,7 +1231,6 @@ function topBar() {
 
 
       <div class="user-header">
-
     
         <div class="user-avatar">
           ${user.initials}
