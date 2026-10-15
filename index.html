@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
   <meta charset="UTF-8">
 
   <meta
@@ -9,21 +10,29 @@
     content="width=device-width, initial-scale=1.0"
   >
 
-  <title>SHARE Lens</title>
+  <meta
+    name="theme-color"
+    content="#46001a"
+  >
+
+  <title>
+    SHARE Lens Prototype
+  </title>
 
   <link
     rel="stylesheet"
-    href="style.css"
+    href="./style.css"
   >
+
 </head>
 
 <body>
 
   <div id="app">
 
-    <section class="login-page">
+    <div class="login-page">
 
-      <div class="login-panel">
+      <section class="login-panel">
 
         <div class="login-inner">
 
@@ -51,55 +60,73 @@
           <div class="login-heading">
 
             <span class="section-label">
-              SHARE
+              WELCOME
             </span>
 
             <h2>
-              Welcome to SHARE Lens
+              Sign in
             </h2>
 
             <p>
-              One connected experience across Service Delivery,
-              Training & Knowledge and the Ambassador Program.
+              Access your SHARE Lens experience using your Staff ID or corporate identity.
             </p>
 
           </div>
 
 
-          <div class="login-method-card">
+          <div class="login-version-row">
+
+            <span class="prototype-badge">
+              Prototype
+            </span>
+
+            <span class="version-badge">
+              v0.8.0
+            </span>
+
+            <span class="version-date">
+              15 Oct 2026
+            </span>
+
+          </div>
+
+
+          <section class="login-method-card">
 
             <div class="login-method-heading">
 
               <strong>
-                Sign in
+                SHARE Lens access
               </strong>
 
               <span>
-                Use your SHARE Lens credentials
+                Your role and organisational scope determine what you can access after sign-in.
               </span>
 
             </div>
 
 
-            <label>
+            <label for="login-id">
               Email or Staff ID
             </label>
 
             <input
               id="login-id"
               type="text"
-              placeholder="Email address or Staff ID"
+              autocomplete="username"
+              placeholder="Enter your email or Staff ID"
             >
 
 
-            <label>
+            <label for="login-password">
               Password
             </label>
 
             <input
               id="login-password"
               type="password"
-              placeholder="Password"
+              autocomplete="current-password"
+              placeholder="Enter your password"
             >
 
 
@@ -134,16 +161,7 @@
               class="sso-button"
               onclick="continueWithSSO()"
             >
-
-              <div class="microsoft-icon">
-                <i></i>
-                <i></i>
-                <i></i>
-                <i></i>
-              </div>
-
               Continue with Microsoft SSO
-
             </button>
 
 
@@ -154,9 +172,7 @@
               </strong>
 
               <p>
-                Ambassadors use Staff ID and password.
-                Corporate roles use Microsoft SSO.
-                Authentication determines the role and experience loaded.
+                Staff ID access demonstrates the Ambassador journey. Corporate personas demonstrate Microsoft Entra ID access.
               </p>
 
             </div>
@@ -168,105 +184,130 @@
 
                 <div>
 
-                  <strong>
-                    Prototype Test Accounts
-                  </strong>
-
-                  <span>
-                    Use the accounts below to test each role.
+                  <span class="section-label">
+                    PROTOTYPE TEST ACCOUNTS
                   </span>
+
+                  <strong>
+                    Demo access
+                  </strong>
 
                 </div>
 
-                <small>
-                  Prototype only
-                </small>
+                <span class="test-account-helper">
+                  Password for all accounts: demo123
+                </span>
 
               </div>
 
 
-              <div class="test-accounts-table">
+              <div class="test-account-row test-account-header">
 
-                <div class="test-account-row test-account-header">
+                <span>
+                  Persona
+                </span>
 
-                  <span>Role</span>
-                  <span>Login</span>
-                  <span>Password</span>
+                <span>
+                  Login
+                </span>
 
-                </div>
+                <span>
+                  Password
+                </span>
 
-
-                <div class="test-account-row">
-
-                  <span>Ambassador</span>
-
-                  <span class="account-value">
-                    100245
-                  </span>
-
-                  <span class="account-value">
-                    demo123
-                  </span>
-
-                </div>
+              </div>
 
 
-                <div class="test-account-row">
+              <div class="test-account-row">
 
-                  <span>BU Lead / Trainer</span>
+                <strong>
+                  Ambassador
+                </strong>
 
-                  <span class="account-value">
-                    ahmed.salah@maf.ae
-                  </span>
+                <span class="account-value">
+                  100245
+                </span>
 
-                  <span class="account-value">
-                    demo123
-                  </span>
+                <span class="account-value">
+                  demo123
+                </span>
 
-                </div>
-
-
-                <div class="test-account-row">
-
-                  <span>Service Delivery</span>
-
-                  <span class="account-value">
-                    marian.zakhary@maf.ae
-                  </span>
-
-                  <span class="account-value">
-                    demo123
-                  </span>
-
-                </div>
+              </div>
 
 
-                <div class="test-account-row">
+              <div class="test-account-row">
 
-                  <span>Platform Admin</span>
+                <strong>
+                  BU Lead / Trainer
+                </strong>
 
-                  <span class="account-value">
-                    admin@maf.ae
-                  </span>
+                <span class="account-value">
+                  ahmed.salah@maf.ae
+                </span>
 
-                  <span class="account-value">
-                    demo123
-                  </span>
+                <span class="account-value">
+                  demo123
+                </span>
 
-                </div>
+              </div>
+
+
+              <div class="test-account-row">
+
+                <strong>
+                  Service Delivery
+                </strong>
+
+                <span class="account-value">
+                  marian.zakhary@maf.ae
+                </span>
+
+                <span class="account-value">
+                  demo123
+                </span>
+
+              </div>
+
+
+              <div class="test-account-row">
+
+                <strong>
+                  Platform Admin
+                </strong>
+
+                <span class="account-value">
+                  admin@maf.ae
+                </span>
+
+                <span class="account-value">
+                  demo123
+                </span>
 
               </div>
 
             </div>
 
+          </section>
+
+
+          <div class="login-footer">
+
+            <span>
+              SHARE Lens Prototype
+            </span>
+
+            <span>
+              Build v0.8.0
+            </span>
+
           </div>
 
         </div>
 
-      </div>
+      </section>
 
 
-      <div class="login-visual">
+      <section class="login-visual">
 
         <div class="visual-content">
 
@@ -284,18 +325,22 @@
             Service Delivery · Training & Knowledge · Ambassador Program
           </p>
 
+          <div class="hero-version">
+            Prototype v0.8.0
+          </div>
+
         </div>
 
-      </div>
+      </section>
 
-    </section>
+    </div>
 
   </div>
 
 
   <script
     type="module"
-    src="app.js"
+    src="./app.js"
   ></script>
 
 </body>
