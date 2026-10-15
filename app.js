@@ -7,8 +7,35 @@ const app = document.getElementById("app");
    BUILD
 ========================================================= */
 
-const APP_VERSION = "0.9.0";
+const APP_VERSION = "0.9.1";
 const APP_BUILD_DATE = "15 Oct 2026";
+
+
+/*
+VERSION HISTORY
+
+v0.9.1
+- Corrected SHARE Points calculator.
+- Uses business earn rates rather than percentage-back logic.
+- Luxury: 1 point / AED 10.
+- Non-Luxury: 2 points / AED 10.
+- Lifestyle: 10 points / AED 10.
+- Leisure & Entertainment: 30 points / AED 100.
+- Carrefour: 2.5 points / AED 10.
+- 2x promotion = Base + equal Bonus = 2x Total.
+- Displays selected earning rule directly in UI.
+- Retains v0.9.0 interaction collapse behaviour.
+- Retains Reem feedback capabilities.
+
+v0.9.0
+- Ambassador notification centre.
+- Knowledge management for BU Lead / Service Delivery.
+- Service Pulse tabs and template prototype.
+- Engagement points and leaderboard.
+- Gamified Knowledge Check.
+- CSV Ambassador population export.
+- Full responsive/mobile baseline.
+*/
 
 
 /* =========================================================
@@ -50,6 +77,50 @@ const performanceSummary = {
   serviceQuality: 86,
   sopAdherence: 92,
   compliance: 100
+};
+
+
+/* =========================================================
+   SHARE EARN RULES
+========================================================= */
+
+const shareEarnRates = {
+
+  luxury: {
+    label: "Luxury Brands",
+    pointsPerSpend: 1,
+    spendUnit: 10,
+    rule: "1 SHARE Point per AED 10 spent"
+  },
+
+  nonLuxury: {
+    label: "Non-Luxury / Shopping Malls",
+    pointsPerSpend: 2,
+    spendUnit: 10,
+    rule: "2 SHARE Points per AED 10 spent"
+  },
+
+  lifestyle: {
+    label: "Lifestyle Brands",
+    pointsPerSpend: 10,
+    spendUnit: 10,
+    rule: "10 SHARE Points per AED 10 spent"
+  },
+
+  leisure: {
+    label: "Leisure & Entertainment",
+    pointsPerSpend: 30,
+    spendUnit: 100,
+    rule: "30 SHARE Points per AED 100 spent"
+  },
+
+  carrefour: {
+    label: "Carrefour Groceries",
+    pointsPerSpend: 2.5,
+    spendUnit: 10,
+    rule: "2.5 SHARE Points per AED 10 spent"
+  }
+
 };
 
 
@@ -146,7 +217,10 @@ const metricDefinitions = {
     "Percentage of assigned learning completed within the selected organisational scope and period.",
 
   engagement:
-    "Points earned from Ambassador Program engagement such as recognised contributions, selected programme activity and communication engagement."
+    "Points earned from Ambassador Program engagement such as recognised contributions, selected programme activity and communication engagement.",
+
+  sharePoints:
+    "SHARE Points are calculated from the transaction value using the earning rule for the selected category. Promotions such as 2× Points add bonus points on top of the normal base earn."
 
 };
 
@@ -410,13 +484,9 @@ const managerAttentionItems = [
 const ambassadorPopulation = [
 
   ["Layla Haddad", "100245", "Entertainment", "VOX Cinemas", "Mall of the Emirates", "VOX MOE", 86, 100, 42, 185, "Active"],
-
   ["Noor Hassan", "100822", "Entertainment", "VOX Cinemas", "City Centre Mirdif", "VOX CCM", 91, 100, 50, 240, "Active"],
-
   ["Rania Ali", "100845", "Entertainment", "VOX Cinemas", "City Centre Deira", "VOX CCD", 74, 82, 29, 135, "Active"],
-
   ["Sami Omar", "100901", "Entertainment", "VOX Cinemas", "City Centre Al Zahia", "VOX CCAZ", 88, 94, 44, 210, "Active"],
-
   ["Sara Khan", "100928", "Entertainment", "VOX Cinemas", "City Centre Deira", "VOX CCD", 72, 69, 21, 120, "Active"]
 
 ].map(
@@ -3905,7 +3975,7 @@ function filterKnowledgeBase(canManage = false) {
 
 
 /* =========================================================
-   MY STATUS + SHARE POINTS
+   MY STATUS
 ========================================================= */
 
 function statusPage() {
@@ -4154,6 +4224,10 @@ function statusPage() {
 }
 
 
+/* =========================================================
+   SHARE POINTS CALCULATOR
+========================================================= */
+
 function sharePointsCalculator() {
 
   return `
@@ -4172,13 +4246,13 @@ function sharePointsCalculator() {
           </h3>
 
           <p>
-            Enter the member transaction value and select the transaction type.
+            Enter the member's transaction value, choose the spend category and apply a promotion if applicable.
           </p>
 
         </div>
 
         ${infoIcon(
-          "Non-Luxury base points use 0.025% of transaction value. Luxury base points use 1% of transaction value. A Bonus / Promo multiplier can add 2× the base points."
+          metricDefinitions.sharePoints
         )}
 
       </div>
@@ -4215,7 +4289,7 @@ function sharePointsCalculator() {
         <div class="calculator-field">
 
           <label>
-            Transaction type
+            Spend category
           </label>
 
           <select
@@ -4223,12 +4297,24 @@ function sharePointsCalculator() {
             onchange="calculateSharePoints()"
           >
 
-            <option value="non-luxury">
-              Non-Luxury
+            <option value="leisure">
+              Leisure & Entertainment
             </option>
 
             <option value="luxury">
-              Luxury
+              Luxury Brands
+            </option>
+
+            <option value="nonLuxury">
+              Non-Luxury / Shopping Malls
+            </option>
+
+            <option value="lifestyle">
+              Lifestyle Brands
+            </option>
+
+            <option value="carrefour">
+              Carrefour Groceries
             </option>
 
           </select>
@@ -4239,7 +4325,7 @@ function sharePointsCalculator() {
         <div class="calculator-field">
 
           <label>
-            Bonus / Promo
+            Promotion
           </label>
 
           <select
@@ -4248,16 +4334,37 @@ function sharePointsCalculator() {
           >
 
             <option value="1">
-              No promotion
+              Standard earn
             </option>
 
             <option value="2">
-              2× Base Points
+              2× Points
             </option>
 
           </select>
 
         </div>
+
+      </div>
+
+
+      <div class="earn-rule-banner">
+
+        <div>
+
+          <span class="section-label">
+            SELECTED EARNING RULE
+          </span>
+
+          <strong id="share-selected-category">
+            Leisure & Entertainment
+          </strong>
+
+        </div>
+
+        <span id="share-selected-rule">
+          30 SHARE Points per AED 100 spent
+        </span>
 
       </div>
 
@@ -4271,11 +4378,11 @@ function sharePointsCalculator() {
           </span>
 
           <strong id="share-base-points">
-            0.25
+            300
           </strong>
 
-          <small id="share-base-rule">
-            Non-Luxury · 0.025%
+          <small>
+            Standard points earned
           </small>
 
         </div>
@@ -4288,11 +4395,11 @@ function sharePointsCalculator() {
           </span>
 
           <strong id="share-bonus-points">
-            0.00
+            0
           </strong>
 
-          <small>
-            Additional promotional points
+          <small id="share-promo-description">
+            No promotion applied
           </small>
 
         </div>
@@ -4305,11 +4412,11 @@ function sharePointsCalculator() {
           </span>
 
           <strong id="share-total-points">
-            0.25
+            300
           </strong>
 
           <small>
-            Base + Bonus / Promo
+            Base Points + Bonus Points
           </small>
 
         </div>
@@ -4320,17 +4427,51 @@ function sharePointsCalculator() {
       <div class="calculator-rule-note">
 
         <strong>
-          Calculation rules
+          How this works
         </strong>
 
-        <span>
-          Non-Luxury = 0.025% of transaction value · Luxury = 1% of transaction value · Promotion = additional points equal to 2× base when selected.
+        <span id="share-calculation-explanation">
+          AED 1,000 ÷ AED 100 × 30 points = 300 Base Points.
         </span>
 
       </div>
 
     </section>
   `;
+
+}
+
+
+function formatPoints(value) {
+
+  if (
+    Number.isInteger(value)
+  ) {
+
+    return value.toLocaleString();
+
+  }
+
+  return value.toLocaleString(
+    undefined,
+    {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2
+    }
+  );
+
+}
+
+
+function formatCurrency(value) {
+
+  return Number(value).toLocaleString(
+    undefined,
+    {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2
+    }
+  );
 
 }
 
@@ -4362,60 +4503,140 @@ function calculateSharePoints() {
   }
 
 
-  const transaction =
-    Number(transactionNode.value) || 0;
+  const transactionValue =
+    Math.max(
+      Number(transactionNode.value) || 0,
+      0
+    );
 
-  const type =
+
+  const selectedCategory =
     typeNode.value;
 
-  const promoMultiplier =
-    Number(promoNode.value);
+
+  const category =
+    shareEarnRates[
+      selectedCategory
+    ];
 
 
-  const rate =
-    type === "luxury"
-      ? 0.01
-      : 0.00025;
+  if (!category) return;
+
+
+  const multiplier =
+    Number(promoNode.value) || 1;
 
 
   const basePoints =
-    transaction * rate;
+    (
+      transactionValue /
+      category.spendUnit
+    ) *
+    category.pointsPerSpend;
 
 
   const bonusPoints =
-    promoMultiplier === 2
-      ? basePoints * 2
+    multiplier > 1
+      ? basePoints * (multiplier - 1)
       : 0;
 
 
   const totalPoints =
-    basePoints + bonusPoints;
+    basePoints +
+    bonusPoints;
 
 
-  document.getElementById(
-    "share-base-points"
-  ).textContent =
-    basePoints.toFixed(2);
+  const baseNode =
+    document.getElementById(
+      "share-base-points"
+    );
+
+  const bonusNode =
+    document.getElementById(
+      "share-bonus-points"
+    );
+
+  const totalNode =
+    document.getElementById(
+      "share-total-points"
+    );
+
+  const categoryNode =
+    document.getElementById(
+      "share-selected-category"
+    );
+
+  const ruleNode =
+    document.getElementById(
+      "share-selected-rule"
+    );
+
+  const promoDescriptionNode =
+    document.getElementById(
+      "share-promo-description"
+    );
+
+  const explanationNode =
+    document.getElementById(
+      "share-calculation-explanation"
+    );
 
 
-  document.getElementById(
-    "share-bonus-points"
-  ).textContent =
-    bonusPoints.toFixed(2);
+  if (baseNode) {
+    baseNode.textContent =
+      formatPoints(basePoints);
+  }
 
 
-  document.getElementById(
-    "share-total-points"
-  ).textContent =
-    totalPoints.toFixed(2);
+  if (bonusNode) {
+    bonusNode.textContent =
+      formatPoints(bonusPoints);
+  }
 
 
-  document.getElementById(
-    "share-base-rule"
-  ).textContent =
-    type === "luxury"
-      ? "Luxury · 1%"
-      : "Non-Luxury · 0.025%";
+  if (totalNode) {
+    totalNode.textContent =
+      formatPoints(totalPoints);
+  }
+
+
+  if (categoryNode) {
+    categoryNode.textContent =
+      category.label;
+  }
+
+
+  if (ruleNode) {
+    ruleNode.textContent =
+      category.rule;
+  }
+
+
+  if (promoDescriptionNode) {
+
+    promoDescriptionNode.textContent =
+      multiplier === 2
+        ? "2× promotion adds bonus equal to Base Points"
+        : "No promotion applied";
+
+  }
+
+
+  if (explanationNode) {
+
+    const baseExplanation =
+      `AED ${formatCurrency(transactionValue)} ÷ AED ${category.spendUnit} × ${category.pointsPerSpend} points = ${formatPoints(basePoints)} Base Points.`;
+
+    const promoExplanation =
+      multiplier === 2
+        ? ` 2× Points adds ${formatPoints(bonusPoints)} Bonus Points, giving ${formatPoints(totalPoints)} Total SHARE Points.`
+        : ` Total SHARE Points = ${formatPoints(totalPoints)}.`;
+
+    explanationNode.textContent =
+      baseExplanation +
+      promoExplanation;
+
+  }
 
 }
 
@@ -8322,13 +8543,11 @@ function navigateTo(
 ) {
 
   /*
-    IMPORTANT v0.9.0 FIX
+    Interactions default to collapsed whenever the user
+    enters My Performance normally.
 
-    When users simply navigate to My Performance,
-    interaction analysis must NOT remain expanded.
-
-    Expansion is preserved only when the navigation
-    explicitly came from Analyse Interaction / direct evidence.
+    Expanded state is preserved only for an explicit
+    interaction analysis / evidence navigation.
   */
 
   if (
@@ -8624,86 +8843,33 @@ function renderCurrentPage() {
    GLOBALS
 ========================================================= */
 
-window.signIn =
-  signIn;
-
-window.continueWithSSO =
-  continueWithSSO;
-
-window.signOut =
-  signOut;
-
-window.navigateTo =
-  navigateTo;
-
-window.toggleMobileNav =
-  toggleMobileNav;
-
-window.closeMobileNav =
-  closeMobileNav;
-
-window.toggleInfo =
-  toggleInfo;
-
-window.showToast =
-  showToast;
-
-window.toggleNotificationDrawer =
-  toggleNotificationDrawer;
-
-window.markAllNotificationsRead =
-  markAllNotificationsRead;
-
-window.handleNotificationAction =
-  handleNotificationAction;
-
-window.toggleInteractionDetails =
-  toggleInteractionDetails;
-
-window.analyseInlineInteraction =
-  analyseInlineInteraction;
-
-window.startInlineAnalysis =
-  startInlineAnalysis;
-
-window.openPerformanceInteraction =
-  openPerformanceInteraction;
-
-window.runAmbassadorOverallAnalysis =
-  runAmbassadorOverallAnalysis;
-
-window.runManagerAnalysis =
-  runManagerAnalysis;
-
-window.runServiceAnalysis =
-  runServiceAnalysis;
-
-window.filterKnowledgeBase =
-  filterKnowledgeBase;
-
-window.toggleKnowledgeEditor =
-  toggleKnowledgeEditor;
-
-window.exportAmbassadorList =
-  exportAmbassadorList;
-
-window.showNewBroadcast =
-  showNewBroadcast;
-
-window.calculateSharePoints =
-  calculateSharePoints;
-
-window.answerKnowledgeQuestion =
-  answerKnowledgeQuestion;
-
-window.nextKnowledgeQuestion =
-  nextKnowledgeQuestion;
-
-window.setServicePulseTab =
-  setServicePulseTab;
-
-window.showServicePulseTemplateCreator =
-  showServicePulseTemplateCreator;
+window.signIn = signIn;
+window.continueWithSSO = continueWithSSO;
+window.signOut = signOut;
+window.navigateTo = navigateTo;
+window.toggleMobileNav = toggleMobileNav;
+window.closeMobileNav = closeMobileNav;
+window.toggleInfo = toggleInfo;
+window.showToast = showToast;
+window.toggleNotificationDrawer = toggleNotificationDrawer;
+window.markAllNotificationsRead = markAllNotificationsRead;
+window.handleNotificationAction = handleNotificationAction;
+window.toggleInteractionDetails = toggleInteractionDetails;
+window.analyseInlineInteraction = analyseInlineInteraction;
+window.startInlineAnalysis = startInlineAnalysis;
+window.openPerformanceInteraction = openPerformanceInteraction;
+window.runAmbassadorOverallAnalysis = runAmbassadorOverallAnalysis;
+window.runManagerAnalysis = runManagerAnalysis;
+window.runServiceAnalysis = runServiceAnalysis;
+window.filterKnowledgeBase = filterKnowledgeBase;
+window.toggleKnowledgeEditor = toggleKnowledgeEditor;
+window.exportAmbassadorList = exportAmbassadorList;
+window.showNewBroadcast = showNewBroadcast;
+window.calculateSharePoints = calculateSharePoints;
+window.answerKnowledgeQuestion = answerKnowledgeQuestion;
+window.nextKnowledgeQuestion = nextKnowledgeQuestion;
+window.setServicePulseTab = setServicePulseTab;
+window.showServicePulseTemplateCreator = showServicePulseTemplateCreator;
 
 
 /* =========================================================
