@@ -6144,3 +6144,627 @@ select {
     grid-template-columns: 1fr;
   }
 }
+
+
+
+/* =========================================================
+   SHARE LENS v0.12.0 — MOTION SYSTEM
+
+   PURPOSE:
+   Adds polished, restrained movement to KPI and acquisition
+   components to reinforce that SHARE Lens is a live
+   operational experience.
+
+   BUSINESS MEANING:
+   Motion highlights changing performance and attribution
+   data without implying a real-time backend where one does
+   not yet exist.
+
+   USED BY:
+   pages/ambassadorPages.js
+
+   ACCESSIBILITY:
+   Disabled when prefers-reduced-motion is enabled.
+
+   CHANGE IMPACT:
+   Visual only. No data, scoring or workflow logic changes.
+========================================================= */
+
+.v12-motion-card {
+  opacity: 1;
+}
+
+.v12-motion-card.v12-motion-ready {
+  animation:
+    v12CardReveal
+    520ms
+    cubic-bezier(0.22, 1, 0.36, 1)
+    both;
+  animation-delay:
+    var(
+      --motion-delay,
+      0ms
+    );
+}
+
+@keyframes v12CardReveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+.v12-kpi-card {
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.v12-kpi-card:hover {
+  transform: translateY(-2px);
+  border-color: #dcbac7;
+  box-shadow:
+    0 10px 25px
+    rgba(
+      70,
+      0,
+      26,
+      0.08
+    );
+}
+
+
+.v12-acquisition-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.v12-acquisition-panel::after {
+  content: "";
+  position: absolute;
+  top: -90px;
+  right: -90px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle,
+      rgba(
+        213,
+        21,
+        91,
+        0.08
+      ),
+      rgba(
+        213,
+        21,
+        91,
+        0
+      )
+      68%
+    );
+  pointer-events: none;
+}
+
+
+.v12-acquisition-card {
+  grid-template-columns:
+    150px
+    minmax(
+      0,
+      1fr
+    );
+  gap: 24px;
+  min-height: 180px;
+}
+
+
+.v12-qr-stage {
+  position: relative;
+  width: 142px;
+  min-height: 150px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.v12-qr-orbit {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+
+  width: 132px;
+  height: 132px;
+
+  border:
+    1px dashed
+    rgba(
+      213,
+      21,
+      91,
+      0.28
+    );
+
+  border-radius: 50%;
+
+  transform:
+    translateX(-50%);
+
+  animation:
+    v12QrOrbit
+    15s
+    linear
+    infinite;
+}
+
+
+@keyframes v12QrOrbit {
+  from {
+    transform:
+      translateX(-50%)
+      rotate(0deg);
+  }
+
+  to {
+    transform:
+      translateX(-50%)
+      rotate(360deg);
+  }
+}
+
+
+.v12-qr-placeholder {
+  position: relative;
+  z-index: 2;
+
+  width: 112px;
+  height: 112px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 8px 22px
+    rgba(
+      70,
+      0,
+      26,
+      0.12
+    );
+}
+
+
+.v12-qr-placeholder::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.42
+    );
+
+  border-radius: 4px;
+
+  pointer-events: none;
+}
+
+
+.v12-qr-scan {
+  position: absolute;
+  z-index: 3;
+  top: -18px;
+  left: 3px;
+
+  width:
+    calc(
+      100% - 6px
+    );
+
+  height: 18px;
+
+  margin: 0 !important;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(
+        255,
+        255,
+        255,
+        0
+      ),
+      rgba(
+        255,
+        255,
+        255,
+        0.7
+      ),
+      rgba(
+        255,
+        255,
+        255,
+        0
+      )
+    );
+
+  filter: blur(1px);
+
+  animation:
+    v12QrScan
+    2.8s
+    ease-in-out
+    infinite;
+}
+
+
+@keyframes v12QrScan {
+  0% {
+    transform:
+      translateY(0);
+    opacity: 0;
+  }
+
+  12% {
+    opacity: 1;
+  }
+
+  58% {
+    opacity: 0.8;
+  }
+
+  72%,
+  100% {
+    transform:
+      translateY(130px);
+    opacity: 0;
+  }
+}
+
+
+.v12-live-attribution {
+  position: relative;
+  z-index: 4;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  margin-top: 11px;
+
+  padding:
+    5px
+    8px;
+
+  border:
+    1px solid
+    #d7eadf;
+
+  border-radius: 999px;
+
+  background: #f7fcf9;
+
+  color: var(--green);
+
+  font-size: 9px;
+  font-weight: 800;
+}
+
+
+.v12-live-attribution > span {
+  width: 7px;
+  height: 7px;
+
+  margin: 0 !important;
+
+  border-radius: 50%;
+
+  background: var(--green);
+
+  box-shadow:
+    0 0 0
+    rgba(
+      24,
+      121,
+      78,
+      0.35
+    );
+
+  animation:
+    v12LivePulse
+    1.9s
+    ease-out
+    infinite;
+}
+
+
+@keyframes v12LivePulse {
+  0% {
+    box-shadow:
+      0 0 0 0
+      rgba(
+        24,
+        121,
+        78,
+        0.34
+      );
+  }
+
+  75% {
+    box-shadow:
+      0 0 0 7px
+      rgba(
+        24,
+        121,
+        78,
+        0
+      );
+  }
+
+  100% {
+    box-shadow:
+      0 0 0 0
+      rgba(
+        24,
+        121,
+        78,
+        0
+      );
+  }
+}
+
+
+.v12-acquisition-metrics {
+  min-width: 0;
+}
+
+
+.v12-acquisition-primary {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 15px;
+
+  padding-bottom: 12px;
+
+  border-bottom:
+    1px solid
+    var(--border);
+}
+
+
+.v12-acquisition-primary > strong {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+
+  color: var(--brand);
+
+  font-size: 32px;
+  line-height: 1;
+}
+
+
+.v12-acquisition-primary > strong small {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+
+.v12-acquisition-primary > span {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+
+.v12-acquisition-progress {
+  margin:
+    12px
+    0;
+}
+
+
+.v12-acquisition-progress > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 6px;
+
+  color: var(--muted);
+
+  font-size: 9px;
+}
+
+
+.v12-acquisition-progress > div:first-child strong {
+  color: var(--brand);
+}
+
+
+.v12-acquisition-progress-track {
+  height: 7px;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background: #eee8eb;
+}
+
+
+.v12-acquisition-progress-track > div {
+  width: 0;
+  height: 100%;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--brand-mid),
+      var(--accent)
+    );
+
+  transition:
+    width
+    950ms
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    );
+}
+
+
+.v12-acquisition-stat-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(
+        0,
+        1fr
+      )
+    );
+
+  gap: 9px;
+}
+
+
+.v12-acquisition-stat-grid > div {
+  padding: 10px;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 8px;
+
+  background: #faf8f9;
+}
+
+
+.v12-acquisition-stat-grid span,
+.v12-acquisition-stat-grid strong {
+  display: block;
+}
+
+
+.v12-acquisition-stat-grid span {
+  color: var(--muted);
+  font-size: 9px;
+}
+
+
+.v12-acquisition-stat-grid strong {
+  margin-top: 4px;
+
+  color: var(--brand);
+
+  font-size: 16px;
+}
+
+
+.v12-acquisition-reference {
+  display: block;
+
+  margin-top: 9px;
+
+  color: var(--muted);
+
+  font-size: 8px;
+}
+
+
+/*
+  KPI value micro-emphasis.
+  Count-up is handled in JavaScript; this pulse only makes the
+  final value landing feel intentional.
+*/
+
+.v12-kpi-card > strong,
+.v12-acquisition-primary > strong {
+  animation:
+    v12ValueSettle
+    760ms
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    )
+    both;
+}
+
+
+@keyframes v12ValueSettle {
+  0% {
+    opacity: 0.45;
+    transform:
+      scale(0.96);
+  }
+
+  100% {
+    opacity: 1;
+    transform:
+      scale(1);
+  }
+}
+
+
+@media (max-width: 700px) {
+
+  .v12-acquisition-card {
+    grid-template-columns: 1fr;
+  }
+
+  .v12-qr-stage {
+    width: 100%;
+  }
+
+  .v12-acquisition-primary {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+  .v12-motion-card.v12-motion-ready,
+  .v12-qr-orbit,
+  .v12-qr-scan,
+  .v12-live-attribution > span,
+  .v12-kpi-card > strong,
+  .v12-acquisition-primary > strong {
+    animation: none !important;
+  }
+
+  .v12-acquisition-progress-track > div {
+    transition: none !important;
+  }
+
+  .v12-kpi-card:hover {
+    transform: none;
+  }
+
+}
