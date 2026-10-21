@@ -4,6 +4,7 @@ import {
   renderAmbassadorHomeV012,
   renderServicePulseV012,
   renderFeedbackV012,
+  renderSuggestionsV012,
   renderManualTransactionV012,
   renderShareWallV012,
   renderTrainingLandingV012,
@@ -16,6 +17,7 @@ import {
   setServicePulseScenarioV012,
   submitServicePulseFormV012,
   submitFeedbackFormV012,
+  submitSuggestionFormV012,
   submitManualTransactionFormV012,
   submitShareWallFormV012,
   submitPhysicalTrainingFormV012,
@@ -1153,6 +1155,7 @@ const navigation = {
       title: "Ambassador Actions",
       items: [
         ["feedback", "Feedback"],
+        ["suggestions", "Suggestions"],
         ["manual-transaction", "Manual Transaction"],
         ["share-wall", "SHARE Wall"]
       ]
@@ -8686,6 +8689,9 @@ function renderCurrentPage() {
       feedback:
         renderFeedbackV012,
 
+      suggestions:
+        renderSuggestionsV012,
+
       "manual-transaction":
         renderManualTransactionV012,
 
@@ -9072,6 +9078,16 @@ function submitFeedbackV012() {
 }
 
 
+function submitSuggestionV012() {
+
+  runV12Submission(
+    submitSuggestionFormV012,
+    "Suggestion submitted"
+  );
+
+}
+
+
 function submitManualTransactionV012() {
 
   runV12Submission(
@@ -9229,6 +9245,9 @@ window.submitServicePulseV012 =
 
 window.submitFeedbackV012 =
   submitFeedbackV012;
+
+window.submitSuggestionV012 =
+  submitSuggestionV012;
 
 window.submitManualTransactionV012 =
   submitManualTransactionV012;
