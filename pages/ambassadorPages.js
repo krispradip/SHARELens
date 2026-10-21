@@ -132,13 +132,17 @@ function metricCard(metric) {
   const trendPositive = Number(metric.trend) >= 0;
 
   return `
-    <section class="dashboard-card v12-kpi-card ${belowTarget ? "needs-attention" : ""}">
+    <section class="dashboard-card v12-kpi-card v12-motion-card ${belowTarget ? "needs-attention" : ""}">
       <div class="v12-kpi-topline">
         <span>${escapeHtml(metric.label)}</span>
         <span class="v12-target">Target ${metric.target}${metric.unit}</span>
       </div>
 
-      <strong>
+      <strong
+        data-count-to="${metric.actual}"
+        data-decimals="${Number.isInteger(metric.actual) ? 0 : 1}"
+        data-suffix="${metric.unit}"
+      >
         ${metric.actual}${metric.unit}
       </strong>
 
@@ -180,6 +184,204 @@ function submissionRows(type, emptyText = "No submissions yet.") {
       </div>
     `;
   }).join("");
+}
+
+
+/* =========================================================
+   COMPONENT: Page Motion Initializer
+
+   PURPOSE:
+   Adds restrained motion to live KPI values, progress bars
+   and newly rendered cards.
+
+   BUSINESS MEANING:
+   Makes changing performance and attribution data feel live
+   without implying data is updating in real time.
+
+   INPUTS:
+   data-count-to and data-progress-to attributes rendered by
+   the page components.
+
+   OUTPUTS:
+   Count-up values and animated progress indicators.
+
+   ACCESSIBILITY:
+   Respects prefers-reduced-motion and immediately renders
+   final values when reduced motion is requested.
+
+   CHANGE IMPACT:
+   Visual behaviour only. No KPI values or business logic are
+   changed by this component.
+========================================================= */
+
+export function initializeV12Motion() {
+
+  const reduceMotion =
+    window.matchMedia?.(
+      "(prefers-reduced-motion: reduce)"
+    )?.matches;
+
+  const numberNodes =
+    document.querySelectorAll(
+      "[data-count-to]"
+    );
+
+  numberNodes.forEach(node => {
+
+    const target =
+      Number(
+        node.dataset.countTo ||
+        0
+      );
+
+    const decimals =
+      Number(
+        node.dataset.decimals ||
+        0
+      );
+
+    const prefix =
+      node.dataset.prefix ||
+      "";
+
+    const suffix =
+      node.dataset.suffix ||
+      "";
+
+    const formatted = value =>
+      `${prefix}${Number(value).toLocaleString(
+        undefined,
+        {
+          minimumFractionDigits: decimals,
+          maximumFractionDigits: decimals
+        }
+      )}${suffix}`;
+
+
+    if (
+      reduceMotion ||
+      !Number.isFinite(target)
+    ) {
+
+      node.textContent =
+        formatted(target);
+
+      return;
+
+    }
+
+
+    const duration = 900;
+
+    const start =
+      performance.now();
+
+
+    const frame = now => {
+
+      const elapsed =
+        Math.min(
+          1,
+          (now - start) /
+          duration
+        );
+
+      const eased =
+        1 -
+        Math.pow(
+          1 - elapsed,
+          3
+        );
+
+      node.textContent =
+        formatted(
+          target * eased
+        );
+
+
+      if (elapsed < 1) {
+
+        requestAnimationFrame(
+          frame
+        );
+
+      }
+
+    };
+
+
+    requestAnimationFrame(
+      frame
+    );
+
+  });
+
+
+  document
+    .querySelectorAll(
+      "[data-progress-to]"
+    )
+    .forEach(node => {
+
+      const target =
+        Math.max(
+          0,
+          Math.min(
+            100,
+            Number(
+              node.dataset.progressTo ||
+              0
+            )
+          )
+        );
+
+
+      if (reduceMotion) {
+
+        node.style.width =
+          `${target}%`;
+
+        return;
+
+      }
+
+
+      requestAnimationFrame(
+        () => {
+
+          node.style.width =
+            `${target}%`;
+
+        }
+      );
+
+    });
+
+
+  if (!reduceMotion) {
+
+    document
+      .querySelectorAll(
+        ".v12-motion-card"
+      )
+      .forEach(
+        (node, index) => {
+
+          node.style
+            .setProperty(
+              "--motion-delay",
+              `${Math.min(index * 55, 385)}ms`
+            );
+
+          node.classList.add(
+            "v12-motion-ready"
+          );
+
+        }
+      );
+
+  }
+
 }
 
 
@@ -245,7 +447,7 @@ export function renderAmbassadorHomeV012() {
     </div>
 
     <div class="dashboard-grid two">
-      <section class="dashboard-card">
+      <section class="dashboard-card v12-motion-card">
         <div class="card-heading-row">
           <div>
             <span class="section-label">FOCUS</span>
@@ -261,7 +463,7 @@ export function renderAmbassadorHomeV012() {
         `}
       </section>
 
-      <section class="dashboard-card">
+      <section class="dashboard-card v12-motion-card">
         <span class="section-label">DIRECT ACTIONS</span>
         <h3>What do you need to do?</h3>
 
@@ -295,7 +497,7 @@ export function renderAmbassadorHomeV012() {
     </div>
 
     <div class="dashboard-grid two">
-      <section class="dashboard-card">
+      <section class="dashboard-card v12-motion-card v12-acquisition-panel">
         <div class="card-heading-row">
           <div>
             <span class="section-label">ACQUISITION</span>
@@ -305,21 +507,75 @@ export function renderAmbassadorHomeV012() {
         </div>
 
         <div class="v12-acquisition-card">
-          <div class="v12-qr-placeholder">
-            <span>ADJUST</span>
-            <strong>QR</strong>
+          <div class="v12-qr-stage">
+            <div class="v12-qr-orbit"></div>
+
+            <div class="v12-qr-placeholder">
+              <span class="v12-qr-scan"></span>
+              <span>ADJUST</span>
+              <strong>QR</strong>
+            </div>
+
+            <div class="v12-live-attribution">
+              <span></span>
+              Attribution active
+            </div>
           </div>
 
-          <div>
-            <strong>${ACQUISITION.membersAcquired} / ${ACQUISITION.target} members</strong>
-            <p>${ACQUISITION.activeMemberRate}% active-member rate</p>
-            <p>AED ${ACQUISITION.attributedSpend.toLocaleString()} attributed member spend</p>
-            <small>QR reference: ${escapeHtml(ACQUISITION.qrReference)}</small>
+          <div class="v12-acquisition-metrics">
+            <div class="v12-acquisition-primary">
+              <strong>
+                <span
+                  data-count-to="${ACQUISITION.membersAcquired}"
+                  data-decimals="0"
+                >${ACQUISITION.membersAcquired}</span>
+                <small>/ ${ACQUISITION.target}</small>
+              </strong>
+
+              <span>members acquired</span>
+            </div>
+
+            <div class="v12-acquisition-progress">
+              <div>
+                <span>Target progress</span>
+                <strong>${Math.round((ACQUISITION.membersAcquired / ACQUISITION.target) * 100)}%</strong>
+              </div>
+
+              <div class="v12-acquisition-progress-track">
+                <div
+                  data-progress-to="${(ACQUISITION.membersAcquired / ACQUISITION.target) * 100}"
+                ></div>
+              </div>
+            </div>
+
+            <div class="v12-acquisition-stat-grid">
+              <div>
+                <span>Active-member rate</span>
+                <strong
+                  data-count-to="${ACQUISITION.activeMemberRate}"
+                  data-decimals="0"
+                  data-suffix="%"
+                >${ACQUISITION.activeMemberRate}%</strong>
+              </div>
+
+              <div>
+                <span>Attributed spend</span>
+                <strong
+                  data-count-to="${ACQUISITION.attributedSpend}"
+                  data-decimals="0"
+                  data-prefix="AED "
+                >AED ${ACQUISITION.attributedSpend.toLocaleString()}</strong>
+              </div>
+            </div>
+
+            <small class="v12-acquisition-reference">
+              Adjust reference: ${escapeHtml(ACQUISITION.qrReference)}
+            </small>
           </div>
         </div>
       </section>
 
-      <section class="dashboard-card">
+      <section class="dashboard-card v12-motion-card">
         <div class="card-heading-row">
           <div>
             <span class="section-label">TRAINING & KNOWLEDGE</span>
