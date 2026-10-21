@@ -7,8 +7,8 @@ const app = document.getElementById("app");
    BUILD
 ========================================================= */
 
-const APP_VERSION = "0.11.1";
-const APP_BUILD_DATE = "15 Oct 2026";
+const APP_VERSION = "0.12.0";
+const APP_BUILD_DATE = "21 Oct 2026";
 
 const SHARE_POINT_AED_VALUE = 0.10;
 
