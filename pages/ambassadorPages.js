@@ -7,7 +7,8 @@ import {
   KNOWLEDGE_ARTICLES,
   SERVICE_PULSE,
   NEXT_BEST_ACTIONS,
-  SCORE_FAMILIES
+  SCORE_FAMILIES,
+  AMBASSADOR_PERFORMANCE
 } from "../data/platformData.js";
 
 import { getUserContext } from "../services/userContextService.js";
@@ -456,6 +457,382 @@ export function initializeV12Motion() {
    KPI status, approved actions and direct workflow entry.
 ========================================================= */
 
+/* =========================================================
+   COMPONENT: Ambassador Performance Card
+
+   PURPOSE:
+   Shows the Ambassador's own engagement-based performance
+   directly below the home greeting.
+
+   BUSINESS MEANING:
+   Separates Ambassador participation / engagement from the
+   programme KPI cards below it.
+
+   INPUTS:
+   Campaign participation, broadcast acknowledgements,
+   Feedback + Suggestions and SHARE Wall submissions.
+
+   OUTPUTS:
+   Transparent sub-metrics plus combined monthly threshold.
+
+   CHANGE IMPACT:
+   New submissions immediately change the Feedback +
+   Suggestions count in this prototype.
+========================================================= */
+
+function ambassadorPerformanceCounts() {
+
+  const feedbackCount =
+    AMBASSADOR_PERFORMANCE
+      .feedbackSuggestions
+      .baselineFeedback +
+    getSubmissionsByType(
+      "feedback"
+    ).length;
+
+  const suggestionCount =
+    AMBASSADOR_PERFORMANCE
+      .feedbackSuggestions
+      .baselineSuggestions +
+    getSubmissionsByType(
+      "suggestion"
+    ).length;
+
+  return {
+    feedbackCount,
+    suggestionCount,
+    combined:
+      feedbackCount +
+      suggestionCount
+  };
+
+}
+
+
+function ambassadorPerformanceCard() {
+
+  const performance =
+    AMBASSADOR_PERFORMANCE;
+
+  const counts =
+    ambassadorPerformanceCounts();
+
+  const threshold =
+    performance
+      .feedbackSuggestions
+      .monthlyThreshold;
+
+  const combinedProgress =
+    Math.min(
+      100,
+      (
+        counts.combined /
+        threshold
+      ) *
+      100
+    );
+
+  const campaignRate =
+    Math.round(
+      (
+        performance
+          .campaignParticipation
+          .participated /
+        performance
+          .campaignParticipation
+          .available
+      ) *
+      100
+    );
+
+  const acknowledgementRate =
+    Math.round(
+      (
+        performance
+          .broadcastAcknowledgement
+          .acknowledged /
+        performance
+          .broadcastAcknowledgement
+          .sent
+      ) *
+      100
+    );
+
+  const wallRate =
+    Math.round(
+      (
+        performance
+          .shareWall
+          .submitted /
+        performance
+          .shareWall
+          .expected
+      ) *
+      100
+    );
+
+
+  return `
+    <section class="dashboard-card v12-motion-card v12-ambassador-performance">
+
+      <div class="v12-ambassador-performance-head">
+
+        <div>
+
+          <span class="section-label">
+            MY AMBASSADOR PERFORMANCE
+          </span>
+
+          <h2 class="v12-heading-with-info">
+            Ambassador Performance Score
+
+            ${tooltip(
+              "This score reflects the Ambassador's own programme engagement. The agreed components are campaign participation, broadcast acknowledgement, Feedback & Suggestions, and SHARE Wall submission. Final weighting remains configurable and is not yet confirmed."
+            )}
+          </h2>
+
+          <p>
+            Your participation and engagement in the SHARE Ambassador programme.
+          </p>
+
+        </div>
+
+
+        <div class="v12-performance-score-ring">
+
+          <div
+            class="v12-performance-score-value"
+            data-count-to="${performance.score}"
+            data-decimals="0"
+            data-suffix="%"
+          >
+            ${performance.score}%
+          </div>
+
+          <span>
+            Demo score
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div class="v12-performance-subgrid">
+
+        <button
+          type="button"
+          class="v12-performance-subcard"
+          onclick="showToast('Campaign detail will open from the Campaigns module when Lead campaign management is connected.')"
+        >
+
+          <div class="v12-subcard-top">
+
+            <span class="v12-subcard-icon">
+              C
+            </span>
+
+            ${tooltip(
+              performance
+                .campaignParticipation
+                .description
+            )}
+
+          </div>
+
+          <strong
+            data-count-to="${campaignRate}"
+            data-decimals="0"
+            data-suffix="%"
+          >
+            ${campaignRate}%
+          </strong>
+
+          <span>
+            Campaign Participation
+          </span>
+
+          <small>
+            ${performance.campaignParticipation.participated} of ${performance.campaignParticipation.available} campaigns participated
+          </small>
+
+          <div class="v12-subcard-progress">
+            <div data-progress-to="${campaignRate}"></div>
+          </div>
+
+        </button>
+
+
+        <button
+          type="button"
+          class="v12-performance-subcard"
+          onclick="showToast('Broadcast acknowledgement detail will open from Communications.')"
+        >
+
+          <div class="v12-subcard-top">
+
+            <span class="v12-subcard-icon">
+              B
+            </span>
+
+            ${tooltip(
+              performance
+                .broadcastAcknowledgement
+                .description
+            )}
+
+          </div>
+
+          <strong
+            data-count-to="${acknowledgementRate}"
+            data-decimals="0"
+            data-suffix="%"
+          >
+            ${acknowledgementRate}%
+          </strong>
+
+          <span>
+            Broadcast Acknowledgement
+          </span>
+
+          <small>
+            ${performance.broadcastAcknowledgement.acknowledged} of ${performance.broadcastAcknowledgement.sent} acknowledged · 👍 ${performance.broadcastAcknowledgement.positiveReactions} · 👎 ${performance.broadcastAcknowledgement.negativeReactions}
+          </small>
+
+          <div class="v12-subcard-progress">
+            <div data-progress-to="${acknowledgementRate}"></div>
+          </div>
+
+        </button>
+
+
+        <div class="v12-performance-subcard v12-feedback-suggestion-card">
+
+          <div class="v12-subcard-top">
+
+            <span class="v12-subcard-icon">
+              F
+            </span>
+
+            ${tooltip(
+              performance
+                .feedbackSuggestions
+                .description
+            )}
+
+          </div>
+
+          <strong>
+            <span
+              data-count-to="${counts.combined}"
+              data-decimals="0"
+            >${counts.combined}</span>
+            <small>
+              / ${threshold}
+            </small>
+          </strong>
+
+          <span>
+            Feedback & Suggestions
+          </span>
+
+          <small>
+            ${counts.feedbackCount} feedback · ${counts.suggestionCount} suggestions · monthly combined threshold
+          </small>
+
+          <div class="v12-subcard-progress">
+            <div data-progress-to="${combinedProgress}"></div>
+          </div>
+
+          <div class="v12-subcard-actions">
+
+            <button
+              type="button"
+              onclick="navigateTo('feedback')"
+            >
+              Feedback
+            </button>
+
+            <button
+              type="button"
+              onclick="navigateTo('suggestions')"
+            >
+              Suggestion
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="v12-performance-subcard"
+          onclick="navigateTo('share-wall')"
+        >
+
+          <div class="v12-subcard-top">
+
+            <span class="v12-subcard-icon">
+              W
+            </span>
+
+            ${tooltip(
+              performance
+                .shareWall
+                .description
+            )}
+
+          </div>
+
+          <strong>
+            ${performance.shareWall.submitted}
+            <small>
+              / ${performance.shareWall.expected}
+            </small>
+          </strong>
+
+          <span>
+            SHARE Wall Submission
+          </span>
+
+          <small>
+            Current-period wall updates submitted
+          </small>
+
+          <div class="v12-subcard-progress">
+            <div data-progress-to="${wallRate}"></div>
+          </div>
+
+        </button>
+
+      </div>
+
+
+      <div class="v12-performance-footnote">
+
+        <span>
+          Feedback + Suggestions target:
+          <strong>
+            2 per Ambassador per month
+          </strong>
+          in any combination.
+        </span>
+
+        <span>
+          Final score weighting:
+          <strong>
+            To be confirmed
+          </strong>
+        </span>
+
+      </div>
+
+    </section>
+  `;
+}
+
+
 export function renderAmbassadorHomeV012() {
   const user = getUserContext();
   const metrics = Object.values(AMBASSADOR_KPIS);
@@ -495,6 +872,8 @@ export function renderAmbassadorHomeV012() {
         <strong>${escapeHtml(user.brand)} · ${escapeHtml(user.location)}</strong>
       </div>
     </div>
+
+    ${ambassadorPerformanceCard()}
 
     <div class="dashboard-grid four v12-kpi-grid">
       ${metrics.map(metricCard).join("")}
@@ -539,6 +918,11 @@ export function renderAmbassadorHomeV012() {
           <button onclick="navigateTo('feedback')">
             <span>✎</span>
             <strong>Submit Feedback</strong>
+          </button>
+
+          <button onclick="navigateTo('suggestions')">
+            <span>＋</span>
+            <strong>Submit Suggestion</strong>
           </button>
           <button onclick="navigateTo('manual-transaction')">
             <span>▣</span>
@@ -961,6 +1345,258 @@ export function submitFeedbackFormV012() {
     imageFileName: image?.name || "",
     status: "Submitted"
   });
+}
+
+
+/* =========================================================
+   PAGE: Suggestions
+
+   PURPOSE:
+   Gives Ambassadors a dedicated native workflow for ideas
+   and improvement suggestions.
+
+   BUSINESS MEANING:
+   Suggestions count together with Feedback toward the agreed
+   minimum monthly participation threshold of 2 submissions
+   per Ambassador, in any combination.
+
+   OUTPUTS:
+   Structured suggestion submission with authenticated user
+   and organisational context.
+========================================================= */
+
+export function renderSuggestionsV012() {
+
+  const counts =
+    ambassadorPerformanceCounts();
+
+  const threshold =
+    AMBASSADOR_PERFORMANCE
+      .feedbackSuggestions
+      .monthlyThreshold;
+
+  return `
+    ${pageHeading(
+      "AMBASSADOR PROGRAM",
+      "Submit a Suggestion",
+      "Share an improvement idea directly in SHARE Lens."
+    )}
+
+    ${contextStrip()}
+
+
+    <div class="dashboard-grid two">
+
+      <section class="dashboard-card v12-form-card">
+
+        <div class="card-heading-row">
+
+          <div>
+
+            <span class="section-label">
+              NEW SUGGESTION
+            </span>
+
+            <h3>
+              What would you improve?
+            </h3>
+
+          </div>
+
+          <span class="v12-target-chip">
+            Feedback + Suggestions:
+            ${counts.combined} / ${threshold}
+          </span>
+
+        </div>
+
+
+        <div class="v12-form-grid two">
+
+          <label>
+
+            <span>
+              Suggestion Category
+            </span>
+
+            <select id="suggestion-category">
+
+              <option>
+                Customer Experience
+              </option>
+
+              <option>
+                SHARE App
+              </option>
+
+              <option>
+                Process Improvement
+              </option>
+
+              <option>
+                Ambassador Program
+              </option>
+
+              <option>
+                Training & Knowledge
+              </option>
+
+              <option>
+                Other
+              </option>
+
+            </select>
+
+          </label>
+
+
+          <label>
+
+            <span>
+              Suggestion Title
+            </span>
+
+            <input
+              id="suggestion-title"
+              placeholder="Short title for your idea"
+            >
+
+          </label>
+
+        </div>
+
+
+        <label class="v12-full-field">
+
+          <span>
+            Suggestion
+          </span>
+
+          <textarea
+            id="suggestion-text"
+            rows="6"
+            placeholder="Explain the idea, problem or improvement..."
+          ></textarea>
+
+        </label>
+
+
+        <label class="v12-full-field">
+
+          <span>
+            Optional Image
+          </span>
+
+          <input
+            id="suggestion-image"
+            type="file"
+            accept="image/*"
+          >
+
+          <small>
+            Prototype stores the selected file name only.
+          </small>
+
+        </label>
+
+
+        <div class="v12-form-actions">
+
+          <span>
+            This submission counts toward the combined monthly Feedback + Suggestions threshold.
+          </span>
+
+          <button
+            class="primary-small"
+            onclick="submitSuggestionV012()"
+          >
+            Submit Suggestion
+          </button>
+
+        </div>
+
+      </section>
+
+
+      <section class="dashboard-card">
+
+        <span class="section-label">
+          MY SUGGESTIONS
+        </span>
+
+        <h3>
+          Recent suggestions
+        </h3>
+
+        ${submissionRows(
+          "suggestion",
+          "No suggestions submitted from this prototype yet."
+        )}
+
+      </section>
+
+    </div>
+  `;
+}
+
+
+export function submitSuggestionFormV012() {
+
+  const title =
+    fieldValue(
+      "suggestion-title"
+    );
+
+  const suggestion =
+    fieldValue(
+      "suggestion-text"
+    );
+
+
+  if (
+    !title ||
+    !suggestion
+  ) {
+
+    throw new Error(
+      "Enter a title and suggestion before submitting."
+    );
+
+  }
+
+
+  const image =
+    document
+      .getElementById(
+        "suggestion-image"
+      )
+      ?.files?.[0];
+
+
+  return createSubmission(
+    "suggestion",
+    {
+
+      suggestionTitle:
+        title,
+
+      suggestionCategory:
+        fieldValue(
+          "suggestion-category"
+        ),
+
+      suggestion,
+
+      imageFileName:
+        image?.name ||
+        "",
+
+      status:
+        "Submitted"
+
+    }
+  );
+
 }
 
 
