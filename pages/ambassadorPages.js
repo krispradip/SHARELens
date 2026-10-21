@@ -86,6 +86,46 @@ function pageHeading(label, title, subtitle) {
   `;
 }
 
+
+/* =========================================================
+   COMPONENT: Transcript-Grounded Tooltip
+
+   PURPOSE:
+   Gives users enough context to understand what each KPI or
+   programme card means and what the measure is based on.
+
+   BUSINESS MEANING:
+   The workshop explicitly called for users to understand an
+   indicator and the action to take next.
+
+   INPUTS:
+   Tooltip copy derived from the discovery / review workshop.
+
+   OUTPUTS:
+   Accessible focusable tooltip trigger and explanatory text.
+
+   CHANGE IMPACT:
+   Copy changes affect user interpretation only; KPI logic is
+   unchanged.
+========================================================= */
+
+function tooltip(text) {
+  return `
+    <span class="v12-tooltip-wrap">
+      <button
+        type="button"
+        class="v12-tooltip-trigger"
+        aria-label="More information"
+      >
+        i
+      </button>
+      <span class="v12-tooltip-content">
+        ${escapeHtml(text)}
+      </span>
+    </span>
+  `;
+}
+
 function contextStrip() {
   const user = getUserContext();
 
@@ -131,10 +171,24 @@ function metricCard(metric) {
   const belowTarget = Number(metric.actual) < Number(metric.target);
   const trendPositive = Number(metric.trend) >= 0;
 
+  const tooltipCopy = {
+    performance:
+      "Your own Ambassador performance view. The review workshop confirmed that this is distinct from the programme-level KPI view and is made up from SHARE performance, Ambassador engagement performance and training performance.",
+    acquisition:
+      "Acquisition is one of the core programme KPIs Ambassadors need to see. Attribution is linked to the Ambassador and store through the personalised Adjust QR, enabling measurable acquisition performance and recognition.",
+    penetration:
+      "SHARE / sales penetration is one of the programme KPIs Ambassadors need to see and should reflect the applicable business-unit / brand operating scope.",
+    servicePulse:
+      "Service Pulse is one of the core programme KPIs. It reflects the applicable audit / Service Pulse performance for the Ambassador's operating scope and is used to identify where corrective action is needed."
+  };
+
   return `
     <section class="dashboard-card v12-kpi-card v12-motion-card ${belowTarget ? "needs-attention" : ""}">
       <div class="v12-kpi-topline">
-        <span>${escapeHtml(metric.label)}</span>
+        <span class="v12-kpi-label">
+          ${escapeHtml(metric.label)}
+          ${tooltip(tooltipCopy[metric.key] || metric.description || "")}
+        </span>
         <span class="v12-target">Target ${metric.target}${metric.unit}</span>
       </div>
 
@@ -451,7 +505,12 @@ export function renderAmbassadorHomeV012() {
         <div class="card-heading-row">
           <div>
             <span class="section-label">FOCUS</span>
-            <h3>Next Best Actions</h3>
+            <h3 class="v12-heading-with-info">
+              Next Best Actions
+              ${tooltip(
+                "The intended outcome is for low performance or completion to trigger an action, while strong performance can trigger recognition. For the Ambassador programme, actions should be driven by controlled KPI gaps rather than speculative external causes."
+              )}
+            </h3>
           </div>
           <span class="v12-evidence-label">KPI-driven</span>
         </div>
@@ -465,7 +524,12 @@ export function renderAmbassadorHomeV012() {
 
       <section class="dashboard-card v12-motion-card">
         <span class="section-label">DIRECT ACTIONS</span>
-        <h3>What do you need to do?</h3>
+        <h3 class="v12-heading-with-info">
+          What do you need to do?
+          ${tooltip(
+            "The workshop asked for direct in-platform entry points for Ambassador actions such as feedback and SHARE Wall submission instead of relying on distributed external links."
+          )}
+        </h3>
 
         <div class="v12-action-grid">
           <button onclick="navigateTo('service-pulse')">
@@ -501,13 +565,24 @@ export function renderAmbassadorHomeV012() {
         <div class="card-heading-row">
           <div>
             <span class="section-label">ACQUISITION</span>
-            <h3>Your personalised QR</h3>
+            <h3 class="v12-heading-with-info">
+              Your personalised QR
+              ${tooltip(
+                "Individual acquisition QR codes are a priority use case. Each Ambassador should have a personal QR that retains the Ambassador identifier when a customer joins, so acquisition can be attributed to the Ambassador and store for performance, leaderboards and recognition."
+              )}
+            </h3>
           </div>
-          <span class="v12-source-badge">Source: ${ACQUISITION.provider}</span>
+          <span class="v12-source-badge">
+            Source: ${ACQUISITION.provider}
+            ${tooltip(
+              "Adjust is the current QR attribution platform. The target model keeps Adjust as the specialist acquisition source while SHARE Lens becomes the user experience and reporting layer."
+            )}
+          </span>
         </div>
 
         <div class="v12-acquisition-card">
-          <div class="v12-qr-stage">
+          <div class="v12-acquisition-left">
+            <div class="v12-qr-stage">
             <div class="v12-qr-orbit"></div>
 
             <div class="v12-qr-placeholder">
@@ -522,6 +597,15 @@ export function renderAmbassadorHomeV012() {
             </div>
           </div>
 
+          <button
+            type="button"
+            class="v12-qr-action"
+            onclick="showToast('Opening personalised acquisition QR in the prototype.')"
+          >
+            View personal QR
+          </button>
+        </div>
+
           <div class="v12-acquisition-metrics">
             <div class="v12-acquisition-primary">
               <strong>
@@ -532,7 +616,12 @@ export function renderAmbassadorHomeV012() {
                 <small>/ ${ACQUISITION.target}</small>
               </strong>
 
-              <span>members acquired</span>
+              <span>
+                members acquired
+                ${tooltip(
+                  "Customers attributed to this Ambassador's personalised QR. The workshop linked acquisition performance to the Ambassador's store and individual attribution."
+                )}
+              </span>
             </div>
 
             <div class="v12-acquisition-progress">
@@ -550,7 +639,12 @@ export function renderAmbassadorHomeV012() {
 
             <div class="v12-acquisition-stat-grid">
               <div>
-                <span>Active-member rate</span>
+                <span>
+                  Active-member rate
+                  ${tooltip(
+                    "The proportion of attributed acquired members who are active, based on acquisition outcome data returned from Adjust or the approved acquisition source."
+                  )}
+                </span>
                 <strong
                   data-count-to="${ACQUISITION.activeMemberRate}"
                   data-decimals="0"
@@ -559,7 +653,12 @@ export function renderAmbassadorHomeV012() {
               </div>
 
               <div>
-                <span>Attributed spend</span>
+                <span>
+                  Attributed spend
+                  ${tooltip(
+                    "Spend associated with members attributed to the Ambassador's acquisition activity. This is an acquisition outcome metric, not a points-value calculator."
+                  )}
+                </span>
                 <strong
                   data-count-to="${ACQUISITION.attributedSpend}"
                   data-decimals="0"
@@ -579,7 +678,12 @@ export function renderAmbassadorHomeV012() {
         <div class="card-heading-row">
           <div>
             <span class="section-label">TRAINING & KNOWLEDGE</span>
-            <h3>Continue where you left off</h3>
+            <h3 class="v12-heading-with-info">
+              Continue where you left off
+              ${tooltip(
+                "Training data can be integrated from Mitti rather than replacing it initially, while SHARE Lens provides the single front door, status view and connected knowledge experience."
+              )}
+            </h3>
           </div>
         </div>
 
