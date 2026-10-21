@@ -6768,3 +6768,279 @@ select {
   }
 
 }
+
+
+/* =========================================================
+   SHARE LENS v0.12.0 — TOOLTIPS + ACQUISITION REFINEMENT
+
+   PURPOSE:
+   Adds transcript-grounded contextual help and improves the
+   acquisition card hierarchy.
+
+   BUSINESS MEANING:
+   Users should understand what an indicator means, what
+   scope it represents, and where its data comes from.
+
+   CHANGE IMPACT:
+   Visual / explanatory only. No KPI calculations change.
+========================================================= */
+
+.v12-kpi-label,
+.v12-heading-with-info,
+.v12-acquisition-primary > span,
+.v12-acquisition-stat-grid span,
+.v12-source-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.v12-heading-with-info {
+  flex-wrap: wrap;
+}
+
+.v12-tooltip-wrap {
+  position: relative;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.v12-tooltip-trigger {
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid #d8cbd0;
+  border-radius: 50%;
+  background: #ffffff;
+  color: var(--brand);
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1;
+  cursor: help;
+}
+
+.v12-tooltip-trigger:focus {
+  outline: 3px solid rgba(213, 21, 91, 0.12);
+  outline-offset: 2px;
+}
+
+.v12-tooltip-content {
+  position: absolute;
+  z-index: 900;
+  left: 50%;
+  bottom: calc(100% + 9px);
+  width: 290px;
+  max-width: min(290px, 78vw);
+  padding: 11px 12px;
+  border: 1px solid #dbc9d0;
+  border-radius: 9px;
+  background: #ffffff;
+  color: var(--text);
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: left;
+  box-shadow: 0 12px 30px rgba(30, 10, 17, 0.16);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate(-50%, 5px);
+  transition:
+    opacity 140ms ease,
+    transform 140ms ease,
+    visibility 140ms ease;
+}
+
+.v12-tooltip-content::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 8px;
+  height: 8px;
+  background: #ffffff;
+  border-right: 1px solid #dbc9d0;
+  border-bottom: 1px solid #dbc9d0;
+  transform: translate(-50%, -4px) rotate(45deg);
+}
+
+.v12-tooltip-wrap:hover .v12-tooltip-content,
+.v12-tooltip-wrap:focus-within .v12-tooltip-content {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+
+
+.v12-acquisition-panel {
+  min-height: 292px;
+}
+
+.v12-acquisition-card {
+  grid-template-columns: 180px minmax(0, 1fr);
+  align-items: stretch;
+  gap: 22px;
+  min-height: 205px;
+}
+
+.v12-acquisition-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background:
+    linear-gradient(
+      145deg,
+      #fffafb,
+      #ffffff
+    );
+}
+
+.v12-qr-stage {
+  width: 146px;
+  min-height: 154px;
+}
+
+.v12-qr-action {
+  width: 100%;
+  min-height: 36px;
+  margin-top: 9px;
+  border: 1px solid #dcbac7;
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--brand);
+  font-size: 10px;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease;
+}
+
+.v12-qr-action:hover {
+  border-color: var(--accent);
+  background: var(--pink-soft);
+  transform: translateY(-1px);
+}
+
+.v12-acquisition-metrics {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  min-width: 0;
+  padding: 5px 0;
+}
+
+.v12-acquisition-primary {
+  align-items: center;
+  min-height: 63px;
+}
+
+.v12-acquisition-primary > strong {
+  font-size: 36px;
+}
+
+.v12-acquisition-primary > span {
+  justify-content: flex-end;
+  color: var(--muted);
+  font-size: 10px;
+  text-align: right;
+}
+
+.v12-acquisition-progress {
+  margin: 15px 0;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #faf8f9;
+}
+
+.v12-acquisition-stat-grid {
+  align-self: stretch;
+}
+
+.v12-acquisition-stat-grid > div {
+  position: relative;
+  overflow: hidden;
+  min-height: 82px;
+  padding: 13px;
+  background: #ffffff;
+}
+
+.v12-acquisition-stat-grid > div::after {
+  content: "";
+  position: absolute;
+  right: -30px;
+  bottom: -38px;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle,
+      rgba(213, 21, 91, 0.08),
+      rgba(213, 21, 91, 0) 68%
+    );
+}
+
+.v12-acquisition-stat-grid span {
+  position: relative;
+  z-index: 1;
+  align-items: center;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.v12-acquisition-stat-grid strong {
+  position: relative;
+  z-index: 1;
+  margin-top: 7px;
+  font-size: 19px;
+}
+
+.v12-acquisition-reference {
+  margin-top: 11px;
+  padding-top: 9px;
+  border-top: 1px solid var(--border);
+}
+
+
+@media (max-width: 850px) {
+  .v12-tooltip-content {
+    left: 0;
+    transform: translate(0, 5px);
+  }
+
+  .v12-tooltip-wrap:hover .v12-tooltip-content,
+  .v12-tooltip-wrap:focus-within .v12-tooltip-content {
+    transform: translate(0, 0);
+  }
+
+  .v12-tooltip-content::after {
+    left: 10px;
+    transform: translate(0, -4px) rotate(45deg);
+  }
+}
+
+
+@media (max-width: 700px) {
+  .v12-acquisition-card {
+    grid-template-columns: 1fr;
+  }
+
+  .v12-acquisition-primary {
+    align-items: flex-start;
+  }
+
+  .v12-acquisition-primary > span {
+    justify-content: flex-start;
+    text-align: left;
+  }
+}
