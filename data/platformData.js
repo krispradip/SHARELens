@@ -140,11 +140,76 @@ export const SCORE_FAMILIES = {
   },
   ambassadorPerformance: {
     label: "Ambassador Performance Score",
-    components: ["Campaign Participation", "Broadcast Acknowledgement", "Feedback", "SHARE Wall Submission"]
+    components: ["Campaign Participation", "Broadcast Acknowledgement", "Feedback & Suggestions", "SHARE Wall Submission"]
   },
   trainingPerformance: {
     label: "Training Performance Score",
     components: ["Online Training Completion", "Knowledge Score", "In-Store Training Completion"]
+  }
+};
+
+
+/* =========================================================
+   COMPONENT: Ambassador Performance Score
+
+   PURPOSE:
+   Defines the Ambassador-owned engagement measures agreed
+   for the programme dashboard.
+
+   BUSINESS MEANING:
+   Measures participation in programme activity rather than
+   service delivery outcomes.
+
+   INPUTS:
+   Campaign participation, broadcast acknowledgements,
+   Feedback + Suggestions submissions and SHARE Wall updates.
+
+   IMPORTANT:
+   Final weighting is not yet confirmed. The prototype score
+   is therefore a demo value, while each component is shown
+   transparently underneath it.
+
+   CHANGE IMPACT:
+   Changes affect the Ambassador Performance card and future
+   BU / Programme Lead roll-ups.
+========================================================= */
+export const AMBASSADOR_PERFORMANCE = {
+  score: 82,
+  weightingStatus: "Weighting to be confirmed",
+
+  campaignParticipation: {
+    participated: 3,
+    available: 4,
+    label: "Campaign Participation",
+    description:
+      "Participation in campaigns launched by BU Leads or Programme Leads, including response-based campaigns such as nominations."
+  },
+
+  broadcastAcknowledgement: {
+    acknowledged: 4,
+    sent: 5,
+    positiveReactions: 3,
+    negativeReactions: 1,
+    label: "Broadcast Acknowledgement",
+    description:
+      "Acknowledgement of programme broadcasts using the configured response action, including thumbs-up / thumbs-down reactions."
+  },
+
+  feedbackSuggestions: {
+    baselineFeedback: 1,
+    baselineSuggestions: 0,
+    monthlyThreshold: 2,
+    label: "Feedback & Suggestions",
+    description:
+      "Feedback and Suggestions share one monthly threshold. Each Ambassador should submit at least 2 in total per month, in any combination."
+  },
+
+  shareWall: {
+    submitted: 1,
+    expected: 1,
+    label: "SHARE Wall Submission",
+    description:
+      "Number of required SHARE Wall updates submitted for the current period."
   }
 };
 
