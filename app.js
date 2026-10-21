@@ -1,5 +1,26 @@
 import { analyseInteraction } from "./agents/agentOrchestrator.js";
 
+import {
+  renderAmbassadorHomeV012,
+  renderServicePulseV012,
+  renderFeedbackV012,
+  renderManualTransactionV012,
+  renderShareWallV012,
+  renderTrainingLandingV012,
+  renderOnlineTrainingV012,
+  renderPhysicalTrainingV012,
+  renderKnowledgeV012,
+  renderKnowledgeResultsV012,
+  renderReportsV012,
+  renderStatusV012,
+  setServicePulseScenarioV012,
+  submitServicePulseFormV012,
+  submitFeedbackFormV012,
+  submitManualTransactionFormV012,
+  submitShareWallFormV012,
+  submitPhysicalTrainingFormV012
+} from "./pages/ambassadorPages.js";
+
 const app = document.getElementById("app");
 
 
@@ -1116,28 +1137,40 @@ const navigation = {
     {
       title: "",
       items: [
-        ["home", "Home"]
+        ["home", "Dashboard"]
       ]
     },
 
     {
-      title: "Performance",
+      title: "Service Delivery",
       items: [
-        ["performance", "My Performance"]
+        ["service-pulse", "Service Pulse"]
+      ]
+    },
+
+    {
+      title: "Ambassador Actions",
+      items: [
+        ["feedback", "Feedback"],
+        ["manual-transaction", "Manual Transaction"],
+        ["share-wall", "SHARE Wall"]
       ]
     },
 
     {
       title: "Training & Knowledge",
       items: [
-        ["training", "My Training"],
+        ["training", "Training"],
+        ["training-online", "Online Training", "child"],
+        ["training-physical", "Physical / In-Store", "child"],
         ["knowledge", "Knowledge Base"]
       ]
     },
 
     {
-      title: "Ambassador",
+      title: "My Activity",
       items: [
+        ["reports", "Reports"],
         ["status", "My Status"]
       ]
     }
@@ -1648,6 +1681,10 @@ function sidebar() {
                 class="nav-item ${
                   currentPage === item[0]
                     ? "active"
+                    : ""
+                } ${
+                  item[2] === "child"
+                    ? "nav-child"
                     : ""
                 }"
 
@@ -8640,22 +8677,40 @@ function renderCurrentPage() {
     const pages = {
 
       home:
-        ambassadorHome,
+        renderAmbassadorHomeV012,
 
-      performance:
-        ambassadorPerformance,
+      "service-pulse":
+        renderServicePulseV012,
+
+      feedback:
+        renderFeedbackV012,
+
+      "manual-transaction":
+        renderManualTransactionV012,
+
+      "share-wall":
+        renderShareWallV012,
 
       training:
-        trainingPage,
+        renderTrainingLandingV012,
+
+      "training-online":
+        renderOnlineTrainingV012,
+
+      "training-physical":
+        renderPhysicalTrainingV012,
 
       knowledge:
-        knowledgePage,
+        renderKnowledgeV012,
+
+      reports:
+        renderReportsV012,
 
       "knowledge-check":
         knowledgeCheckPage,
 
       status:
-        statusPage
+        renderStatusV012
 
     };
 
@@ -8663,7 +8718,7 @@ function renderCurrentPage() {
     content =
       pages[currentPage]
         ? pages[currentPage]()
-        : ambassadorHome();
+        : renderAmbassadorHomeV012();
 
   }
 
@@ -8930,6 +8985,140 @@ function renderCurrentPage() {
 
 
 /* =========================================================
+   COMPONENT: v0.12 Ambassador Action Handlers
+
+   PURPOSE:
+   Bridges modular Ambassador pages to the existing global
+   prototype shell and toast system.
+
+   BUSINESS MEANING:
+   Keeps page-specific workflows outside app.js while
+   preserving the existing no-framework navigation pattern.
+
+   INPUTS:
+   Native form values from modular Ambassador pages.
+
+   OUTPUTS:
+   Prototype submissions and refreshed page state.
+
+   CHANGE IMPACT:
+   Changes affect Ambassador workflow submission behaviour.
+========================================================= */
+
+function runV12Submission(action, successMessage) {
+
+  try {
+
+    const submission =
+      action();
+
+    showToast(
+      `${successMessage} · ${submission.submissionId}`
+    );
+
+    renderCurrentPage();
+
+  } catch (error) {
+
+    showToast(
+      error?.message ||
+      "Please check the form and try again."
+    );
+
+  }
+
+}
+
+
+function selectServicePulseScenarioV012(
+  scenario
+) {
+
+  setServicePulseScenarioV012(
+    scenario
+  );
+
+  renderCurrentPage();
+
+}
+
+
+function submitServicePulseV012() {
+
+  runV12Submission(
+    submitServicePulseFormV012,
+    "Service Pulse submitted"
+  );
+
+}
+
+
+function submitFeedbackV012() {
+
+  runV12Submission(
+    submitFeedbackFormV012,
+    "Feedback submitted"
+  );
+
+}
+
+
+function submitManualTransactionV012() {
+
+  runV12Submission(
+    submitManualTransactionFormV012,
+    "Manual transaction request created"
+  );
+
+}
+
+
+function submitShareWallV012() {
+
+  runV12Submission(
+    submitShareWallFormV012,
+    "SHARE Wall update submitted"
+  );
+
+}
+
+
+function submitPhysicalTrainingV012() {
+
+  runV12Submission(
+    submitPhysicalTrainingFormV012,
+    "Training session logged"
+  );
+
+}
+
+
+function filterV12Knowledge() {
+
+  const query =
+    document
+      .getElementById(
+        "v12-knowledge-search"
+      )
+      ?.value ||
+    "";
+
+  const target =
+    document.getElementById(
+      "v12-knowledge-results"
+    );
+
+  if (!target) return;
+
+  target.innerHTML =
+    renderKnowledgeResultsV012(
+      query
+    );
+
+}
+
+
+/* =========================================================
    GLOBAL FUNCTIONS
 ========================================================= */
 
@@ -9022,6 +9211,27 @@ window.exportServicePulse =
 
 window.runServicePulseAI =
   runServicePulseAI;
+
+window.selectServicePulseScenarioV012 =
+  selectServicePulseScenarioV012;
+
+window.submitServicePulseV012 =
+  submitServicePulseV012;
+
+window.submitFeedbackV012 =
+  submitFeedbackV012;
+
+window.submitManualTransactionV012 =
+  submitManualTransactionV012;
+
+window.submitShareWallV012 =
+  submitShareWallV012;
+
+window.submitPhysicalTrainingV012 =
+  submitPhysicalTrainingV012;
+
+window.filterV12Knowledge =
+  filterV12Knowledge;
 
 
 /* =========================================================
