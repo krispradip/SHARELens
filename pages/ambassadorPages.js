@@ -73,46 +73,46 @@ function fieldValue(id) {
 }
 
 function selectedValue(name) {
-  return document.querySelector(\`input[name="\${name}"]:checked\`)?.value || "";
+  return document.querySelector(`input[name="${name}"]:checked`)?.value || "";
 }
 
 function pageHeading(label, title, subtitle) {
-  return \`
+  return `
     <div class="page-heading">
-      <span class="section-label">\${label}</span>
-      <h1>\${title}</h1>
-      <p>\${subtitle}</p>
+      <span class="section-label">${label}</span>
+      <h1>${title}</h1>
+      <p>${subtitle}</p>
     </div>
-  \`;
+  `;
 }
 
 function contextStrip() {
   const user = getUserContext();
 
-  return \`
+  return `
     <section class="v12-context-strip">
       <div>
         <span>Ambassador</span>
-        <strong>\${escapeHtml(user.name)}</strong>
+        <strong>${escapeHtml(user.name)}</strong>
       </div>
       <div>
         <span>Business Unit</span>
-        <strong>\${escapeHtml(user.businessUnit)}</strong>
+        <strong>${escapeHtml(user.businessUnit)}</strong>
       </div>
       <div>
         <span>Brand</span>
-        <strong>\${escapeHtml(user.brand)}</strong>
+        <strong>${escapeHtml(user.brand)}</strong>
       </div>
       <div>
         <span>Location</span>
-        <strong>\${escapeHtml(user.location)}</strong>
+        <strong>${escapeHtml(user.location)}</strong>
       </div>
       <div class="v12-context-lock">
         <span>Context source</span>
         <strong>Authenticated profile</strong>
       </div>
     </section>
-  \`;
+  `;
 }
 
 function statusPill(status) {
@@ -124,39 +124,39 @@ function statusPill(status) {
         ? "warning"
         : "neutral";
 
-  return \`<span class="v12-status-pill \${cls}">\${escapeHtml(status)}</span>\`;
+  return `<span class="v12-status-pill ${cls}">${escapeHtml(status)}</span>`;
 }
 
 function metricCard(metric) {
   const belowTarget = Number(metric.actual) < Number(metric.target);
   const trendPositive = Number(metric.trend) >= 0;
 
-  return \`
-    <section class="dashboard-card v12-kpi-card \${belowTarget ? "needs-attention" : ""}">
+  return `
+    <section class="dashboard-card v12-kpi-card ${belowTarget ? "needs-attention" : ""}">
       <div class="v12-kpi-topline">
-        <span>\${escapeHtml(metric.label)}</span>
-        <span class="v12-target">Target \${metric.target}\${metric.unit}</span>
+        <span>${escapeHtml(metric.label)}</span>
+        <span class="v12-target">Target ${metric.target}${metric.unit}</span>
       </div>
 
       <strong>
-        \${metric.actual}\${metric.unit}
+        ${metric.actual}${metric.unit}
       </strong>
 
       <div class="v12-kpi-bottom">
-        <span class="\${trendPositive ? "trend-up" : "trend-down"}">
-          \${trendPositive ? "↑" : "↓"} \${Math.abs(metric.trend)}%
+        <span class="${trendPositive ? "trend-up" : "trend-down"}">
+          ${trendPositive ? "↑" : "↓"} ${Math.abs(metric.trend)}%
         </span>
-        <span>\${belowTarget ? "Below target" : "On target"}</span>
+        <span>${belowTarget ? "Below target" : "On target"}</span>
       </div>
     </section>
-  \`;
+  `;
 }
 
 function submissionRows(type, emptyText = "No submissions yet.") {
   const rows = getSubmissionsByType(type).slice(0, 5);
 
   if (!rows.length) {
-    return \`<div class="v12-empty-state">\${emptyText}</div>\`;
+    return `<div class="v12-empty-state">${emptyText}</div>`;
   }
 
   return rows.map(item => {
@@ -170,15 +170,15 @@ function submissionRows(type, emptyText = "No submissions yet.") {
       item.data.comments ||
       item.type;
 
-    return \`
+    return `
       <div class="v12-activity-row">
         <div>
-          <strong>\${escapeHtml(summary)}</strong>
-          <span>\${escapeHtml(date)}</span>
+          <strong>${escapeHtml(summary)}</strong>
+          <span>${escapeHtml(date)}</span>
         </div>
-        \${statusPill(item.status)}
+        ${statusPill(item.status)}
       </div>
-    \`;
+    `;
   }).join("");
 }
 
@@ -210,38 +210,38 @@ export function renderAmbassadorHomeV012() {
       const action = NEXT_BEST_ACTIONS.find(item => item.kpi === metric.key);
       if (!action) return "";
 
-      return \`
+      return `
         <div class="v12-nba-item">
           <div class="v12-nba-icon">✦</div>
           <div>
             <span class="section-label">NEXT BEST ACTION</span>
-            <strong>\${escapeHtml(action.title)}</strong>
-            <p>\${escapeHtml(action.action)}</p>
+            <strong>${escapeHtml(action.title)}</strong>
+            <p>${escapeHtml(action.action)}</p>
           </div>
-          <button class="small-button" onclick="navigateTo('\${metric.key === "penetration" || metric.key === "acquisition" ? "training-online" : "service-pulse"}')">
+          <button class="small-button" onclick="navigateTo('${metric.key === "penetration" || metric.key === "acquisition" ? "training-online" : "service-pulse"}')">
             Open
           </button>
         </div>
-      \`;
+      `;
     })
     .join("");
 
-  return \`
+  return `
     <div class="v12-home-heading">
       <div>
         <span class="section-label">MY SHARE</span>
-        <h1>Good afternoon, \${escapeHtml(user.name.split(" ")[0])}</h1>
+        <h1>Good afternoon, ${escapeHtml(user.name.split(" ")[0])}</h1>
         <p>One place for your performance, programme actions, training and knowledge.</p>
       </div>
 
       <div class="v12-profile-chip">
         <span>Active Ambassador</span>
-        <strong>\${escapeHtml(user.brand)} · \${escapeHtml(user.location)}</strong>
+        <strong>${escapeHtml(user.brand)} · ${escapeHtml(user.location)}</strong>
       </div>
     </div>
 
     <div class="dashboard-grid four v12-kpi-grid">
-      \${metrics.map(metricCard).join("")}
+      ${metrics.map(metricCard).join("")}
     </div>
 
     <div class="dashboard-grid two">
@@ -254,11 +254,11 @@ export function renderAmbassadorHomeV012() {
           <span class="v12-evidence-label">KPI-driven</span>
         </div>
 
-        \${gapActions || \`
+        ${gapActions || `
           <div class="v12-empty-state">
             All four primary KPIs are currently at or above target.
           </div>
-        \`}
+        `}
       </section>
 
       <section class="dashboard-card">
@@ -301,7 +301,7 @@ export function renderAmbassadorHomeV012() {
             <span class="section-label">ACQUISITION</span>
             <h3>Your personalised QR</h3>
           </div>
-          <span class="v12-source-badge">Source: \${ACQUISITION.provider}</span>
+          <span class="v12-source-badge">Source: ${ACQUISITION.provider}</span>
         </div>
 
         <div class="v12-acquisition-card">
@@ -311,10 +311,10 @@ export function renderAmbassadorHomeV012() {
           </div>
 
           <div>
-            <strong>\${ACQUISITION.membersAcquired} / \${ACQUISITION.target} members</strong>
-            <p>\${ACQUISITION.activeMemberRate}% active-member rate</p>
-            <p>AED \${ACQUISITION.attributedSpend.toLocaleString()} attributed member spend</p>
-            <small>QR reference: \${escapeHtml(ACQUISITION.qrReference)}</small>
+            <strong>${ACQUISITION.membersAcquired} / ${ACQUISITION.target} members</strong>
+            <p>${ACQUISITION.activeMemberRate}% active-member rate</p>
+            <p>AED ${ACQUISITION.attributedSpend.toLocaleString()} attributed member spend</p>
+            <small>QR reference: ${escapeHtml(ACQUISITION.qrReference)}</small>
           </div>
         </div>
       </section>
@@ -346,7 +346,7 @@ export function renderAmbassadorHomeV012() {
         </div>
       </section>
     </div>
-  \`;
+  `;
 }
 
 
@@ -372,14 +372,14 @@ export function setServicePulseScenarioV012(scenario) {
 export function renderServicePulseV012() {
   const questions = SERVICE_PULSE.questions[selectedServicePulseScenario] || [];
 
-  return \`
-    \${pageHeading(
+  return `
+    ${pageHeading(
       "SERVICE DELIVERY",
       "Service Pulse",
       "Complete the applicable scenario directly in SHARE Lens. Your identity and location context are already known."
     )}
 
-    \${contextStrip()}
+    ${contextStrip()}
 
     <div class="dashboard-grid two">
       <section class="dashboard-card">
@@ -388,26 +388,26 @@ export function renderServicePulseV012() {
             <span class="section-label">NEW ASSESSMENT</span>
             <h3>Select scenario</h3>
           </div>
-          <span class="v12-target-chip">Target ≥ \${SERVICE_PULSE.threshold}%</span>
+          <span class="v12-target-chip">Target ≥ ${SERVICE_PULSE.threshold}%</span>
         </div>
 
         <div class="v12-scenario-list">
-          \${SERVICE_PULSE.scenarios.map((scenario, index) => \`
+          ${SERVICE_PULSE.scenarios.map((scenario, index) => `
             <button
-              class="\${scenario === selectedServicePulseScenario ? "active" : ""}"
-              onclick="selectServicePulseScenarioV012('\${escapeHtml(scenario).replaceAll("'", "\\\\'")}')"
+              class="${scenario === selectedServicePulseScenario ? "active" : ""}"
+              onclick="selectServicePulseScenarioV012('${escapeHtml(scenario).replaceAll("'", "\\\\'")}')"
             >
-              <span>0\${index + 1}</span>
-              <strong>\${escapeHtml(scenario)}</strong>
+              <span>0${index + 1}</span>
+              <strong>${escapeHtml(scenario)}</strong>
             </button>
-          \`).join("")}
+          `).join("")}
         </div>
       </section>
 
       <section class="dashboard-card">
         <span class="section-label">CURRENT STATUS</span>
         <h3>Your recent Service Pulse activity</h3>
-        \${submissionRows("service-pulse", "No Service Pulse assessments submitted from this prototype yet.")}
+        ${submissionRows("service-pulse", "No Service Pulse assessments submitted from this prototype yet.")}
       </section>
     </div>
 
@@ -415,7 +415,7 @@ export function renderServicePulseV012() {
       <div class="card-heading-row">
         <div>
           <span class="section-label">ASSESSMENT</span>
-          <h3>\${escapeHtml(selectedServicePulseScenario)}</h3>
+          <h3>${escapeHtml(selectedServicePulseScenario)}</h3>
         </div>
         <span class="v12-evidence-label">Yes / No / N/A</span>
       </div>
@@ -436,23 +436,23 @@ export function renderServicePulseV012() {
       </div>
 
       <div class="v12-pulse-questions">
-        \${questions.map((question, index) => \`
+        ${questions.map((question, index) => `
           <div class="v12-pulse-question">
             <div>
-              <span>Q\${index + 1}</span>
-              <strong>\${escapeHtml(question)}</strong>
+              <span>Q${index + 1}</span>
+              <strong>${escapeHtml(question)}</strong>
             </div>
 
             <div class="v12-choice-group">
-              \${["Yes", "No", "N/A"].map(value => \`
+              ${["Yes", "No", "N/A"].map(value => `
                 <label>
-                  <input type="radio" name="sp-q-\${index}" value="\${value}">
-                  <span>\${value}</span>
+                  <input type="radio" name="sp-q-${index}" value="${value}">
+                  <span>${value}</span>
                 </label>
-              \`).join("")}
+              `).join("")}
             </div>
           </div>
-        \`).join("")}
+        `).join("")}
       </div>
 
       <div class="v12-form-grid two">
@@ -473,14 +473,14 @@ export function renderServicePulseV012() {
         </button>
       </div>
     </section>
-  \`;
+  `;
 }
 
 export function submitServicePulseFormV012() {
   const questions = SERVICE_PULSE.questions[selectedServicePulseScenario] || [];
   const answers = questions.map((question, index) => ({
     question,
-    answer: selectedValue(\`sp-q-\${index}\`)
+    answer: selectedValue(`sp-q-${index}`)
   }));
 
   if (!fieldValue("sp-employee")) {
@@ -522,14 +522,14 @@ export function submitServicePulseFormV012() {
 ========================================================= */
 
 export function renderFeedbackV012() {
-  return \`
-    \${pageHeading(
+  return `
+    ${pageHeading(
       "AMBASSADOR PROGRAM",
       "Submit Feedback",
       "Capture member or employee feedback directly in SHARE Lens."
     )}
 
-    \${contextStrip()}
+    ${contextStrip()}
 
     <div class="dashboard-grid two">
       <section class="dashboard-card v12-form-card">
@@ -579,10 +579,10 @@ export function renderFeedbackV012() {
       <section class="dashboard-card">
         <span class="section-label">MY SUBMISSIONS</span>
         <h3>Recent feedback</h3>
-        \${submissionRows("feedback", "No feedback submitted from this prototype yet.")}
+        ${submissionRows("feedback", "No feedback submitted from this prototype yet.")}
       </section>
     </div>
-  \`;
+  `;
 }
 
 export function submitFeedbackFormV012() {
@@ -619,14 +619,14 @@ export function submitFeedbackFormV012() {
 ========================================================= */
 
 export function renderManualTransactionV012() {
-  return \`
-    \${pageHeading(
+  return `
+    ${pageHeading(
       "AMBASSADOR PROGRAM",
       "Manual Transaction",
       "Submit a manual transaction request and track the resulting OneView case."
     )}
 
-    \${contextStrip()}
+    ${contextStrip()}
 
     <div class="dashboard-grid two">
       <section class="dashboard-card v12-form-card">
@@ -702,10 +702,10 @@ export function renderManualTransactionV012() {
       <section class="dashboard-card">
         <span class="section-label">MY REQUESTS</span>
         <h3>Recent manual transactions</h3>
-        \${submissionRows("manual-transaction", "No manual transaction requests submitted from this prototype yet.")}
+        ${submissionRows("manual-transaction", "No manual transaction requests submitted from this prototype yet.")}
       </section>
     </div>
-  \`;
+  `;
 }
 
 export function submitManualTransactionFormV012() {
@@ -729,7 +729,7 @@ export function submitManualTransactionFormV012() {
     issueReason: reason,
     notes: fieldValue("mt-notes"),
     receiptFileName: receipt?.name || "",
-    oneViewTicketId: \`OV-\${String(Date.now()).slice(-7)}\`,
+    oneViewTicketId: `OV-${String(Date.now()).slice(-7)}`,
     status: "Submitted to OneView"
   });
 }
@@ -747,14 +747,14 @@ export function submitManualTransactionFormV012() {
 ========================================================= */
 
 export function renderShareWallV012() {
-  return \`
-    \${pageHeading(
+  return `
+    ${pageHeading(
       "AMBASSADOR PROGRAM",
       "SHARE Wall",
       "Update the physical SHARE Wall, upload evidence and record what changed."
     )}
 
-    \${contextStrip()}
+    ${contextStrip()}
 
     <div class="dashboard-grid two">
       <section class="dashboard-card v12-form-card">
@@ -791,10 +791,10 @@ export function renderShareWallV012() {
       <section class="dashboard-card">
         <span class="section-label">MY UPDATES</span>
         <h3>Recent SHARE Wall submissions</h3>
-        \${submissionRows("share-wall", "No SHARE Wall updates submitted from this prototype yet.")}
+        ${submissionRows("share-wall", "No SHARE Wall updates submitted from this prototype yet.")}
       </section>
     </div>
-  \`;
+  `;
 }
 
 export function submitShareWallFormV012() {
@@ -829,8 +829,8 @@ export function submitShareWallFormV012() {
 ========================================================= */
 
 export function renderTrainingLandingV012() {
-  return \`
-    \${pageHeading(
+  return `
+    ${pageHeading(
       "TRAINING & KNOWLEDGE",
       "Training",
       "Choose between online learning in Mitti and physical / in-store training managed through SHARE Lens."
@@ -869,7 +869,7 @@ export function renderTrainingLandingV012() {
         <button class="primary-small" onclick="navigateTo('training-physical')">Open Physical Training</button>
       </section>
     </div>
-  \`;
+  `;
 }
 
 
@@ -886,8 +886,8 @@ export function renderTrainingLandingV012() {
 export function renderOnlineTrainingV012() {
   const courses = TRAINING.online.courses;
 
-  return \`
-    \${pageHeading(
+  return `
+    ${pageHeading(
       "TRAINING · ONLINE",
       "Online Training",
       "Your Mitti learning status in SHARE Lens, with direct access to the learning platform."
@@ -896,36 +896,36 @@ export function renderOnlineTrainingV012() {
     <section class="dashboard-card v12-integration-hero">
       <div>
         <span class="section-label">CONNECTED LEARNING ENGINE</span>
-        <h2>\${escapeHtml(TRAINING.online.provider)}</h2>
+        <h2>${escapeHtml(TRAINING.online.provider)}</h2>
         <p>SHARE Lens displays training progress and results. Course delivery remains in Mitti.</p>
       </div>
 
-      <a class="v12-primary-link" href="\${TRAINING.online.launchUrl}" target="_blank" rel="noopener noreferrer">
+      <a class="v12-primary-link" href="${TRAINING.online.launchUrl}" target="_blank" rel="noopener noreferrer">
         Open Mitti ↗
       </a>
     </section>
 
     <div class="dashboard-grid three">
-      \${courses.map(course => \`
+      ${courses.map(course => `
         <section class="dashboard-card v12-course-card">
           <div class="card-heading-row">
-            \${statusPill(course.status)}
+            ${statusPill(course.status)}
             <span class="v12-source-badge">Mitti</span>
           </div>
 
-          <h3>\${escapeHtml(course.title)}</h3>
-          <p>Due \${escapeHtml(course.due)}</p>
+          <h3>${escapeHtml(course.title)}</h3>
+          <p>Due ${escapeHtml(course.due)}</p>
 
           <div class="v12-progress-track">
-            <div style="width:\${course.progress}%"></div>
+            <div style="width:${course.progress}%"></div>
           </div>
 
           <div class="v12-course-footer">
-            <strong>\${course.progress}%</strong>
-            <span>\${course.score == null ? "Score pending" : \`Score \${course.score}%\`}</span>
+            <strong>${course.progress}%</strong>
+            <span>${course.score == null ? "Score pending" : `Score ${course.score}%`}</span>
           </div>
         </section>
-      \`).join("")}
+      `).join("")}
     </div>
 
     <section class="dashboard-card v12-architecture-note">
@@ -934,7 +934,7 @@ export function renderOnlineTrainingV012() {
       <span>Mitti course/completion data</span><b>+</b>
       <span>Launch to Mitti for learning</span>
     </section>
-  \`;
+  `;
 }
 
 
@@ -946,14 +946,14 @@ export function renderOnlineTrainingV012() {
 ========================================================= */
 
 export function renderPhysicalTrainingV012() {
-  return \`
-    \${pageHeading(
+  return `
+    ${pageHeading(
       "TRAINING · PHYSICAL",
       "Physical / In-Store Training",
       "Log training and huddles conducted with your team."
     )}
 
-    \${contextStrip()}
+    ${contextStrip()}
 
     <div class="dashboard-grid two">
       <section class="dashboard-card v12-form-card">
@@ -964,7 +964,7 @@ export function renderPhysicalTrainingV012() {
           <label>
             <span>Session Type</span>
             <select id="training-type">
-              \${TRAINING.physical.sessionTypes.map(type => \`<option>\${type}</option>\`).join("")}
+              ${TRAINING.physical.sessionTypes.map(type => `<option>${type}</option>`).join("")}
             </select>
           </label>
 
@@ -1015,10 +1015,10 @@ export function renderPhysicalTrainingV012() {
       <section class="dashboard-card">
         <span class="section-label">MY SESSIONS</span>
         <h3>Recent training / huddles</h3>
-        \${submissionRows("physical-training", "No physical training sessions submitted from this prototype yet.")}
+        ${submissionRows("physical-training", "No physical training sessions submitted from this prototype yet.")}
       </section>
     </div>
-  \`;
+  `;
 }
 
 export function submitPhysicalTrainingFormV012() {
@@ -1058,8 +1058,8 @@ export function submitPhysicalTrainingFormV012() {
 ========================================================= */
 
 export function renderKnowledgeV012() {
-  return \`
-    \${pageHeading(
+  return `
+    ${pageHeading(
       "TRAINING & KNOWLEDGE",
       "Knowledge Base",
       "Search approved SHARE knowledge without needing to know which source system holds it."
@@ -1078,14 +1078,14 @@ export function renderKnowledgeV012() {
     </section>
 
     <div class="dashboard-grid three">
-      \${KNOWLEDGE_SOURCES.map(source => \`
+      ${KNOWLEDGE_SOURCES.map(source => `
         <section class="dashboard-card v12-source-card">
-          <div class="v12-source-icon">\${escapeHtml(source.name.charAt(0))}</div>
-          <strong>\${escapeHtml(source.name)}</strong>
-          <span>\${escapeHtml(source.type)}</span>
-          \${statusPill(source.status)}
+          <div class="v12-source-icon">${escapeHtml(source.name.charAt(0))}</div>
+          <strong>${escapeHtml(source.name)}</strong>
+          <span>${escapeHtml(source.type)}</span>
+          ${statusPill(source.status)}
         </section>
-      \`).join("")}
+      `).join("")}
     </div>
 
     <section class="dashboard-card">
@@ -1098,10 +1098,10 @@ export function renderKnowledgeV012() {
       </div>
 
       <div id="v12-knowledge-results">
-        \${renderKnowledgeResultsV012("")}
+        ${renderKnowledgeResultsV012("")}
       </div>
     </section>
-  \`;
+  `;
 }
 
 export function renderKnowledgeResultsV012(query = "") {
@@ -1118,16 +1118,16 @@ export function renderKnowledgeResultsV012(query = "") {
     return '<div class="v12-empty-state">No approved knowledge matched that search.</div>';
   }
 
-  return results.map(item => \`
+  return results.map(item => `
     <div class="v12-knowledge-row">
       <div>
-        <strong>\${escapeHtml(item.title)}</strong>
-        <span>\${escapeHtml(item.category)} · Updated \${escapeHtml(item.updated)}</span>
+        <strong>${escapeHtml(item.title)}</strong>
+        <span>${escapeHtml(item.category)} · Updated ${escapeHtml(item.updated)}</span>
       </div>
-      <span class="v12-source-badge">\${escapeHtml(item.source)}</span>
+      <span class="v12-source-badge">${escapeHtml(item.source)}</span>
       <button class="small-button" onclick="showToast('Opening approved knowledge article in the prototype.')">Open</button>
     </div>
-  \`).join("");
+  `).join("");
 }
 
 
@@ -1153,18 +1153,18 @@ export function renderReportsV012() {
     manual: getSubmissionsByType("manual-transaction").length
   };
 
-  return \`
-    \${pageHeading(
+  return `
+    ${pageHeading(
       "MY ACTIVITY",
       "Reports",
       "Your own SHARE Lens submissions and programme activity."
     )}
 
     <div class="dashboard-grid four">
-      <section class="dashboard-card metric-card"><span>Feedback</span><strong>\${counts.feedback}</strong><small>Submitted</small></section>
-      <section class="dashboard-card metric-card"><span>SHARE Wall</span><strong>\${counts.wall}</strong><small>Updates</small></section>
-      <section class="dashboard-card metric-card"><span>Training / Huddles</span><strong>\${counts.training}</strong><small>Sessions</small></section>
-      <section class="dashboard-card metric-card"><span>Service Pulse</span><strong>\${counts.pulse}</strong><small>Assessments</small></section>
+      <section class="dashboard-card metric-card"><span>Feedback</span><strong>${counts.feedback}</strong><small>Submitted</small></section>
+      <section class="dashboard-card metric-card"><span>SHARE Wall</span><strong>${counts.wall}</strong><small>Updates</small></section>
+      <section class="dashboard-card metric-card"><span>Training / Huddles</span><strong>${counts.training}</strong><small>Sessions</small></section>
+      <section class="dashboard-card metric-card"><span>Service Pulse</span><strong>${counts.pulse}</strong><small>Assessments</small></section>
     </div>
 
     <section class="dashboard-card">
@@ -1173,21 +1173,21 @@ export function renderReportsV012() {
           <span class="section-label">ACTIVITY LOG</span>
           <h3>Recent submissions</h3>
         </div>
-        <span class="v12-source-badge">\${all.length} total prototype records</span>
+        <span class="v12-source-badge">${all.length} total prototype records</span>
       </div>
 
-      \${all.length ? all.slice(0, 20).map(item => \`
+      ${all.length ? all.slice(0, 20).map(item => `
         <div class="v12-report-row">
           <div>
-            <strong>\${escapeHtml(item.type.replaceAll("-", " "))}</strong>
-            <span>\${new Date(item.createdAt).toLocaleString()}</span>
+            <strong>${escapeHtml(item.type.replaceAll("-", " "))}</strong>
+            <span>${new Date(item.createdAt).toLocaleString()}</span>
           </div>
-          <span>\${escapeHtml(item.submissionId)}</span>
-          \${statusPill(item.status)}
+          <span>${escapeHtml(item.submissionId)}</span>
+          ${statusPill(item.status)}
         </div>
-      \`).join("") : '<div class="v12-empty-state">Complete a workflow to create your first activity record.</div>'}
+      `).join("") : '<div class="v12-empty-state">Complete a workflow to create your first activity record.</div>'}
     </section>
-  \`;
+  `;
 }
 
 
@@ -1204,8 +1204,8 @@ export function renderReportsV012() {
 export function renderStatusV012() {
   const user = USERS.ambassador;
 
-  return \`
-    \${pageHeading(
+  return `
+    ${pageHeading(
       "AMBASSADOR",
       "My Status",
       "Your programme identity, organisational context and Ambassador journey."
@@ -1215,21 +1215,21 @@ export function renderStatusV012() {
       <section class="dashboard-card">
         <span class="section-label">PROFILE</span>
         <div class="v12-profile-hero">
-          <div class="large-avatar">\${escapeHtml(user.initials)}</div>
+          <div class="large-avatar">${escapeHtml(user.initials)}</div>
           <div>
-            <h2>\${escapeHtml(user.name)}</h2>
-            <p>\${escapeHtml(user.accountStatus)}</p>
+            <h2>${escapeHtml(user.name)}</h2>
+            <p>${escapeHtml(user.accountStatus)}</p>
           </div>
         </div>
 
         <div class="v12-profile-list">
-          <div><span>Staff ID</span><strong>\${escapeHtml(user.staffId)}</strong></div>
-          <div><span>SHARE ID</span><strong>\${escapeHtml(user.shareId)}</strong></div>
-          <div><span>Country</span><strong>\${escapeHtml(user.country)}</strong></div>
-          <div><span>Business Unit</span><strong>\${escapeHtml(user.businessUnit)}</strong></div>
-          <div><span>Brand</span><strong>\${escapeHtml(user.brand)}</strong></div>
-          <div><span>Location</span><strong>\${escapeHtml(user.location)}</strong></div>
-          <div><span>Manager</span><strong>\${escapeHtml(user.manager)}</strong></div>
+          <div><span>Staff ID</span><strong>${escapeHtml(user.staffId)}</strong></div>
+          <div><span>SHARE ID</span><strong>${escapeHtml(user.shareId)}</strong></div>
+          <div><span>Country</span><strong>${escapeHtml(user.country)}</strong></div>
+          <div><span>Business Unit</span><strong>${escapeHtml(user.businessUnit)}</strong></div>
+          <div><span>Brand</span><strong>${escapeHtml(user.brand)}</strong></div>
+          <div><span>Location</span><strong>${escapeHtml(user.location)}</strong></div>
+          <div><span>Manager</span><strong>${escapeHtml(user.manager)}</strong></div>
         </div>
       </section>
 
@@ -1238,35 +1238,35 @@ export function renderStatusV012() {
         <h3>Programme status</h3>
 
         <div class="v12-journey-list">
-          \${["Onboarded", "Mandatory Training", "Knowledge Check", "Personal QR Code"].map((step, index) => \`
+          ${["Onboarded", "Mandatory Training", "Knowledge Check", "Personal QR Code"].map((step, index) => `
             <div>
               <span class="v12-journey-check">✓</span>
               <div>
-                <strong>\${index + 1}. \${step}</strong>
+                <strong>${index + 1}. ${step}</strong>
                 <span>Complete</span>
               </div>
             </div>
-          \`).join("")}
+          `).join("")}
         </div>
 
         <div class="v12-adjust-reference">
           <span>Personal acquisition attribution</span>
-          <strong>Adjust · \${escapeHtml(ACQUISITION.qrReference)}</strong>
+          <strong>Adjust · ${escapeHtml(ACQUISITION.qrReference)}</strong>
         </div>
       </section>
     </div>
 
     <div class="dashboard-grid three">
-      \${Object.values(SCORE_FAMILIES).map(family => \`
+      ${Object.values(SCORE_FAMILIES).map(family => `
         <section class="dashboard-card">
           <span class="section-label">SCORE FAMILY</span>
-          <h3>\${escapeHtml(family.label)}</h3>
+          <h3>${escapeHtml(family.label)}</h3>
           <ul class="v12-component-list">
-            \${family.components.map(component => \`<li>\${escapeHtml(component)}</li>\`).join("")}
+            ${family.components.map(component => `<li>${escapeHtml(component)}</li>`).join("")}
           </ul>
           <small>Final weighting remains configurable / to be confirmed.</small>
         </section>
-      \`).join("")}
+      `).join("")}
     </div>
-  \`;
+  `;
 }
