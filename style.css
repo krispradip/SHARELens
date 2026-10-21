@@ -7044,3 +7044,317 @@ select {
     text-align: left;
   }
 }
+
+
+/* =========================================================
+   SHARE LENS v0.12.0 — AMBASSADOR PERFORMANCE CARD
+
+   PURPOSE:
+   Visualises the Ambassador-owned engagement score and its
+   four underlying programme participation components.
+
+   BUSINESS MEANING:
+   Keeps engagement performance distinct from SHARE
+   Performance and Training Performance.
+
+   CHANGE IMPACT:
+   Visual only. Metric values and thresholds come from
+   data/platformData.js and native submissions.
+========================================================= */
+
+.v12-ambassador-performance {
+  margin-bottom: 15px;
+  overflow: hidden;
+  background:
+    linear-gradient(
+      120deg,
+      #ffffff,
+      #fffafb
+    );
+}
+
+.v12-ambassador-performance-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.v12-ambassador-performance-head h2 {
+  margin: 5px 0 3px;
+  color: var(--brand);
+  font-size: 21px;
+}
+
+.v12-ambassador-performance-head p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.v12-performance-score-ring {
+  width: 92px;
+  height: 92px;
+  flex: 0 0 92px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 7px solid var(--pink-soft);
+  border-top-color: var(--accent);
+  border-right-color: var(--brand-mid);
+  border-radius: 50%;
+  background: #ffffff;
+  animation:
+    v12ScoreRingIn
+    900ms
+    cubic-bezier(0.22, 1, 0.36, 1)
+    both;
+}
+
+@keyframes v12ScoreRingIn {
+  from {
+    opacity: 0;
+    transform: scale(0.82) rotate(-16deg);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.v12-performance-score-value {
+  color: var(--brand);
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.v12-performance-score-ring > span {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.v12-performance-subgrid {
+  display: grid;
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(
+        0,
+        1fr
+      )
+    );
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.v12-performance-subcard {
+  position: relative;
+  min-width: 0;
+  min-height: 170px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: #ffffff;
+  color: var(--text);
+  text-align: left;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+button.v12-performance-subcard {
+  cursor: pointer;
+}
+
+button.v12-performance-subcard:hover,
+.v12-feedback-suggestion-card:hover {
+  transform: translateY(-2px);
+  border-color: #dcbac7;
+  box-shadow:
+    0 9px 22px
+    rgba(
+      70,
+      0,
+      26,
+      0.07
+    );
+}
+
+.v12-subcard-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 30px;
+}
+
+.v12-subcard-icon {
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: var(--pink-soft);
+  color: var(--brand);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.v12-performance-subcard > strong {
+  display: block;
+  margin-top: 13px;
+  color: var(--brand);
+  font-size: 25px;
+  line-height: 1;
+}
+
+.v12-performance-subcard > strong small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.v12-performance-subcard > span {
+  display: block;
+  margin-top: 7px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.v12-performance-subcard > small {
+  display: block;
+  min-height: 31px;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.v12-subcard-progress {
+  height: 5px;
+  margin-top: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #eee8eb;
+}
+
+.v12-subcard-progress > div {
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background:
+    linear-gradient(
+      90deg,
+      var(--brand-mid),
+      var(--accent)
+    );
+  transition:
+    width
+    950ms
+    cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.v12-subcard-actions {
+  display: grid;
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(
+        0,
+        1fr
+      )
+    );
+  gap: 5px;
+  margin-top: 9px;
+}
+
+.v12-subcard-actions button {
+  min-height: 30px;
+  border: 1px solid #dcbac7;
+  border-radius: 7px;
+  background: #ffffff;
+  color: var(--brand);
+  font-size: 9px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.v12-subcard-actions button:hover {
+  background: var(--pink-soft);
+}
+
+.v12-performance-footnote {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 14px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--pink-soft);
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.v12-performance-footnote strong {
+  color: var(--brand);
+}
+
+
+@media (max-width: 1100px) {
+
+  .v12-performance-subgrid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      );
+  }
+
+}
+
+
+@media (max-width: 700px) {
+
+  .v12-ambassador-performance-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .v12-performance-score-ring {
+    width: 80px;
+    height: 80px;
+    flex-basis: 80px;
+  }
+
+  .v12-performance-subgrid {
+    grid-template-columns: 1fr;
+  }
+
+  .v12-performance-footnote {
+    flex-direction: column;
+  }
+
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+  .v12-performance-score-ring {
+    animation: none !important;
+  }
+
+  .v12-subcard-progress > div {
+    transition: none !important;
+  }
+
+}
