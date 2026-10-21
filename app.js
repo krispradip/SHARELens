@@ -18,7 +18,8 @@ import {
   submitFeedbackFormV012,
   submitManualTransactionFormV012,
   submitShareWallFormV012,
-  submitPhysicalTrainingFormV012
+  submitPhysicalTrainingFormV012,
+  initializeV12Motion
 } from "./pages/ambassadorPages.js";
 
 const app = document.getElementById("app");
@@ -8980,6 +8981,14 @@ function renderCurrentPage() {
 
 
   renderShell(content);
+
+  if (
+    currentRole === "ambassador"
+  ) {
+
+    initializeV12Motion();
+
+  }
 
 }
 
