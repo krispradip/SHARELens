@@ -676,8 +676,8 @@ function ambassadorPerformanceCard() {
 
         <div>
 
-          <h2 class="v12-heading-with-info v12-direct-style-heading">
-            Ambassador Performance Score
+          <h2 class="v12-section-heading">
+            AMBASSADOR PERFORMANCE SCORE
 
             ${tooltip(
               "This score reflects the Ambassador's own programme engagement. It is currently calculated as an equal-weight average of target attainment across Campaign Participation, Broadcast Acknowledgement, Feedback & Suggestions, and SHARE Wall Submission. Each component is capped at 100% attainment."
@@ -1028,8 +1028,8 @@ export function renderAmbassadorHomeV012() {
 <section class="dashboard-card v12-motion-card v12-acquisition-panel">
         <div class="card-heading-row">
           <div>
-            <h3 class="v12-heading-with-info v12-direct-style-heading">
-              Acquisition Performance
+            <h3 class="v12-section-heading">
+              ACQUISITION PERFORMANCE
               ${tooltip(
                 "Individual acquisition QR codes are a priority use case. Each Ambassador should have a personal QR that retains the Ambassador identifier when a customer joins, so acquisition can be attributed to the Ambassador and store for performance, leaderboards and recognition."
               )}
@@ -1108,7 +1108,7 @@ export function renderAmbassadorHomeV012() {
 
       <div class="v12-home-column">
 <section class="dashboard-card v12-motion-card">
-        <span class="section-label v12-direct-actions-label">DIRECT ACTIONS</span>
+        <h3 class="v12-section-heading">DIRECT ACTIONS</h3>
 
         <div class="v12-action-grid">
           <button onclick="navigateTo('service-pulse')">
@@ -1145,7 +1145,7 @@ export function renderAmbassadorHomeV012() {
 <section class="dashboard-card v12-motion-card">
         <div class="card-heading-row">
           <div>
-            <span class="section-label">TRAINING & KNOWLEDGE</span>
+            <h3 class="v12-section-heading">TRAINING & KNOWLEDGE</h3>
           </div>
         </div>
 
