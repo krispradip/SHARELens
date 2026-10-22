@@ -1009,8 +1009,8 @@ export function renderAmbassadorHomeV012() {
 <section class="dashboard-card v12-motion-card">
         <div class="card-heading-row">
           <div>
-              <h3 class="v12-heading-with-info">
-              Next Best Actions
+              <h3 class="v12-section-heading">
+              NEXT BEST ACTIONS
               ${tooltip(
                 "The intended outcome is for low performance or completion to trigger an action, while strong performance can trigger recognition. For the Ambassador programme, actions should be driven by controlled KPI gaps rather than speculative external causes."
               )}
