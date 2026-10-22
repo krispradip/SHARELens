@@ -14,6 +14,7 @@ import {
   renderKnowledgeResultsV012,
   renderReportsV012,
   renderStatusV012,
+  renderCommunicationsV012,
   setServicePulseScenarioV012,
   submitServicePulseFormV012,
   submitFeedbackFormV012,
@@ -22,6 +23,9 @@ import {
   closeManualTransactionFormV012,
   submitShareWallFormV012,
   submitPhysicalTrainingFormV012,
+  setSelectedCommunicationV012,
+  participateInCampaignFormV012,
+  reactToBroadcastFormV012,
   initializeV12Motion
 } from "./pages/ambassadorPages.js";
 
@@ -264,56 +268,61 @@ const ambassadorNotifications = [
 
   {
     id: "N-001",
-    type: "knowledge",
-    title: "Refund Process updated",
-    detail: "Review the latest Refund Process guidance.",
+    communicationId: "COM-001",
+    type: "campaign",
+    title: "Mother's Day — Nominate a Mum",
+    detail: "Programme campaign: nominate a mum from your team.",
     date: "Today",
-    action: "Open Knowledge",
-    target: "knowledge",
+    action: "Open Campaign",
+    target: "communications",
     unread: true
   },
 
   {
     id: "N-002",
-    type: "recognition",
-    title: "Noor reached 50 SHARE onboardings",
-    detail: "Recognise a fellow Ambassador.",
+    communicationId: "COM-002",
+    type: "broadcast",
+    title: "SHARE Member Week",
+    detail: "New programme broadcast from your BU Lead.",
     date: "Today",
-    action: "Cheer Noor",
-    target: "cheer",
+    action: "Acknowledge",
+    target: "communications",
     unread: true
   },
 
   {
     id: "N-003",
-    type: "training",
-    title: "Service Recovery Essentials",
-    detail: "2 days remaining to complete your assigned training.",
+    communicationId: "COM-003",
+    type: "broadcast",
+    title: "Service Pulse guidance updated",
+    detail: "Please review and acknowledge the latest guidance.",
     date: "Today",
-    action: "Open Training",
-    target: "training",
+    action: "Acknowledge",
+    target: "communications",
     unread: true
   },
 
   {
     id: "N-004",
-    type: "knowledge-check",
-    title: "Refund Handling Knowledge Check",
-    detail: "Recommended after your performance-linked refresher.",
-    date: "14 Oct",
-    action: "Start Check",
-    target: "knowledge-check",
+    communicationId: "COM-004",
+    type: "reminder",
+    title: "Service Recovery Essentials",
+    detail: "2 days remaining to complete your assigned training.",
+    date: "Today",
+    action: "View Reminder",
+    target: "communications",
     unread: true
   },
 
   {
     id: "N-005",
-    type: "announcement",
-    title: "SHARE Member Week",
-    detail: "Entertainment UAE programme update from Ahmed.",
-    date: "13 Oct",
-    action: "View",
-    target: "announcement",
+    communicationId: "COM-005",
+    type: "reminder",
+    title: "Feedback / Suggestion monthly target",
+    detail: "Reminder to complete your monthly Ambassador participation target.",
+    date: "Today",
+    action: "View Reminder",
+    target: "communications",
     unread: true
   }
 
@@ -1155,6 +1164,7 @@ const navigation = {
     {
       title: "Ambassador Actions",
       items: [
+        ["communications", "Communications"],
         ["feedback", "Feedback"],
         ["suggestions", "Suggestions"],
         ["manual-transaction", "Manual Transaction"],
@@ -2087,6 +2097,21 @@ function notificationDrawer() {
 
             <div>
 
+              <div class="notification-meta-row">
+                <span class="notification-type-tag ${item.type}">
+                  ${item.type === "campaign"
+                    ? "Campaign"
+                    : item.type === "broadcast"
+                      ? "Broadcast"
+                      : "Reminder"
+                  }
+                </span>
+
+                <span class="notification-date">
+                  ${item.date}
+                </span>
+              </div>
+
               <strong>
                 ${item.title}
               </strong>
@@ -2118,11 +2143,9 @@ function notificationDrawer() {
 function notificationIcon(type) {
 
   const icons = {
-    knowledge: "K",
-    recognition: "★",
-    training: "T",
-    "knowledge-check": "?",
-    announcement: "!"
+    campaign: "C",
+    broadcast: "B",
+    reminder: "R"
   };
 
   return icons[type] || "•";
@@ -2140,33 +2163,46 @@ function toggleNotificationDrawer() {
 }
 
 
-function handleNotificationAction(target) {
+function handleNotificationAction(
+  target,
+  notificationId
+) {
 
-  if (target === "cheer") {
+  const item =
+    ambassadorNotifications
+      .find(
+        notification =>
+          notification.id ===
+          notificationId
+      );
 
-    prototypeUsers.ambassador.engagementPoints += 5;
 
-    showToast(
-      "You cheered Noor. +5 engagement points."
+  if (item) {
+
+    item.unread = false;
+
+    unreadNotifications =
+      ambassadorNotifications
+        .filter(
+          notification =>
+            notification.unread
+        )
+        .length;
+
+    setSelectedCommunicationV012(
+      item.communicationId
     );
-
-    return;
 
   }
 
 
-  if (target === "announcement") {
+  notificationDrawerOpen =
+    false;
 
-    showToast(
-      "Opening programme announcement."
-    );
-
-    return;
-
-  }
-
-
-  navigateTo(target);
+  navigateTo(
+    target ||
+    "communications"
+  );
 
 }
 
@@ -8687,6 +8723,9 @@ function renderCurrentPage() {
       "service-pulse":
         renderServicePulseV012,
 
+      communications:
+        renderCommunicationsV012,
+
       feedback:
         renderFeedbackV012,
 
@@ -9319,6 +9358,40 @@ function submitPhysicalTrainingV012() {
 }
 
 
+function participateInCampaignV012(
+  communicationId
+) {
+
+  runV12Submission(
+    () =>
+      participateInCampaignFormV012(
+        communicationId
+      ),
+    "Campaign participation recorded"
+  );
+
+}
+
+
+function reactToBroadcastV012(
+  communicationId,
+  reaction
+) {
+
+  runV12Submission(
+    () =>
+      reactToBroadcastFormV012(
+        communicationId,
+        reaction
+      ),
+    reaction === "up"
+      ? "Broadcast acknowledged with thumbs up"
+      : "Broadcast acknowledged with thumbs down"
+  );
+
+}
+
+
 function filterV12Knowledge() {
 
   const query =
@@ -9461,6 +9534,12 @@ window.submitShareWallV012 =
 
 window.submitPhysicalTrainingV012 =
   submitPhysicalTrainingV012;
+
+window.participateInCampaignV012 =
+  participateInCampaignV012;
+
+window.reactToBroadcastV012 =
+  reactToBroadcastV012;
 
 window.filterV12Knowledge =
   filterV12Knowledge;
