@@ -655,6 +655,19 @@ function ambassadorPerformanceCard() {
     ) /
     4;
 
+  const ambassadorScoreDecimals =
+    Number.isInteger(
+      ambassadorPerformanceScore
+    )
+      ? 0
+      : 1;
+
+  const ambassadorScoreDisplay =
+    ambassadorPerformanceScore
+      .toFixed(
+        ambassadorScoreDecimals
+      );
+
 
   return `
     <section class="dashboard-card v12-motion-card v12-ambassador-performance">
@@ -687,10 +700,10 @@ function ambassadorPerformanceCard() {
             <div
               class="v12-performance-score-value"
               data-count-to="${ambassadorPerformanceScore}"
-              data-decimals="1"
+              data-decimals="${ambassadorScoreDecimals}"
               data-suffix="%"
             >
-              ${ambassadorPerformanceScore.toFixed(1)}%
+              ${ambassadorScoreDisplay}%
             </div>
           </div>
         </div>
