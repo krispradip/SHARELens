@@ -9500,3 +9500,154 @@ select {
   }
 
 }
+
+
+/* =========================================================
+   SHARE LENS v0.12.0 — COMPONENT-LEVEL FLUIDITY
+
+   PURPOSE:
+   Extends responsive behaviour into individual cards and
+   metric tiles so elements size to their content rather than
+   inheriting unnecessary vertical height.
+
+   BUSINESS MEANING:
+   Tablet and phone layouts should remain compact and usable
+   without wasting vertical space.
+
+   CHANGE IMPACT:
+   Ambassador v0.12 visual layout only.
+========================================================= */
+
+/* Score ring no longer reserves room for a subtitle. */
+.v12-performance-score-ring {
+  gap: 0;
+}
+
+.v12-performance-score-ring > span {
+  display: none;
+}
+
+
+/* Acquisition outcome tiles are content-driven. */
+.v12-acquisition-stat-grid {
+  align-items: start;
+}
+
+.v12-acquisition-stat-grid > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  min-height: 0 !important;
+  height: auto;
+
+  padding:
+    clamp(
+      9px,
+      1.4vw,
+      12px
+    );
+}
+
+.v12-acquisition-stat-grid > div > span {
+  min-height: 0;
+  line-height: 1.3;
+}
+
+.v12-acquisition-stat-grid > div > strong {
+  margin-top:
+    clamp(
+      6px,
+      1vw,
+      10px
+    );
+
+  line-height: 1.15;
+}
+
+
+/* Remove unnecessary vertical stretch from acquisition metrics. */
+.v12-acquisition-metrics {
+  display: block;
+}
+
+.v12-acquisition-primary {
+  min-height: 0;
+  height: auto;
+}
+
+.v12-acquisition-progress {
+  height: auto;
+}
+
+.v12-acquisition-reference {
+  display: block;
+}
+
+
+/* Keep paired tiles equal only by content row, not by forced height. */
+@media (min-width: 561px) {
+
+  .v12-acquisition-stat-grid {
+    grid-auto-rows: auto;
+  }
+
+}
+
+
+/* General v0.12 cards should grow from content. */
+.v12-home-column > .dashboard-card,
+.v12-performance-subcard,
+.v12-system-card,
+.v12-kpi-card,
+.v12-source-card,
+.v12-course-card {
+  min-height: 0 !important;
+  height: auto;
+}
+
+
+/* Direct action tiles scale with text rather than a fixed block. */
+.v12-action-grid button,
+.v12-home-column .v12-action-grid button {
+  min-height:
+    clamp(
+      56px,
+      7vw,
+      70px
+    );
+
+  height: auto;
+}
+
+
+/* Tablet */
+@media (max-width: 850px) {
+
+  .v12-acquisition-stat-grid > div {
+    padding: 9px 10px;
+  }
+
+  .v12-acquisition-stat-grid > div > strong {
+    margin-top: 6px;
+  }
+
+}
+
+
+/* Phone */
+@media (max-width: 600px) {
+
+  .v12-acquisition-stat-grid > div {
+    padding: 9px;
+  }
+
+  .v12-acquisition-stat-grid > div > span {
+    font-size: 8px;
+  }
+
+  .v12-acquisition-stat-grid > div > strong {
+    margin-top: 5px;
+  }
+
+}
