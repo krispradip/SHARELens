@@ -7170,12 +7170,7 @@ select {
     box-shadow 160ms ease;
 }
 
-button.v12-performance-subcard {
-  cursor: pointer;
-}
-
-button.v12-performance-subcard:hover,
-.v12-feedback-suggestion-card:hover {
+.v12-performance-subcard:hover {
   transform: translateY(-2px);
   border-color: #dcbac7;
   box-shadow:
@@ -7357,4 +7352,36 @@ button.v12-performance-subcard:hover,
     transition: none !important;
   }
 
+}
+
+
+/* v0.12.0 performance-card structural fix */
+.v12-subcard-link {
+  width: 100%;
+  min-height: 31px;
+  margin-top: 10px;
+  border: 1px solid #dcbac7;
+  border-radius: 7px;
+  background: #ffffff;
+  color: var(--brand);
+  font-size: 9px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.v12-subcard-link:hover {
+  background: var(--pink-soft);
+}
+
+.v12-performance-subcard {
+  display: flex;
+  flex-direction: column;
+}
+
+.v12-performance-subcard .v12-subcard-progress {
+  margin-top: auto;
+}
+
+.v12-feedback-suggestion-card .v12-subcard-progress {
+  margin-top: 10px;
 }
