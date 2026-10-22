@@ -9651,3 +9651,257 @@ select {
   }
 
 }
+
+
+/* =========================================================
+   SHARE LENS v0.12.0 — FLUID TYPOGRAPHY
+
+   PURPOSE:
+   Scales Ambassador typography with available component /
+   viewport width so compressed cards do not retain desktop
+   text sizes.
+
+   CHANGE IMPACT:
+   Ambassador v0.12 visual hierarchy only.
+========================================================= */
+
+/* Page / section titles */
+.v12-home-heading h1 {
+  font-size:
+    clamp(
+      24px,
+      2.2vw,
+      30px
+    );
+}
+
+.v12-ambassador-performance-head h2,
+.v12-heading-with-info {
+  font-size:
+    clamp(
+      17px,
+      1.7vw,
+      21px
+    );
+}
+
+
+/* Ambassador Performance ring */
+.v12-performance-score-value {
+  font-size:
+    clamp(
+      18px,
+      2.2vw,
+      26px
+    );
+}
+
+.v12-performance-score-ring {
+  width:
+    clamp(
+      64px,
+      7vw,
+      92px
+    );
+
+  height:
+    clamp(
+      64px,
+      7vw,
+      92px
+    );
+
+  flex-basis:
+    clamp(
+      64px,
+      7vw,
+      92px
+    );
+}
+
+
+/* Ambassador Performance sub-card values */
+.v12-performance-subcard > .v12-subcard-value {
+  font-size:
+    clamp(
+      23px,
+      2.6vw,
+      29px
+    );
+}
+
+.v12-performance-subcard > span:not(.v12-status-pill) {
+  font-size:
+    clamp(
+      10px,
+      1.2vw,
+      12px
+    );
+}
+
+.v12-performance-subcard > small {
+  font-size:
+    clamp(
+      8px,
+      1vw,
+      10px
+    );
+}
+
+
+/* Primary KPI cards */
+.v12-kpi-card > strong {
+  font-size:
+    clamp(
+      24px,
+      2.5vw,
+      30px
+    );
+}
+
+.v12-kpi-topline {
+  font-size:
+    clamp(
+      9px,
+      1vw,
+      11px
+    );
+}
+
+.v12-target {
+  font-size:
+    clamp(
+      8px,
+      0.9vw,
+      9px
+    );
+}
+
+
+/* Acquisition */
+.v12-acquisition-primary > strong {
+  font-size:
+    clamp(
+      28px,
+      3.4vw,
+      36px
+    );
+}
+
+.v12-acquisition-primary > strong small {
+  font-size:
+    clamp(
+      11px,
+      1.3vw,
+      14px
+    );
+}
+
+.v12-acquisition-primary > span {
+  font-size:
+    clamp(
+      9px,
+      1vw,
+      11px
+    );
+}
+
+.v12-acquisition-stat-grid span {
+  font-size:
+    clamp(
+      8px,
+      0.9vw,
+      10px
+    );
+}
+
+.v12-acquisition-stat-grid strong {
+  font-size:
+    clamp(
+      15px,
+      2vw,
+      19px
+    );
+}
+
+
+/* Next Best Actions / Direct Actions */
+.v12-nba-item strong {
+  font-size:
+    clamp(
+      11px,
+      1.3vw,
+      13px
+    );
+}
+
+.v12-nba-item p {
+  font-size:
+    clamp(
+      9px,
+      1.1vw,
+      11px
+    );
+}
+
+.v12-action-grid button strong {
+  font-size:
+    clamp(
+      10px,
+      1.2vw,
+      12px
+    );
+}
+
+
+/* Training & Knowledge */
+.v12-system-card strong {
+  font-size:
+    clamp(
+      11px,
+      1.2vw,
+      13px
+    );
+}
+
+.v12-system-card span {
+  font-size:
+    clamp(
+      9px,
+      1vw,
+      10px
+    );
+}
+
+
+/* Compact phone tuning */
+@media (max-width: 480px) {
+
+  .v12-performance-score-value {
+    font-size:
+      clamp(
+        16px,
+        5vw,
+        19px
+      );
+  }
+
+  .v12-acquisition-primary > strong {
+    font-size:
+      clamp(
+        25px,
+        8vw,
+        30px
+      );
+  }
+
+  .v12-kpi-card > strong {
+    font-size:
+      clamp(
+        22px,
+        7vw,
+        26px
+      );
+  }
+
+}
