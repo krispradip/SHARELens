@@ -8554,3 +8554,316 @@ select {
   }
 
 }
+
+
+/* =========================================================
+   SHARE LENS v0.12.0 — ACTIVITY STATUS + SPACE EFFICIENCY
+
+   PURPOSE:
+   Uses the same Last Login status language in management
+   views and improves responsive density for Ambassador use
+   on tablets and phones.
+
+   BUSINESS MEANING:
+   Mobile layouts should use available screen space without
+   oversized empty card areas or desktop-first spacing.
+
+   CHANGE IMPACT:
+   Ambassador responsive UI + Lead population status.
+========================================================= */
+
+.population-activity {
+  display: inline-flex;
+  width: fit-content;
+  padding: 5px 8px;
+  border-radius: 999px;
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.population-activity.active {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.population-activity.review {
+  background: #fff1cf;
+  color: #8a5b00;
+}
+
+.population-activity.unknown {
+  background: #f2eff1;
+  color: var(--muted);
+}
+
+.v12-activity-status {
+  display: inline-flex !important;
+  width: fit-content;
+  padding: 4px 7px;
+  border-radius: 999px;
+  font-size: 9px !important;
+}
+
+.v12-activity-status.active {
+  background: var(--green-soft);
+  color: var(--green) !important;
+}
+
+.v12-activity-status.review {
+  background: #fff1cf;
+  color: #8a5b00 !important;
+}
+
+.v12-activity-status.unknown {
+  background: #f2eff1;
+  color: var(--muted) !important;
+}
+
+
+/* Tablet density */
+@media (max-width: 1024px) {
+
+  .v12-ambassador-performance {
+    padding: 15px;
+  }
+
+  .v12-ambassador-performance-head {
+    gap: 14px;
+    padding-bottom: 12px;
+  }
+
+  .v12-performance-subgrid {
+    gap: 8px;
+    margin-top: 11px;
+  }
+
+  .v12-performance-subcard {
+    min-height: 148px;
+    padding: 12px;
+  }
+
+  .v12-performance-subcard > small {
+    min-height: 0;
+  }
+
+  .v12-acquisition-panel {
+    min-height: 0;
+  }
+
+  .v12-acquisition-card {
+    min-height: 0;
+  }
+
+}
+
+
+/* Phone / narrow tablet: keep score beside the heading
+   instead of dropping it into a large empty row. */
+@media (max-width: 700px) {
+
+  .v12-ambassador-performance {
+    padding: 13px;
+  }
+
+  .v12-ambassador-performance-head {
+    display: grid;
+    grid-template-columns:
+      minmax(0, 1fr)
+      72px;
+    align-items: start;
+    gap: 10px;
+    padding-bottom: 11px;
+  }
+
+  .v12-ambassador-performance-head > div:first-child {
+    min-width: 0;
+  }
+
+  .v12-ambassador-performance-head h2 {
+    margin-top: 3px;
+    font-size: 18px;
+    line-height: 1.2;
+  }
+
+  .v12-ambassador-performance-head p {
+    margin-top: 5px;
+    font-size: 10px;
+    line-height: 1.4;
+  }
+
+  .v12-performance-score-ring {
+    width: 68px;
+    height: 68px;
+    flex-basis: auto;
+    border-width: 6px;
+  }
+
+  .v12-performance-score-value {
+    font-size: 18px;
+  }
+
+  .v12-performance-score-ring > span {
+    margin-top: 3px;
+    font-size: 6.5px;
+    text-align: center;
+  }
+
+  .v12-performance-subgrid {
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .v12-performance-subcard {
+    min-height: 0;
+    padding: 11px 12px;
+  }
+
+  .v12-performance-subcard .v12-subcard-top {
+    min-height: 18px;
+  }
+
+  .v12-performance-subcard > .v12-subcard-value {
+    min-height: 30px;
+    margin-top: 2px;
+    font-size: 25px;
+  }
+
+  .v12-performance-subcard > span:not(.v12-status-pill) {
+    margin-top: 5px;
+  }
+
+  .v12-performance-subcard > small {
+    min-height: 0;
+    margin-top: 3px;
+    line-height: 1.35;
+  }
+
+  .v12-subcard-progress {
+    margin-top: 8px;
+  }
+
+  .v12-subcard-link,
+  .v12-subcard-actions {
+    margin-top: 8px;
+  }
+
+  .v12-subcard-link,
+  .v12-subcard-actions button {
+    min-height: 36px;
+  }
+
+  .v12-acquisition-panel {
+    padding: 12px;
+  }
+
+  .v12-acquisition-card {
+    gap: 12px;
+  }
+
+  .v12-acquisition-left {
+    padding: 9px;
+  }
+
+  .v12-qr-stage {
+    min-height: 130px;
+  }
+
+  .v12-acquisition-primary {
+    min-height: 50px;
+    padding-bottom: 8px;
+  }
+
+  .v12-acquisition-primary > strong {
+    font-size: 30px;
+  }
+
+  .v12-acquisition-progress {
+    margin: 9px 0;
+    padding: 9px;
+  }
+
+  /*
+    Two compact outcome tiles make better use of phone width
+    than stacking two full-width cards vertically.
+  */
+  .v12-acquisition-stat-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      );
+    gap: 7px;
+  }
+
+  .v12-acquisition-stat-grid > div {
+    min-height: 66px;
+    padding: 10px;
+  }
+
+  .v12-acquisition-stat-grid strong {
+    margin-top: 5px;
+    font-size: 16px;
+  }
+
+  .v12-acquisition-reference {
+    margin-top: 7px;
+    padding-top: 7px;
+  }
+
+}
+
+
+/* Narrow phones: preserve two useful columns where readable,
+   then collapse only when genuinely necessary. */
+@media (max-width: 430px) {
+
+  .v12-ambassador-performance-head {
+    grid-template-columns:
+      minmax(0, 1fr)
+      62px;
+  }
+
+  .v12-performance-score-ring {
+    width: 60px;
+    height: 60px;
+    border-width: 5px;
+  }
+
+  .v12-performance-score-value {
+    font-size: 16px;
+  }
+
+  .v12-acquisition-stat-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      );
+  }
+
+  .v12-acquisition-stat-grid span {
+    font-size: 8px;
+  }
+
+  .v12-acquisition-stat-grid strong {
+    font-size: 14px;
+  }
+
+}
+
+
+/* Very narrow devices only */
+@media (max-width: 350px) {
+
+  .v12-acquisition-stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
