@@ -721,3 +721,223 @@
   }
 
 }
+
+
+/* =========================================================
+   SHARE LENS v0.12.0 — ACQUISITION RESPONSIVE LAYOUT FINAL
+
+   PURPOSE:
+   Matches the approved Acquisition Performance composition:
+   large screens use a 2x2 information layout; smaller
+   screens stack the first two blocks while preserving the
+   two outcome tiles side-by-side.
+
+   LARGE SCREEN:
+   [ Members Acquired ] [ Target Progress ]
+   [ Active-member ]    [ Attributed Spend ]
+
+   SMALL / TABLET:
+   [ Members Acquired ]
+   [ Target Progress ]
+   [ Active-member ] [ Attributed Spend ]
+
+   CHANGE IMPACT:
+   Acquisition Performance layout only.
+========================================================= */
+
+.v12-acquisition-metrics-only {
+  display: grid !important;
+  grid-template-columns:
+    minmax(
+      0,
+      1fr
+    )
+    minmax(
+      0,
+      1fr
+    ) !important;
+
+  grid-template-areas:
+    "primary progress"
+    "stats stats"
+    "reference reference" !important;
+
+  gap:
+    clamp(
+      8px,
+      0.9vw,
+      11px
+    ) !important;
+
+  align-items: start !important;
+}
+
+.v12-acquisition-primary {
+  grid-area: primary !important;
+}
+
+.v12-acquisition-progress {
+  grid-area: progress !important;
+}
+
+.v12-acquisition-stat-grid {
+  grid-area: stats !important;
+
+  display: grid !important;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(
+        0,
+        1fr
+      )
+    ) !important;
+
+  gap:
+    clamp(
+      8px,
+      0.9vw,
+      11px
+    ) !important;
+}
+
+.v12-acquisition-reference {
+  grid-area: reference !important;
+}
+
+
+/* Make all four blocks visually consistent */
+.v12-acquisition-primary,
+.v12-acquisition-progress,
+.v12-acquisition-stat-grid > div {
+  min-height: 0 !important;
+  height: auto !important;
+
+  padding:
+    clamp(
+      10px,
+      1vw,
+      13px
+    ) !important;
+
+  border:
+    1px solid
+    var(--border) !important;
+
+  border-radius:
+    10px !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ffffff,
+      #fffafb
+    ) !important;
+}
+
+
+/* Primary value card */
+.v12-acquisition-primary {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 7px !important;
+}
+
+.v12-acquisition-primary > strong {
+  margin: 0 !important;
+  line-height: 1 !important;
+}
+
+.v12-acquisition-primary > span {
+  margin: 0 !important;
+}
+
+
+/* Progress card */
+.v12-acquisition-progress {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  margin: 0 !important;
+}
+
+
+/* Outcome cards */
+.v12-acquisition-stat-grid > div {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+}
+
+.v12-acquisition-stat-grid > div > span {
+  margin: 0 !important;
+}
+
+.v12-acquisition-stat-grid > div > strong {
+  margin: 0 !important;
+  align-self: flex-end !important;
+}
+
+
+/* Attribution reference */
+.v12-acquisition-reference {
+  margin: 0 !important;
+
+  padding:
+    7px
+    0
+    0 !important;
+
+  border-top:
+    1px solid
+    var(--border) !important;
+}
+
+
+/* =========================================================
+   SMALL SCREEN / TABLET
+========================================================= */
+
+@media (max-width: 760px) {
+
+  .v12-acquisition-metrics-only {
+    grid-template-columns:
+      1fr !important;
+
+    grid-template-areas:
+      "primary"
+      "progress"
+      "stats"
+      "reference" !important;
+  }
+
+  .v12-acquisition-stat-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      ) !important;
+  }
+
+}
+
+
+/* =========================================================
+   VERY NARROW PHONE
+========================================================= */
+
+@media (max-width: 360px) {
+
+  .v12-acquisition-stat-grid {
+    grid-template-columns:
+      1fr !important;
+  }
+
+}
