@@ -8226,3 +8226,331 @@ select {
   display: block;
 }
 
+
+
+/* =========================================================
+   SHARE LENS v0.12.0 — TOOLTIP VISIBILITY / RESPONSIVE FIX
+
+   PURPOSE:
+   Prevents contextual help from being clipped by KPI,
+   performance and grid containers.
+
+   BUSINESS MEANING:
+   Tooltip definitions must remain readable on desktop,
+   tablet and mobile without hiding behind adjacent cards.
+
+   CHANGE IMPACT:
+   Tooltip presentation only.
+========================================================= */
+
+/*
+   Tooltip-bearing cards must allow the popover to escape the
+   card boundary. These override earlier decorative overflow
+   rules used by the cards.
+*/
+.v12-kpi-card,
+.v12-ambassador-performance,
+.v12-performance-subcard,
+.v12-acquisition-panel {
+  overflow: visible;
+}
+
+.v12-tooltip-wrap {
+  position: relative;
+  z-index: 40;
+}
+
+.v12-tooltip-wrap:hover,
+.v12-tooltip-wrap:focus-within {
+  z-index: 1200;
+}
+
+.v12-tooltip-content {
+  z-index: 1300;
+
+  width:
+    min(
+      300px,
+      calc(100vw - 32px)
+    );
+
+  max-width:
+    calc(100vw - 32px);
+
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  hyphens: auto;
+
+  line-height: 1.45;
+}
+
+/*
+   Keep tooltips inside the viewport for KPI cards near the
+   right edge of a four-column desktop grid.
+*/
+.v12-kpi-grid
+  > .v12-kpi-card:nth-child(3)
+  .v12-tooltip-content,
+.v12-kpi-grid
+  > .v12-kpi-card:nth-child(4)
+  .v12-tooltip-content {
+
+  left: auto;
+  right: 0;
+
+  transform:
+    translate(
+      0,
+      5px
+    );
+}
+
+.v12-kpi-grid
+  > .v12-kpi-card:nth-child(3)
+  .v12-tooltip-wrap:hover
+  .v12-tooltip-content,
+.v12-kpi-grid
+  > .v12-kpi-card:nth-child(3)
+  .v12-tooltip-wrap:focus-within
+  .v12-tooltip-content,
+.v12-kpi-grid
+  > .v12-kpi-card:nth-child(4)
+  .v12-tooltip-wrap:hover
+  .v12-tooltip-content,
+.v12-kpi-grid
+  > .v12-kpi-card:nth-child(4)
+  .v12-tooltip-wrap:focus-within
+  .v12-tooltip-content {
+
+  transform:
+    translate(
+      0,
+      0
+    );
+}
+
+.v12-kpi-grid
+  > .v12-kpi-card:nth-child(3)
+  .v12-tooltip-content::after,
+.v12-kpi-grid
+  > .v12-kpi-card:nth-child(4)
+  .v12-tooltip-content::after {
+
+  left: auto;
+  right: 6px;
+
+  transform:
+    translate(
+      0,
+      -4px
+    )
+    rotate(45deg);
+}
+
+
+/*
+   Ambassador Performance sub-cards use the same edge-aware
+   behaviour for the right half of the row.
+*/
+.v12-performance-subgrid
+  > .v12-performance-subcard:nth-child(3)
+  .v12-tooltip-content,
+.v12-performance-subgrid
+  > .v12-performance-subcard:nth-child(4)
+  .v12-tooltip-content {
+
+  left: auto;
+  right: 0;
+
+  transform:
+    translate(
+      0,
+      5px
+    );
+}
+
+.v12-performance-subgrid
+  > .v12-performance-subcard:nth-child(3)
+  .v12-tooltip-wrap:hover
+  .v12-tooltip-content,
+.v12-performance-subgrid
+  > .v12-performance-subcard:nth-child(3)
+  .v12-tooltip-wrap:focus-within
+  .v12-tooltip-content,
+.v12-performance-subgrid
+  > .v12-performance-subcard:nth-child(4)
+  .v12-tooltip-wrap:hover
+  .v12-tooltip-content,
+.v12-performance-subgrid
+  > .v12-performance-subcard:nth-child(4)
+  .v12-tooltip-wrap:focus-within
+  .v12-tooltip-content {
+
+  transform:
+    translate(
+      0,
+      0
+    );
+}
+
+.v12-performance-subgrid
+  > .v12-performance-subcard:nth-child(3)
+  .v12-tooltip-content::after,
+.v12-performance-subgrid
+  > .v12-performance-subcard:nth-child(4)
+  .v12-tooltip-content::after {
+
+  left: auto;
+  right: 6px;
+
+  transform:
+    translate(
+      0,
+      -4px
+    )
+    rotate(45deg);
+}
+
+
+/* Tablet: cards become two columns, so second card in each
+   row should anchor the tooltip to the right edge. */
+@media (max-width: 1100px) {
+
+  .v12-performance-subgrid
+    > .v12-performance-subcard:nth-child(even)
+    .v12-tooltip-content {
+
+    left: auto;
+    right: 0;
+
+    transform:
+      translate(
+        0,
+        5px
+      );
+  }
+
+  .v12-performance-subgrid
+    > .v12-performance-subcard:nth-child(even)
+    .v12-tooltip-wrap:hover
+    .v12-tooltip-content,
+  .v12-performance-subgrid
+    > .v12-performance-subcard:nth-child(even)
+    .v12-tooltip-wrap:focus-within
+    .v12-tooltip-content {
+
+    transform:
+      translate(
+        0,
+        0
+      );
+  }
+
+}
+
+
+/* Phone / narrow tablet:
+   Use a compact wrapped tooltip and anchor it to the nearest
+   card edge instead of attempting a centred desktop popover.
+*/
+@media (max-width: 700px) {
+
+  .v12-tooltip-content {
+    width:
+      min(
+        260px,
+        calc(100vw - 28px)
+      );
+
+    max-width:
+      calc(100vw - 28px);
+
+    padding:
+      10px
+      11px;
+
+    font-size: 10px;
+    line-height: 1.45;
+  }
+
+  .v12-kpi-card
+    .v12-tooltip-content,
+  .v12-performance-subcard
+    .v12-tooltip-content,
+  .v12-heading-with-info
+    .v12-tooltip-content {
+
+    left: auto;
+    right: 0;
+
+    transform:
+      translate(
+        0,
+        5px
+      );
+  }
+
+  .v12-kpi-card
+    .v12-tooltip-wrap:hover
+    .v12-tooltip-content,
+  .v12-kpi-card
+    .v12-tooltip-wrap:focus-within
+    .v12-tooltip-content,
+  .v12-performance-subcard
+    .v12-tooltip-wrap:hover
+    .v12-tooltip-content,
+  .v12-performance-subcard
+    .v12-tooltip-wrap:focus-within
+    .v12-tooltip-content,
+  .v12-heading-with-info
+    .v12-tooltip-wrap:hover
+    .v12-tooltip-content,
+  .v12-heading-with-info
+    .v12-tooltip-wrap:focus-within
+    .v12-tooltip-content {
+
+    transform:
+      translate(
+        0,
+        0
+      );
+  }
+
+  .v12-kpi-card
+    .v12-tooltip-content::after,
+  .v12-performance-subcard
+    .v12-tooltip-content::after,
+  .v12-heading-with-info
+    .v12-tooltip-content::after {
+
+    left: auto;
+    right: 6px;
+
+    transform:
+      translate(
+        0,
+        -4px
+      )
+      rotate(45deg);
+  }
+
+}
+
+
+@media (max-width: 430px) {
+
+  .v12-tooltip-content {
+    width:
+      min(
+        230px,
+        calc(100vw - 24px)
+      );
+
+    max-width:
+      calc(100vw - 24px);
+
+    font-size: 9.5px;
+  }
+
+}
