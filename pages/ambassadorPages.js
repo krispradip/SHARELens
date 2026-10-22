@@ -702,10 +702,6 @@ function ambassadorPerformanceCard() {
 
           <div class="v12-subcard-top">
 
-            <span class="v12-subcard-icon">
-              C
-            </span>
-
             ${tooltip(
               performance
                 .campaignParticipation
@@ -715,6 +711,7 @@ function ambassadorPerformanceCard() {
           </div>
 
           <strong
+            class="v12-subcard-value"
             data-count-to="${campaignRate}"
             data-decimals="0"
             data-suffix="%"
@@ -749,10 +746,6 @@ function ambassadorPerformanceCard() {
 
           <div class="v12-subcard-top">
 
-            <span class="v12-subcard-icon">
-              B
-            </span>
-
             ${tooltip(
               performance
                 .broadcastAcknowledgement
@@ -762,6 +755,7 @@ function ambassadorPerformanceCard() {
           </div>
 
           <strong
+            class="v12-subcard-value"
             data-count-to="${acknowledgementRate}"
             data-decimals="0"
             data-suffix="%"
@@ -796,10 +790,6 @@ function ambassadorPerformanceCard() {
 
           <div class="v12-subcard-top">
 
-            <span class="v12-subcard-icon">
-              F
-            </span>
-
             ${tooltip(
               performance
                 .feedbackSuggestions
@@ -808,7 +798,7 @@ function ambassadorPerformanceCard() {
 
           </div>
 
-          <strong>
+          <strong class="v12-subcard-value">
             <span
               data-count-to="${counts.combined}"
               data-decimals="0"
@@ -855,10 +845,6 @@ function ambassadorPerformanceCard() {
 
           <div class="v12-subcard-top">
 
-            <span class="v12-subcard-icon">
-              W
-            </span>
-
             ${tooltip(
               performance
                 .shareWall
@@ -867,7 +853,7 @@ function ambassadorPerformanceCard() {
 
           </div>
 
-          <strong>
+          <strong class="v12-subcard-value">
             ${performance.shareWall.submitted}
             <small>
               / ${performance.shareWall.expected}
@@ -923,6 +909,49 @@ function ambassadorPerformanceCard() {
 }
 
 
+/* =========================================================
+   COMPONENT: Time-Based Greeting
+
+   PURPOSE:
+   Generates the Ambassador greeting from the user's local
+   device time rather than a fixed prototype phrase.
+
+   BUSINESS MEANING:
+   Keeps the home experience contextually correct across
+   morning, afternoon and evening use.
+
+   INPUTS:
+   Browser-local hour.
+
+   OUTPUTS:
+   Good morning / Good afternoon / Good evening.
+
+   CHANGE IMPACT:
+   Display only; no workflow or business data impact.
+========================================================= */
+
+function timeBasedGreetingV012() {
+
+  const hour =
+    new Date()
+      .getHours();
+
+
+  if (hour < 12) {
+    return "Good morning";
+  }
+
+
+  if (hour < 17) {
+    return "Good afternoon";
+  }
+
+
+  return "Good evening";
+
+}
+
+
 export function renderAmbassadorHomeV012() {
   const user = getUserContext();
   const metrics = Object.values(AMBASSADOR_KPIS);
@@ -953,7 +982,7 @@ export function renderAmbassadorHomeV012() {
     <div class="v12-home-heading">
       <div>
         <span class="section-label">MY SHARE</span>
-        <h1>Good afternoon, ${escapeHtml(user.name.split(" ")[0])}</h1>
+        <h1>${timeBasedGreetingV012()}, ${escapeHtml(user.name.split(" ")[0])}</h1>
         <p>One place for your performance, programme actions, training and knowledge.</p>
       </div>
 
