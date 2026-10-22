@@ -7385,3 +7385,434 @@ select {
 .v12-feedback-suggestion-card .v12-subcard-progress {
   margin-top: 10px;
 }
+
+
+/* =========================================================
+   SHARE LENS v0.12.0 — MANUAL TRANSACTION FLOW + MOBILE UX
+
+   PURPOSE:
+   Adds visual case progression for OneView and improves the
+   Ambassador experience on tablet and mobile layouts.
+
+   BUSINESS MEANING:
+   Shows exactly where a manual transaction request is in the
+   operational lifecycle and keeps mobile actions usable.
+
+   CHANGE IMPACT:
+   Ambassador-facing UI only.
+========================================================= */
+
+.v12-ticket-flow {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    36px
+    minmax(0, 1fr)
+    36px
+    minmax(0, 1fr);
+  align-items: center;
+  gap: 6px;
+  margin-top: 15px;
+}
+
+.v12-ticket-step {
+  display: grid;
+  grid-template-columns: 34px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  min-height: 76px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #ffffff;
+  transition:
+    background 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    transform 220ms ease;
+}
+
+.v12-ticket-step-icon {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #f1ecef;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.v12-ticket-step strong,
+.v12-ticket-step small {
+  display: block;
+}
+
+.v12-ticket-step small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 9px;
+  line-height: 1.35;
+}
+
+.v12-ticket-state {
+  padding: 5px 7px;
+  border-radius: 999px;
+  background: #f4f1f2;
+  color: var(--muted);
+  font-size: 8px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.v12-ticket-step.complete {
+  border-color: #b9ddca;
+  background: #f7fcf9;
+  box-shadow:
+    0 7px 16px
+    rgba(24, 121, 78, 0.07);
+}
+
+.v12-ticket-step.complete .v12-ticket-step-icon {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.v12-ticket-step.complete .v12-ticket-state {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.v12-ticket-step.processing {
+  border-color: #e8cd99;
+  background: #fffaf0;
+  box-shadow:
+    0 7px 16px
+    rgba(177, 113, 0, 0.08);
+  transform: translateY(-1px);
+}
+
+.v12-ticket-step.processing .v12-ticket-step-icon {
+  background: #fff1cf;
+  color: #9a6300;
+  animation:
+    v12ProcessingPulse
+    1.15s
+    ease-in-out
+    infinite;
+}
+
+.v12-ticket-step.processing .v12-ticket-state {
+  background: #fff1cf;
+  color: #9a6300;
+}
+
+@keyframes v12ProcessingPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+.v12-ticket-connector {
+  height: 2px;
+  border-radius: 999px;
+  background:
+    linear-gradient(
+      90deg,
+      #ddd3d7,
+      #eee8eb
+    );
+}
+
+.v12-ticket-result {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 11px 13px;
+  border: 1px solid #b9ddca;
+  border-radius: 9px;
+  background: #f7fcf9;
+}
+
+.v12-ticket-result.visible {
+  display: flex;
+  animation:
+    v12TicketReveal
+    360ms
+    cubic-bezier(0.22, 1, 0.36, 1)
+    both;
+}
+
+@keyframes v12TicketReveal {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.v12-ticket-result span {
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.v12-ticket-result strong {
+  color: var(--green);
+  font-size: 13px;
+}
+
+.v12-flow-resolution-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #faf8f9;
+}
+
+.v12-flow-resolution-action > span {
+  color: var(--muted);
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   TABLET / MOBILE BEHAVIOUR
+========================================================= */
+
+@media (max-width: 1024px) {
+
+  .content {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .v12-home-heading {
+    gap: 12px;
+  }
+
+  .v12-performance-subgrid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      );
+  }
+
+  .v12-ticket-flow {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .v12-ticket-connector {
+    width: 2px;
+    height: 18px;
+    margin-left: 28px;
+    background:
+      linear-gradient(
+        180deg,
+        #ddd3d7,
+        #eee8eb
+      );
+  }
+
+}
+
+
+@media (max-width: 850px) {
+
+  .content {
+    padding: 14px;
+  }
+
+  .page-heading {
+    margin-bottom: 13px;
+  }
+
+  .page-heading h1 {
+    font-size: 25px;
+  }
+
+  .dashboard-card {
+    border-radius: 11px;
+  }
+
+  .v12-context-strip {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    border: 0;
+    background: transparent;
+    scroll-snap-type: x proximity;
+  }
+
+  .v12-context-strip > div {
+    min-width: 155px;
+    flex: 0 0 auto;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    scroll-snap-align: start;
+  }
+
+  .v12-action-grid {
+    display: flex;
+    overflow-x: auto;
+    gap: 8px;
+    padding-bottom: 4px;
+    scroll-snap-type: x proximity;
+  }
+
+  .v12-action-grid button {
+    min-width: 150px;
+    flex: 0 0 150px;
+    scroll-snap-align: start;
+  }
+
+  .v12-form-grid.two,
+  .v12-form-grid.three {
+    grid-template-columns: 1fr;
+  }
+
+  .v12-form-actions {
+    gap: 10px;
+  }
+
+  .v12-form-actions .primary-small {
+    min-height: 44px;
+  }
+
+  .v12-ticket-step {
+    min-height: 70px;
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .content {
+    padding: 10px;
+  }
+
+  .v12-home-heading h1 {
+    font-size: 24px;
+  }
+
+  .v12-home-heading p {
+    font-size: 11px;
+  }
+
+  .v12-profile-chip {
+    width: 100%;
+  }
+
+  .v12-performance-subgrid {
+    grid-template-columns: 1fr;
+  }
+
+  .v12-kpi-grid.dashboard-grid.four {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      );
+  }
+
+  .v12-kpi-card {
+    min-height: 132px;
+  }
+
+  .v12-kpi-card > strong {
+    font-size: 25px;
+  }
+
+  .v12-acquisition-card {
+    grid-template-columns: 1fr;
+  }
+
+  .v12-acquisition-left {
+    width: 100%;
+  }
+
+  .v12-acquisition-stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .v12-ticket-step {
+    grid-template-columns: 32px 1fr;
+  }
+
+  .v12-ticket-state {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .v12-flow-resolution-action,
+  .v12-ticket-result {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .v12-flow-resolution-action .small-button {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  .v12-subcard-actions button,
+  .v12-subcard-link,
+  .v12-qr-action {
+    min-height: 40px;
+  }
+
+}
+
+
+@media (max-width: 430px) {
+
+  .v12-kpi-grid.dashboard-grid.four {
+    grid-template-columns: 1fr;
+  }
+
+  .v12-kpi-card {
+    min-height: 0;
+  }
+
+  .v12-context-strip > div {
+    min-width: 145px;
+  }
+
+  .v12-action-grid button {
+    min-width: 138px;
+    flex-basis: 138px;
+  }
+
+  .v12-performance-score-ring {
+    width: 74px;
+    height: 74px;
+    flex-basis: 74px;
+  }
+
+}
