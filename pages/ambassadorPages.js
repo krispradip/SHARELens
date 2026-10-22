@@ -1004,8 +1004,10 @@ export function renderAmbassadorHomeV012() {
       ${metrics.map(metricCard).join("")}
     </div>
 
-    <div class="dashboard-grid two">
-      <section class="dashboard-card v12-motion-card">
+    <div class="v12-home-masonry">
+
+      <div class="v12-home-column">
+<section class="dashboard-card v12-motion-card">
         <div class="card-heading-row">
           <div>
             <span class="section-label">FOCUS</span>
@@ -1025,52 +1027,7 @@ export function renderAmbassadorHomeV012() {
           </div>
         `}
       </section>
-
-      <section class="dashboard-card v12-motion-card">
-        <span class="section-label">DIRECT ACTIONS</span>
-        <h3 class="v12-heading-with-info">
-          What do you need to do?
-          ${tooltip(
-            "The workshop asked for direct in-platform entry points for Ambassador actions such as feedback and SHARE Wall submission instead of relying on distributed external links."
-          )}
-        </h3>
-
-        <div class="v12-action-grid">
-          <button onclick="navigateTo('service-pulse')">
-            <span>◉</span>
-            <strong>Start Service Pulse</strong>
-          </button>
-          <button onclick="navigateTo('feedback')">
-            <span>✎</span>
-            <strong>Submit Feedback</strong>
-          </button>
-
-          <button onclick="navigateTo('suggestions')">
-            <span>＋</span>
-            <strong>Submit Suggestion</strong>
-          </button>
-          <button onclick="navigateTo('manual-transaction')">
-            <span>▣</span>
-            <strong>Manual Transaction</strong>
-          </button>
-          <button onclick="navigateTo('share-wall')">
-            <span>▧</span>
-            <strong>Update SHARE Wall</strong>
-          </button>
-          <button onclick="navigateTo('training-physical')">
-            <span>✓</span>
-            <strong>Log Training / Huddle</strong>
-          </button>
-          <button onclick="navigateTo('knowledge')">
-            <span>?</span>
-            <strong>Ask / Search Knowledge</strong>
-          </button>
-        </div>
-      </section>
-    </div>
-
-    <div class="dashboard-grid two">
-      <section class="dashboard-card v12-motion-card v12-acquisition-panel">
+<section class="dashboard-card v12-motion-card v12-acquisition-panel">
         <div class="card-heading-row">
           <div>
             <span class="section-label">ACQUISITION</span>
@@ -1182,8 +1139,51 @@ export function renderAmbassadorHomeV012() {
           </div>
         </div>
       </section>
+      </div>
 
-      <section class="dashboard-card v12-motion-card">
+      <div class="v12-home-column">
+<section class="dashboard-card v12-motion-card">
+        <span class="section-label">DIRECT ACTIONS</span>
+        <h3 class="v12-heading-with-info">
+          What do you need to do?
+          ${tooltip(
+            "The workshop asked for direct in-platform entry points for Ambassador actions such as feedback and SHARE Wall submission instead of relying on distributed external links."
+          )}
+        </h3>
+
+        <div class="v12-action-grid">
+          <button onclick="navigateTo('service-pulse')">
+            <span>◉</span>
+            <strong>Start Service Pulse</strong>
+          </button>
+          <button onclick="navigateTo('feedback')">
+            <span>✎</span>
+            <strong>Submit Feedback</strong>
+          </button>
+
+          <button onclick="navigateTo('suggestions')">
+            <span>＋</span>
+            <strong>Submit Suggestion</strong>
+          </button>
+          <button onclick="navigateTo('manual-transaction')">
+            <span>▣</span>
+            <strong>Manual Transaction</strong>
+          </button>
+          <button onclick="navigateTo('share-wall')">
+            <span>▧</span>
+            <strong>Update SHARE Wall</strong>
+          </button>
+          <button onclick="navigateTo('training-physical')">
+            <span>✓</span>
+            <strong>Log Training / Huddle</strong>
+          </button>
+          <button onclick="navigateTo('knowledge')">
+            <span>?</span>
+            <strong>Ask / Search Knowledge</strong>
+          </button>
+        </div>
+      </section>
+<section class="dashboard-card v12-motion-card">
         <div class="card-heading-row">
           <div>
             <span class="section-label">TRAINING & KNOWLEDGE</span>
@@ -1214,7 +1214,10 @@ export function renderAmbassadorHomeV012() {
           <button class="small-button" onclick="navigateTo('knowledge')">Open</button>
         </div>
       </section>
+      </div>
+
     </div>
+
   `;
 }
 
