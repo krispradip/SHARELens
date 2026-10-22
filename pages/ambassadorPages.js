@@ -572,6 +572,81 @@ function ambassadorPerformanceCard() {
     );
 
 
+  /*
+     Ambassador Performance Score
+     ----------------------------
+     Each component is measured against its agreed target.
+     Component attainment is capped at 100% so exceeding one
+     target cannot compensate for missing another.
+
+     Current prototype weighting:
+     25% Campaign Participation
+     25% Broadcast Acknowledgement
+     25% Feedback + Suggestions
+     25% SHARE Wall Submission
+
+     This can be changed later if business weighting is
+     formally agreed.
+  */
+
+  const campaignAttainment =
+    Math.min(
+      100,
+      (
+        campaignRate /
+        performance
+          .campaignParticipation
+          .threshold
+      ) *
+      100
+    );
+
+  const acknowledgementAttainment =
+    Math.min(
+      100,
+      (
+        acknowledgementRate /
+        performance
+          .broadcastAcknowledgement
+          .threshold
+      ) *
+      100
+    );
+
+  const feedbackSuggestionAttainment =
+    Math.min(
+      100,
+      (
+        counts.combined /
+        threshold
+      ) *
+      100
+    );
+
+  const wallAttainment =
+    Math.min(
+      100,
+      (
+        performance
+          .shareWall
+          .submitted /
+        performance
+          .shareWall
+          .expected
+      ) *
+      100
+    );
+
+  const ambassadorPerformanceScore =
+    (
+      campaignAttainment +
+      acknowledgementAttainment +
+      feedbackSuggestionAttainment +
+      wallAttainment
+    ) /
+    4;
+
+
   return `
     <section class="dashboard-card v12-motion-card v12-ambassador-performance">
 
@@ -587,7 +662,7 @@ function ambassadorPerformanceCard() {
             Ambassador Performance Score
 
             ${tooltip(
-              "This score reflects the Ambassador's own programme engagement. The agreed components are campaign participation, broadcast acknowledgement, Feedback & Suggestions, and SHARE Wall submission. Final weighting remains configurable and is not yet confirmed."
+              "This score reflects the Ambassador's own programme engagement. It is currently calculated as an equal-weight average of target attainment across Campaign Participation, Broadcast Acknowledgement, Feedback & Suggestions, and SHARE Wall Submission. Each component is capped at 100% attainment."
             )}
           </h2>
 
@@ -602,15 +677,15 @@ function ambassadorPerformanceCard() {
 
           <div
             class="v12-performance-score-value"
-            data-count-to="${performance.score}"
-            data-decimals="0"
+            data-count-to="${ambassadorPerformanceScore}"
+            data-decimals="1"
             data-suffix="%"
           >
-            ${performance.score}%
+            ${ambassadorPerformanceScore.toFixed(1)}%
           </div>
 
           <span>
-            Demo score
+            Calculated score
           </span>
 
         </div>
@@ -649,11 +724,11 @@ function ambassadorPerformanceCard() {
           </span>
 
           <small>
-            ${performance.campaignParticipation.participated} of ${performance.campaignParticipation.available} campaigns participated
+            ${performance.campaignParticipation.participated} of ${performance.campaignParticipation.available} campaigns participated · target ${performance.campaignParticipation.threshold}%
           </small>
 
           <div class="v12-subcard-progress">
-            <div data-progress-to="${campaignRate}"></div>
+            <div data-progress-to="${campaignAttainment}"></div>
           </div>
 
           <button
@@ -696,11 +771,11 @@ function ambassadorPerformanceCard() {
           </span>
 
           <small>
-            ${performance.broadcastAcknowledgement.acknowledged} of ${performance.broadcastAcknowledgement.sent} acknowledged · 👍 ${performance.broadcastAcknowledgement.positiveReactions} · 👎 ${performance.broadcastAcknowledgement.negativeReactions}
+            ${performance.broadcastAcknowledgement.acknowledged} of ${performance.broadcastAcknowledgement.sent} acknowledged · target ${performance.broadcastAcknowledgement.threshold}% · 👍 ${performance.broadcastAcknowledgement.positiveReactions} · 👎 ${performance.broadcastAcknowledgement.negativeReactions}
           </small>
 
           <div class="v12-subcard-progress">
-            <div data-progress-to="${acknowledgementRate}"></div>
+            <div data-progress-to="${acknowledgementAttainment}"></div>
           </div>
 
           <button
@@ -832,9 +907,9 @@ function ambassadorPerformanceCard() {
         </span>
 
         <span>
-          Final score weighting:
+          Current calculation:
           <strong>
-            To be confirmed
+            Equal weight across 4 target-attainment components
           </strong>
         </span>
 
