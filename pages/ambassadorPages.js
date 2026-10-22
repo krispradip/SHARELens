@@ -683,8 +683,8 @@ function ambassadorPerformanceCard() {
 
 
         <div class="v12-performance-score-ring">
-
-          <div
+          <div class="v12-performance-score-inner">
+            <div
             class="v12-performance-score-value"
             data-count-to="${ambassadorPerformanceScore}"
             data-decimals="1"
@@ -772,7 +772,7 @@ function ambassadorPerformanceCard() {
           </span>
 
           <small>
-            ${performance.broadcastAcknowledgement.acknowledged} of ${performance.broadcastAcknowledgement.sent} acknowledged · target ${performance.broadcastAcknowledgement.threshold}% · 👍 ${performance.broadcastAcknowledgement.positiveReactions} · 👎 ${performance.broadcastAcknowledgement.negativeReactions}
+            ${performance.broadcastAcknowledgement.acknowledged} of ${performance.broadcastAcknowledgement.sent} acknowledged · target ${performance.broadcastAcknowledgement.threshold}%
           </small>
 
           <div class="v12-subcard-progress">
@@ -817,7 +817,7 @@ function ambassadorPerformanceCard() {
           </span>
 
           <small>
-            ${counts.feedbackCount} feedback · ${counts.suggestionCount} suggestions · monthly combined threshold
+            ${counts.feedbackCount} feedback · ${counts.suggestionCount} suggestions
           </small>
 
           <div class="v12-subcard-progress">
@@ -889,24 +889,7 @@ function ambassadorPerformanceCard() {
       </div>
 
 
-      <div class="v12-performance-footnote">
 
-        <span>
-          Feedback + Suggestions target:
-          <strong>
-            2 per Ambassador per month
-          </strong>
-          in any combination.
-        </span>
-
-        <span>
-          Current calculation:
-          <strong>
-            Equal weight across 4 target-attainment components
-          </strong>
-        </span>
-
-      </div>
 
     </section>
   `;
@@ -990,9 +973,20 @@ export function renderAmbassadorHomeV012() {
         <p>One place for your performance, programme actions, training and knowledge.</p>
       </div>
 
-      <div class="v12-profile-chip">
-        <span>Active Ambassador</span>
-        <strong>${escapeHtml(user.brand)} · ${escapeHtml(user.location)}</strong>
+      <div class="v12-profile-qr-card">
+        <div class="v12-profile-chip">
+          <span>Active Ambassador</span>
+          <strong>${escapeHtml(user.brand)} · ${escapeHtml(user.location)}</strong>
+        </div>
+
+        <div class="v12-profile-qr-wrap">
+          <img
+            class="v12-profile-qr-image"
+            src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https%3A%2F%2Fwww.sharerewards.com%2F"
+            alt="Personal SHARE QR Code"
+          >
+          <span>Personal QR</span>
+        </div>
       </div>
     </div>
 
@@ -1036,106 +1030,74 @@ export function renderAmbassadorHomeV012() {
               )}
             </h3>
           </div>
-          <span class="v12-source-badge">
-            Source: ${ACQUISITION.provider}
-            ${tooltip(
-              "Adjust is the current QR attribution platform. The target model keeps Adjust as the specialist acquisition source while SHARE Lens becomes the user experience and reporting layer."
-            )}
-          </span>
+
         </div>
 
-        <div class="v12-acquisition-card">
-          <div class="v12-acquisition-left">
-            <div class="v12-qr-stage">
-            <div class="v12-qr-orbit"></div>
+        <div class="v12-acquisition-metrics-only">
+          <div class="v12-acquisition-primary">
+            <strong>
+              <span
+                data-count-to="${ACQUISITION.membersAcquired}"
+                data-decimals="0"
+              >${ACQUISITION.membersAcquired}</span>
+              <small>/ ${ACQUISITION.target}</small>
+            </strong>
 
-            <div class="v12-qr-placeholder">
-              <span class="v12-qr-scan"></span>
-              <span>ADJUST</span>
-              <strong>QR</strong>
+            <span>
+              members acquired
+              ${tooltip(
+                "Customers attributed to this Ambassador's personalised QR. The workshop linked acquisition performance to the Ambassador's store and individual attribution."
+              )}
+            </span>
+          </div>
+
+          <div class="v12-acquisition-progress">
+            <div>
+              <span>Target progress</span>
+              <strong>${Math.round((ACQUISITION.membersAcquired / ACQUISITION.target) * 100)}%</strong>
             </div>
 
-            <div class="v12-live-attribution">
-              <span></span>
-              Attribution active
+            <div class="v12-acquisition-progress-track">
+              <div
+                data-progress-to="${(ACQUISITION.membersAcquired / ACQUISITION.target) * 100}"
+              ></div>
             </div>
           </div>
 
-          <button
-            type="button"
-            class="v12-qr-action"
-            onclick="showToast('Opening personalised acquisition QR in the prototype.')"
-          >
-            View personal QR
-          </button>
-        </div>
-
-          <div class="v12-acquisition-metrics">
-            <div class="v12-acquisition-primary">
-              <strong>
-                <span
-                  data-count-to="${ACQUISITION.membersAcquired}"
-                  data-decimals="0"
-                >${ACQUISITION.membersAcquired}</span>
-                <small>/ ${ACQUISITION.target}</small>
-              </strong>
-
+          <div class="v12-acquisition-stat-grid">
+            <div>
               <span>
-                members acquired
+                Active-member rate
                 ${tooltip(
-                  "Customers attributed to this Ambassador's personalised QR. The workshop linked acquisition performance to the Ambassador's store and individual attribution."
+                  "The proportion of attributed acquired members who are active, based on acquisition outcome data returned from Adjust or the approved acquisition source."
                 )}
               </span>
+              <strong
+                data-count-to="${ACQUISITION.activeMemberRate}"
+                data-decimals="0"
+                data-suffix="%"
+              >${ACQUISITION.activeMemberRate}%</strong>
             </div>
 
-            <div class="v12-acquisition-progress">
-              <div>
-                <span>Target progress</span>
-                <strong>${Math.round((ACQUISITION.membersAcquired / ACQUISITION.target) * 100)}%</strong>
-              </div>
-
-              <div class="v12-acquisition-progress-track">
-                <div
-                  data-progress-to="${(ACQUISITION.membersAcquired / ACQUISITION.target) * 100}"
-                ></div>
-              </div>
+            <div>
+              <span>
+                Attributed spend
+                ${tooltip(
+                  "Spend associated with members attributed to the Ambassador's acquisition activity. This is an acquisition outcome metric, not a points-value calculator."
+                )}
+              </span>
+              <strong
+                data-count-to="${ACQUISITION.attributedSpend}"
+                data-decimals="0"
+                data-prefix="AED "
+              >AED ${ACQUISITION.attributedSpend.toLocaleString()}</strong>
             </div>
-
-            <div class="v12-acquisition-stat-grid">
-              <div>
-                <span>
-                  Active-member rate
-                  ${tooltip(
-                    "The proportion of attributed acquired members who are active, based on acquisition outcome data returned from Adjust or the approved acquisition source."
-                  )}
-                </span>
-                <strong
-                  data-count-to="${ACQUISITION.activeMemberRate}"
-                  data-decimals="0"
-                  data-suffix="%"
-                >${ACQUISITION.activeMemberRate}%</strong>
-              </div>
-
-              <div>
-                <span>
-                  Attributed spend
-                  ${tooltip(
-                    "Spend associated with members attributed to the Ambassador's acquisition activity. This is an acquisition outcome metric, not a points-value calculator."
-                  )}
-                </span>
-                <strong
-                  data-count-to="${ACQUISITION.attributedSpend}"
-                  data-decimals="0"
-                  data-prefix="AED "
-                >AED ${ACQUISITION.attributedSpend.toLocaleString()}</strong>
-              </div>
-            </div>
-
-            <small class="v12-acquisition-reference">
-              Adjust reference: ${escapeHtml(ACQUISITION.qrReference)}
-            </small>
           </div>
-        </div>
+
+          <small class="v12-acquisition-reference">
+            Attribution reference: ${escapeHtml(ACQUISITION.qrReference)}
+          </small>
+        </div>        </div>
       </section>
       </div>
 
