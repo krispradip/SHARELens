@@ -10391,3 +10391,141 @@ select {
   letter-spacing: 0.08em;
 }
 
+
+
+/* =========================================================
+   SHARE LENS v0.12.0 — ACQUISITION HORIZONTAL COMPRESSION
+
+   PURPOSE:
+   Uses available desktop width instead of stacking
+   Acquisition metrics vertically.
+
+   BUSINESS MEANING:
+   Keeps Acquisition Performance visually consistent with
+   other compact Ambassador dashboard cards.
+
+   RESPONSIVE:
+   Desktop -> compact horizontal metric band
+   Tablet  -> two-column metric layout
+   Phone   -> single-column where necessary
+========================================================= */
+
+@media (min-width: 1051px) {
+
+  .v12-acquisition-metrics-only {
+    display: grid;
+    grid-template-columns:
+      minmax(150px, 0.9fr)
+      minmax(220px, 1.5fr)
+      minmax(135px, 0.8fr)
+      minmax(150px, 0.9fr);
+    grid-template-areas:
+      "primary progress active spend"
+      "reference reference reference reference";
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .v12-acquisition-primary {
+    grid-area: primary;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 5px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #ffffff;
+  }
+
+  .v12-acquisition-primary > span {
+    text-align: left;
+  }
+
+  .v12-acquisition-progress {
+    grid-area: progress;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 !important;
+    min-height: 86px;
+  }
+
+  .v12-acquisition-stat-grid {
+    display: contents;
+  }
+
+  .v12-acquisition-stat-grid > div:first-child {
+    grid-area: active;
+  }
+
+  .v12-acquisition-stat-grid > div:last-child {
+    grid-area: spend;
+  }
+
+  .v12-acquisition-stat-grid > div {
+    min-height: 86px !important;
+    padding: 10px 12px !important;
+    justify-content: center;
+  }
+
+  .v12-acquisition-reference {
+    grid-area: reference;
+    margin-top: 0 !important;
+    padding-top: 6px !important;
+  }
+
+}
+
+
+/* Tablet */
+@media (max-width: 1050px) and (min-width: 641px) {
+
+  .v12-acquisition-metrics-only {
+    display: grid;
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      );
+    gap: 9px;
+  }
+
+  .v12-acquisition-primary,
+  .v12-acquisition-progress,
+  .v12-acquisition-stat-grid,
+  .v12-acquisition-reference {
+    grid-column: span 2;
+  }
+
+  .v12-acquisition-stat-grid {
+    display: grid;
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      );
+  }
+
+}
+
+
+/* Phone */
+@media (max-width: 640px) {
+
+  .v12-acquisition-metrics-only {
+    display: block;
+  }
+
+  .v12-acquisition-stat-grid {
+    margin-top: 8px;
+  }
+
+}
