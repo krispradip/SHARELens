@@ -15,7 +15,8 @@ import { getUserContext } from "../services/userContextService.js";
 import {
   createSubmission,
   getSubmissions,
-  getSubmissionsByType
+  getSubmissionsByType,
+  updateSubmission
 } from "../services/submissionService.js";
 
 
@@ -1454,14 +1455,6 @@ export function submitFeedbackFormV012() {
 
 export function renderSuggestionsV012() {
 
-  const counts =
-    ambassadorPerformanceCounts();
-
-  const threshold =
-    AMBASSADOR_PERFORMANCE
-      .feedbackSuggestions
-      .monthlyThreshold;
-
   return `
     ${pageHeading(
       "AMBASSADOR PROGRAM",
@@ -1489,11 +1482,6 @@ export function renderSuggestionsV012() {
             </h3>
 
           </div>
-
-          <span class="v12-target-chip">
-            Feedback + Suggestions:
-            ${counts.combined} / ${threshold}
-          </span>
 
         </div>
 
@@ -1702,6 +1690,26 @@ export function submitSuggestionFormV012() {
 ========================================================= */
 
 export function renderManualTransactionV012() {
+
+  const recent =
+    getSubmissionsByType(
+      "manual-transaction"
+    )[0];
+
+  const validationDone =
+    Boolean(
+      recent?.data?.validationComplete
+    );
+
+  const ticketReceived =
+    Boolean(
+      recent?.data?.oneViewTicketId
+    );
+
+  const resolved =
+    recent?.status ===
+    "Closed / Resolved";
+
   return `
     ${pageHeading(
       "AMBASSADOR PROGRAM",
@@ -1718,7 +1726,6 @@ export function renderManualTransactionV012() {
             <span class="section-label">NEW REQUEST</span>
             <h3>Transaction details</h3>
           </div>
-          <span class="v12-source-badge">Target: OneView / SAP C4C</span>
         </div>
 
         <div class="v12-form-grid two">
@@ -1769,12 +1776,87 @@ export function renderManualTransactionV012() {
           <input id="mt-receipt" type="file" accept="image/*">
         </label>
 
-        <div class="v12-flow-strip">
-          <span>SHARE Lens</span><b>→</b>
-          <span>Validation</span><b>→</b>
-          <span>OneView</span><b>→</b>
-          <span>Human Action</span>
+        <div
+          id="manual-transaction-flow"
+          class="v12-ticket-flow"
+        >
+
+          <div
+            class="v12-ticket-step ${validationDone ? "complete" : "idle"}"
+            data-flow-step="validation"
+          >
+            <span class="v12-ticket-step-icon">1</span>
+            <div>
+              <strong>Validation</strong>
+              <small>Required details verified</small>
+            </div>
+            <span class="v12-ticket-state">
+              ${validationDone ? "Validated" : "Waiting"}
+            </span>
+          </div>
+
+          <div class="v12-ticket-connector"></div>
+
+          <div
+            class="v12-ticket-step ${ticketReceived ? "complete" : "idle"}"
+            data-flow-step="oneview"
+          >
+            <span class="v12-ticket-step-icon">2</span>
+            <div>
+              <strong>OneView</strong>
+              <small>API payload submitted and ticket created</small>
+            </div>
+            <span class="v12-ticket-state">
+              ${ticketReceived ? "Ticket received" : "Waiting"}
+            </span>
+          </div>
+
+          <div class="v12-ticket-connector"></div>
+
+          <div
+            class="v12-ticket-step ${resolved ? "complete" : "idle"}"
+            data-flow-step="resolution"
+          >
+            <span class="v12-ticket-step-icon">3</span>
+            <div>
+              <strong>Resolution</strong>
+              <small>Agent completes and closes the case</small>
+            </div>
+            <span class="v12-ticket-state">
+              ${resolved ? "Closed" : "Open"}
+            </span>
+          </div>
+
         </div>
+
+        <div
+          id="manual-ticket-result"
+          class="v12-ticket-result ${ticketReceived ? "visible" : ""}"
+        >
+          <span>OneView Ticket</span>
+          <strong>
+            ${recent?.data?.oneViewTicketId || "Pending"}
+          </strong>
+        </div>
+
+        ${
+          recent &&
+          ticketReceived &&
+          !resolved
+            ? `
+                <div class="v12-flow-resolution-action">
+                  <span>Ticket is open in OneView.</span>
+                  <button
+                    type="button"
+                    class="small-button"
+                    onclick="closeManualTransactionV012('${recent.submissionId}')"
+                  >
+                    Mark Ticket Closed
+                  </button>
+                </div>
+              `
+            : ""
+        }
 
         <div class="v12-form-actions">
           <span>Ambassador and location context will be appended automatically.</span>
@@ -1812,9 +1894,30 @@ export function submitManualTransactionFormV012() {
     issueReason: reason,
     notes: fieldValue("mt-notes"),
     receiptFileName: receipt?.name || "",
+    validationComplete: true,
+    payloadSent: true,
     oneViewTicketId: `OV-${String(Date.now()).slice(-7)}`,
-    status: "Submitted to OneView"
+    status: "Open in OneView"
   });
+}
+
+
+
+export function closeManualTransactionFormV012(
+  submissionId
+) {
+
+  return updateSubmission(
+    submissionId,
+    {
+      status: "Closed / Resolved",
+      data: {
+        resolvedAt:
+          new Date().toISOString()
+      }
+    }
+  );
+
 }
 
 
