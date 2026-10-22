@@ -10360,3 +10360,34 @@ select {
   }
 
 }
+
+
+/* =========================================================
+   SHARE LENS v0.12.0 — HEADING TYPOGRAPHY ALIGNMENT
+
+   PURPOSE:
+   Makes Ambassador Performance Score and Acquisition
+   Performance match the visual treatment of DIRECT ACTIONS.
+========================================================= */
+
+.v12-direct-style-heading {
+  margin: 0;
+  color: var(--brand);
+  font-family: inherit;
+  font-size:
+    clamp(
+      15px,
+      1.35vw,
+      18px
+    );
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+
+.v12-direct-actions-label {
+  font-family: inherit;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
