@@ -64,7 +64,8 @@ export const USERS = {
     store: "Mall of the Emirates",
     location: "Mall of the Emirates",
     manager: "Ahmed Salah",
-    accountStatus: "Active Ambassador"
+    accountStatus: "Active Ambassador",
+    lastLogin: "2026-10-22T08:42:00+04:00"
   }
 };
 
