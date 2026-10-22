@@ -9068,3 +9068,435 @@ select {
   min-height: 0;
 }
 
+
+
+/* =========================================================
+   SHARE LENS v0.12.0 — FLUID RESPONSIVE OVERRIDES
+
+   PURPOSE:
+   Replaces abrupt layout switching with fluid card resizing.
+
+   BUSINESS MEANING:
+   Ambassador users will primarily use tablets and phones.
+   The UI should preserve its layout hierarchy while scaling
+   naturally, rather than forcing large cards into long
+   vertical stacks or horizontal scrollers.
+
+   CHANGE IMPACT:
+   Ambassador home responsive behaviour only.
+========================================================= */
+
+/*
+  Global fluid spacing.
+  Keeps cards visually balanced across desktop, tablet and
+  phone without large jumps between breakpoints.
+*/
+.v12-home-masonry,
+.v12-home-column,
+.v12-performance-subgrid,
+.v12-action-grid {
+  gap:
+    clamp(
+      8px,
+      1vw,
+      14px
+    );
+}
+
+.v12-home-column > .dashboard-card,
+.v12-ambassador-performance,
+.v12-acquisition-panel {
+  padding:
+    clamp(
+      11px,
+      1.4vw,
+      18px
+    );
+}
+
+
+/* =========================================================
+   AMBASSADOR PERFORMANCE
+========================================================= */
+
+/*
+  Keep 2 columns on tablet instead of collapsing immediately
+  to one card per row.
+*/
+@media (max-width: 850px) {
+
+  .v12-performance-subgrid {
+    display: grid;
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      );
+  }
+
+  .v12-performance-subcard {
+    min-height: 0;
+    padding:
+      clamp(
+        10px,
+        2vw,
+        13px
+      );
+  }
+
+  .v12-performance-subcard > .v12-subcard-value {
+    font-size:
+      clamp(
+        23px,
+        5vw,
+        29px
+      );
+  }
+
+}
+
+
+/*
+  Only very narrow phones go to one column.
+*/
+@media (max-width: 480px) {
+
+  .v12-performance-subgrid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+/* =========================================================
+   DIRECT ACTIONS
+========================================================= */
+
+/*
+  Keep actions as a responsive grid rather than converting to
+  a horizontal scroller.
+*/
+@media (max-width: 850px) {
+
+  .v12-home-column .v12-action-grid {
+    display: grid;
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      );
+
+    overflow: visible;
+    padding-bottom: 0;
+  }
+
+  .v12-home-column .v12-action-grid button {
+    min-width: 0;
+    width: 100%;
+    flex: initial;
+
+    min-height:
+      clamp(
+        58px,
+        11vw,
+        72px
+      );
+
+    padding:
+      clamp(
+        9px,
+        1.8vw,
+        12px
+      );
+  }
+
+  .v12-home-column .v12-action-grid button span {
+    margin-bottom: 5px;
+    font-size:
+      clamp(
+        15px,
+        3vw,
+        18px
+      );
+  }
+
+  .v12-home-column .v12-action-grid button strong {
+    font-size:
+      clamp(
+        10px,
+        2vw,
+        12px
+      );
+  }
+
+}
+
+
+/*
+  On very small phones, keep two columns if there is enough
+  width. Collapse only below 360px.
+*/
+@media (max-width: 359px) {
+
+  .v12-home-column .v12-action-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+/* =========================================================
+   ACQUISITION
+========================================================= */
+
+/*
+  Scale acquisition components rather than allowing tall
+  metric cards to dominate the layout.
+*/
+@media (max-width: 850px) {
+
+  .v12-acquisition-card {
+    grid-template-columns:
+      minmax(
+        125px,
+        0.82fr
+      )
+      minmax(
+        0,
+        1.18fr
+      );
+
+    align-items: start;
+    gap:
+      clamp(
+        10px,
+        2vw,
+        16px
+      );
+  }
+
+  .v12-acquisition-left {
+    padding:
+      clamp(
+        8px,
+        1.7vw,
+        11px
+      );
+  }
+
+  .v12-qr-stage {
+    width: 100%;
+    min-height: 0;
+  }
+
+  .v12-qr-placeholder {
+    width:
+      clamp(
+        86px,
+        19vw,
+        108px
+      );
+
+    height:
+      clamp(
+        86px,
+        19vw,
+        108px
+      );
+  }
+
+  .v12-qr-orbit {
+    width:
+      clamp(
+        102px,
+        22vw,
+        124px
+      );
+
+    height:
+      clamp(
+        102px,
+        22vw,
+        124px
+      );
+  }
+
+  .v12-acquisition-primary {
+    min-height: 0;
+    padding-bottom: 8px;
+  }
+
+  .v12-acquisition-primary > strong {
+    font-size:
+      clamp(
+        27px,
+        5.5vw,
+        34px
+      );
+  }
+
+  .v12-acquisition-progress {
+    margin: 8px 0;
+    padding:
+      clamp(
+        8px,
+        1.6vw,
+        10px
+      );
+  }
+
+  .v12-acquisition-stat-grid {
+    display: grid;
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      );
+
+    gap:
+      clamp(
+        6px,
+        1.3vw,
+        9px
+      );
+  }
+
+  .v12-acquisition-stat-grid > div {
+    min-height: 0;
+    padding:
+      clamp(
+        9px,
+        1.7vw,
+        11px
+      );
+  }
+
+  .v12-acquisition-stat-grid strong {
+    font-size:
+      clamp(
+        15px,
+        3.4vw,
+        19px
+      );
+  }
+
+}
+
+
+/*
+  Only when the available width becomes genuinely tight do we
+  stack the QR above the metrics.
+*/
+@media (max-width: 560px) {
+
+  .v12-acquisition-card {
+    grid-template-columns: 1fr;
+  }
+
+  .v12-acquisition-left {
+    display: grid;
+    grid-template-columns:
+      auto
+      minmax(
+        0,
+        1fr
+      );
+
+    align-items: center;
+    gap: 10px;
+  }
+
+  .v12-qr-stage {
+    width:
+      clamp(
+        118px,
+        32vw,
+        145px
+      );
+  }
+
+  .v12-qr-action {
+    margin-top: 0;
+  }
+
+  .v12-acquisition-metrics {
+    padding-top: 0;
+  }
+
+}
+
+
+/* =========================================================
+   NBA / TRAINING
+========================================================= */
+
+.v12-home-column .v12-nba-item,
+.v12-home-column .v12-system-card {
+  padding-top:
+    clamp(
+      8px,
+      1.2vw,
+      11px
+    );
+
+  padding-bottom:
+    clamp(
+      8px,
+      1.2vw,
+      11px
+    );
+}
+
+.v12-home-column .v12-nba-item p,
+.v12-system-card span {
+  font-size:
+    clamp(
+      9px,
+      1.6vw,
+      11px
+    );
+}
+
+
+/* =========================================================
+   HOME MASONRY COLUMNS
+========================================================= */
+
+/*
+  Preserve two independent columns on tablets for longer.
+*/
+@media (max-width: 850px) and (min-width: 641px) {
+
+  .v12-home-masonry {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      );
+  }
+
+}
+
+
+/*
+  Single column only on phone-sized screens.
+*/
+@media (max-width: 640px) {
+
+  .v12-home-masonry {
+    grid-template-columns: 1fr;
+  }
+
+}
