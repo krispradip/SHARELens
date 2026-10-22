@@ -8867,3 +8867,204 @@ select {
   }
 
 }
+
+
+/* =========================================================
+   SHARE LENS v0.12.0 — CONTENT-DRIVEN HOME LAYOUT
+
+   PURPOSE:
+   Removes row-based height matching from the Ambassador
+   dashboard so shorter cards no longer inherit empty space
+   from taller cards beside them.
+
+   BUSINESS MEANING:
+   The Ambassador home should behave like a compact mobile /
+   tablet workspace, not a stretched desktop dashboard.
+
+   LAYOUT:
+   Desktop / tablet:
+   Left column  -> Next Best Actions -> Acquisition
+   Right column -> Direct Actions    -> Training & Knowledge
+
+   Mobile:
+   Collapses to a single natural-flow column.
+
+   CHANGE IMPACT:
+   Ambassador home layout only.
+========================================================= */
+
+.v12-home-masonry {
+  display: grid;
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(
+        0,
+        1fr
+      )
+    );
+  align-items: start;
+  gap: 14px;
+  margin-bottom: 15px;
+}
+
+.v12-home-column {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  min-width: 0;
+}
+
+.v12-home-column > .dashboard-card {
+  min-height: 0;
+  height: auto;
+}
+
+.v12-home-column .v12-action-grid {
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(
+        0,
+        1fr
+      )
+    );
+}
+
+.v12-home-column .v12-action-grid button {
+  min-height: 72px;
+  padding: 11px;
+}
+
+.v12-home-column .v12-nba-item {
+  padding: 11px 0;
+}
+
+.v12-home-column .v12-system-card {
+  padding: 10px 0;
+}
+
+.v12-home-column .card-heading-row {
+  margin-bottom: 9px;
+}
+
+.v12-home-column .v12-acquisition-card {
+  margin-top: 8px;
+}
+
+
+/* Medium desktop / tablet */
+@media (max-width: 1180px) {
+
+  .v12-home-column .v12-action-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      );
+  }
+
+}
+
+
+/* Narrow tablet / phone */
+@media (max-width: 850px) {
+
+  .v12-home-masonry {
+    grid-template-columns: 1fr;
+    gap: 11px;
+  }
+
+  .v12-home-column {
+    gap: 11px;
+  }
+
+  /*
+    On smaller screens, keep direct actions horizontally
+    scrollable rather than creating a very tall action card.
+  */
+  .v12-home-column .v12-action-grid {
+    display: flex;
+    overflow-x: auto;
+    gap: 8px;
+    padding-bottom: 4px;
+    scroll-snap-type: x proximity;
+  }
+
+  .v12-home-column .v12-action-grid button {
+    min-width: 145px;
+    flex: 0 0 145px;
+    min-height: 68px;
+    scroll-snap-align: start;
+  }
+
+  .v12-home-column > .dashboard-card {
+    padding: 14px;
+  }
+
+}
+
+
+/* Phone */
+@media (max-width: 600px) {
+
+  .v12-home-masonry {
+    gap: 9px;
+  }
+
+  .v12-home-column {
+    gap: 9px;
+  }
+
+  .v12-home-column > .dashboard-card {
+    padding: 12px;
+  }
+
+  .v12-home-column .v12-nba-item {
+    grid-template-columns:
+      30px
+      minmax(0, 1fr)
+      auto;
+    gap: 9px;
+    padding: 9px 0;
+  }
+
+  .v12-home-column .v12-nba-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .v12-home-column .v12-system-card {
+    grid-template-columns:
+      38px
+      minmax(0, 1fr)
+      auto;
+    gap: 9px;
+    padding: 9px 0;
+  }
+
+  .v12-home-column .v12-system-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+}
+
+
+/*
+  Prevent generic grid rows from stretching cards where
+  content should determine height in the v0.12 Ambassador
+  experience.
+*/
+.v12-kpi-grid {
+  align-items: start;
+}
+
+.v12-kpi-grid > .dashboard-card {
+  height: auto;
+  min-height: 0;
+}
+
