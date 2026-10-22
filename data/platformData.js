@@ -376,3 +376,87 @@ export const NEXT_BEST_ACTIONS = [
     action: "Review the below-target programme component contributing to your performance score."
   }
 ];
+
+
+/* =========================================================
+   COMPONENT: Ambassador Communications
+
+   PURPOSE:
+   Provides prototype Campaign, Broadcast and Reminder
+   communications for the Ambassador experience.
+
+   BUSINESS MEANING:
+   BU Leads / Programme Leads can send programme activity
+   that Ambassadors consume and acknowledge in one place.
+
+   TYPES:
+   - Campaign: requires participation / response.
+   - Broadcast: requires acknowledgement / reaction.
+   - Reminder: points the Ambassador to an outstanding task.
+
+   OUTPUTS:
+   Communications page, notification drawer and future
+   Ambassador engagement metrics.
+
+   CHANGE IMPACT:
+   Changes affect notifications, Communications and the
+   Ambassador engagement model.
+========================================================= */
+
+export const COMMUNICATIONS = [
+  {
+    id: "COM-001",
+    type: "campaign",
+    title: "Mother's Day — Nominate a Mum",
+    summary: "Nominate a mum from your team who deserves to be recognised this Mother's Day.",
+    sender: "Programme Lead",
+    date: "22 Oct 2026",
+    due: "28 Oct 2026",
+    actionLabel: "Participate",
+    reminderTarget: ""
+  },
+  {
+    id: "COM-002",
+    type: "broadcast",
+    title: "SHARE Member Week",
+    summary: "This week's programme focus is proactive SHARE conversations with every eligible customer.",
+    sender: "Ahmed Salah · BU Lead",
+    date: "21 Oct 2026",
+    due: "",
+    actionLabel: "Acknowledge",
+    reminderTarget: ""
+  },
+  {
+    id: "COM-003",
+    type: "broadcast",
+    title: "Service Pulse guidance updated",
+    summary: "Review the latest Service Pulse guidance before your next assessment.",
+    sender: "Service Delivery",
+    date: "21 Oct 2026",
+    due: "",
+    actionLabel: "Acknowledge",
+    reminderTarget: ""
+  },
+  {
+    id: "COM-004",
+    type: "reminder",
+    title: "Service Recovery Essentials",
+    summary: "2 days remaining to complete your assigned online training.",
+    sender: "Training",
+    date: "22 Oct 2026",
+    due: "24 Oct 2026",
+    actionLabel: "Open Training",
+    reminderTarget: "training-online"
+  },
+  {
+    id: "COM-005",
+    type: "reminder",
+    title: "Feedback / Suggestion monthly target",
+    summary: "You need 2 Feedback or Suggestion submissions in total this month, in any combination.",
+    sender: "SHARE Ambassador Programme",
+    date: "22 Oct 2026",
+    due: "31 Oct 2026",
+    actionLabel: "Submit",
+    reminderTarget: "feedback"
+  }
+];
