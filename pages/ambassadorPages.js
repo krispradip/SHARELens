@@ -676,7 +676,7 @@ function ambassadorPerformanceCard() {
 
         <div>
 
-          <h2 class="v12-heading-with-info">
+          <h2 class="v12-heading-with-info v12-direct-style-heading">
             Ambassador Performance Score
 
             ${tooltip(
@@ -1028,7 +1028,7 @@ export function renderAmbassadorHomeV012() {
 <section class="dashboard-card v12-motion-card v12-acquisition-panel">
         <div class="card-heading-row">
           <div>
-            <h3 class="v12-heading-with-info">
+            <h3 class="v12-heading-with-info v12-direct-style-heading">
               Acquisition Performance
               ${tooltip(
                 "Individual acquisition QR codes are a priority use case. Each Ambassador should have a personal QR that retains the Ambassador identifier when a customer joins, so acquisition can be attributed to the Ambassador and store for performance, leaderboards and recognition."
@@ -1108,7 +1108,7 @@ export function renderAmbassadorHomeV012() {
 
       <div class="v12-home-column">
 <section class="dashboard-card v12-motion-card">
-        <span class="section-label">DIRECT ACTIONS</span>
+        <span class="section-label v12-direct-actions-label">DIRECT ACTIONS</span>
 
         <div class="v12-action-grid">
           <button onclick="navigateTo('service-pulse')">
