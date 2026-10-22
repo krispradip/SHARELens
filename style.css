@@ -10197,3 +10197,166 @@ select {
   }
 
 }
+
+
+/* =========================================================
+   SHARE LENS v0.12.0 — ACQUISITION COMPACTNESS FIX
+
+   PURPOSE:
+   Removes residual vertical stretching from the Acquisition
+   Performance component now that the real QR sits in the
+   profile area.
+
+   CHANGE IMPACT:
+   Ambassador Acquisition Performance visual density only.
+========================================================= */
+
+.v12-acquisition-panel {
+  padding:
+    clamp(
+      12px,
+      1.1vw,
+      16px
+    ) !important;
+}
+
+.v12-acquisition-panel .card-heading-row {
+  margin-bottom: 6px;
+}
+
+.v12-acquisition-metrics-only {
+  display: block;
+  height: auto !important;
+  min-height: 0 !important;
+  margin-top: 4px;
+}
+
+.v12-acquisition-primary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 0 !important;
+  padding:
+    6px
+    0
+    10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.v12-acquisition-primary > strong {
+  margin: 0;
+}
+
+.v12-acquisition-primary > span {
+  margin: 0;
+  text-align: right;
+}
+
+.v12-acquisition-progress {
+  margin:
+    10px
+    0
+    12px !important;
+
+  padding:
+    10px
+    12px !important;
+}
+
+.v12-acquisition-stat-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(
+        0,
+        1fr
+      )
+    );
+
+  align-items: start !important;
+  align-self: start !important;
+
+  gap:
+    clamp(
+      8px,
+      0.8vw,
+      10px
+    );
+}
+
+.v12-acquisition-stat-grid > div {
+  display: grid !important;
+  align-content: center !important;
+  gap: 8px !important;
+
+  min-height: 92px !important;
+  height: auto !important;
+
+  padding:
+    12px
+    14px !important;
+}
+
+.v12-acquisition-stat-grid > div > span {
+  margin: 0 !important;
+  min-height: 0 !important;
+}
+
+.v12-acquisition-stat-grid > div > strong {
+  margin: 0 !important;
+  align-self: end;
+}
+
+.v12-acquisition-reference {
+  margin-top: 10px !important;
+  padding-top: 8px !important;
+}
+
+
+/* Tablet */
+@media (max-width: 850px) {
+
+  .v12-acquisition-stat-grid > div {
+    min-height: 82px !important;
+    padding:
+      10px
+      12px !important;
+  }
+
+}
+
+
+/* Phone */
+@media (max-width: 600px) {
+
+  .v12-acquisition-panel {
+    padding: 11px !important;
+  }
+
+  .v12-acquisition-progress {
+    margin:
+      8px
+      0
+      10px !important;
+  }
+
+  .v12-acquisition-stat-grid > div {
+    min-height: 74px !important;
+    padding:
+      9px
+      10px !important;
+  }
+
+}
+
+
+/* Very narrow phone */
+@media (max-width: 360px) {
+
+  .v12-acquisition-stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
