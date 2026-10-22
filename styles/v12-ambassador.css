@@ -1,0 +1,510 @@
+/* =========================================================
+   SHARE LENS v0.12.0 — AMBASSADOR HOME FINAL LAYOUT
+   Owner: Pradip
+
+   PURPOSE:
+   Single authoritative responsive layer for the Ambassador
+   home dashboard.
+
+   BUSINESS MEANING:
+   Preserves hierarchy and usability across desktop, tablet
+   and phone without abrupt layout changes or wasted space.
+
+   CHANGE IMPACT:
+   Ambassador home presentation only.
+========================================================= */
+
+/* ---------- Shared section headings ---------- */
+
+.v12-section-heading {
+  margin: 0 !important;
+  color: var(--brand) !important;
+  font-family: inherit !important;
+  font-size: clamp(11px, 0.95vw, 13px) !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+}
+
+.v12-tooltip-content {
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  font-weight: 400 !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+}
+
+/* ---------- Home heading / identity ---------- */
+
+.v12-home-heading {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: clamp(12px, 2vw, 24px) !important;
+}
+
+.v12-home-heading > div:first-child {
+  min-width: 0 !important;
+}
+
+.v12-profile-qr-card {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: 12px !important;
+  min-width: min(420px, 42vw) !important;
+  padding: 10px 12px !important;
+}
+
+.v12-profile-qr-image {
+  width: clamp(50px, 5vw, 64px) !important;
+  height: clamp(50px, 5vw, 64px) !important;
+}
+
+/* ---------- Ambassador Performance ---------- */
+
+.v12-ambassador-performance {
+  overflow: visible !important;
+  padding: clamp(13px, 1.35vw, 18px) !important;
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+.v12-ambassador-performance-head {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: 14px !important;
+  padding-bottom: 12px !important;
+}
+
+.v12-ambassador-performance-head p {
+  margin: 5px 0 0 !important;
+  font-size: clamp(10px, 1vw, 12px) !important;
+}
+
+.v12-performance-score-ring {
+  position: relative !important;
+  display: grid !important;
+  place-items: center !important;
+  width: clamp(66px, 6vw, 86px) !important;
+  height: clamp(66px, 6vw, 86px) !important;
+  flex: 0 0 auto !important;
+  border-width: 6px !important;
+}
+
+.v12-performance-score-inner {
+  position: absolute !important;
+  inset: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 7px !important;
+}
+
+.v12-performance-score-value {
+  width: 100% !important;
+  margin: 0 !important;
+  color: var(--brand) !important;
+  font-size: clamp(16px, 1.7vw, 22px) !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  letter-spacing: -0.03em !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+}
+
+.v12-performance-subgrid {
+  display: grid !important;
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(
+        min(220px, 100%),
+        1fr
+      )
+    ) !important;
+  gap: clamp(8px, 0.8vw, 11px) !important;
+  margin-top: 12px !important;
+}
+
+.v12-performance-subcard {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 13px !important;
+}
+
+.v12-performance-subcard .v12-subcard-top {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  min-height: 0 !important;
+  height: auto !important;
+  margin: 0 !important;
+}
+
+.v12-performance-subcard > .v12-subcard-value {
+  display: flex !important;
+  align-items: baseline !important;
+  min-height: 0 !important;
+  margin: 0 0 8px !important;
+  font-size: clamp(23px, 2.2vw, 29px) !important;
+  line-height: 1 !important;
+}
+
+.v12-performance-subcard > span:not(.v12-status-pill) {
+  margin: 0 0 5px !important;
+  font-size: clamp(10px, 1vw, 12px) !important;
+  font-weight: 800 !important;
+}
+
+.v12-performance-subcard > small {
+  min-height: 0 !important;
+  margin: 0 !important;
+  font-size: clamp(8px, 0.85vw, 10px) !important;
+  line-height: 1.4 !important;
+}
+
+.v12-performance-subcard .v12-subcard-progress {
+  margin-top: 10px !important;
+}
+
+.v12-performance-subcard .v12-subcard-link,
+.v12-performance-subcard .v12-subcard-actions {
+  margin-top: 9px !important;
+}
+
+/* ---------- KPI row ---------- */
+
+.v12-kpi-grid {
+  align-items: stretch !important;
+}
+
+.v12-kpi-card {
+  min-height: 0 !important;
+  height: auto !important;
+  padding: clamp(12px, 1.15vw, 16px) !important;
+}
+
+.v12-kpi-card > strong {
+  font-size: clamp(24px, 2.2vw, 30px) !important;
+}
+
+/* ---------- Lower home area ---------- */
+
+.v12-home-masonry {
+  display: grid !important;
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(
+        min(430px, 100%),
+        1fr
+      )
+    ) !important;
+  align-items: start !important;
+  gap: clamp(10px, 1vw, 14px) !important;
+}
+
+.v12-home-column {
+  display: grid !important;
+  grid-auto-rows: max-content !important;
+  align-content: start !important;
+  gap: clamp(10px, 1vw, 14px) !important;
+  min-width: 0 !important;
+}
+
+.v12-home-column > .dashboard-card {
+  align-self: start !important;
+  min-height: 0 !important;
+  height: auto !important;
+  padding: clamp(12px, 1.2vw, 17px) !important;
+}
+
+/* ---------- NBA ---------- */
+
+.v12-nba-item {
+  grid-template-columns: 34px minmax(0, 1fr) auto !important;
+  gap: 10px !important;
+  padding: 10px 0 !important;
+}
+
+.v12-nba-item p {
+  margin-top: 3px !important;
+  font-size: clamp(9px, 0.95vw, 11px) !important;
+}
+
+/* ---------- Direct Actions ---------- */
+
+.v12-action-grid,
+.v12-home-column .v12-action-grid {
+  display: grid !important;
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(
+        min(155px, 100%),
+        1fr
+      )
+    ) !important;
+  gap: 9px !important;
+  margin-top: 12px !important;
+  overflow: visible !important;
+}
+
+.v12-action-grid button,
+.v12-home-column .v12-action-grid button {
+  min-width: 0 !important;
+  width: 100% !important;
+  min-height: 64px !important;
+  height: auto !important;
+  padding: 11px 12px !important;
+}
+
+.v12-action-grid button span {
+  margin-bottom: 5px !important;
+  font-size: 16px !important;
+}
+
+.v12-action-grid button strong {
+  font-size: clamp(10px, 0.95vw, 12px) !important;
+}
+
+/* ---------- Training & Knowledge ---------- */
+
+.v12-system-card {
+  grid-template-columns: 42px minmax(0, 1fr) auto !important;
+  gap: 10px !important;
+  padding: 10px 0 !important;
+}
+
+.v12-system-card strong {
+  font-size: clamp(11px, 1vw, 13px) !important;
+}
+
+.v12-system-card span {
+  font-size: clamp(9px, 0.85vw, 10px) !important;
+}
+
+/* ---------- Acquisition ---------- */
+
+.v12-acquisition-panel {
+  overflow: visible !important;
+  min-height: 0 !important;
+  height: auto !important;
+  padding: clamp(12px, 1.15vw, 16px) !important;
+}
+
+.v12-acquisition-panel .card-heading-row {
+  margin-bottom: 8px !important;
+}
+
+.v12-acquisition-metrics-only {
+  display: grid !important;
+  grid-template-columns:
+    minmax(145px, 0.85fr)
+    minmax(220px, 1.45fr) !important;
+  grid-template-areas:
+    "primary progress"
+    "stats stats"
+    "reference reference" !important;
+  gap: 10px !important;
+  align-items: start !important;
+  min-height: 0 !important;
+  height: auto !important;
+  margin-top: 4px !important;
+}
+
+.v12-acquisition-primary {
+  grid-area: primary !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  min-height: 78px !important;
+  padding: 10px 12px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 10px !important;
+  background: #fff !important;
+}
+
+.v12-acquisition-primary > strong {
+  margin: 0 !important;
+  font-size: clamp(28px, 3vw, 34px) !important;
+}
+
+.v12-acquisition-primary > span {
+  margin: 0 !important;
+  text-align: left !important;
+  justify-content: flex-start !important;
+}
+
+.v12-acquisition-progress {
+  grid-area: progress !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  min-height: 78px !important;
+  margin: 0 !important;
+  padding: 10px 12px !important;
+}
+
+.v12-acquisition-stat-grid {
+  grid-area: stats !important;
+  display: grid !important;
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(
+        0,
+        1fr
+      )
+    ) !important;
+  gap: 10px !important;
+  align-items: start !important;
+}
+
+.v12-acquisition-stat-grid > div,
+.v12-acquisition-stat-grid > div:first-child,
+.v12-acquisition-stat-grid > div:last-child {
+  grid-area: auto !important;
+  grid-column: auto !important;
+  grid-row: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  min-width: 0 !important;
+  min-height: 76px !important;
+  height: auto !important;
+  padding: 10px 12px !important;
+  overflow: visible !important;
+}
+
+.v12-acquisition-stat-grid > div > span,
+.v12-acquisition-stat-grid > div > strong {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.v12-acquisition-stat-grid > div > strong {
+  margin-top: 6px !important;
+  color: var(--brand) !important;
+  font-size: clamp(15px, 1.7vw, 19px) !important;
+}
+
+.v12-acquisition-reference {
+  grid-area: reference !important;
+  margin: 0 !important;
+  padding-top: 7px !important;
+}
+
+/* ---------- Tooltips ---------- */
+
+.v12-tooltip-wrap {
+  z-index: 30 !important;
+}
+
+.v12-tooltip-wrap:hover,
+.v12-tooltip-wrap:focus-within {
+  z-index: 1500 !important;
+}
+
+.v12-tooltip-content {
+  z-index: 1600 !important;
+  width: min(290px, calc(100vw - 28px)) !important;
+  max-width: calc(100vw - 28px) !important;
+}
+
+/* ---------- Tablet ---------- */
+
+@media (max-width: 900px) {
+
+  .v12-home-heading {
+    align-items: stretch !important;
+    flex-direction: column !important;
+  }
+
+  .v12-profile-qr-card {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  .v12-acquisition-metrics-only {
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "primary"
+      "progress"
+      "stats"
+      "reference" !important;
+  }
+
+  .v12-performance-subgrid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      ) !important;
+  }
+}
+
+/* ---------- Phone ---------- */
+
+@media (max-width: 560px) {
+
+  .v12-ambassador-performance-head {
+    grid-template-columns: minmax(0, 1fr) 64px !important;
+  }
+
+  .v12-performance-score-ring {
+    width: 62px !important;
+    height: 62px !important;
+  }
+
+  .v12-performance-score-value {
+    font-size: 16px !important;
+  }
+
+  .v12-performance-subgrid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .v12-action-grid,
+  .v12-home-column .v12-action-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      ) !important;
+  }
+
+  .v12-acquisition-stat-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      ) !important;
+  }
+}
+
+@media (max-width: 360px) {
+
+  .v12-action-grid,
+  .v12-home-column .v12-action-grid,
+  .v12-acquisition-stat-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
