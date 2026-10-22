@@ -29,6 +29,13 @@ import {
   initializeV12Motion
 } from "./pages/ambassadorPages.js";
 
+import {
+  recordLogin,
+  getLastLogin,
+  getActivityStatus,
+  formatLastLogin
+} from "./services/userActivityService.js";
+
 const app = document.getElementById("app");
 
 
@@ -486,7 +493,9 @@ const ambassadorContribution = [
 
   {
     name: "Layla Haddad",
+    userId: "USR-AMB-100245",
     staffId: "100245",
+    lastLogin: "2026-10-22T08:42:00+04:00",
     bu: "Entertainment",
     brand: "VOX Cinemas",
     mall: "Mall of the Emirates",
@@ -507,7 +516,9 @@ const ambassadorContribution = [
 
   {
     name: "Noor Hassan",
+    userId: "USR-AMB-100822",
     staffId: "100822",
+    lastLogin: "2026-10-20T16:20:00+04:00",
     bu: "Entertainment",
     brand: "VOX Cinemas",
     mall: "City Centre Mirdif",
@@ -528,7 +539,9 @@ const ambassadorContribution = [
 
   {
     name: "Rania Ali",
+    userId: "USR-AMB-100845",
     staffId: "100845",
+    lastLogin: "2026-08-04T10:15:00+04:00",
     bu: "Entertainment",
     brand: "VOX Cinemas",
     mall: "City Centre Deira",
@@ -549,7 +562,9 @@ const ambassadorContribution = [
 
   {
     name: "Sami Omar",
+    userId: "USR-AMB-100901",
     staffId: "100901",
+    lastLogin: "2026-10-18T14:05:00+04:00",
     bu: "Entertainment",
     brand: "VOX Cinemas",
     mall: "City Centre Al Zahia",
@@ -570,7 +585,9 @@ const ambassadorContribution = [
 
   {
     name: "Sara Khan",
+    userId: "USR-AMB-100928",
     staffId: "100928",
+    lastLogin: "2026-07-30T09:40:00+04:00",
     bu: "Entertainment",
     brand: "VOX Cinemas",
     mall: "City Centre Deira",
@@ -1512,6 +1529,12 @@ function continueWithSSO() {
 function loginAsRole(role) {
 
   currentRole = role;
+
+  if (role === "ambassador") {
+    recordLogin(
+      "USR-AMB-100245"
+    );
+  }
 
   currentPage = "home";
 
@@ -5414,6 +5437,25 @@ function attentionPage(service) {
    AMBASSADOR POPULATION
 ========================================================= */
 
+function ambassadorActivityState(item) {
+
+  const lastLogin =
+    getLastLogin(
+      item.userId,
+      item.lastLogin
+    );
+
+  return {
+    lastLogin,
+    activity:
+      getActivityStatus(
+        lastLogin
+      )
+  };
+
+}
+
+
 function ambassadorsPage(service) {
 
   return `
@@ -5459,69 +5501,77 @@ function ambassadorsPage(service) {
           <span>Ambassador</span>
           <span>Brand</span>
           <span>Location</span>
+          <span>Last Login</span>
+          <span>Activity</span>
           <span>Performance</span>
           <span>Members</span>
           <span>Member Spend</span>
-          <span>Member Points</span>
-          <span>Points Value</span>
 
         </div>
 
 
         ${ambassadorContribution
-          .map(item => `
-            <div class="population-row">
+          .map(item => {
 
-              <div data-label="Ambassador">
+            const activityState =
+              ambassadorActivityState(
+                item
+              );
 
-                <strong>
-                  ${item.name}
-                </strong>
+            return `
+              <div class="population-row">
 
-                <span>
-                  ${item.staffId}
+                <div data-label="Ambassador">
+
+                  <strong>
+                    ${item.name}
+                  </strong>
+
+                  <span>
+                    ${item.staffId}
+                  </span>
+
+                </div>
+
+                <span data-label="Brand">
+                  ${item.brand}
                 </span>
 
+                <span data-label="Location">
+                  ${item.mall}
+                </span>
+
+                <span data-label="Last Login">
+                  ${formatLastLogin(
+                    activityState.lastLogin
+                  )}
+                </span>
+
+                <span
+                  data-label="Activity"
+                  class="population-activity ${activityState.activity.state}"
+                >
+                  ${activityState.activity.label}
+                </span>
+
+                <strong data-label="Performance">
+                  ${item.performance}%
+                </strong>
+
+                <strong data-label="Members">
+                  ${item.members}
+                </strong>
+
+                <strong data-label="Member Spend">
+                  ${formatAED(
+                    item.memberSpend
+                  )}
+                </strong>
+
               </div>
+            `;
 
-              <span data-label="Brand">
-                ${item.brand}
-              </span>
-
-              <span data-label="Location">
-                ${item.mall}
-              </span>
-
-              <strong data-label="Performance">
-                ${item.performance}%
-              </strong>
-
-              <strong data-label="Members">
-                ${item.members}
-              </strong>
-
-              <strong data-label="Member Spend">
-                ${formatAED(
-                  item.memberSpend
-                )}
-              </strong>
-
-              <strong data-label="Member Points">
-                ${formatPoints(
-                  item.memberPoints
-                )}
-              </strong>
-
-              <strong data-label="Points Value">
-                ${formatAED(
-                  pointsToAED(
-                    item.memberPoints
-                  )
-                )}
-              </strong>
-
-            </div>
-          `)
+          })
           .join("")}
 
       </div>
@@ -5540,30 +5590,39 @@ function exportAmbassadorList() {
     "BU",
     "Brand",
     "Mall",
+    "Last Login",
+    "Activity Status",
     "Members Acquired",
-    "Member Spend",
-    "SHARE Points Earned by Members",
-    "Points Value"
+    "Member Spend"
   ];
 
 
   const rows =
     ambassadorContribution.map(
-      item => [
+      item => {
 
-        item.name,
-        item.staffId,
-        item.bu,
-        item.brand,
-        item.mall,
-        item.members,
-        item.memberSpend,
-        item.memberPoints,
-        pointsToAED(
-          item.memberPoints
-        )
+        const activityState =
+          ambassadorActivityState(
+            item
+          );
 
-      ]
+        return [
+
+          item.name,
+          item.staffId,
+          item.bu,
+          item.brand,
+          item.mall,
+          formatLastLogin(
+            activityState.lastLogin
+          ),
+          activityState.activity.label,
+          item.members,
+          item.memberSpend
+
+        ];
+
+      }
     );
 
 
@@ -6059,7 +6118,7 @@ function lifecyclePage(service) {
       </h3>
 
       <p>
-        Disable programme access, deactivate QR attribution, close open tasks and preserve the audit trail.
+        Last Login is the shared activity reference used by BU Leads and Programme Leads. More than 60 days without a login is flagged for inactivity review; access is not automatically removed until the Lead verifies the reason.
       </p>
 
     </section>
