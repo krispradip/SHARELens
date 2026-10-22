@@ -20,6 +20,12 @@ import {
   updateSubmission
 } from "../services/submissionService.js";
 
+import {
+  getLastLogin,
+  getActivityStatus,
+  formatLastLogin
+} from "../services/userActivityService.js";
+
 
 /* =========================================================
    MODULE: Ambassador Pages v0.12.0
@@ -2807,6 +2813,17 @@ export function renderReportsV012() {
 export function renderStatusV012() {
   const user = USERS.ambassador;
 
+  const lastLogin =
+    getLastLogin(
+      user.userId,
+      user.lastLogin
+    );
+
+  const activity =
+    getActivityStatus(
+      lastLogin
+    );
+
   return `
     ${pageHeading(
       "AMBASSADOR",
@@ -2833,6 +2850,13 @@ export function renderStatusV012() {
           <div><span>Brand</span><strong>${escapeHtml(user.brand)}</strong></div>
           <div><span>Location</span><strong>${escapeHtml(user.location)}</strong></div>
           <div><span>Manager</span><strong>${escapeHtml(user.manager)}</strong></div>
+          <div><span>Last Login</span><strong>${escapeHtml(formatLastLogin(lastLogin))}</strong></div>
+          <div>
+            <span>Activity Status</span>
+            <strong class="v12-activity-status ${activity.state}">
+              ${escapeHtml(activity.label)}
+            </strong>
+          </div>
         </div>
       </section>
 
