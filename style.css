@@ -10054,3 +10054,146 @@ select {
   }
 
 }
+
+
+/* =========================================================
+   SHARE LENS v0.12.0 — FINAL CONTENT-FIT POLISH
+
+   PURPOSE:
+   Keeps the Ambassador Performance score inside its ring and
+   removes residual vertical stretch from Acquisition.
+
+   CHANGE IMPACT:
+   Ambassador home visual sizing only.
+========================================================= */
+
+.v12-performance-score-ring {
+  width:
+    clamp(
+      70px,
+      6.4vw,
+      88px
+    );
+
+  height:
+    clamp(
+      70px,
+      6.4vw,
+      88px
+    );
+
+  flex-basis:
+    clamp(
+      70px,
+      6.4vw,
+      88px
+    );
+}
+
+.v12-performance-score-inner {
+  padding: 8px;
+}
+
+.v12-performance-score-value {
+  font-size:
+    clamp(
+      17px,
+      1.8vw,
+      23px
+    );
+
+  letter-spacing: -0.025em;
+}
+
+
+/* Make home columns strictly content-sized. */
+.v12-home-column {
+  grid-auto-rows: max-content;
+}
+
+.v12-home-column > .dashboard-card {
+  align-self: start;
+  height: fit-content;
+}
+
+
+/* Acquisition should end immediately after its content. */
+.v12-acquisition-panel {
+  align-self: start;
+  height: fit-content !important;
+  min-height: 0 !important;
+}
+
+.v12-acquisition-metrics-only {
+  display: grid;
+  grid-template-rows:
+    max-content
+    max-content
+    max-content
+    max-content;
+
+  align-content: start;
+  gap:
+    clamp(
+      7px,
+      0.8vw,
+      10px
+    );
+
+  height: fit-content;
+  min-height: 0;
+}
+
+.v12-acquisition-primary {
+  padding-bottom:
+    clamp(
+      6px,
+      0.7vw,
+      9px
+    );
+}
+
+.v12-acquisition-progress {
+  margin:
+    clamp(
+      6px,
+      0.7vw,
+      9px
+    )
+    0;
+}
+
+.v12-acquisition-stat-grid {
+  align-items: start;
+}
+
+.v12-acquisition-stat-grid > div {
+  min-height: 0 !important;
+  height: fit-content !important;
+}
+
+.v12-acquisition-reference {
+  margin-top: 0;
+  padding-top:
+    clamp(
+      5px,
+      0.6vw,
+      8px
+    );
+}
+
+
+/* Phone ring remains compact but readable. */
+@media (max-width: 600px) {
+
+  .v12-performance-score-ring {
+    width: 64px;
+    height: 64px;
+    flex-basis: 64px;
+  }
+
+  .v12-performance-score-value {
+    font-size: 17px;
+  }
+
+}
