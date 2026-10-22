@@ -10717,3 +10717,145 @@ select {
   }
 
 }
+
+
+/* =========================================================
+   SHARE LENS v0.12.0 — DENSITY / GRID CLEANUP
+
+   PURPOSE:
+   Removes tooltip-only whitespace from Ambassador
+   Performance cards, improves Direct Actions packing on
+   desktop, and resets stale Acquisition grid-area rules.
+
+   CHANGE IMPACT:
+   Ambassador home visual layout only.
+========================================================= */
+
+/* ---------------------------------------------------------
+   Ambassador Performance cards
+   ---------------------------------------------------------
+   The tooltip icon should not consume its own row.
+--------------------------------------------------------- */
+
+.v12-performance-subcard {
+  position: relative;
+}
+
+.v12-performance-subcard .v12-subcard-top {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  display: block;
+  min-height: 0 !important;
+  height: auto;
+
+  margin: 0;
+  padding: 0;
+
+  z-index: 20;
+}
+
+.v12-performance-subcard > .v12-subcard-value {
+  margin-top: 0 !important;
+}
+
+.v12-performance-subcard {
+  padding-top:
+    clamp(
+      12px,
+      1vw,
+      15px
+    ) !important;
+}
+
+
+/* ---------------------------------------------------------
+   Direct Actions
+   ---------------------------------------------------------
+   Use the available desktop width more efficiently.
+--------------------------------------------------------- */
+
+@media (min-width: 1320px) {
+
+  .v12-home-column .v12-action-grid {
+    grid-template-columns:
+      repeat(
+        4,
+        minmax(
+          0,
+          1fr
+        )
+      ) !important;
+  }
+
+  .v12-home-column .v12-action-grid button {
+    min-height: 66px;
+  }
+
+}
+
+
+/* Standard desktop / large tablet */
+@media (max-width: 1319px) and (min-width: 851px) {
+
+  .v12-home-column .v12-action-grid {
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(
+          0,
+          1fr
+        )
+      ) !important;
+  }
+
+}
+
+
+/* ---------------------------------------------------------
+   Acquisition
+   ---------------------------------------------------------
+   Reset stale child grid-area names left over from the
+   previous desktop layout. These were causing both outcome
+   tiles to overlap inside the same parent grid.
+--------------------------------------------------------- */
+
+.v12-acquisition-stat-grid > div,
+.v12-acquisition-stat-grid > div:first-child,
+.v12-acquisition-stat-grid > div:last-child {
+  grid-area: auto !important;
+  grid-column: auto !important;
+  grid-row: auto !important;
+}
+
+@media (min-width: 1051px) {
+
+  .v12-acquisition-stat-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      ) !important;
+  }
+
+  .v12-acquisition-stat-grid > div {
+    min-width: 0;
+    overflow: visible;
+  }
+
+}
+
+
+/* Compact tablet / phone spacing */
+@media (max-width: 850px) {
+
+  .v12-performance-subcard .v12-subcard-top {
+    top: 9px;
+    right: 9px;
+  }
+
+}
