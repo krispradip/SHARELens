@@ -87,7 +87,7 @@ export const USERS = {
 export const AMBASSADOR_KPIS = {
   performance: {
     key: "performance",
-    label: "Performance Score",
+    label: "SHARE Performance Score",
     actual: 88.8,
     target: 86,
     unit: "%",
@@ -174,25 +174,26 @@ export const SCORE_FAMILIES = {
    BU / Programme Lead roll-ups.
 ========================================================= */
 export const AMBASSADOR_PERFORMANCE = {
-  score: 82,
-  weightingStatus: "Weighting to be confirmed",
+  weightingMethod: "Equal-weight average of target attainment, capped at 100% per component",
 
   campaignParticipation: {
     participated: 3,
     available: 4,
+    threshold: 75,
     label: "Campaign Participation",
     description:
-      "Participation in campaigns launched by BU Leads or Programme Leads, including response-based campaigns such as nominations."
+      "Participation in campaigns launched by BU Leads or Programme Leads, including response-based campaigns such as nominations. The current participation threshold is 75%."
   },
 
   broadcastAcknowledgement: {
     acknowledged: 4,
     sent: 5,
+    threshold: 80,
     positiveReactions: 3,
     negativeReactions: 1,
     label: "Broadcast Acknowledgement",
     description:
-      "Acknowledgement of programme broadcasts using the configured response action, including thumbs-up / thumbs-down reactions."
+      "Acknowledgement of programme broadcasts using the configured response action, including thumbs-up / thumbs-down reactions. The current acknowledgement threshold is 80%."
   },
 
   feedbackSuggestions: {
