@@ -693,9 +693,7 @@ function ambassadorPerformanceCard() {
             ${ambassadorPerformanceScore.toFixed(1)}%
           </div>
 
-          <span>
-            Calculated score
-          </span>
+
 
         </div>
 
