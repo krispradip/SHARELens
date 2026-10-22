@@ -10564,3 +10564,156 @@ select {
     font-size: 11px;
   }
 }
+
+
+/* =========================================================
+   SHARE LENS v0.12.0 — HEADER / TOOLTIP / ACQUISITION FIX
+
+   PURPOSE:
+   Finalizes the unified section-header treatment, prevents
+   uppercase inheritance inside tooltip bodies, and restores
+   reliable Acquisition metric rendering on desktop.
+========================================================= */
+
+/* Tooltip body must never inherit uppercase heading rules. */
+.v12-tooltip-content {
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  font-family: inherit !important;
+  font-weight: 400 !important;
+  white-space: normal !important;
+}
+
+
+/* Next Best Actions now uses the same shared section header. */
+.v12-section-heading .v12-tooltip-wrap {
+  text-transform: none;
+}
+
+
+/* ---------------------------------------------------------
+   Acquisition layout
+   ---------------------------------------------------------
+   Avoid display: contents here. It caused the outcome-card
+   content to disappear in some desktop browser layouts.
+--------------------------------------------------------- */
+
+@media (min-width: 1051px) {
+
+  .v12-acquisition-metrics-only {
+    display: grid !important;
+    grid-template-columns:
+      minmax(150px, 0.9fr)
+      minmax(230px, 1.4fr);
+    grid-template-areas:
+      "primary progress"
+      "stats stats"
+      "reference reference";
+    gap: 10px !important;
+    align-items: start;
+  }
+
+  .v12-acquisition-primary {
+    grid-area: primary;
+    min-height: 82px !important;
+  }
+
+  .v12-acquisition-progress {
+    grid-area: progress;
+    min-height: 82px !important;
+    margin: 0 !important;
+  }
+
+  .v12-acquisition-stat-grid {
+    grid-area: stats;
+    display: grid !important;
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      ) !important;
+    gap: 10px !important;
+    align-items: start !important;
+  }
+
+  .v12-acquisition-stat-grid > div {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center !important;
+    min-height: 82px !important;
+    height: auto !important;
+    padding: 10px 12px !important;
+  }
+
+  .v12-acquisition-stat-grid > div > span,
+  .v12-acquisition-stat-grid > div > strong {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  .v12-acquisition-stat-grid > div > strong {
+    margin-top: 7px !important;
+    color: var(--brand) !important;
+  }
+
+  .v12-acquisition-reference {
+    grid-area: reference;
+  }
+
+}
+
+
+/* Tablet keeps a stable two-column outcome grid. */
+@media (max-width: 1050px) and (min-width: 641px) {
+
+  .v12-acquisition-stat-grid {
+    display: grid !important;
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      ) !important;
+  }
+
+  .v12-acquisition-stat-grid > div {
+    min-height: 76px !important;
+  }
+
+}
+
+
+/* Phone retains both outcome tiles side-by-side until narrow. */
+@media (max-width: 640px) {
+
+  .v12-acquisition-stat-grid {
+    display: grid !important;
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      ) !important;
+  }
+
+  .v12-acquisition-stat-grid > div {
+    min-height: 70px !important;
+  }
+
+}
+
+@media (max-width: 360px) {
+
+  .v12-acquisition-stat-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+}
