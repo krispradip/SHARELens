@@ -8118,3 +8118,74 @@ select {
   }
 
 }
+
+
+/* =========================================================
+   SHARE LENS v0.12.0 — PERFORMANCE CARD POLISH
+
+   PURPOSE:
+   Removes placeholder letter tiles and establishes one
+   consistent metric baseline across Ambassador Performance
+   sub-cards.
+
+   CHANGE IMPACT:
+   Visual only.
+========================================================= */
+
+.v12-performance-subcard .v12-subcard-top {
+  justify-content: flex-end;
+  min-height: 22px;
+}
+
+.v12-performance-subcard .v12-subcard-icon {
+  display: none;
+}
+
+.v12-performance-subcard > .v12-subcard-value {
+  display: flex;
+  align-items: baseline;
+  min-height: 38px;
+  margin-top: 6px;
+  color: var(--brand);
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.v12-performance-subcard > .v12-subcard-value > span {
+  display: inline;
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+}
+
+.v12-performance-subcard > .v12-subcard-value small {
+  margin-left: 4px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.v12-performance-subcard > span:not(.v12-status-pill) {
+  margin-top: 9px;
+}
+
+.v12-feedback-suggestion-card > .v12-subcard-value {
+  margin-top: 6px;
+}
+
+@media (max-width: 600px) {
+
+  .v12-performance-subcard {
+    min-height: 0;
+  }
+
+  .v12-performance-subcard > .v12-subcard-value {
+    min-height: 34px;
+    font-size: 27px;
+  }
+
+}
