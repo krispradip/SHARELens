@@ -508,3 +508,216 @@
     grid-template-columns: 1fr !important;
   }
 }
+
+
+/* =========================================================
+   SHARE LENS v0.12.0 — ACQUISITION TOOLTIP OVERLAY FIX
+
+   PURPOSE:
+   Ensures acquisition tooltips float over the UI instead of
+   contributing to metric-card height.
+
+   BUSINESS MEANING:
+   Contextual help must not distort KPI card sizing.
+
+   CHANGE IMPACT:
+   Acquisition Performance layout only.
+========================================================= */
+
+.v12-acquisition-panel,
+.v12-acquisition-metrics-only,
+.v12-acquisition-stat-grid,
+.v12-acquisition-stat-grid > div {
+  overflow: visible !important;
+}
+
+.v12-acquisition-stat-grid > div {
+  position: relative !important;
+  justify-content: flex-start !important;
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 10px 12px !important;
+}
+
+.v12-acquisition-stat-grid > div > span {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+}
+
+.v12-acquisition-stat-grid > div > strong {
+  margin-top: 8px !important;
+  line-height: 1.1 !important;
+}
+
+.v12-acquisition-stat-grid .v12-tooltip-wrap {
+  position: relative !important;
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
+  z-index: 50 !important;
+}
+
+.v12-acquisition-stat-grid .v12-tooltip-content {
+  position: absolute !important;
+  left: 50% !important;
+  bottom: calc(100% + 9px) !important;
+  top: auto !important;
+  right: auto !important;
+
+  width:
+    min(
+      280px,
+      calc(100vw - 28px)
+    ) !important;
+
+  max-width:
+    calc(100vw - 28px) !important;
+
+  margin: 0 !important;
+  padding: 10px 11px !important;
+
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+
+  transform:
+    translate(
+      -50%,
+      5px
+    ) !important;
+
+  z-index: 1800 !important;
+}
+
+.v12-acquisition-stat-grid
+.v12-tooltip-wrap:hover
+.v12-tooltip-content,
+.v12-acquisition-stat-grid
+.v12-tooltip-wrap:focus-within
+.v12-tooltip-content {
+  opacity: 1 !important;
+  visibility: visible !important;
+
+  transform:
+    translate(
+      -50%,
+      0
+    ) !important;
+}
+
+.v12-acquisition-stat-grid
+> div:last-child
+.v12-tooltip-content {
+  left: auto !important;
+  right: 0 !important;
+
+  transform:
+    translate(
+      0,
+      5px
+    ) !important;
+}
+
+.v12-acquisition-stat-grid
+> div:last-child
+.v12-tooltip-wrap:hover
+.v12-tooltip-content,
+.v12-acquisition-stat-grid
+> div:last-child
+.v12-tooltip-wrap:focus-within
+.v12-tooltip-content {
+  transform:
+    translate(
+      0,
+      0
+    ) !important;
+}
+
+.v12-acquisition-stat-grid
+> div:last-child
+.v12-tooltip-content::after {
+  left: auto !important;
+  right: 6px !important;
+
+  transform:
+    translate(
+      0,
+      -4px
+    )
+    rotate(45deg) !important;
+}
+
+
+/* Compact the whole Acquisition section */
+.v12-acquisition-panel {
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+.v12-acquisition-metrics-only {
+  gap: 8px !important;
+}
+
+.v12-acquisition-primary,
+.v12-acquisition-progress {
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+.v12-acquisition-primary {
+  padding: 9px 11px !important;
+}
+
+.v12-acquisition-progress {
+  padding: 9px 11px !important;
+}
+
+.v12-acquisition-reference {
+  padding-top: 5px !important;
+}
+
+
+/* Tablet / phone tooltip positioning */
+@media (max-width: 900px) {
+
+  .v12-acquisition-stat-grid
+  .v12-tooltip-content {
+    left: 0 !important;
+    right: auto !important;
+
+    transform:
+      translate(
+        0,
+        5px
+      ) !important;
+  }
+
+  .v12-acquisition-stat-grid
+  .v12-tooltip-wrap:hover
+  .v12-tooltip-content,
+  .v12-acquisition-stat-grid
+  .v12-tooltip-wrap:focus-within
+  .v12-tooltip-content {
+    transform:
+      translate(
+        0,
+        0
+      ) !important;
+  }
+
+  .v12-acquisition-stat-grid
+  .v12-tooltip-content::after {
+    left: 6px !important;
+    right: auto !important;
+
+    transform:
+      translate(
+        0,
+        -4px
+      )
+      rotate(45deg) !important;
+  }
+
+}
