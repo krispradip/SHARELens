@@ -685,16 +685,14 @@ function ambassadorPerformanceCard() {
         <div class="v12-performance-score-ring">
           <div class="v12-performance-score-inner">
             <div
-            class="v12-performance-score-value"
-            data-count-to="${ambassadorPerformanceScore}"
-            data-decimals="1"
-            data-suffix="%"
-          >
-            ${ambassadorPerformanceScore.toFixed(1)}%
+              class="v12-performance-score-value"
+              data-count-to="${ambassadorPerformanceScore}"
+              data-decimals="1"
+              data-suffix="%"
+            >
+              ${ambassadorPerformanceScore.toFixed(1)}%
+            </div>
           </div>
-
-
-
         </div>
 
       </div>
@@ -1024,7 +1022,7 @@ export function renderAmbassadorHomeV012() {
           <div>
             <span class="section-label">ACQUISITION</span>
             <h3 class="v12-heading-with-info">
-              Your personalised QR
+              Acquisition Performance
               ${tooltip(
                 "Individual acquisition QR codes are a priority use case. Each Ambassador should have a personal QR that retains the Ambassador identifier when a customer joins, so acquisition can be attributed to the Ambassador and store for performance, leaderboards and recognition."
               )}
@@ -1097,7 +1095,7 @@ export function renderAmbassadorHomeV012() {
           <small class="v12-acquisition-reference">
             Attribution reference: ${escapeHtml(ACQUISITION.qrReference)}
           </small>
-        </div>        </div>
+        </div>
       </section>
       </div>
 
