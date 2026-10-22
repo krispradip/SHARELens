@@ -9905,3 +9905,152 @@ select {
   }
 
 }
+
+
+/* =========================================================
+   SHARE LENS v0.12.0 — PROFILE QR + SCORE RING FIX
+
+   PURPOSE:
+   Moves the personal SHARE QR into the Ambassador identity
+   area, removes duplicated QR actions, and centres the
+   Ambassador Performance percentage inside its ring.
+
+   CHANGE IMPACT:
+   Ambassador home visual hierarchy only.
+========================================================= */
+
+.v12-profile-qr-card {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    auto;
+  align-items: center;
+  gap: 14px;
+  min-width: 320px;
+  padding: 10px 12px;
+  border: 1px solid #ead6de;
+  border-radius: 11px;
+  background: #fffafb;
+}
+
+.v12-profile-qr-card .v12-profile-chip {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.v12-profile-qr-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.v12-profile-qr-image {
+  width: 64px;
+  height: 64px;
+  flex: 0 0 64px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.v12-profile-qr-wrap > span {
+  color: var(--brand);
+  font-size: 9px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+
+.v12-performance-score-ring {
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  text-align: center;
+}
+
+.v12-performance-score-inner {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 10px;
+}
+
+.v12-performance-score-value {
+  display: block;
+  width: 100%;
+  margin: 0;
+  text-align: center;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+
+.v12-acquisition-metrics-only {
+  display: grid;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.v12-acquisition-metrics-only .v12-acquisition-primary {
+  margin: 0;
+}
+
+.v12-acquisition-metrics-only .v12-acquisition-stat-grid {
+  align-items: start;
+}
+
+.v12-acquisition-metrics-only .v12-acquisition-reference {
+  margin-top: 0;
+}
+
+
+@media (max-width: 850px) {
+
+  .v12-profile-qr-card {
+    min-width: 0;
+    width: 100%;
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .v12-home-heading {
+    align-items: stretch;
+  }
+
+  .v12-profile-qr-card {
+    grid-template-columns:
+      minmax(0, 1fr)
+      auto;
+    gap: 10px;
+  }
+
+  .v12-profile-qr-image {
+    width: 56px;
+    height: 56px;
+    flex-basis: 56px;
+  }
+
+  .v12-profile-qr-wrap > span {
+    display: none;
+  }
+
+}
+
+
+@media (max-width: 420px) {
+
+  .v12-profile-qr-image {
+    width: 50px;
+    height: 50px;
+    flex-basis: 50px;
+  }
+
+}
