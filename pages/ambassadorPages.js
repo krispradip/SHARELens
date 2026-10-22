@@ -8,7 +8,8 @@ import {
   SERVICE_PULSE,
   NEXT_BEST_ACTIONS,
   SCORE_FAMILIES,
-  AMBASSADOR_PERFORMANCE
+  AMBASSADOR_PERFORMANCE,
+  COMMUNICATIONS
 } from "../data/platformData.js";
 
 import { getUserContext } from "../services/userContextService.js";
@@ -49,6 +50,7 @@ import {
 ========================================================= */
 
 let selectedServicePulseScenario = SERVICE_PULSE.scenarios[0];
+let selectedCommunicationId = null;
 
 
 /* =========================================================
@@ -1179,6 +1181,392 @@ export function renderAmbassadorHomeV012() {
       </section>
     </div>
   `;
+}
+
+
+/* =========================================================
+   PAGE: Communications
+
+   PURPOSE:
+   Gives Ambassadors one place to receive Campaigns,
+   Broadcasts and Reminders.
+
+   BUSINESS MEANING:
+   Campaign participation and broadcast acknowledgements feed
+   the Ambassador engagement model. Reminders route users to
+   the relevant task.
+
+   INPUTS:
+   Lead / Programme communications from platformData.js and
+   local prototype response records.
+
+   OUTPUTS:
+   Participation, thumbs-up / thumbs-down acknowledgements
+   and reminder navigation.
+
+   CHANGE IMPACT:
+   Response records can be used by the Ambassador
+   Performance Score and management reporting.
+========================================================= */
+
+export function setSelectedCommunicationV012(
+  communicationId
+) {
+  selectedCommunicationId =
+    communicationId || null;
+}
+
+
+function communicationResponse(
+  communicationId,
+  responseType
+) {
+
+  return getSubmissions()
+    .find(item =>
+      item.type === responseType &&
+      item.data?.communicationId === communicationId
+    );
+}
+
+
+function communicationTypeLabel(type) {
+
+  const labels = {
+    campaign: "Campaign",
+    broadcast: "Broadcast",
+    reminder: "Reminder"
+  };
+
+  return labels[type] || type;
+}
+
+
+export function renderCommunicationsV012() {
+
+  const ordered =
+    [...COMMUNICATIONS]
+      .sort((a, b) => {
+
+        if (
+          a.id === selectedCommunicationId
+        ) return -1;
+
+        if (
+          b.id === selectedCommunicationId
+        ) return 1;
+
+        return 0;
+
+      });
+
+
+  return `
+    ${pageHeading(
+      "AMBASSADOR PROGRAM",
+      "Communications",
+      "Campaigns, broadcasts and reminders sent to you by the SHARE programme."
+    )}
+
+    <div class="v12-comms-filter-row">
+
+      <span class="v12-comms-filter active">
+        All
+      </span>
+
+      <span class="v12-comms-filter campaign">
+        Campaign
+      </span>
+
+      <span class="v12-comms-filter broadcast">
+        Broadcast
+      </span>
+
+      <span class="v12-comms-filter reminder">
+        Reminder
+      </span>
+
+    </div>
+
+
+    <div class="v12-comms-list">
+
+      ${ordered.map(item => {
+
+        const reaction =
+          communicationResponse(
+            item.id,
+            "broadcast-acknowledgement"
+          );
+
+        const participation =
+          communicationResponse(
+            item.id,
+            "campaign-participation"
+          );
+
+        const highlighted =
+          item.id ===
+          selectedCommunicationId;
+
+
+        return `
+          <article
+            id="communication-${item.id}"
+            class="dashboard-card v12-communication-card ${highlighted ? "highlighted" : ""}"
+          >
+
+            <div class="v12-communication-type-column">
+
+              <span class="v12-communication-type ${item.type}">
+                ${communicationTypeLabel(item.type)}
+              </span>
+
+              <span class="v12-communication-date">
+                ${escapeHtml(item.date)}
+              </span>
+
+            </div>
+
+
+            <div class="v12-communication-content">
+
+              <div class="v12-communication-heading">
+
+                <div>
+
+                  <h3>
+                    ${escapeHtml(item.title)}
+                  </h3>
+
+                  <span>
+                    From ${escapeHtml(item.sender)}
+                  </span>
+
+                </div>
+
+                ${item.due
+                  ? `
+                      <span class="v12-comms-due">
+                        Due ${escapeHtml(item.due)}
+                      </span>
+                    `
+                  : ""
+                }
+
+              </div>
+
+
+              <p>
+                ${escapeHtml(item.summary)}
+              </p>
+
+
+              ${item.type === "campaign"
+                ? `
+                    <div class="v12-campaign-response">
+
+                      <label>
+
+                        <span>
+                          Your response
+                        </span>
+
+                        <input
+                          id="campaign-response-${item.id}"
+                          placeholder="Example: I nominate Fatima from our team"
+                          value="${escapeHtml(participation?.data?.response || "")}"
+                        >
+
+                      </label>
+
+                      <button
+                        type="button"
+                        class="primary-small"
+                        onclick="participateInCampaignV012('${item.id}')"
+                      >
+                        ${participation ? "Update Response" : "Participate"}
+                      </button>
+
+                    </div>
+
+                    ${participation
+                      ? `
+                          <span class="v12-comms-response-status good">
+                            ✓ Participation recorded
+                          </span>
+                        `
+                      : ""
+                    }
+                  `
+                : ""
+              }
+
+
+              ${item.type === "broadcast"
+                ? `
+                    <div class="v12-broadcast-reaction">
+
+                      <span>
+                        Acknowledge this broadcast
+                      </span>
+
+                      <div>
+
+                        <button
+                          type="button"
+                          class="${reaction?.data?.reaction === "up" ? "selected" : ""}"
+                          onclick="reactToBroadcastV012('${item.id}', 'up')"
+                          aria-label="Thumbs up"
+                        >
+                          👍
+                        </button>
+
+                        <button
+                          type="button"
+                          class="${reaction?.data?.reaction === "down" ? "selected" : ""}"
+                          onclick="reactToBroadcastV012('${item.id}', 'down')"
+                          aria-label="Thumbs down"
+                        >
+                          👎
+                        </button>
+
+                      </div>
+
+                      ${reaction
+                        ? `
+                            <span class="v12-comms-response-status good">
+                              Acknowledged
+                            </span>
+                          `
+                        : ""
+                      }
+
+                    </div>
+                  `
+                : ""
+              }
+
+
+              ${item.type === "reminder"
+                ? `
+                    <button
+                      type="button"
+                      class="small-button"
+                      onclick="navigateTo('${item.reminderTarget}')"
+                    >
+                      ${escapeHtml(item.actionLabel)}
+                    </button>
+                  `
+                : ""
+              }
+
+            </div>
+
+          </article>
+        `;
+
+      }).join("")}
+
+    </div>
+  `;
+}
+
+
+export function participateInCampaignFormV012(
+  communicationId
+) {
+
+  const field =
+    document.getElementById(
+      `campaign-response-${communicationId}`
+    );
+
+  const response =
+    field?.value?.trim() || "";
+
+
+  if (!response) {
+
+    throw new Error(
+      "Enter your campaign response before submitting."
+    );
+
+  }
+
+
+  const existing =
+    communicationResponse(
+      communicationId,
+      "campaign-participation"
+    );
+
+
+  if (existing) {
+
+    return updateSubmission(
+      existing.submissionId,
+      {
+        status: "Participated",
+        data: {
+          communicationId,
+          response
+        }
+      }
+    );
+
+  }
+
+
+  return createSubmission(
+    "campaign-participation",
+    {
+      communicationId,
+      response,
+      status: "Participated"
+    }
+  );
+
+}
+
+
+export function reactToBroadcastFormV012(
+  communicationId,
+  reaction
+) {
+
+  const existing =
+    communicationResponse(
+      communicationId,
+      "broadcast-acknowledgement"
+    );
+
+
+  if (existing) {
+
+    return updateSubmission(
+      existing.submissionId,
+      {
+        status: "Acknowledged",
+        data: {
+          communicationId,
+          reaction
+        }
+      }
+    );
+
+  }
+
+
+  return createSubmission(
+    "broadcast-acknowledgement",
+    {
+      communicationId,
+      reaction,
+      status: "Acknowledged"
+    }
+  );
+
 }
 
 
