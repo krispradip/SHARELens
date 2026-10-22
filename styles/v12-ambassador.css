@@ -941,3 +941,121 @@
   }
 
 }
+
+
+/* =========================================================
+   SHARE LENS v0.12.0 — APPROVED ACQUISITION LAYOUT
+
+   PURPOSE:
+   Implements the approved responsive Acquisition Performance
+   composition.
+
+   LARGE SCREEN:
+   Row 1: Members acquired | Target progress
+   Row 2: Active-member rate | Attributed spend
+   Row 3: Attribution reference
+
+   SMALL SCREEN / TABLET:
+   Row 1: Members acquired
+   Row 2: Target progress
+   Row 3: Active-member rate | Attributed spend
+   Row 4: Attribution reference
+
+   CHANGE IMPACT:
+   Acquisition Performance presentation only.
+========================================================= */
+
+.v12-acquisition-metrics-only {
+  display: grid !important;
+  grid-template-columns:
+    minmax(
+      220px,
+      0.8fr
+    )
+    minmax(
+      0,
+      1.6fr
+    ) !important;
+  grid-template-areas:
+    "primary progress"
+    "stats stats"
+    "reference reference" !important;
+  gap: 10px !important;
+  align-items: start !important;
+}
+
+.v12-acquisition-primary {
+  grid-area: primary !important;
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 12px 14px !important;
+}
+
+.v12-acquisition-progress {
+  grid-area: progress !important;
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 12px 14px !important;
+}
+
+.v12-acquisition-stat-grid {
+  grid-area: stats !important;
+  display: grid !important;
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(
+        0,
+        1fr
+      )
+    ) !important;
+  gap: 10px !important;
+}
+
+.v12-acquisition-stat-grid > div {
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 12px 14px !important;
+}
+
+.v12-acquisition-reference {
+  grid-area: reference !important;
+  margin: 0 !important;
+  padding-top: 8px !important;
+}
+
+
+/* Tablet / smaller screens */
+@media (max-width: 820px) {
+
+  .v12-acquisition-metrics-only {
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "primary"
+      "progress"
+      "stats"
+      "reference" !important;
+  }
+
+  .v12-acquisition-stat-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      ) !important;
+  }
+
+}
+
+
+/* Very narrow phones */
+@media (max-width: 360px) {
+
+  .v12-acquisition-stat-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+}
