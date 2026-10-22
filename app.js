@@ -19,6 +19,7 @@ import {
   submitFeedbackFormV012,
   submitSuggestionFormV012,
   submitManualTransactionFormV012,
+  closeManualTransactionFormV012,
   submitShareWallFormV012,
   submitPhysicalTrainingFormV012,
   initializeV12Motion
@@ -9090,9 +9091,209 @@ function submitSuggestionV012() {
 
 function submitManualTransactionV012() {
 
-  runV12Submission(
-    submitManualTransactionFormV012,
-    "Manual transaction request created"
+  try {
+
+    const submission =
+      submitManualTransactionFormV012();
+
+    const button =
+      document.getElementById(
+        "mt-submit-button"
+      );
+
+    if (button) {
+
+      button.disabled = true;
+      button.textContent =
+        "Processing...";
+
+    }
+
+
+    const validation =
+      document.querySelector(
+        '[data-flow-step="validation"]'
+      );
+
+    const oneView =
+      document.querySelector(
+        '[data-flow-step="oneview"]'
+      );
+
+    const ticketResult =
+      document.getElementById(
+        "manual-ticket-result"
+      );
+
+
+    if (validation) {
+
+      validation.classList.remove(
+        "idle",
+        "processing"
+      );
+
+      validation.classList.add(
+        "complete"
+      );
+
+      validation.querySelector(
+        ".v12-ticket-state"
+      ).textContent =
+        "Validated";
+
+    }
+
+
+    setTimeout(
+      () => {
+
+        if (oneView) {
+
+          oneView.classList.remove(
+            "idle",
+            "complete"
+          );
+
+          oneView.classList.add(
+            "processing"
+          );
+
+          oneView.querySelector(
+            ".v12-ticket-state"
+          ).textContent =
+            "Sending payload";
+
+        }
+
+      },
+      500
+    );
+
+
+    setTimeout(
+      () => {
+
+        if (oneView) {
+
+          oneView.classList.remove(
+            "processing",
+            "idle"
+          );
+
+          oneView.classList.add(
+            "complete"
+          );
+
+          oneView.querySelector(
+            ".v12-ticket-state"
+          ).textContent =
+            "Ticket received";
+
+        }
+
+
+        if (ticketResult) {
+
+          ticketResult.classList.add(
+            "visible"
+          );
+
+          ticketResult.querySelector(
+            "strong"
+          ).textContent =
+            submission.data.oneViewTicketId;
+
+        }
+
+
+        showToast(
+          `OneView ticket created · ${submission.data.oneViewTicketId}`
+        );
+
+      },
+      1350
+    );
+
+
+    setTimeout(
+      () => {
+
+        renderCurrentPage();
+
+      },
+      2200
+    );
+
+  } catch (error) {
+
+    showToast(
+      error?.message ||
+      "Please check the form and try again."
+    );
+
+  }
+
+}
+
+
+function closeManualTransactionV012(
+  submissionId
+) {
+
+  const updated =
+    closeManualTransactionFormV012(
+      submissionId
+    );
+
+  if (!updated) {
+
+    showToast(
+      "Unable to update this ticket."
+    );
+
+    return;
+
+  }
+
+
+  const resolution =
+    document.querySelector(
+      '[data-flow-step="resolution"]'
+    );
+
+
+  if (resolution) {
+
+    resolution.classList.remove(
+      "idle",
+      "processing"
+    );
+
+    resolution.classList.add(
+      "complete"
+    );
+
+    resolution.querySelector(
+      ".v12-ticket-state"
+    ).textContent =
+      "Closed";
+
+  }
+
+
+  showToast(
+    "Ticket marked closed and resolved."
+  );
+
+
+  setTimeout(
+    () => {
+
+      renderCurrentPage();
+
+    },
+    650
   );
 
 }
@@ -9251,6 +9452,9 @@ window.submitSuggestionV012 =
 
 window.submitManualTransactionV012 =
   submitManualTransactionV012;
+
+window.closeManualTransactionV012 =
+  closeManualTransactionV012;
 
 window.submitShareWallV012 =
   submitShareWallV012;
