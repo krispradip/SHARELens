@@ -620,11 +620,7 @@ function ambassadorPerformanceCard() {
 
       <div class="v12-performance-subgrid">
 
-        <button
-          type="button"
-          class="v12-performance-subcard"
-          onclick="showToast('Campaign detail will open from the Campaigns module when Lead campaign management is connected.')"
-        >
+        <article class="v12-performance-subcard">
 
           <div class="v12-subcard-top">
 
@@ -660,14 +656,18 @@ function ambassadorPerformanceCard() {
             <div data-progress-to="${campaignRate}"></div>
           </div>
 
-        </button>
+          <button
+            type="button"
+            class="v12-subcard-link"
+            onclick="showToast('Campaign detail will open from the Campaigns module when Lead campaign management is connected.')"
+          >
+            View campaigns
+          </button>
+
+        </article>
 
 
-        <button
-          type="button"
-          class="v12-performance-subcard"
-          onclick="showToast('Broadcast acknowledgement detail will open from Communications.')"
-        >
+        <article class="v12-performance-subcard">
 
           <div class="v12-subcard-top">
 
@@ -703,10 +703,18 @@ function ambassadorPerformanceCard() {
             <div data-progress-to="${acknowledgementRate}"></div>
           </div>
 
-        </button>
+          <button
+            type="button"
+            class="v12-subcard-link"
+            onclick="showToast('Broadcast acknowledgement detail will open from Communications.')"
+          >
+            View broadcasts
+          </button>
+
+        </article>
 
 
-        <div class="v12-performance-subcard v12-feedback-suggestion-card">
+        <article class="v12-performance-subcard v12-feedback-suggestion-card">
 
           <div class="v12-subcard-top">
 
@@ -762,14 +770,10 @@ function ambassadorPerformanceCard() {
 
           </div>
 
-        </div>
+        </article>
 
 
-        <button
-          type="button"
-          class="v12-performance-subcard"
-          onclick="navigateTo('share-wall')"
-        >
+        <article class="v12-performance-subcard">
 
           <div class="v12-subcard-top">
 
@@ -804,7 +808,15 @@ function ambassadorPerformanceCard() {
             <div data-progress-to="${wallRate}"></div>
           </div>
 
-        </button>
+          <button
+            type="button"
+            class="v12-subcard-link"
+            onclick="navigateTo('share-wall')"
+          >
+            Update SHARE Wall
+          </button>
+
+        </article>
 
       </div>
 
