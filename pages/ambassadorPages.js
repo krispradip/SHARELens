@@ -676,10 +676,6 @@ function ambassadorPerformanceCard() {
 
         <div>
 
-          <span class="section-label">
-            MY AMBASSADOR PERFORMANCE
-          </span>
-
           <h2 class="v12-heading-with-info">
             Ambassador Performance Score
 
@@ -1013,8 +1009,7 @@ export function renderAmbassadorHomeV012() {
 <section class="dashboard-card v12-motion-card">
         <div class="card-heading-row">
           <div>
-            <span class="section-label">FOCUS</span>
-            <h3 class="v12-heading-with-info">
+              <h3 class="v12-heading-with-info">
               Next Best Actions
               ${tooltip(
                 "The intended outcome is for low performance or completion to trigger an action, while strong performance can trigger recognition. For the Ambassador programme, actions should be driven by controlled KPI gaps rather than speculative external causes."
@@ -1033,7 +1028,6 @@ export function renderAmbassadorHomeV012() {
 <section class="dashboard-card v12-motion-card v12-acquisition-panel">
         <div class="card-heading-row">
           <div>
-            <span class="section-label">ACQUISITION</span>
             <h3 class="v12-heading-with-info">
               Acquisition Performance
               ${tooltip(
@@ -1115,12 +1109,6 @@ export function renderAmbassadorHomeV012() {
       <div class="v12-home-column">
 <section class="dashboard-card v12-motion-card">
         <span class="section-label">DIRECT ACTIONS</span>
-        <h3 class="v12-heading-with-info">
-          What do you need to do?
-          ${tooltip(
-            "The workshop asked for direct in-platform entry points for Ambassador actions such as feedback and SHARE Wall submission instead of relying on distributed external links."
-          )}
-        </h3>
 
         <div class="v12-action-grid">
           <button onclick="navigateTo('service-pulse')">
@@ -1158,12 +1146,6 @@ export function renderAmbassadorHomeV012() {
         <div class="card-heading-row">
           <div>
             <span class="section-label">TRAINING & KNOWLEDGE</span>
-            <h3 class="v12-heading-with-info">
-              Continue where you left off
-              ${tooltip(
-                "Training data can be integrated from Mitti rather than replacing it initially, while SHARE Lens provides the single front door, status view and connected knowledge experience."
-              )}
-            </h3>
           </div>
         </div>
 
