@@ -8189,3 +8189,40 @@ select {
   }
 
 }
+
+
+/* =========================================================
+   SHARE LENS v0.12.0 — JOURNEY STATUS ALIGNMENT FIX
+
+   PURPOSE:
+   Ensures the completion checkmark remains centred inside
+   the green status circle.
+
+   CHANGE IMPACT:
+   Visual only.
+========================================================= */
+
+.v12-journey-list > div > .v12-journey-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 31px;
+  height: 31px;
+  border-radius: 50%;
+  background: var(--green-soft);
+  color: var(--green);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.v12-journey-list > div > div > span {
+  display: block;
+  color: var(--green);
+  font-size: 9px;
+}
+
+.v12-journey-list > div > div > strong {
+  display: block;
+}
+
