@@ -261,3 +261,360 @@ export const PROGRAMME_LEAD_DASHBOARD = {
     trainingEvaluations: 2671
   }
 };
+
+
+/* =========================================================
+   MANAGEMENT DRILL-DOWN DATA
+
+   PURPOSE:
+   Prototype datasets for operational management screens.
+
+   PRODUCTION DATA REQUIREMENT:
+   Replace these arrays with repository/API responses. Keep
+   the field contracts stable so the page modules do not need
+   to be rewritten when persistence is connected.
+========================================================= */
+
+export const MANAGEMENT_AMBASSADORS = [
+  {
+    id: "AMB-100245",
+    name: "Layla Haddad",
+    staffId: "100245",
+    bu: "Entertainment",
+    brand: "VOX Cinemas",
+    store: "Mall of the Emirates",
+    lastLogin: "22 Oct 2026 · 08:42",
+    activity: "Active",
+    sharePerformance: 91.2,
+    ambassadorPerformance: 100,
+    acquisition: 42,
+    salesPenetration: 38.4,
+    servicePulse: 94.0,
+    trainingCompletion: 100,
+    knowledgeScore: 96
+  },
+  {
+    id: "AMB-100822",
+    name: "Noor Hassan",
+    staffId: "100822",
+    bu: "Entertainment",
+    brand: "VOX Cinemas",
+    store: "City Centre Mirdif",
+    lastLogin: "20 Oct 2026 · 16:20",
+    activity: "Active",
+    sharePerformance: 86.4,
+    ambassadorPerformance: 82.5,
+    acquisition: 31,
+    salesPenetration: 35.1,
+    servicePulse: 89.4,
+    trainingCompletion: 75,
+    knowledgeScore: 88
+  },
+  {
+    id: "AMB-100845",
+    name: "Rania Ali",
+    staffId: "100845",
+    bu: "Entertainment",
+    brand: "Magic Planet",
+    store: "Mall of the Emirates",
+    lastLogin: "04 Aug 2026 · 10:15",
+    activity: "Needs inactivity review",
+    sharePerformance: 79.8,
+    ambassadorPerformance: 74.0,
+    acquisition: 18,
+    salesPenetration: 29.7,
+    servicePulse: 81.5,
+    trainingCompletion: 67,
+    knowledgeScore: 79
+  },
+  {
+    id: "AMB-100901",
+    name: "Sami Omar",
+    staffId: "100901",
+    bu: "Entertainment",
+    brand: "Magic Planet",
+    store: "City Centre Deira",
+    lastLogin: "18 Oct 2026 · 14:05",
+    activity: "Active",
+    sharePerformance: 88.1,
+    ambassadorPerformance: 84.2,
+    acquisition: 36,
+    salesPenetration: 36.8,
+    servicePulse: 91.1,
+    trainingCompletion: 100,
+    knowledgeScore: 91
+  },
+  {
+    id: "AMB-200114",
+    name: "Maha Karim",
+    staffId: "200114",
+    bu: "Retail",
+    brand: "Carrefour",
+    store: "City Centre Mirdif",
+    lastLogin: "21 Oct 2026 · 11:45",
+    activity: "Active",
+    sharePerformance: 87.9,
+    ambassadorPerformance: 83.5,
+    acquisition: 51,
+    salesPenetration: 34.8,
+    servicePulse: 90.2,
+    trainingCompletion: 92,
+    knowledgeScore: 90
+  },
+  {
+    id: "AMB-300071",
+    name: "Sara Khan",
+    staffId: "300071",
+    bu: "Lifestyle",
+    brand: "lululemon",
+    store: "Mall of the Emirates",
+    lastLogin: "30 Jul 2026 · 09:40",
+    activity: "Needs inactivity review",
+    sharePerformance: 84.7,
+    ambassadorPerformance: 79.2,
+    acquisition: 27,
+    salesPenetration: 32.9,
+    servicePulse: 87.8,
+    trainingCompletion: 83,
+    knowledgeScore: 84
+  }
+];
+
+
+export const MANAGEMENT_CAMPAIGNS = [
+  {
+    id: "CMP-2026-021",
+    type: "Campaign",
+    title: "Mother's Day — Nominate a Mum",
+    audience: "Entertainment UAE",
+    start: "22 Oct 2026",
+    end: "28 Oct 2026",
+    status: "Live",
+    sent: 238,
+    participated: 188,
+    rate: 79
+  },
+  {
+    id: "BRD-2026-018",
+    type: "Broadcast",
+    title: "SHARE Member Week",
+    audience: "Entertainment UAE",
+    start: "21 Oct 2026",
+    end: "31 Oct 2026",
+    status: "Live",
+    sent: 238,
+    participated: 201,
+    rate: 84
+  },
+  {
+    id: "CMP-2026-019",
+    type: "Campaign",
+    title: "Service Hero Recognition",
+    audience: "All Ambassadors",
+    start: "10 Oct 2026",
+    end: "20 Oct 2026",
+    status: "Closed",
+    sent: 1284,
+    participated: 1017,
+    rate: 79
+  },
+  {
+    id: "BRD-2026-016",
+    type: "Broadcast",
+    title: "Service Pulse Guidance Update",
+    audience: "All Ambassadors",
+    start: "15 Oct 2026",
+    end: "31 Oct 2026",
+    status: "Live",
+    sent: 1284,
+    participated: 1089,
+    rate: 85
+  }
+];
+
+
+export const MANAGEMENT_TRAINING = {
+  onlineCourses: [
+    {
+      title: "SHARE Customer Experience",
+      assigned: 238,
+      completed: 224,
+      inProgress: 9,
+      overdue: 5,
+      completion: 94
+    },
+    {
+      title: "Service Recovery Essentials",
+      assigned: 118,
+      completed: 91,
+      inProgress: 19,
+      overdue: 8,
+      completion: 77
+    },
+    {
+      title: "Product Knowledge",
+      assigned: 238,
+      completed: 230,
+      inProgress: 4,
+      overdue: 4,
+      completion: 97
+    }
+  ],
+  physicalSessions: [
+    {
+      id: "TRN-441",
+      type: "Training",
+      topic: "SHARE Member Onboarding",
+      date: "20 Oct 2026",
+      location: "Mall of the Emirates",
+      ambassador: "Layla Haddad",
+      reached: 18,
+      completion: "81–99%",
+      evidence: 2
+    },
+    {
+      id: "HUD-219",
+      type: "Huddle",
+      topic: "Service Pulse",
+      date: "18 Oct 2026",
+      location: "City Centre Mirdif",
+      ambassador: "Noor Hassan",
+      reached: 11,
+      completion: "61–80%",
+      evidence: 1
+    },
+    {
+      id: "TRN-438",
+      type: "Training",
+      topic: "SHARE Benefits",
+      date: "17 Oct 2026",
+      location: "City Centre Deira",
+      ambassador: "Sami Omar",
+      reached: 16,
+      completion: "100%",
+      evidence: 2
+    }
+  ]
+};
+
+
+export const MANAGEMENT_KNOWLEDGE_CHECKS = [
+  {
+    id: "KC-2026-08",
+    title: "UAE | SHARE August Knowledge Check",
+    period: "Aug 2026",
+    responses: 265,
+    participation: 88,
+    score: 93.0,
+    topGap: "SHARE earn rates across business units",
+    status: "Closed"
+  },
+  {
+    id: "KC-2026-Q4",
+    title: "Q4 SHARE Knowledge Check",
+    period: "Oct 2026",
+    responses: 198,
+    participation: 74,
+    score: 89.4,
+    topGap: "Receipt Scan and co-branded card",
+    status: "Live"
+  }
+];
+
+
+export const MANAGEMENT_ONBOARDING = [
+  {
+    id: "ONB-100822",
+    name: "Noor Hassan",
+    brand: "VOX Cinemas",
+    store: "City Centre Mirdif",
+    account: "Complete",
+    firstLogin: "Complete",
+    training: "In Progress",
+    knowledge: "Pending",
+    personalQr: "Pending",
+    status: "Onboarding"
+  },
+  {
+    id: "ONB-101002",
+    name: "Aisha Rahman",
+    brand: "Magic Planet",
+    store: "City Centre Mirdif",
+    account: "Complete",
+    firstLogin: "Pending",
+    training: "Pending",
+    knowledge: "Pending",
+    personalQr: "Pending",
+    status: "Invited"
+  }
+];
+
+
+export const MANAGEMENT_SUBMISSIONS = [
+  {
+    type: "Feedback",
+    total: 33,
+    thisMonth: 33,
+    awaitingReview: 4,
+    source: "SHARE Lens"
+  },
+  {
+    type: "Suggestions",
+    total: 18,
+    thisMonth: 18,
+    awaitingReview: 7,
+    source: "SHARE Lens"
+  },
+  {
+    type: "SHARE Wall",
+    total: 9,
+    thisMonth: 9,
+    awaitingReview: 1,
+    source: "SHARE Lens"
+  },
+  {
+    type: "Physical Training / Huddles",
+    total: 13,
+    thisMonth: 13,
+    awaitingReview: 2,
+    source: "SHARE Lens"
+  },
+  {
+    type: "Manual Transactions",
+    total: 24,
+    thisMonth: 24,
+    awaitingReview: 5,
+    source: "OneView"
+  }
+];
+
+
+export const MANAGEMENT_RECOGNITION = [
+  {
+    rank: 1,
+    ambassador: "Layla Haddad",
+    bu: "Entertainment",
+    brand: "VOX Cinemas",
+    performance: 100,
+    acquisition: 42,
+    recognition: "Service Pulse Champion"
+  },
+  {
+    rank: 2,
+    ambassador: "Maha Karim",
+    bu: "Retail",
+    brand: "Carrefour",
+    performance: 96,
+    acquisition: 51,
+    recognition: "Acquisition Leader"
+  },
+  {
+    rank: 3,
+    ambassador: "Sami Omar",
+    bu: "Entertainment",
+    brand: "Magic Planet",
+    performance: 92,
+    acquisition: 36,
+    recognition: "Training Champion"
+  }
+];
