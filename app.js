@@ -31,7 +31,20 @@ import {
 
 import {
   renderBULeadHomeV012,
-  renderProgrammeLeadHomeV012
+  renderProgrammeLeadHomeV012,
+  renderManagementPerformanceV012,
+  renderManagementAttentionV012,
+  renderManagementAmbassadorsV012,
+  renderManagementLifecycleV012,
+  renderManagementCampaignsV012,
+  renderManagementTrainingV012,
+  renderManagementKnowledgeChecksV012,
+  renderManagementAcquisitionV012,
+  renderManagementSubmissionsV012,
+  renderManagementRecognitionV012,
+  toggleManagementCampaignComposerV012 as toggleManagementCampaignComposerStateV012,
+  submitManagementCampaignFormV012,
+  reviewManagementAmbassadorFormV012
 } from "./pages/managementPages.js";
 
 import {
@@ -8892,22 +8905,23 @@ function renderCurrentPage() {
         renderBULeadHomeV012,
 
       "team-performance":
-        managerPerformance,
+        () =>
+          renderManagementPerformanceV012(false),
 
       "team-attention":
         () =>
-          attentionPage(false),
+          renderManagementAttentionV012(false),
 
       "team-service-pulse":
         servicePulsePage,
 
       "training-overview":
         () =>
-          managementTrainingPage(false),
+          renderManagementTrainingV012(false),
 
       "knowledge-gaps":
         () =>
-          knowledgeGapsPage(false),
+          renderManagementKnowledgeChecksV012(false),
 
       "manager-knowledge":
         () => `
@@ -8924,23 +8938,23 @@ function renderCurrentPage() {
 
       ambassadors:
         () =>
-          ambassadorsPage(false),
+          renderManagementAmbassadorsV012(false),
 
       "manager-onboarding":
         () =>
-          lifecyclePage(false),
+          renderManagementLifecycleV012(false),
 
       "manager-acquisition":
         () =>
-          acquisitionPage(false),
+          renderManagementAcquisitionV012(false),
 
       "manager-communications":
         () =>
-          communicationsPage(false),
+          renderManagementCampaignsV012(false),
 
       "manager-hub":
         () =>
-          hubPage(false)
+          renderManagementSubmissionsV012(false)
 
     };
 
@@ -8963,11 +8977,12 @@ function renderCurrentPage() {
         renderProgrammeLeadHomeV012,
 
       "group-performance":
-        servicePerformance,
+        () =>
+          renderManagementPerformanceV012(true),
 
       "group-attention":
         () =>
-          attentionPage(true),
+          renderManagementAttentionV012(true),
 
       "service-pulse":
         servicePulsePage,
@@ -8977,11 +8992,11 @@ function renderCurrentPage() {
 
       "group-training":
         () =>
-          managementTrainingPage(true),
+          renderManagementTrainingV012(true),
 
       "group-gaps":
         () =>
-          knowledgeGapsPage(true),
+          renderManagementKnowledgeChecksV012(true),
 
       "group-knowledge":
         () => `
@@ -8998,27 +9013,26 @@ function renderCurrentPage() {
 
       "group-ambassadors":
         () =>
-          ambassadorsPage(true),
+          renderManagementAmbassadorsV012(true),
 
       "group-onboarding":
         () =>
-          lifecyclePage(true),
+          renderManagementLifecycleV012(true),
 
       "group-acquisition":
         () =>
-          acquisitionPage(true),
+          renderManagementAcquisitionV012(true),
 
       "group-communications":
         () =>
-          communicationsPage(true),
+          renderManagementCampaignsV012(true),
 
       "group-hub":
         () =>
-          hubPage(true),
+          renderManagementSubmissionsV012(true),
 
       "group-recognition":
-        () =>
-          acquisitionPage(true),
+        renderManagementRecognitionV012,
 
       "group-actions":
         () =>
@@ -9507,6 +9521,58 @@ function reactToBroadcastV012(
 }
 
 
+function toggleManagementCampaignComposerV012() {
+
+  toggleManagementCampaignComposerStateV012();
+
+  renderCurrentPage();
+
+}
+
+
+function submitManagementCampaignV012() {
+
+  try {
+
+    const created =
+      submitManagementCampaignFormV012();
+
+    showToast(
+      `${created.type} published · ${created.id}`
+    );
+
+    renderCurrentPage();
+
+  } catch (error) {
+
+    showToast(
+      error?.message ||
+      "Please complete the communication details."
+    );
+
+  }
+
+}
+
+
+function reviewManagementAmbassadorV012(
+  ambassadorId
+) {
+
+  const review =
+    reviewManagementAmbassadorFormV012(
+      ambassadorId
+    );
+
+  showToast(
+    `Review recorded · ${review.reviewId}`
+  );
+
+  renderCurrentPage();
+
+}
+
+
 function filterV12Knowledge() {
 
   const query =
@@ -9655,6 +9721,15 @@ window.participateInCampaignV012 =
 
 window.reactToBroadcastV012 =
   reactToBroadcastV012;
+
+window.toggleManagementCampaignComposerV012 =
+  toggleManagementCampaignComposerV012;
+
+window.submitManagementCampaignV012 =
+  submitManagementCampaignV012;
+
+window.reviewManagementAmbassadorV012 =
+  reviewManagementAmbassadorV012;
 
 window.filterV12Knowledge =
   filterV12Knowledge;
