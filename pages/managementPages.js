@@ -1,8 +1,25 @@
 import {
   MANAGEMENT_TARGETS,
   BU_LEAD_DASHBOARD,
-  PROGRAMME_LEAD_DASHBOARD
+  PROGRAMME_LEAD_DASHBOARD,
+  MANAGEMENT_AMBASSADORS,
+  MANAGEMENT_CAMPAIGNS,
+  MANAGEMENT_TRAINING,
+  MANAGEMENT_KNOWLEDGE_CHECKS,
+  MANAGEMENT_ONBOARDING,
+  MANAGEMENT_SUBMISSIONS,
+  MANAGEMENT_RECOGNITION
 } from "../data/managementData.js";
+
+import {
+  getCreatedCampaigns,
+  createManagementCampaign,
+  recordAmbassadorReview,
+  getAmbassadorReviews
+} from "../services/managementActionService.js";
+
+
+let managementCampaignComposerOpen = false;
 
 
 /* =========================================================
