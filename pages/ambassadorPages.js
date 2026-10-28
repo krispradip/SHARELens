@@ -8,6 +8,7 @@ import {
   SERVICE_PULSE,
   NEXT_BEST_ACTIONS,
   SCORE_FAMILIES,
+  KPI_CARD_DEFINITIONS,
   AMBASSADOR_PERFORMANCE,
   COMMUNICATIONS
 } from "../data/platformData.js";
@@ -183,13 +184,13 @@ function metricCard(metric) {
 
   const tooltipCopy = {
     performance:
-      "Your own Ambassador performance view. The review workshop confirmed that this is distinct from the programme-level KPI view and is made up from SHARE performance, Ambassador engagement performance and training performance.",
+      KPI_CARD_DEFINITIONS.sharePerformance,
     acquisition:
-      "Acquisition is one of the core programme KPIs Ambassadors need to see. Attribution is linked to the Ambassador and store through the personalised Adjust QR, enabling measurable acquisition performance and recognition.",
+      KPI_CARD_DEFINITIONS.acquisition,
     penetration:
-      "SHARE / sales penetration is one of the programme KPIs Ambassadors need to see and should reflect the applicable business-unit / brand operating scope.",
+      KPI_CARD_DEFINITIONS.salesPenetration,
     servicePulse:
-      "Service Pulse is one of the core programme KPIs. It reflects the applicable audit / Service Pulse performance for the Ambassador's operating scope and is used to identify where corrective action is needed."
+      KPI_CARD_DEFINITIONS.servicePulse
   };
 
   return `
@@ -680,7 +681,7 @@ function ambassadorPerformanceCard() {
             AMBASSADOR PERFORMANCE SCORE
 
             ${tooltip(
-              "This score reflects the Ambassador's own programme engagement. It is currently calculated as an equal-weight average of target attainment across Campaign Participation, Broadcast Acknowledgement, Feedback & Suggestions, and SHARE Wall Submission. Each component is capped at 100% attainment."
+              KPI_CARD_DEFINITIONS.ambassadorPerformanceed at 100% attainment."
             )}
           </h2>
 
