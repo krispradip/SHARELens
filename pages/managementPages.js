@@ -1,4 +1,9 @@
 import {
+  KPI_CARD_DEFINITIONS,
+  SCORE_FAMILIES
+} from "../data/platformData.js";
+
+import {
   MANAGEMENT_TARGETS,
   BU_LEAD_DASHBOARD,
   PROGRAMME_LEAD_DASHBOARD,
@@ -74,6 +79,73 @@ function statusClass(value, target, higherIsBetter = true) {
 }
 
 
+function managementCardDefinition(
+  label
+) {
+
+  const definitions = {
+    "Total Ambassadors":
+      KPI_CARD_DEFINITIONS.totalAmbassadors,
+    "Ambassadors":
+      KPI_CARD_DEFINITIONS.totalAmbassadors,
+    "Active":
+      KPI_CARD_DEFINITIONS.activeRate,
+    "Active Rate":
+      KPI_CARD_DEFINITIONS.activeRate,
+    "SHARE Performance":
+      KPI_CARD_DEFINITIONS.sharePerformance,
+    "Ambassador Performance":
+      KPI_CARD_DEFINITIONS.ambassadorPerformance,
+    "SHARE Acquisition":
+      KPI_CARD_DEFINITIONS.acquisition,
+    "Members Acquired":
+      KPI_CARD_DEFINITIONS.acquisition,
+    "Sales Penetration":
+      KPI_CARD_DEFINITIONS.salesPenetration,
+    "Service Pulse":
+      KPI_CARD_DEFINITIONS.servicePulse,
+    "Training Completion":
+      KPI_CARD_DEFINITIONS.trainingCompletion,
+    "Current Knowledge Score":
+      KPI_CARD_DEFINITIONS.knowledgeScore,
+    "Knowledge Score":
+      KPI_CARD_DEFINITIONS.knowledgeScore
+  };
+
+  return definitions[label] || "";
+}
+
+
+function managementInfoTooltip(
+  text
+) {
+
+  if (!text) {
+    return "";
+  }
+
+  return `
+    <span
+      class="v12-tooltip-wrap v12-management-tooltip-wrap"
+      onclick="event.stopPropagation()"
+    >
+      <button
+        type="button"
+        class="v12-tooltip-trigger"
+        aria-label="More information"
+        onclick="event.stopPropagation()"
+      >
+        i
+      </button>
+
+      <span class="v12-tooltip-content">
+        ${text}
+      </span>
+    </span>
+  `;
+}
+
+
 function managementKpiCard(
   label,
   value,
@@ -104,13 +176,33 @@ function managementKpiCard(
       ? ""
       : `Target ${target}${suffix === "%" ? "%" : ""}`;
 
+  const definition =
+    managementCardDefinition(
+      label
+    );
+
   return `
-    <button
-      class="v12-management-kpi"
-      ${route ? `onclick="navigateTo('${route}')"` : ""}
+    <div
+      class="v12-management-kpi ${route ? "is-clickable" : ""}"
+      ${route
+        ? `
+          role="button"
+          tabindex="0"
+          onclick="navigateTo('${route}')"
+          onkeydown="if(event.key==='Enter' || event.key===' '){event.preventDefault();navigateTo('${route}')}"
+        `
+        : ""
+      }
     >
       <div class="v12-management-kpi-top">
-        <span>${label}</span>
+
+        <span class="v12-management-kpi-label">
+          ${label}
+          ${managementInfoTooltip(
+            definition
+          )}
+        </span>
+
         ${targetDisplay
           ? `<em>${targetDisplay}</em>`
           : ""
@@ -142,7 +234,7 @@ function managementKpiCard(
           : ""
         }
       </div>
-    </button>
+    </div>
   `;
 }
 
