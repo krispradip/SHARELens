@@ -151,6 +151,66 @@ export const SCORE_FAMILIES = {
 
 
 /* =========================================================
+   COMPONENT: KPI Card Definitions
+
+   PURPOSE:
+   Provides one source of truth for the explanatory tooltip
+   shown from KPI information icons across Ambassador,
+   BU Lead and Programme Lead views.
+
+   BUSINESS MEANING:
+   The same KPI must mean the same thing regardless of the
+   user's organisational scope.
+
+   CHANGE IMPACT:
+   Tooltip wording across all v0.12 user personas.
+========================================================= */
+export const KPI_CARD_DEFINITIONS = {
+  sharePerformance:
+    "SHARE Performance measures SHARERewards performance for the selected Ambassador or organisational scope. It brings together SHARE Acquisition, Sales Penetration and Service Pulse performance.",
+
+  ambassadorPerformance:
+    "Ambassador Performance measures participation in the Ambassador programme. It is based on Campaign Participation, Broadcast Acknowledgement, Feedback & Suggestions, and SHARE Wall Submission. The current prototype uses equal-weight target attainment across the four components.",
+
+  trainingPerformance:
+    "Training Performance measures learning and development performance. It brings together Online Training Completion, Knowledge Score, and Physical / In-Store Training Completion.",
+
+  totalAmbassadors:
+    "Total Ambassadors is the number of Ambassadors included in the current authorised organisational scope and selected filters.",
+
+  activeRate:
+    "Active Rate is the percentage of Ambassadors considered active based on recent platform activity. More than 60 days without a login triggers an inactivity review; it does not automatically offboard the Ambassador.",
+
+  acquisition:
+    "SHARE Acquisition is the number of SHARE members acquired through attributable Ambassador activity, including the Ambassador's personal acquisition QR. In production, attribution is expected to come from Adjust or the approved acquisition source.",
+
+  salesPenetration:
+    "Sales Penetration shows the proportion of applicable sales linked to SHARE activity within the selected operating scope. It is one of the three components of SHARE Performance.",
+
+  servicePulse:
+    "Service Pulse measures observed SHARE service behaviour through the applicable Service Pulse assessment. It is one of the three components of SHARE Performance.",
+
+  trainingCompletion:
+    "Training Completion shows completion of assigned online learning for the selected scope. It is one input into the broader Training Performance score, alongside Knowledge Score and Physical / In-Store Training Completion.",
+
+  knowledgeScore:
+    "Knowledge Score is the average result from applicable Knowledge Checks in the selected scope. It is one component of Training Performance.",
+
+  campaignParticipation:
+    "Campaign Participation measures the share of eligible programme campaigns in which the Ambassador participated. The current target is 75%.",
+
+  broadcastAcknowledgement:
+    "Broadcast Acknowledgement measures the share of programme broadcasts acknowledged by the Ambassador. The current target is 80%.",
+
+  feedbackSuggestions:
+    "Feedback & Suggestions measures the Ambassador's monthly contribution through submitted feedback and suggestions. The current combined target is two submissions per month.",
+
+  shareWall:
+    "SHARE Wall Submission measures whether the Ambassador has completed the expected SHARE Wall contribution for the reporting period."
+};
+
+
+/* =========================================================
    COMPONENT: Ambassador Performance Score
 
    PURPOSE:
