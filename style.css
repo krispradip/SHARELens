@@ -10859,3 +10859,67 @@ select {
   }
 
 }
+
+
+/* =========================================================
+   SHARE LENS — PROTOTYPE CREATOR SIGNATURE
+
+   PURPOSE:
+   Makes prototype authorship explicit across login and
+   authenticated views.
+========================================================= */
+
+.prototype-creator-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: rgba(213, 21, 91, 0.10);
+  color: var(--brand-mid);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.sidebar-version {
+  max-width: 190px;
+}
+
+.sidebar-version span {
+  margin-bottom: 3px;
+}
+
+.sidebar-version strong {
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 9px;
+  line-height: 1.35;
+}
+
+.login-footer {
+  align-items: flex-start;
+}
+
+.login-footer-creator strong,
+.login-footer-creator span {
+  display: block;
+}
+
+.login-footer-creator strong {
+  color: var(--brand);
+  font-size: 10px;
+}
+
+.login-footer-creator span {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+@media (max-width: 900px) {
+
+  .prototype-creator-badge {
+    display: none;
+  }
+
+}
