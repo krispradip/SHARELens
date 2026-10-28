@@ -137,7 +137,7 @@ export const AMBASSADOR_KPIS = {
 export const SCORE_FAMILIES = {
   sharePerformance: {
     label: "SHARE Performance Score",
-    components: ["SHARE Penetration", "Service Pulse", "SHARE Acquisitions"]
+    components: ["SHARE Acquisition", "Sales Penetration", "Service Pulse"]
   },
   ambassadorPerformance: {
     label: "Ambassador Performance Score",
@@ -145,7 +145,7 @@ export const SCORE_FAMILIES = {
   },
   trainingPerformance: {
     label: "Training Performance Score",
-    components: ["Online Training Completion", "Knowledge Score", "In-Store Training Completion"]
+    components: ["Online Training Completion", "Knowledge Score", "Physical / In-Store Training Completion"]
   }
 };
 
