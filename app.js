@@ -44,7 +44,11 @@ import {
   renderManagementRecognitionV012,
   toggleManagementCampaignComposerV012 as toggleManagementCampaignComposerStateV012,
   submitManagementCampaignFormV012,
-  reviewManagementAmbassadorFormV012
+  reviewManagementAmbassadorFormV012,
+  toggleManagementTrainingEventComposerV012 as toggleManagementTrainingEventComposerStateV012,
+  submitManagementTrainingEventFormV012,
+  openManagementKnowledgeCheckModalStateV012,
+  closeManagementKnowledgeCheckModalStateV012
 } from "./pages/managementPages.js";
 
 import {
@@ -9521,6 +9525,77 @@ function reactToBroadcastV012(
 }
 
 
+function toggleManagementTrainingEventComposerV012() {
+
+  toggleManagementTrainingEventComposerStateV012();
+
+  renderCurrentPage();
+
+}
+
+
+function submitManagementTrainingEventV012() {
+
+  try {
+
+    const created =
+      submitManagementTrainingEventFormV012();
+
+    showToast(
+      `Training event created · ${created.id}`
+    );
+
+    renderCurrentPage();
+
+  } catch (error) {
+
+    showToast(
+      error?.message ||
+      "Please complete the event details."
+    );
+
+  }
+
+}
+
+
+function openManagementKnowledgeCheckModalV012() {
+
+  openManagementKnowledgeCheckModalStateV012();
+
+  renderCurrentPage();
+
+}
+
+
+function closeManagementKnowledgeCheckModalV012() {
+
+  closeManagementKnowledgeCheckModalStateV012();
+
+  renderCurrentPage();
+
+}
+
+
+function openMittiKnowledgeCheckV012() {
+
+  closeManagementKnowledgeCheckModalStateV012();
+
+  window.open(
+    "https://app.safetyculture.com/",
+    "_blank",
+    "noopener,noreferrer"
+  );
+
+  showToast(
+    "Opening Mitti / SafetyCulture."
+  );
+
+  renderCurrentPage();
+
+}
+
+
 function toggleManagementCampaignComposerV012() {
 
   toggleManagementCampaignComposerStateV012();
@@ -9721,6 +9796,21 @@ window.participateInCampaignV012 =
 
 window.reactToBroadcastV012 =
   reactToBroadcastV012;
+
+window.toggleManagementTrainingEventComposerV012 =
+  toggleManagementTrainingEventComposerV012;
+
+window.submitManagementTrainingEventV012 =
+  submitManagementTrainingEventV012;
+
+window.openManagementKnowledgeCheckModalV012 =
+  openManagementKnowledgeCheckModalV012;
+
+window.closeManagementKnowledgeCheckModalV012 =
+  closeManagementKnowledgeCheckModalV012;
+
+window.openMittiKnowledgeCheckV012 =
+  openMittiKnowledgeCheckV012;
 
 window.toggleManagementCampaignComposerV012 =
   toggleManagementCampaignComposerV012;
