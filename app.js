@@ -1663,6 +1663,10 @@ function topBar() {
               v${APP_VERSION}
             </span>
 
+            <span class="prototype-creator-badge">
+              Prototype created by Pradip Krishnamoorthy
+            </span>
+
           </div>
 
           <span>
@@ -1811,11 +1815,11 @@ function sidebar() {
       <div class="sidebar-version">
 
         <span>
-          Prototype
+          Prototype v${APP_VERSION}
         </span>
 
         <strong>
-          v${APP_VERSION}
+          Created by Pradip Krishnamoorthy
         </strong>
 
       </div>
