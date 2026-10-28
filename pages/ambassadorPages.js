@@ -681,7 +681,7 @@ function ambassadorPerformanceCard() {
             AMBASSADOR PERFORMANCE SCORE
 
             ${tooltip(
-              KPI_CARD_DEFINITIONS.ambassadorPerformanceed at 100% attainment."
+              KPI_CARD_DEFINITIONS.ambassadorPerformance
             )}
           </h2>
 
