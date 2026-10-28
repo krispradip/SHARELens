@@ -1039,3 +1039,86 @@
   }
 
 }
+
+
+/* =========================================================
+   SHARE LENS v0.12.0 — MANAGEMENT MODALS / EVENT FORM
+
+   PURPOSE:
+   Supports physical-event creation and Mitti handoff for
+   Knowledge Check authoring.
+========================================================= */
+
+.v12-management-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 4000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background:
+    rgba(
+      28,
+      10,
+      18,
+      0.42
+    );
+  backdrop-filter: blur(3px);
+}
+
+.v12-management-modal {
+  width: min(460px, 100%);
+  padding: 22px;
+  border: 1px solid #e5d3da;
+  border-radius: 14px;
+  background: white;
+  box-shadow:
+    0 24px 70px
+    rgba(
+      35,
+      7,
+      17,
+      0.24
+    );
+}
+
+.v12-management-modal h2 {
+  margin: 5px 0 8px;
+  color: var(--brand);
+  font-size: 21px;
+}
+
+.v12-management-modal p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.v12-management-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.v12-management-composer {
+  margin-top: 10px;
+}
+
+@media (max-width: 560px) {
+
+  .v12-management-modal {
+    padding: 17px;
+  }
+
+  .v12-management-modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .v12-management-modal-actions button {
+    width: 100%;
+    min-height: 42px;
+  }
+
+}
