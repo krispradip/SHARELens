@@ -20,6 +20,8 @@
    - communication_audiences
    - communication_responses
    - ambassador_reviews
+   - training_events
+   - training_event_attendance
    - workflow_audit
 
    CHANGE IMPACT:
@@ -31,6 +33,9 @@ const CAMPAIGN_KEY =
 
 const REVIEW_KEY =
   "sharelens-v0.12.0-management-reviews";
+
+const TRAINING_EVENT_KEY =
+  "sharelens-v0.12.0-management-training-events";
 
 
 function readJson(key, fallback) {
@@ -131,4 +136,46 @@ export function getAmbassadorReviews() {
     REVIEW_KEY,
     []
   );
+}
+
+
+export function getCreatedTrainingEvents() {
+
+  return readJson(
+    TRAINING_EVENT_KEY,
+    []
+  );
+
+}
+
+
+export function createTrainingEvent(
+  payload
+) {
+
+  const records =
+    getCreatedTrainingEvents();
+
+  const created = {
+    id:
+      `EVT-${String(Date.now()).slice(-8)}`,
+    createdAt:
+      new Date().toISOString(),
+    status: "Scheduled",
+    reached: 0,
+    completion: "Not started",
+    evidence: 0,
+    ...payload
+  };
+
+  records.unshift(
+    created
+  );
+
+  writeJson(
+    TRAINING_EVENT_KEY,
+    records.slice(0, 100)
+  );
+
+  return created;
 }
