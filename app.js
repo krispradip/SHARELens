@@ -30,6 +30,11 @@ import {
 } from "./pages/ambassadorPages.js";
 
 import {
+  renderBULeadHomeV012,
+  renderProgrammeLeadHomeV012
+} from "./pages/managementPages.js";
+
+import {
   recordLogin,
   getLastLogin,
   getActivityStatus,
@@ -1215,35 +1220,54 @@ const navigation = {
     {
       title: "",
       items: [
-        ["home", "Home"]
+        ["home", "Dashboard"]
       ]
     },
 
     {
       title: "Performance",
       items: [
-        ["team-performance", "Performance"],
+        ["team-performance", "Programme Performance"],
         ["team-attention", "Requires Attention"]
       ]
     },
 
     {
-      title: "Training & Knowledge",
+      title: "People & Ambassadors",
       items: [
-        ["training-overview", "Training Overview"],
-        ["knowledge-gaps", "Knowledge Gaps"],
+        ["ambassadors", "Ambassadors"],
+        ["manager-onboarding", "Onboarding & Offboarding"]
+      ]
+    },
+
+    {
+      title: "Campaigns & Communications",
+      items: [
+        ["manager-communications", "Campaigns & Broadcasts"]
+      ]
+    },
+
+    {
+      title: "Training & Development",
+      items: [
+        ["training-overview", "Training"],
+        ["knowledge-gaps", "Knowledge Checks"],
         ["manager-knowledge", "Knowledge Base"]
       ]
     },
 
     {
-      title: "Ambassador Program",
+      title: "Service & Quality",
       items: [
-        ["ambassadors", "Ambassadors"],
-        ["manager-onboarding", "Onboarding & Offboarding"],
+        ["team-service-pulse", "Service Pulse"]
+      ]
+    },
+
+    {
+      title: "Programme Activity",
+      items: [
         ["manager-acquisition", "Acquisition"],
-        ["manager-communications", "Communications"],
-        ["manager-hub", "Ambassador Hub"]
+        ["manager-hub", "Forms & Submissions"]
       ]
     }
 
@@ -1255,39 +1279,68 @@ const navigation = {
     {
       title: "",
       items: [
-        ["home", "Home"]
+        ["home", "Dashboard"]
       ]
     },
 
     {
-      title: "Service Delivery",
+      title: "Programme Performance",
       items: [
         ["group-performance", "Performance"],
-        ["group-attention", "Requires Attention"],
-        ["service-pulse", "Service Pulse"],
-        ["audit", "Service Audit / Mystery Shop"],
-        ["group-actions", "Actions"]
+        ["group-attention", "Requires Attention"]
       ]
     },
 
     {
-      title: "Training & Knowledge",
+      title: "People & Ambassadors",
+      items: [
+        ["group-ambassadors", "Ambassadors"],
+        ["group-onboarding", "Onboarding & Offboarding"]
+      ]
+    },
+
+    {
+      title: "Campaigns & Communications",
+      items: [
+        ["group-communications", "Campaigns & Broadcasts"]
+      ]
+    },
+
+    {
+      title: "Training & Development",
       items: [
         ["group-training", "Training"],
-        ["group-gaps", "Knowledge Gaps"],
+        ["group-gaps", "Knowledge Checks"]
+      ]
+    },
+
+    {
+      title: "Service & Quality",
+      items: [
+        ["service-pulse", "Service Pulse"],
+        ["audit", "Service Audit / Mystery Shop"]
+      ]
+    },
+
+    {
+      title: "Knowledge & Content",
+      items: [
         ["group-knowledge", "Knowledge Base"]
       ]
     },
 
     {
-      title: "Ambassador Program",
+      title: "Rewards & Recognition",
       items: [
-        ["group-ambassadors", "Ambassadors"],
-        ["group-onboarding", "Onboarding & Offboarding"],
-        ["group-acquisition", "Acquisition"],
-        ["group-communications", "Communications"],
-        ["group-hub", "Ambassador Hub"],
         ["group-recognition", "Recognition / Leaderboard"]
+      ]
+    },
+
+    {
+      title: "Programme Activity",
+      items: [
+        ["group-acquisition", "Acquisition"],
+        ["group-hub", "Forms & Submissions"]
       ]
     }
 
@@ -8836,7 +8889,7 @@ function renderCurrentPage() {
     const pages = {
 
       home:
-        managerHome,
+        renderBULeadHomeV012,
 
       "team-performance":
         managerPerformance,
@@ -8844,6 +8897,9 @@ function renderCurrentPage() {
       "team-attention":
         () =>
           attentionPage(false),
+
+      "team-service-pulse":
+        servicePulsePage,
 
       "training-overview":
         () =>
@@ -8904,7 +8960,7 @@ function renderCurrentPage() {
     const pages = {
 
       home:
-        serviceHome,
+        renderProgrammeLeadHomeV012,
 
       "group-performance":
         servicePerformance,
