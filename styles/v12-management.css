@@ -425,3 +425,617 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+/* =========================================================
+   SHARE LENS v0.12.0 — MANAGEMENT DRILL-DOWN LAYOUTS
+
+   PURPOSE:
+   Working, responsive layouts for BU Lead and Programme Lead
+   operational pages.
+
+   CHANGE IMPACT:
+   Management views only.
+========================================================= */
+
+.v12-data-source-note {
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.v12-management-actionbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 11px 13px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: white;
+}
+
+.v12-management-actionbar strong,
+.v12-management-actionbar span {
+  display: block;
+}
+
+.v12-management-actionbar strong {
+  color: var(--brand);
+  font-size: 22px;
+  line-height: 1;
+}
+
+.v12-management-actionbar span {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.v12-management-note {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.v12-ambassador-table,
+.v12-campaign-list,
+.v12-training-list,
+.v12-recognition-list {
+  overflow-x: auto;
+}
+
+.v12-ambassador-table-head,
+.v12-ambassador-table-row {
+  display: grid;
+  grid-template-columns:
+    minmax(140px, 1.2fr)
+    minmax(150px, 1.4fr)
+    minmax(125px, 1fr)
+    minmax(120px, 1fr)
+    repeat(
+      4,
+      minmax(
+        75px,
+        0.65fr
+      )
+    )
+    auto;
+  gap: 8px;
+  align-items: center;
+  min-width: 1040px;
+}
+
+.v12-ambassador-table-head {
+  padding: 0 8px 7px;
+  color: var(--muted);
+  font-size: 8px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.v12-ambassador-table-row {
+  padding: 10px 8px;
+  border-top: 1px solid var(--border);
+  font-size: 9px;
+}
+
+.v12-ambassador-table-row strong,
+.v12-ambassador-table-row small {
+  display: block;
+}
+
+.v12-ambassador-table-row small {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 8px;
+}
+
+.v12-activity-chip {
+  display: inline-flex;
+  width: fit-content;
+  padding: 4px 7px;
+  border-radius: 999px;
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.v12-activity-chip.active {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.v12-activity-chip.review {
+  background: var(--amber-soft);
+  color: var(--amber);
+}
+
+.v12-management-lifecycle-grid,
+.v12-training-mode-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(
+        0,
+        1fr
+      )
+    );
+  gap: 12px;
+  align-items: start;
+}
+
+.v12-lifecycle-card {
+  padding: 11px 0;
+  border-top: 1px solid var(--border);
+}
+
+.v12-lifecycle-card:first-of-type {
+  border-top: 0;
+}
+
+.v12-lifecycle-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.v12-lifecycle-card-head strong,
+.v12-lifecycle-card-head span {
+  display: block;
+}
+
+.v12-lifecycle-card-head > div > span {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.v12-lifecycle-step-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(
+      5,
+      minmax(
+        0,
+        1fr
+      )
+    );
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.v12-lifecycle-step-grid > div {
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fffafb;
+}
+
+.v12-lifecycle-step-grid span,
+.v12-lifecycle-step-grid strong {
+  display: block;
+}
+
+.v12-lifecycle-step-grid span {
+  color: var(--muted);
+  font-size: 8px;
+}
+
+.v12-lifecycle-step-grid strong {
+  margin-top: 3px;
+  color: var(--brand);
+  font-size: 9px;
+}
+
+.v12-inactivity-row,
+.v12-training-row,
+.v12-knowledge-check-row,
+.v12-recognition-row,
+.v12-acquisition-management-row,
+.v12-campaign-row {
+  border-top: 1px solid var(--border);
+}
+
+.v12-inactivity-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.v12-inactivity-row strong,
+.v12-inactivity-row span {
+  display: block;
+}
+
+.v12-inactivity-row span {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.v12-management-composer {
+  margin-bottom: 12px;
+}
+
+.v12-management-form-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(
+        0,
+        1fr
+      )
+    );
+  gap: 10px;
+}
+
+.v12-management-form-grid label > span {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.v12-management-form-grid input,
+.v12-management-form-grid select,
+.v12-management-form-grid textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: white;
+  color: var(--text);
+  font: inherit;
+}
+
+.v12-management-form-grid input,
+.v12-management-form-grid select {
+  height: 38px;
+  padding: 0 9px;
+}
+
+.v12-management-form-grid textarea {
+  padding: 9px;
+  resize: vertical;
+}
+
+.v12-management-form-grid .wide {
+  grid-column: span 2;
+}
+
+.v12-management-form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 11px;
+}
+
+.v12-management-form-actions span {
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.v12-campaign-row {
+  display: grid;
+  grid-template-columns:
+    80px
+    minmax(
+      180px,
+      1.5fr
+    )
+    70px
+    110px
+    90px;
+  gap: 10px;
+  align-items: center;
+  min-width: 700px;
+  padding: 10px 0;
+}
+
+.v12-campaign-row strong,
+.v12-campaign-row small {
+  display: block;
+}
+
+.v12-campaign-row small {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 8px;
+}
+
+.v12-campaign-type {
+  display: inline-flex;
+  width: fit-content;
+  padding: 4px 7px;
+  border-radius: 999px;
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.v12-campaign-type.campaign {
+  background: var(--pink-soft);
+  color: var(--brand);
+}
+
+.v12-campaign-type.broadcast {
+  background: #eeeaf8;
+  color: #5d3aa8;
+}
+
+.v12-training-list {
+  margin-top: 10px;
+}
+
+.v12-training-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.v12-training-row strong,
+.v12-training-row small,
+.v12-training-row span {
+  display: block;
+}
+
+.v12-training-row small {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 8px;
+}
+
+.v12-training-row-metrics {
+  text-align: right;
+}
+
+.v12-training-row-metrics span {
+  color: var(--muted);
+  font-size: 8px;
+}
+
+.v12-knowledge-check-row {
+  display: grid;
+  grid-template-columns:
+    minmax(
+      220px,
+      1.6fr
+    )
+    90px
+    90px
+    90px
+    minmax(
+      180px,
+      1.2fr
+    );
+  gap: 10px;
+  align-items: center;
+  min-width: 760px;
+  padding: 10px 0;
+}
+
+.v12-knowledge-check-row strong,
+.v12-knowledge-check-row small,
+.v12-knowledge-check-row span {
+  display: block;
+}
+
+.v12-knowledge-check-row small,
+.v12-knowledge-check-row span {
+  color: var(--muted);
+  font-size: 8px;
+}
+
+.v12-knowledge-check-row > div:not(:first-child) strong {
+  margin-top: 3px;
+  color: var(--brand);
+}
+
+.v12-acquisition-management-list {
+  overflow-x: auto;
+}
+
+.v12-acquisition-management-row {
+  display: grid;
+  grid-template-columns:
+    minmax(
+      180px,
+      1.5fr
+    )
+    repeat(
+      3,
+      minmax(
+        100px,
+        0.8fr
+      )
+    );
+  gap: 10px;
+  align-items: center;
+  min-width: 620px;
+  padding: 10px 0;
+}
+
+.v12-acquisition-management-row strong,
+.v12-acquisition-management-row small,
+.v12-acquisition-management-row span {
+  display: block;
+}
+
+.v12-acquisition-management-row small,
+.v12-acquisition-management-row span {
+  color: var(--muted);
+  font-size: 8px;
+}
+
+.v12-acquisition-management-row > div:not(:first-child) strong {
+  margin-top: 3px;
+  color: var(--brand);
+}
+
+.v12-submission-management-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(
+        180px,
+        1fr
+      )
+    );
+  gap: 10px;
+}
+
+.v12-submission-management-card {
+  min-height: 0;
+  height: auto;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.v12-submission-management-card > span,
+.v12-submission-management-card > strong {
+  display: block;
+}
+
+.v12-submission-management-card > span {
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.v12-submission-management-card > strong {
+  margin: 8px 0;
+  color: var(--brand);
+  font-size: 27px;
+}
+
+.v12-submission-management-card > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 8px;
+}
+
+.v12-submission-management-card em {
+  font-style: normal;
+  font-weight: 700;
+}
+
+.v12-recognition-row {
+  display: grid;
+  grid-template-columns:
+    36px
+    minmax(
+      180px,
+      1.4fr
+    )
+    100px
+    90px
+    minmax(
+      160px,
+      1fr
+    );
+  gap: 10px;
+  align-items: center;
+  min-width: 670px;
+  padding: 10px 0;
+}
+
+.v12-recognition-rank {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--pink-soft);
+  color: var(--brand);
+  font-weight: 800;
+}
+
+.v12-recognition-row strong,
+.v12-recognition-row small,
+.v12-recognition-row span {
+  display: block;
+}
+
+.v12-recognition-row small,
+.v12-recognition-row > div:not(:nth-child(2)) span {
+  color: var(--muted);
+  font-size: 8px;
+}
+
+.v12-recognition-badge {
+  width: fit-content;
+  padding: 5px 7px;
+  border-radius: 999px;
+  background: var(--green-soft);
+  color: var(--green);
+  font-size: 8px;
+  font-weight: 800;
+}
+
+
+@media (max-width: 900px) {
+
+  .v12-management-lifecycle-grid,
+  .v12-training-mode-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .v12-lifecycle-step-grid {
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(
+          0,
+          1fr
+        )
+      );
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .v12-management-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .v12-management-form-grid .wide {
+    grid-column: span 1;
+  }
+
+  .v12-management-form-actions,
+  .v12-management-actionbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .v12-lifecycle-step-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      );
+  }
+
+  .v12-management-actionbar .primary-small,
+  .v12-management-form-actions .primary-small {
+    width: 100%;
+    min-height: 42px;
+  }
+
+}
