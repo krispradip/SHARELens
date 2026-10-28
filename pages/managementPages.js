@@ -15,11 +15,15 @@ import {
   getCreatedCampaigns,
   createManagementCampaign,
   recordAmbassadorReview,
-  getAmbassadorReviews
+  getAmbassadorReviews,
+  getCreatedTrainingEvents,
+  createTrainingEvent
 } from "../services/managementActionService.js";
 
 
 let managementCampaignComposerOpen = false;
+let managementTrainingEventComposerOpen = false;
+let managementKnowledgeCheckModalOpen = false;
 
 
 /* =========================================================
@@ -1438,6 +1442,170 @@ export function renderManagementCampaignsV012(
 }
 
 
+function trainingEventComposer() {
+
+  if (!managementTrainingEventComposerOpen) {
+    return "";
+  }
+
+  return `
+    <section class="dashboard-card v12-management-composer">
+
+      <div class="v12-management-panel-head">
+        <h2>CREATE PHYSICAL / IN-STORE EVENT</h2>
+
+        <button
+          class="small-button"
+          onclick="toggleManagementTrainingEventComposerV012()"
+        >
+          Close
+        </button>
+      </div>
+
+      <div class="v12-management-form-grid">
+
+        <label>
+          <span>Event type</span>
+          <select id="mgmt-event-type">
+            <option>Training</option>
+            <option>Huddle</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Topic</span>
+          <input
+            id="mgmt-event-topic"
+            placeholder="e.g. SHARE Member Onboarding"
+          >
+        </label>
+
+        <label>
+          <span>Date</span>
+          <input
+            id="mgmt-event-date"
+            type="date"
+          >
+        </label>
+
+        <label>
+          <span>Start time</span>
+          <input
+            id="mgmt-event-time"
+            type="time"
+          >
+        </label>
+
+        <label>
+          <span>Location</span>
+          <input
+            id="mgmt-event-location"
+            placeholder="Mall / store / training room"
+          >
+        </label>
+
+        <label>
+          <span>Facilitator / Ambassador</span>
+          <input
+            id="mgmt-event-facilitator"
+            placeholder="Name"
+          >
+        </label>
+
+        <label>
+          <span>Expected audience</span>
+          <input
+            id="mgmt-event-audience"
+            type="number"
+            min="1"
+            placeholder="Number of people"
+          >
+        </label>
+
+        <label class="wide">
+          <span>Notes</span>
+          <textarea
+            id="mgmt-event-notes"
+            rows="3"
+            placeholder="Purpose, preparation or follow-up notes"
+          ></textarea>
+        </label>
+
+      </div>
+
+      <div class="v12-management-form-actions">
+        <span>
+          Production write path: authenticated API → training_events datastore.
+        </span>
+
+        <button
+          class="primary-small"
+          onclick="submitManagementTrainingEventV012()"
+        >
+          Create Event
+        </button>
+      </div>
+
+    </section>
+  `;
+}
+
+
+function knowledgeCheckMittiModal() {
+
+  if (!managementKnowledgeCheckModalOpen) {
+    return "";
+  }
+
+  return `
+    <div class="v12-management-modal-backdrop">
+
+      <section
+        class="v12-management-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="mitti-modal-title"
+      >
+
+        <span class="v12-management-eyebrow">
+          KNOWLEDGE CHECK
+        </span>
+
+        <h2 id="mitti-modal-title">
+          Create in Mitti / SafetyCulture
+        </h2>
+
+        <p>
+          Knowledge Checks are authored and managed in Mitti / SafetyCulture.
+          SHARE Lens will surface participation, scores and knowledge gaps once
+          the assessment data is available.
+        </p>
+
+        <div class="v12-management-modal-actions">
+
+          <button
+            class="small-button"
+            onclick="closeManagementKnowledgeCheckModalV012()"
+          >
+            Cancel
+          </button>
+
+          <button
+            class="primary-small"
+            onclick="openMittiKnowledgeCheckV012()"
+          >
+            Continue to Mitti
+          </button>
+
+        </div>
+
+      </section>
+
+    </div>
+  `;
+}
+
+
 export function renderManagementTrainingV012(
   programmeLead = false
 ) {
@@ -1448,6 +1616,14 @@ export function renderManagementTrainingV012(
           .trainingSummary
       : BU_LEAD_DASHBOARD
           .trainingSummary;
+
+  const createdEvents =
+    getCreatedTrainingEvents();
+
+  const physicalSessions = [
+    ...createdEvents,
+    ...MANAGEMENT_TRAINING.physicalSessions
+  ];
 
   return pageShell(
     programmeLead,
@@ -1511,14 +1687,18 @@ export function renderManagementTrainingV012(
           <div class="v12-management-panel-head">
             <h2>PHYSICAL / IN-STORE TRAINING</h2>
 
-            <button class="primary-small">
+            <button
+              class="primary-small"
+              onclick="toggleManagementTrainingEventComposerV012()"
+            >
               + Create Event
             </button>
           </div>
 
+          ${trainingEventComposer()}
+
           <div class="v12-training-list">
-            ${MANAGEMENT_TRAINING
-              .physicalSessions
+            ${physicalSessions
               .map(
                 item => `
                   <div class="v12-training-row">
@@ -1530,7 +1710,7 @@ export function renderManagementTrainingV012(
                       <small>
                         ${item.date} ·
                         ${item.location} ·
-                        ${item.ambassador}
+                        ${item.ambassador || item.facilitator}
                       </small>
                     </div>
 
@@ -1582,12 +1762,17 @@ export function renderManagementKnowledgeChecksV012(
         )}
       </div>
 
+      ${knowledgeCheckMittiModal()}
+
       <section class="dashboard-card v12-management-panel">
 
         <div class="v12-management-panel-head">
           <h2>KNOWLEDGE CHECKS</h2>
 
-          <button class="primary-small">
+          <button
+            class="primary-small"
+            onclick="openManagementKnowledgeCheckModalV012()"
+          >
             + Create Knowledge Check
           </button>
         </div>
@@ -1926,4 +2111,119 @@ export function reviewManagementAmbassadorFormV012(
     ambassadorId,
     "Reviewed — retain active pending confirmation"
   );
+}
+
+
+export function toggleManagementTrainingEventComposerV012() {
+  managementTrainingEventComposerOpen =
+    !managementTrainingEventComposerOpen;
+}
+
+
+export function submitManagementTrainingEventFormV012() {
+
+  const type =
+    document
+      .getElementById(
+        "mgmt-event-type"
+      )
+      ?.value ||
+    "Training";
+
+  const topic =
+    document
+      .getElementById(
+        "mgmt-event-topic"
+      )
+      ?.value
+      ?.trim();
+
+  const date =
+    document
+      .getElementById(
+        "mgmt-event-date"
+      )
+      ?.value ||
+    "";
+
+  const time =
+    document
+      .getElementById(
+        "mgmt-event-time"
+      )
+      ?.value ||
+    "";
+
+  const location =
+    document
+      .getElementById(
+        "mgmt-event-location"
+      )
+      ?.value
+      ?.trim();
+
+  const facilitator =
+    document
+      .getElementById(
+        "mgmt-event-facilitator"
+      )
+      ?.value
+      ?.trim();
+
+  const audience =
+    Number(
+      document
+        .getElementById(
+          "mgmt-event-audience"
+        )
+        ?.value ||
+      0
+    );
+
+  const notes =
+    document
+      .getElementById(
+        "mgmt-event-notes"
+      )
+      ?.value
+      ?.trim();
+
+  if (
+    !topic ||
+    !date ||
+    !location
+  ) {
+    throw new Error(
+      "Topic, date and location are required."
+    );
+  }
+
+  const created =
+    createTrainingEvent({
+      type,
+      topic,
+      date,
+      time,
+      location,
+      facilitator:
+        facilitator ||
+        "To be assigned",
+      audience,
+      notes
+    });
+
+  managementTrainingEventComposerOpen =
+    false;
+
+  return created;
+}
+
+
+export function openManagementKnowledgeCheckModalStateV012() {
+  managementKnowledgeCheckModalOpen = true;
+}
+
+
+export function closeManagementKnowledgeCheckModalStateV012() {
+  managementKnowledgeCheckModalOpen = false;
 }
