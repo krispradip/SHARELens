@@ -648,3 +648,1282 @@ export function renderProgrammeLeadHomeV012() {
     ${submissionCard(d.submissions, "group-hub")}
   `;
 }
+
+
+/* =========================================================
+   MANAGEMENT DRILL-DOWN PAGES
+   Owner: Pradip
+
+   PURPOSE:
+   Working operational layouts for BU Lead and Programme
+   Lead personas.
+
+   BUSINESS MEANING:
+   These pages turn the management dashboard into a usable
+   operating workspace rather than a collection of summary
+   cards.
+
+   PRODUCTION DATA REQUIREMENT:
+   Read models should come from APIs / repositories. Actions
+   should write through authenticated services to the
+   approved transactional database and external systems.
+========================================================= */
+
+function scopedAmbassadors(
+  programmeLead
+) {
+
+  return programmeLead
+    ? MANAGEMENT_AMBASSADORS
+    : MANAGEMENT_AMBASSADORS
+        .filter(
+          item =>
+            item.bu ===
+            "Entertainment"
+        );
+}
+
+
+function pageShell(
+  programmeLead,
+  eyebrow,
+  title,
+  subtitle,
+  body
+) {
+
+  const scope =
+    programmeLead
+      ? PROGRAMME_LEAD_DASHBOARD.scopeLabel
+      : BU_LEAD_DASHBOARD.scopeLabel;
+
+  return `
+    ${managementHeader(
+      eyebrow,
+      title,
+      subtitle,
+      scope
+    )}
+
+    ${managementFilterBar(
+      programmeLead
+    )}
+
+    ${body}
+  `;
+}
+
+
+function attentionSummaryGrid(
+  programmeLead
+) {
+
+  const ambassadors =
+    scopedAmbassadors(
+      programmeLead
+    );
+
+  const inactivity =
+    ambassadors.filter(
+      item =>
+        item.activity !==
+        "Active"
+    ).length;
+
+  const belowSales =
+    ambassadors.filter(
+      item =>
+        item.salesPenetration <
+        MANAGEMENT_TARGETS
+          .salesPenetration
+    ).length;
+
+  const belowPulse =
+    ambassadors.filter(
+      item =>
+        item.servicePulse <
+        MANAGEMENT_TARGETS
+          .servicePulse
+    ).length;
+
+  const overdueTraining =
+    ambassadors.filter(
+      item =>
+        item.trainingCompletion <
+        MANAGEMENT_TARGETS
+          .trainingCompletion
+    ).length;
+
+  return `
+    <div class="v12-management-kpi-grid">
+      ${managementKpiCard(
+        "Inactivity Reviews",
+        inactivity,
+        null,
+        "",
+        programmeLead
+          ? "group-ambassadors"
+          : "ambassadors",
+        "Human review required"
+      )}
+
+      ${managementKpiCard(
+        "Below Sales Target",
+        belowSales,
+        null,
+        "",
+        programmeLead
+          ? "group-performance"
+          : "team-performance",
+        "Ambassadors in scope"
+      )}
+
+      ${managementKpiCard(
+        "Below Service Pulse",
+        belowPulse,
+        null,
+        "",
+        "service-pulse",
+        "Below 85% threshold"
+      )}
+
+      ${managementKpiCard(
+        "Training Follow-up",
+        overdueTraining,
+        null,
+        "",
+        programmeLead
+          ? "group-training"
+          : "training-overview",
+        "Below completion target"
+      )}
+    </div>
+  `;
+}
+
+
+export function renderManagementPerformanceV012(
+  programmeLead = false
+) {
+
+  const source =
+    programmeLead
+      ? PROGRAMME_LEAD_DASHBOARD
+      : BU_LEAD_DASHBOARD;
+
+  const hierarchy =
+    programmeLead
+      ? source.businessUnits
+      : source.brands;
+
+  const label =
+    programmeLead
+      ? "Business Unit"
+      : "Brand";
+
+  return pageShell(
+    programmeLead,
+    "PERFORMANCE",
+    programmeLead
+      ? "Programme Performance"
+      : "BU Programme Performance",
+    "Review the same programme KPI framework used by Ambassadors, rolled up to your authorised organisational scope.",
+    `
+      <div class="v12-management-kpi-grid">
+        ${managementKpiCard(
+          "SHARE Performance",
+          source.sharePerformance,
+          MANAGEMENT_TARGETS.sharePerformance,
+          "%"
+        )}
+
+        ${managementKpiCard(
+          "Ambassador Performance",
+          source.ambassadorPerformance,
+          MANAGEMENT_TARGETS.ambassadorPerformance,
+          "%"
+        )}
+
+        ${managementKpiCard(
+          "Sales Penetration",
+          source.salesPenetration,
+          MANAGEMENT_TARGETS.salesPenetration,
+          "%"
+        )}
+
+        ${managementKpiCard(
+          "Service Pulse",
+          source.servicePulse,
+          MANAGEMENT_TARGETS.servicePulse,
+          "%"
+        )}
+
+        ${managementKpiCard(
+          "Training Completion",
+          source.trainingCompletion,
+          MANAGEMENT_TARGETS.trainingCompletion,
+          "%"
+        )}
+
+        ${managementKpiCard(
+          "Knowledge Score",
+          source.knowledgeScore,
+          MANAGEMENT_TARGETS.knowledgeScore,
+          "%"
+        )}
+      </div>
+
+      <section class="dashboard-card v12-management-panel">
+
+        <div class="v12-management-panel-head">
+          <h2>
+            PERFORMANCE BY ${label.toUpperCase()}
+          </h2>
+
+          <span class="v12-data-source-note">
+            Prototype read model
+          </span>
+        </div>
+
+        <div class="v12-management-table">
+
+          <div class="v12-management-table-head">
+            <span>${label}</span>
+            <span>Ambassadors</span>
+            <span>Active</span>
+            <span>SHARE Perf.</span>
+            <span>Ambassador Perf.</span>
+            <span>Sales Pen.</span>
+            <span>Service Pulse</span>
+          </div>
+
+          ${hierarchy
+            .map(
+              item => `
+                <div class="v12-management-table-row">
+                  <strong>${item.name}</strong>
+                  <span>${formatNumber(item.ambassadors)}</span>
+                  <span>${item.activeRate}%</span>
+                  <span>${item.sharePerformance}%</span>
+                  <span>${item.ambassadorPerformance}%</span>
+                  <span class="${statusClass(
+                    item.salesPenetration,
+                    MANAGEMENT_TARGETS.salesPenetration
+                  )}">
+                    ${item.salesPenetration}%
+                  </span>
+                  <span class="${statusClass(
+                    item.servicePulse,
+                    MANAGEMENT_TARGETS.servicePulse
+                  )}">
+                    ${item.servicePulse}%
+                  </span>
+                </div>
+              `
+            )
+            .join("")}
+
+        </div>
+
+      </section>
+    `
+  );
+}
+
+
+export function renderManagementAttentionV012(
+  programmeLead = false
+) {
+
+  const source =
+    programmeLead
+      ? PROGRAMME_LEAD_DASHBOARD
+      : BU_LEAD_DASHBOARD;
+
+  return pageShell(
+    programmeLead,
+    "PERFORMANCE",
+    "Requires Attention",
+    "Focus only on areas where the programme can take action, using controlled KPI gaps and activity signals.",
+    `
+      ${attentionSummaryGrid(
+        programmeLead
+      )}
+
+      <section class="dashboard-card v12-management-panel">
+
+        <div class="v12-management-panel-head">
+          <h2>PRIORITY ACTION QUEUE</h2>
+        </div>
+
+        <div class="v12-management-attention-list">
+
+          ${source
+            .requiresAttention
+            .map(
+              item => `
+                <button
+                  class="v12-management-attention-row large"
+                  onclick="navigateTo('${item.route}')"
+                >
+                  <span class="v12-severity ${item.severity.toLowerCase()}">
+                    ${item.severity}
+                  </span>
+
+                  <div>
+                    <strong>${item.title}</strong>
+                    <small>${item.detail}</small>
+                  </div>
+
+                  <span>Review →</span>
+                </button>
+              `
+            )
+            .join("")}
+
+        </div>
+
+      </section>
+    `
+  );
+}
+
+
+export function renderManagementAmbassadorsV012(
+  programmeLead = false
+) {
+
+  const items =
+    scopedAmbassadors(
+      programmeLead
+    );
+
+  const reviews =
+    getAmbassadorReviews();
+
+  return pageShell(
+    programmeLead,
+    "PEOPLE & AMBASSADORS",
+    "Ambassadors",
+    "Monitor active status, programme performance and intervention needs at individual Ambassador level.",
+    `
+      <div class="v12-management-kpi-grid">
+        ${managementKpiCard(
+          "Ambassadors",
+          items.length,
+          null,
+          "",
+          "",
+          "Visible in current scope"
+        )}
+
+        ${managementKpiCard(
+          "Active",
+          items.filter(
+            item =>
+              item.activity ===
+              "Active"
+          ).length,
+          null,
+          "",
+          "",
+          "Based on Last Login"
+        )}
+
+        ${managementKpiCard(
+          "Inactivity Review",
+          items.filter(
+            item =>
+              item.activity !==
+              "Active"
+          ).length,
+          null,
+          "",
+          "",
+          "Human review required"
+        )}
+
+        ${managementKpiCard(
+          "Reviews Recorded",
+          reviews.length,
+          null,
+          "",
+          "",
+          "Prototype workflow"
+        )}
+      </div>
+
+      <section class="dashboard-card v12-management-panel">
+
+        <div class="v12-management-panel-head">
+          <h2>AMBASSADOR POPULATION</h2>
+        </div>
+
+        <div class="v12-ambassador-table">
+
+          <div class="v12-ambassador-table-head">
+            <span>Ambassador</span>
+            <span>Brand / Store</span>
+            <span>Last Login</span>
+            <span>Activity</span>
+            <span>SHARE Perf.</span>
+            <span>Ambassador Perf.</span>
+            <span>Sales Pen.</span>
+            <span>Service Pulse</span>
+            <span></span>
+          </div>
+
+          ${items.map(item => `
+            <div class="v12-ambassador-table-row">
+
+              <div>
+                <strong>${item.name}</strong>
+                <small>${item.staffId} · ${item.bu}</small>
+              </div>
+
+              <div>
+                <strong>${item.brand}</strong>
+                <small>${item.store}</small>
+              </div>
+
+              <span>${item.lastLogin}</span>
+
+              <span class="v12-activity-chip ${
+                item.activity ===
+                "Active"
+                  ? "active"
+                  : "review"
+              }">
+                ${item.activity}
+              </span>
+
+              <strong>${item.sharePerformance}%</strong>
+              <strong>${item.ambassadorPerformance}%</strong>
+
+              <strong class="${statusClass(
+                item.salesPenetration,
+                MANAGEMENT_TARGETS.salesPenetration
+              )}">
+                ${item.salesPenetration}%
+              </strong>
+
+              <strong class="${statusClass(
+                item.servicePulse,
+                MANAGEMENT_TARGETS.servicePulse
+              )}">
+                ${item.servicePulse}%
+              </strong>
+
+              <button
+                class="small-button"
+                onclick="reviewManagementAmbassadorV012('${item.id}')"
+              >
+                Review
+              </button>
+
+            </div>
+          `).join("")}
+
+        </div>
+
+      </section>
+    `
+  );
+}
+
+
+export function renderManagementLifecycleV012(
+  programmeLead = false
+) {
+
+  const inactivity =
+    scopedAmbassadors(
+      programmeLead
+    ).filter(
+      item =>
+        item.activity !==
+        "Active"
+    );
+
+  return pageShell(
+    programmeLead,
+    "PEOPLE & AMBASSADORS",
+    "Onboarding & Offboarding",
+    "Manage the Ambassador lifecycle while keeping offboarding a human-controlled decision.",
+    `
+      <div class="v12-management-lifecycle-grid">
+
+        <section class="dashboard-card v12-management-panel">
+
+          <div class="v12-management-panel-head">
+            <h2>ONBOARDING</h2>
+
+            <button class="primary-small">
+              + Invite Ambassador
+            </button>
+          </div>
+
+          ${MANAGEMENT_ONBOARDING
+            .map(
+              item => `
+                <div class="v12-lifecycle-card">
+
+                  <div class="v12-lifecycle-card-head">
+                    <div>
+                      <strong>${item.name}</strong>
+                      <span>${item.brand} · ${item.store}</span>
+                    </div>
+
+                    <span class="v12-activity-chip active">
+                      ${item.status}
+                    </span>
+                  </div>
+
+                  <div class="v12-lifecycle-step-grid">
+                    ${[
+                      ["Account", item.account],
+                      ["First Login", item.firstLogin],
+                      ["Training", item.training],
+                      ["Knowledge", item.knowledge],
+                      ["Personal QR", item.personalQr]
+                    ].map(step => `
+                      <div>
+                        <span>${step[0]}</span>
+                        <strong>${step[1]}</strong>
+                      </div>
+                    `).join("")}
+                  </div>
+
+                </div>
+              `
+            )
+            .join("")}
+
+        </section>
+
+        <section class="dashboard-card v12-management-panel">
+
+          <div class="v12-management-panel-head">
+            <h2>INACTIVITY REVIEW</h2>
+          </div>
+
+          <p class="v12-management-note">
+            More than 60 days without a login is a review trigger only. Do not automatically offboard the Ambassador.
+          </p>
+
+          ${inactivity.length
+            ? inactivity.map(item => `
+                <div class="v12-inactivity-row">
+                  <div>
+                    <strong>${item.name}</strong>
+                    <span>${item.brand} · Last login ${item.lastLogin}</span>
+                  </div>
+
+                  <button
+                    class="small-button"
+                    onclick="reviewManagementAmbassadorV012('${item.id}')"
+                  >
+                    Record Review
+                  </button>
+                </div>
+              `).join("")
+            : `
+                <div class="empty-state">
+                  No inactivity reviews in this scope.
+                </div>
+              `
+          }
+
+        </section>
+
+      </div>
+    `
+  );
+}
+
+
+function campaignComposer(
+  programmeLead
+) {
+
+  if (!managementCampaignComposerOpen) {
+    return "";
+  }
+
+  return `
+    <section class="dashboard-card v12-management-composer">
+
+      <div class="v12-management-panel-head">
+        <h2>CREATE CAMPAIGN / BROADCAST</h2>
+
+        <button
+          class="small-button"
+          onclick="toggleManagementCampaignComposerV012()"
+        >
+          Close
+        </button>
+      </div>
+
+      <div class="v12-management-form-grid">
+
+        <label>
+          <span>Type</span>
+          <select id="mgmt-campaign-type">
+            <option>Campaign</option>
+            <option>Broadcast</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Audience</span>
+          <select id="mgmt-campaign-audience">
+            <option>
+              ${programmeLead
+                ? "All Ambassadors"
+                : "Entertainment UAE"
+              }
+            </option>
+            <option>Selected Brand</option>
+            <option>Selected Store</option>
+          </select>
+        </label>
+
+        <label class="wide">
+          <span>Title</span>
+          <input
+            id="mgmt-campaign-title"
+            placeholder="Campaign / broadcast title"
+          >
+        </label>
+
+        <label class="wide">
+          <span>Message</span>
+          <textarea
+            id="mgmt-campaign-message"
+            rows="4"
+            placeholder="What should the Ambassador know or do?"
+          ></textarea>
+        </label>
+
+        <label>
+          <span>Start date</span>
+          <input
+            id="mgmt-campaign-start"
+            type="date"
+          >
+        </label>
+
+        <label>
+          <span>End date</span>
+          <input
+            id="mgmt-campaign-end"
+            type="date"
+          >
+        </label>
+
+      </div>
+
+      <div class="v12-management-form-actions">
+        <span>
+          Prototype writes through managementActionService.
+        </span>
+
+        <button
+          class="primary-small"
+          onclick="submitManagementCampaignV012()"
+        >
+          Publish
+        </button>
+      </div>
+
+    </section>
+  `;
+}
+
+
+export function renderManagementCampaignsV012(
+  programmeLead = false
+) {
+
+  const created =
+    getCreatedCampaigns();
+
+  const items = [
+    ...created,
+    ...MANAGEMENT_CAMPAIGNS
+  ];
+
+  return pageShell(
+    programmeLead,
+    "CAMPAIGNS & COMMUNICATIONS",
+    "Campaigns & Broadcasts",
+    "Create programme communications, target the right audience and measure participation or acknowledgement.",
+    `
+      <div class="v12-management-actionbar">
+        <div>
+          <strong>${items.length}</strong>
+          <span>campaigns / broadcasts visible</span>
+        </div>
+
+        <button
+          class="primary-small"
+          onclick="toggleManagementCampaignComposerV012()"
+        >
+          + New Campaign / Broadcast
+        </button>
+      </div>
+
+      ${campaignComposer(
+        programmeLead
+      )}
+
+      <section class="dashboard-card v12-management-panel">
+
+        <div class="v12-management-panel-head">
+          <h2>COMMUNICATION HISTORY</h2>
+        </div>
+
+        <div class="v12-campaign-list">
+
+          ${items
+            .map(
+              item => `
+                <div class="v12-campaign-row">
+
+                  <span class="v12-campaign-type ${String(item.type).toLowerCase()}">
+                    ${item.type}
+                  </span>
+
+                  <div>
+                    <strong>${item.title}</strong>
+                    <small>
+                      ${item.audience} ·
+                      ${item.start || "Today"} →
+                      ${item.end || "Open"}
+                    </small>
+                  </div>
+
+                  <span>${item.status}</span>
+
+                  <div>
+                    <strong>${item.rate || 0}%</strong>
+                    <small>
+                      ${item.type === "Broadcast"
+                        ? "acknowledged"
+                        : "participated"
+                      }
+                    </small>
+                  </div>
+
+                  <span>
+                    ${formatNumber(
+                      item.participated || 0
+                    )}
+                    /
+                    ${formatNumber(
+                      item.sent || 0
+                    )}
+                  </span>
+
+                </div>
+              `
+            )
+            .join("")}
+
+        </div>
+
+      </section>
+    `
+  );
+}
+
+
+export function renderManagementTrainingV012(
+  programmeLead = false
+) {
+
+  const summary =
+    programmeLead
+      ? PROGRAMME_LEAD_DASHBOARD
+          .trainingSummary
+      : BU_LEAD_DASHBOARD
+          .trainingSummary;
+
+  return pageShell(
+    programmeLead,
+    "TRAINING & DEVELOPMENT",
+    "Training",
+    "Keep online learning and physical / in-store learning separate while presenting both through one management experience.",
+    `
+      <div class="v12-training-mode-grid">
+
+        <section class="dashboard-card v12-management-panel">
+
+          <div class="v12-management-panel-head">
+            <h2>ONLINE TRAINING</h2>
+
+            <span class="v12-data-source-note">
+              Mitti / SafetyCulture
+            </span>
+          </div>
+
+          <div class="v12-management-mini-grid">
+            <div>
+              <span>Completion</span>
+              <strong>${summary.onlineCompletion}%</strong>
+            </div>
+
+            <div>
+              <span>Courses tracked</span>
+              <strong>${MANAGEMENT_TRAINING.onlineCourses.length}</strong>
+            </div>
+          </div>
+
+          <div class="v12-training-list">
+            ${MANAGEMENT_TRAINING
+              .onlineCourses
+              .map(
+                item => `
+                  <div class="v12-training-row">
+                    <div>
+                      <strong>${item.title}</strong>
+                      <small>
+                        ${item.assigned} assigned ·
+                        ${item.overdue} overdue
+                      </small>
+                    </div>
+
+                    <strong>${item.completion}%</strong>
+                  </div>
+                `
+              )
+              .join("")}
+          </div>
+
+          <button class="small-button">
+            Open Mitti
+          </button>
+
+        </section>
+
+        <section class="dashboard-card v12-management-panel">
+
+          <div class="v12-management-panel-head">
+            <h2>PHYSICAL / IN-STORE TRAINING</h2>
+
+            <button class="primary-small">
+              + Create Event
+            </button>
+          </div>
+
+          <div class="v12-training-list">
+            ${MANAGEMENT_TRAINING
+              .physicalSessions
+              .map(
+                item => `
+                  <div class="v12-training-row">
+                    <div>
+                      <strong>
+                        ${item.type} · ${item.topic}
+                      </strong>
+
+                      <small>
+                        ${item.date} ·
+                        ${item.location} ·
+                        ${item.ambassador}
+                      </small>
+                    </div>
+
+                    <div class="v12-training-row-metrics">
+                      <span>${item.reached} reached</span>
+                      <strong>${item.completion}</strong>
+                    </div>
+                  </div>
+                `
+              )
+              .join("")}
+          </div>
+
+        </section>
+
+      </div>
+    `
+  );
+}
+
+
+export function renderManagementKnowledgeChecksV012(
+  programmeLead = false
+) {
+
+  return pageShell(
+    programmeLead,
+    "TRAINING & DEVELOPMENT",
+    "Knowledge Checks",
+    "Monitor participation, score and question-level gaps and use those gaps to target corrective learning.",
+    `
+      <div class="v12-management-kpi-grid">
+        ${managementKpiCard(
+          "Current Knowledge Score",
+          programmeLead
+            ? PROGRAMME_LEAD_DASHBOARD.knowledgeScore
+            : BU_LEAD_DASHBOARD.knowledgeScore,
+          MANAGEMENT_TARGETS.knowledgeScore,
+          "%"
+        )}
+
+        ${managementKpiCard(
+          "Checks Available",
+          MANAGEMENT_KNOWLEDGE_CHECKS.length,
+          null,
+          "",
+          "",
+          "Current prototype"
+        )}
+      </div>
+
+      <section class="dashboard-card v12-management-panel">
+
+        <div class="v12-management-panel-head">
+          <h2>KNOWLEDGE CHECKS</h2>
+
+          <button class="primary-small">
+            + Create Knowledge Check
+          </button>
+        </div>
+
+        ${MANAGEMENT_KNOWLEDGE_CHECKS
+          .map(
+            item => `
+              <div class="v12-knowledge-check-row">
+
+                <div>
+                  <strong>${item.title}</strong>
+                  <small>${item.period} · ${item.status}</small>
+                </div>
+
+                <div>
+                  <span>Responses</span>
+                  <strong>${item.responses}</strong>
+                </div>
+
+                <div>
+                  <span>Participation</span>
+                  <strong>${item.participation}%</strong>
+                </div>
+
+                <div>
+                  <span>Knowledge</span>
+                  <strong>${item.score}%</strong>
+                </div>
+
+                <div>
+                  <span>Top gap</span>
+                  <strong>${item.topGap}</strong>
+                </div>
+
+              </div>
+            `
+          )
+          .join("")}
+
+      </section>
+    `
+  );
+}
+
+
+export function renderManagementAcquisitionV012(
+  programmeLead = false
+) {
+
+  const source =
+    programmeLead
+      ? PROGRAMME_LEAD_DASHBOARD
+      : BU_LEAD_DASHBOARD;
+
+  const achievement =
+    Math.round(
+      source.acquisition /
+      source.acquisitionTarget *
+      100
+    );
+
+  const items =
+    scopedAmbassadors(
+      programmeLead
+    )
+      .sort(
+        (a, b) =>
+          b.acquisition -
+          a.acquisition
+      );
+
+  return pageShell(
+    programmeLead,
+    "PROGRAMME ACTIVITY",
+    "SHARE Acquisition",
+    "Track acquisition attributed to individual Ambassador QR activity and roll it up through store, brand and business unit.",
+    `
+      <div class="v12-management-kpi-grid">
+        ${managementKpiCard(
+          "Members Acquired",
+          source.acquisition,
+          source.acquisitionTarget
+        )}
+
+        ${managementKpiCard(
+          "Target Achievement",
+          achievement,
+          100,
+          "%"
+        )}
+      </div>
+
+      <section class="dashboard-card v12-management-panel">
+
+        <div class="v12-management-panel-head">
+          <h2>AMBASSADOR ACQUISITION</h2>
+
+          <span class="v12-data-source-note">
+            Production source: Adjust
+          </span>
+        </div>
+
+        <div class="v12-acquisition-management-list">
+          ${items.map(item => `
+            <div class="v12-acquisition-management-row">
+              <div>
+                <strong>${item.name}</strong>
+                <small>${item.brand} · ${item.store}</small>
+              </div>
+
+              <div>
+                <span>Members</span>
+                <strong>${item.acquisition}</strong>
+              </div>
+
+              <div>
+                <span>Sales penetration</span>
+                <strong>${item.salesPenetration}%</strong>
+              </div>
+
+              <div>
+                <span>SHARE performance</span>
+                <strong>${item.sharePerformance}%</strong>
+              </div>
+            </div>
+          `).join("")}
+        </div>
+
+      </section>
+    `
+  );
+}
+
+
+export function renderManagementSubmissionsV012(
+  programmeLead = false
+) {
+
+  const multiplier =
+    programmeLead
+      ? 8
+      : 1;
+
+  return pageShell(
+    programmeLead,
+    "PROGRAMME ACTIVITY",
+    "Forms & Submissions",
+    "Consolidated operational submissions captured through SHARE Lens and connected systems.",
+    `
+      <div class="v12-submission-management-grid">
+
+        ${MANAGEMENT_SUBMISSIONS
+          .map(
+            item => `
+              <button class="dashboard-card v12-submission-management-card">
+
+                <span>${item.type}</span>
+
+                <strong>
+                  ${formatNumber(
+                    item.total *
+                    multiplier
+                  )}
+                </strong>
+
+                <div>
+                  <span>
+                    ${item.awaitingReview *
+                    multiplier}
+                    awaiting review
+                  </span>
+
+                  <em>${item.source}</em>
+                </div>
+
+              </button>
+            `
+          )
+          .join("")}
+
+      </div>
+    `
+  );
+}
+
+
+export function renderManagementRecognitionV012() {
+
+  return pageShell(
+    true,
+    "REWARDS & RECOGNITION",
+    "Recognition & Leaderboard",
+    "Bring together SHARE programme recognition and Spark / SuccessFactors recognition without recreating the source system.",
+    `
+      <section class="dashboard-card v12-management-panel">
+
+        <div class="v12-management-panel-head">
+          <h2>TOP AMBASSADORS</h2>
+
+          <span class="v12-data-source-note">
+            Spark integration candidate
+          </span>
+        </div>
+
+        <div class="v12-recognition-list">
+          ${MANAGEMENT_RECOGNITION
+            .map(
+              item => `
+                <div class="v12-recognition-row">
+
+                  <span class="v12-recognition-rank">
+                    ${item.rank}
+                  </span>
+
+                  <div>
+                    <strong>${item.ambassador}</strong>
+                    <small>
+                      ${item.bu} · ${item.brand}
+                    </small>
+                  </div>
+
+                  <div>
+                    <span>Performance</span>
+                    <strong>${item.performance}%</strong>
+                  </div>
+
+                  <div>
+                    <span>Acquisition</span>
+                    <strong>${item.acquisition}</strong>
+                  </div>
+
+                  <span class="v12-recognition-badge">
+                    ${item.recognition}
+                  </span>
+
+                </div>
+              `
+            )
+            .join("")}
+        </div>
+
+      </section>
+    `
+  );
+}
+
+
+/* =========================================================
+   MANAGEMENT ACTION HANDLERS
+========================================================= */
+
+export function toggleManagementCampaignComposerV012() {
+  managementCampaignComposerOpen =
+    !managementCampaignComposerOpen;
+}
+
+
+export function submitManagementCampaignFormV012() {
+
+  const type =
+    document
+      .getElementById(
+        "mgmt-campaign-type"
+      )
+      ?.value ||
+    "Campaign";
+
+  const audience =
+    document
+      .getElementById(
+        "mgmt-campaign-audience"
+      )
+      ?.value ||
+    "All Ambassadors";
+
+  const title =
+    document
+      .getElementById(
+        "mgmt-campaign-title"
+      )
+      ?.value
+      ?.trim();
+
+  const message =
+    document
+      .getElementById(
+        "mgmt-campaign-message"
+      )
+      ?.value
+      ?.trim();
+
+  const start =
+    document
+      .getElementById(
+        "mgmt-campaign-start"
+      )
+      ?.value ||
+    "";
+
+  const end =
+    document
+      .getElementById(
+        "mgmt-campaign-end"
+      )
+      ?.value ||
+    "";
+
+  if (!title) {
+    throw new Error(
+      "Enter a campaign or broadcast title."
+    );
+  }
+
+  const created =
+    createManagementCampaign({
+      type,
+      audience,
+      title,
+      message,
+      start,
+      end
+    });
+
+  managementCampaignComposerOpen =
+    false;
+
+  return created;
+}
+
+
+export function reviewManagementAmbassadorFormV012(
+  ambassadorId
+) {
+
+  return recordAmbassadorReview(
+    ambassadorId,
+    "Reviewed — retain active pending confirmation"
+  );
+}
