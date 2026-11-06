@@ -1648,7 +1648,7 @@ function topBar() {
         </button>
 
         <div class="topbar-logo">
-          SL
+          360
         </div>
 
         <div class="topbar-brand">
@@ -1656,7 +1656,7 @@ function topBar() {
           <div class="topbar-brand-line">
 
             <strong>
-              SHARE Lens
+              SHARE Service360
             </strong>
 
             <span class="header-version">
@@ -1754,7 +1754,7 @@ function sidebar() {
         <div>
 
           <strong>
-            SHARE Lens
+            SHARE Service360
           </strong>
 
           <span>
@@ -3055,7 +3055,7 @@ function renderExpandedInteraction(
           </h3>
 
           <p>
-            SHARE Lens will run the specialist agent team against this interaction.
+            SHARE Service360 will run the specialist agent team against this interaction.
           </p>
 
         </div>
@@ -5741,7 +5741,7 @@ function exportAmbassadorList() {
 
 
   link.download =
-    "share-lens-ambassador-population.csv";
+    "share-service360-ambassador-population.csv";
 
 
   document.body.appendChild(
@@ -6404,7 +6404,7 @@ function hubPage(service) {
         <b>→</b>
 
         <span>
-          SHARE Lens
+          SHARE Service360
         </span>
 
         <b>→</b>
@@ -8002,7 +8002,7 @@ function exportServicePulse() {
 
 
   link.download =
-    "share-lens-service-pulse.csv";
+    "share-service360-service-pulse.csv";
 
 
   document.body.appendChild(
@@ -8133,7 +8133,7 @@ function servicePulseTemplatesView() {
       </strong>
 
       <p>
-        SHARE Lens currently reads the score and total score supplied by each assessment record. Production scoring, question weighting and treatment of N/A responses should follow the formally approved Service Pulse configuration.
+        SHARE Service360 currently reads the score and total score supplied by each assessment record. Production scoring, question weighting and treatment of N/A responses should follow the formally approved Service Pulse configuration.
       </p>
 
     </section>
@@ -8267,7 +8267,7 @@ function showServicePulseAIResult() {
           </h2>
 
           <p>
-            SHARE Lens analysed ${filteredData.length} assessments in the current filtered view. Overall Service Pulse performance is ${overallScore.toFixed(2)}%.
+            SHARE Service360 analysed ${filteredData.length} assessments in the current filtered view. Overall Service Pulse performance is ${overallScore.toFixed(2)}%.
           </p>
 
         </div>
@@ -8619,7 +8619,7 @@ function adminHome() {
   return `
     ${pageTitle(
       "PLATFORM ADMINISTRATION",
-      "SHARE Lens Platform",
+      "SHARE Service360 Platform",
       "Manage identity, access, AI agents, integrations and governance."
     )}
 
@@ -8764,7 +8764,7 @@ function genericRolePage(
       </h3>
 
       <p>
-        This capability is represented within the SHARE Lens prototype.
+        This capability is represented within the SHARE Service360 prototype.
       </p>
 
     </section>
@@ -9078,7 +9078,7 @@ function renderCurrentPage() {
           ${pageTitle(
             "AI PLATFORM",
             "Knowledge Sources",
-            "Manage approved knowledge sources used by SHARE Lens."
+            "Manage approved knowledge sources used by SHARE Service360."
           )}
 
           ${knowledgeRepositorySection(true)}

@@ -1669,7 +1669,7 @@ function knowledgeCheckMittiModal() {
 
         <p>
           Knowledge Checks are authored and managed in Mitti / SafetyCulture.
-          SHARE Lens will surface participation, scores and knowledge gaps once
+          SHARE Service360 will surface participation, scores and knowledge gaps once
           the assessment data is available.
         </p>
 
@@ -2012,7 +2012,7 @@ export function renderManagementSubmissionsV012(
     programmeLead,
     "PROGRAMME ACTIVITY",
     "Forms & Submissions",
-    "Consolidated operational submissions captured through SHARE Lens and connected systems.",
+    "Consolidated operational submissions captured through SHARE Service360 and connected systems.",
     `
       <div class="v12-submission-management-grid">
 

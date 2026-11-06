@@ -1,5 +1,5 @@
 /* =========================================================
-   SHARE LENS — MANAGEMENT DASHBOARD DATA CONTRACT
+   SHARE SERVICE360 — MANAGEMENT DASHBOARD DATA CONTRACT
    Owner: Pradip
 
    PURPOSE:
@@ -17,10 +17,10 @@
    - Ambassador master / identity:
      Entra ID / staff master + operational application DB
    - Campaigns / broadcasts / acknowledgements:
-     SHARE Lens transactional DB (PostgreSQL / Aurora or
+     SHARE Service360 transactional DB (PostgreSQL / Aurora or
      approved equivalent)
    - Feedback / suggestions / SHARE Wall / physical training:
-     SHARE Lens transactional DB
+     SHARE Service360 transactional DB
    - Online training:
      Mitti / SafetyCulture integration
    - Acquisition:
@@ -28,7 +28,7 @@
    - Sales penetration:
      approved sales / loyalty source
    - Service Pulse:
-     SHARE Lens Service Pulse store / approved analytics layer
+     SHARE Service360 Service Pulse store / approved analytics layer
    - Analytics / historical rollups:
      Databricks where appropriate
    - Media:
@@ -556,28 +556,28 @@ export const MANAGEMENT_SUBMISSIONS = [
     total: 33,
     thisMonth: 33,
     awaitingReview: 4,
-    source: "SHARE Lens"
+    source: "SHARE Service360"
   },
   {
     type: "Suggestions",
     total: 18,
     thisMonth: 18,
     awaitingReview: 7,
-    source: "SHARE Lens"
+    source: "SHARE Service360"
   },
   {
     type: "SHARE Wall",
     total: 9,
     thisMonth: 9,
     awaitingReview: 1,
-    source: "SHARE Lens"
+    source: "SHARE Service360"
   },
   {
     type: "Physical Training / Huddles",
     total: 13,
     thisMonth: 13,
     awaitingReview: 2,
-    source: "SHARE Lens"
+    source: "SHARE Service360"
   },
   {
     type: "Manual Transactions",

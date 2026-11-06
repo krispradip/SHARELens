@@ -5135,13 +5135,13 @@ select {
 
 
 /* =========================================================
-   SHARE LENS v0.12.0 — MODULAR AMBASSADOR EXPERIENCE
+   SHARE SERVICE360 v0.12.0 — MODULAR AMBASSADOR EXPERIENCE
 
    PURPOSE:
    Visual layer for the v0.12 Ambassador pages.
 
    BUSINESS MEANING:
-   Preserves the existing SHARE Lens burgundy / pink / white
+   Preserves the existing SHARE Service360 burgundy / pink / white
    design language while adding operational forms, connected
    system cards and KPI-led actions.
 
@@ -6148,11 +6148,11 @@ select {
 
 
 /* =========================================================
-   SHARE LENS v0.12.0 — MOTION SYSTEM
+   SHARE SERVICE360 v0.12.0 — MOTION SYSTEM
 
    PURPOSE:
    Adds polished, restrained movement to KPI and acquisition
-   components to reinforce that SHARE Lens is a live
+   components to reinforce that SHARE Service360 is a live
    operational experience.
 
    BUSINESS MEANING:
@@ -6771,7 +6771,7 @@ select {
 
 
 /* =========================================================
-   SHARE LENS v0.12.0 — TOOLTIPS + ACQUISITION REFINEMENT
+   SHARE SERVICE360 v0.12.0 — TOOLTIPS + ACQUISITION REFINEMENT
 
    PURPOSE:
    Adds transcript-grounded contextual help and improves the
@@ -7047,7 +7047,7 @@ select {
 
 
 /* =========================================================
-   SHARE LENS v0.12.0 — AMBASSADOR PERFORMANCE CARD
+   SHARE SERVICE360 v0.12.0 — AMBASSADOR PERFORMANCE CARD
 
    PURPOSE:
    Visualises the Ambassador-owned engagement score and its
@@ -7388,7 +7388,7 @@ select {
 
 
 /* =========================================================
-   SHARE LENS v0.12.0 — MANUAL TRANSACTION FLOW + MOBILE UX
+   SHARE SERVICE360 v0.12.0 — MANUAL TRANSACTION FLOW + MOBILE UX
 
    PURPOSE:
    Adds visual case progression for OneView and improves the
@@ -7819,7 +7819,7 @@ select {
 
 
 /* =========================================================
-   SHARE LENS v0.12.0 — COMMUNICATIONS + NOTIFICATION TAGS
+   SHARE SERVICE360 v0.12.0 — COMMUNICATIONS + NOTIFICATION TAGS
 
    PURPOSE:
    Visually distinguishes Campaign, Broadcast and Reminder
@@ -8121,7 +8121,7 @@ select {
 
 
 /* =========================================================
-   SHARE LENS v0.12.0 — PERFORMANCE CARD POLISH
+   SHARE SERVICE360 v0.12.0 — PERFORMANCE CARD POLISH
 
    PURPOSE:
    Removes placeholder letter tiles and establishes one
@@ -8192,7 +8192,7 @@ select {
 
 
 /* =========================================================
-   SHARE LENS v0.12.0 — JOURNEY STATUS ALIGNMENT FIX
+   SHARE SERVICE360 v0.12.0 — JOURNEY STATUS ALIGNMENT FIX
 
    PURPOSE:
    Ensures the completion checkmark remains centred inside
@@ -8229,7 +8229,7 @@ select {
 
 
 /* =========================================================
-   SHARE LENS v0.12.0 — TOOLTIP VISIBILITY / RESPONSIVE FIX
+   SHARE SERVICE360 v0.12.0 — TOOLTIP VISIBILITY / RESPONSIVE FIX
 
    PURPOSE:
    Prevents contextual help from being clipped by KPI,
@@ -8557,7 +8557,7 @@ select {
 
 
 /* =========================================================
-   SHARE LENS v0.12.0 — ACTIVITY STATUS + SPACE EFFICIENCY
+   SHARE SERVICE360 v0.12.0 — ACTIVITY STATUS + SPACE EFFICIENCY
 
    PURPOSE:
    Uses the same Last Login status language in management
@@ -8870,7 +8870,7 @@ select {
 
 
 /* =========================================================
-   SHARE LENS v0.12.0 — CONTENT-DRIVEN HOME LAYOUT
+   SHARE SERVICE360 v0.12.0 — CONTENT-DRIVEN HOME LAYOUT
 
    PURPOSE:
    Removes row-based height matching from the Ambassador
@@ -9071,7 +9071,7 @@ select {
 
 
 /* =========================================================
-   SHARE LENS v0.12.0 — FLUID RESPONSIVE OVERRIDES
+   SHARE SERVICE360 v0.12.0 — FLUID RESPONSIVE OVERRIDES
 
    PURPOSE:
    Replaces abrupt layout switching with fluid card resizing.
@@ -9503,7 +9503,7 @@ select {
 
 
 /* =========================================================
-   SHARE LENS v0.12.0 — COMPONENT-LEVEL FLUIDITY
+   SHARE SERVICE360 v0.12.0 — COMPONENT-LEVEL FLUIDITY
 
    PURPOSE:
    Extends responsive behaviour into individual cards and
@@ -9654,7 +9654,7 @@ select {
 
 
 /* =========================================================
-   SHARE LENS v0.12.0 — FLUID TYPOGRAPHY
+   SHARE SERVICE360 v0.12.0 — FLUID TYPOGRAPHY
 
    PURPOSE:
    Scales Ambassador typography with available component /
@@ -9908,7 +9908,7 @@ select {
 
 
 /* =========================================================
-   SHARE LENS v0.12.0 — PROFILE QR + SCORE RING FIX
+   SHARE SERVICE360 v0.12.0 — PROFILE QR + SCORE RING FIX
 
    PURPOSE:
    Moves the personal SHARE QR into the Ambassador identity
@@ -10057,7 +10057,7 @@ select {
 
 
 /* =========================================================
-   SHARE LENS v0.12.0 — FINAL CONTENT-FIT POLISH
+   SHARE SERVICE360 v0.12.0 — FINAL CONTENT-FIT POLISH
 
    PURPOSE:
    Keeps the Ambassador Performance score inside its ring and
@@ -10200,7 +10200,7 @@ select {
 
 
 /* =========================================================
-   SHARE LENS v0.12.0 — ACQUISITION COMPACTNESS FIX
+   SHARE SERVICE360 v0.12.0 — ACQUISITION COMPACTNESS FIX
 
    PURPOSE:
    Removes residual vertical stretching from the Acquisition
@@ -10363,7 +10363,7 @@ select {
 
 
 /* =========================================================
-   SHARE LENS v0.12.0 — HEADING TYPOGRAPHY ALIGNMENT
+   SHARE SERVICE360 v0.12.0 — HEADING TYPOGRAPHY ALIGNMENT
 
    PURPOSE:
    Makes Ambassador Performance Score and Acquisition
@@ -10394,7 +10394,7 @@ select {
 
 
 /* =========================================================
-   SHARE LENS v0.12.0 — ACQUISITION HORIZONTAL COMPRESSION
+   SHARE SERVICE360 v0.12.0 — ACQUISITION HORIZONTAL COMPRESSION
 
    PURPOSE:
    Uses available desktop width instead of stacking
@@ -10532,7 +10532,7 @@ select {
 
 
 /* =========================================================
-   SHARE LENS v0.12.0 — UNIFIED SECTION HEADERS
+   SHARE SERVICE360 v0.12.0 — UNIFIED SECTION HEADERS
 
    PURPOSE:
    Standardizes all major Ambassador dashboard section
@@ -10567,7 +10567,7 @@ select {
 
 
 /* =========================================================
-   SHARE LENS v0.12.0 — HEADER / TOOLTIP / ACQUISITION FIX
+   SHARE SERVICE360 v0.12.0 — HEADER / TOOLTIP / ACQUISITION FIX
 
    PURPOSE:
    Finalizes the unified section-header treatment, prevents
@@ -10720,7 +10720,7 @@ select {
 
 
 /* =========================================================
-   SHARE LENS v0.12.0 — DENSITY / GRID CLEANUP
+   SHARE SERVICE360 v0.12.0 — DENSITY / GRID CLEANUP
 
    PURPOSE:
    Removes tooltip-only whitespace from Ambassador
@@ -10862,7 +10862,7 @@ select {
 
 
 /* =========================================================
-   SHARE LENS — PROTOTYPE CREATOR SIGNATURE
+   SHARE SERVICE360 — PROTOTYPE CREATOR SIGNATURE
 
    PURPOSE:
    Makes prototype authorship explicit across login and

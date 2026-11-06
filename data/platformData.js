@@ -1,5 +1,5 @@
 /* =========================================================
-   MODULE: SHARE Lens Platform Data
+   MODULE: SHARE Service360 Platform Data
    VERSION: v0.12.0
 
    PURPOSE:
@@ -322,7 +322,7 @@ export const TRAINING = {
     ]
   },
   physical: {
-    provider: "SHARE Lens",
+    provider: "SHARE Service360",
     sessionTypes: ["Training", "Huddle"]
   }
 };
@@ -332,12 +332,12 @@ export const TRAINING = {
    COMPONENT: Knowledge Source Layer
 
    PURPOSE:
-   Keeps the SHARE Lens knowledge experience independent
+   Keeps the SHARE Service360 knowledge experience independent
    from a single content repository.
 
    BUSINESS MEANING:
    Knowmax, Databricks, a training portal or another approved
-   repository can feed the same SHARE Lens experience.
+   repository can feed the same SHARE Service360 experience.
 ========================================================= */
 export const KNOWLEDGE_SOURCES = [
   { id: "training-portal", name: "Training Portal", type: "Primary planned source", status: "Planned" },

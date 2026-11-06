@@ -1588,7 +1588,7 @@ export function renderServicePulseV012() {
     ${pageHeading(
       "SERVICE DELIVERY",
       "Service Pulse",
-      "Complete the applicable scenario directly in SHARE Lens. Your identity and location context are already known."
+      "Complete the applicable scenario directly in SHARE Service360. Your identity and location context are already known."
     )}
 
     ${contextStrip()}
@@ -1738,7 +1738,7 @@ export function renderFeedbackV012() {
     ${pageHeading(
       "AMBASSADOR PROGRAM",
       "Submit Feedback",
-      "Capture member or employee feedback directly in SHARE Lens."
+      "Capture member or employee feedback directly in SHARE Service360."
     )}
 
     ${contextStrip()}
@@ -1839,7 +1839,7 @@ export function renderSuggestionsV012() {
     ${pageHeading(
       "AMBASSADOR PROGRAM",
       "Submit a Suggestion",
-      "Share an improvement idea directly in SHARE Lens."
+      "Share an improvement idea directly in SHARE Service360."
     )}
 
     ${contextStrip()}
@@ -2059,7 +2059,7 @@ export function submitSuggestionFormV012() {
    PAGE: Manual Transaction
 
    PURPOSE:
-   Demonstrates the target SHARE Lens → OneView workflow.
+   Demonstrates the target SHARE Service360 → OneView workflow.
 
    BUSINESS MEANING:
    Removes Asana from the target flow where direct OneView
@@ -2308,7 +2308,7 @@ export function closeManualTransactionFormV012(
    Captures the existing physical wall process digitally.
 
    BUSINESS MEANING:
-   The physical board remains. SHARE Lens records the update,
+   The physical board remains. SHARE Service360 records the update,
    evidence image and declared topics without QR dependency.
 ========================================================= */
 
@@ -2399,7 +2399,7 @@ export function renderTrainingLandingV012() {
     ${pageHeading(
       "TRAINING & KNOWLEDGE",
       "Training",
-      "Choose between online learning in Mitti and physical / in-store training managed through SHARE Lens."
+      "Choose between online learning in Mitti and physical / in-store training managed through SHARE Service360."
     )}
 
     <div class="dashboard-grid two">
@@ -2407,7 +2407,7 @@ export function renderTrainingLandingV012() {
         <div class="v12-large-system-icon">M</div>
         <span class="section-label">ONLINE TRAINING</span>
         <h2>Mitti / SafetyCulture</h2>
-        <p>View assignment status, progress, due dates and scores in SHARE Lens. Launch the actual learning experience in Mitti.</p>
+        <p>View assignment status, progress, due dates and scores in SHARE Service360. Launch the actual learning experience in Mitti.</p>
 
         <ul>
           <li>Assigned courses</li>
@@ -2445,7 +2445,7 @@ export function renderTrainingLandingV012() {
    SOURCE OF RECORD:
    Mitti / SafetyCulture.
 
-   SHARE LENS ROLE:
+   SHARE SERVICE360 ROLE:
    Front door + status / reporting layer.
 ========================================================= */
 
@@ -2456,14 +2456,14 @@ export function renderOnlineTrainingV012() {
     ${pageHeading(
       "TRAINING · ONLINE",
       "Online Training",
-      "Your Mitti learning status in SHARE Lens, with direct access to the learning platform."
+      "Your Mitti learning status in SHARE Service360, with direct access to the learning platform."
     )}
 
     <section class="dashboard-card v12-integration-hero">
       <div>
         <span class="section-label">CONNECTED LEARNING ENGINE</span>
         <h2>${escapeHtml(TRAINING.online.provider)}</h2>
-        <p>SHARE Lens displays training progress and results. Course delivery remains in Mitti.</p>
+        <p>SHARE Service360 displays training progress and results. Course delivery remains in Mitti.</p>
       </div>
 
       <a class="v12-primary-link" href="${TRAINING.online.launchUrl}" target="_blank" rel="noopener noreferrer">
@@ -2496,7 +2496,7 @@ export function renderOnlineTrainingV012() {
 
     <section class="dashboard-card v12-architecture-note">
       <strong>Integration model</strong>
-      <span>SHARE Lens</span><b>→</b>
+      <span>SHARE Service360</span><b>→</b>
       <span>Mitti course/completion data</span><b>+</b>
       <span>Launch to Mitti for learning</span>
     </section>
@@ -2618,7 +2618,7 @@ export function submitPhysicalTrainingFormV012() {
    Creates one knowledge experience independent from source.
 
    BUSINESS MEANING:
-   Users search SHARE Lens while approved content can be
+   Users search SHARE Service360 while approved content can be
    supplied by Knowmax, Databricks, the training portal or
    another approved repository.
 ========================================================= */
@@ -2723,7 +2723,7 @@ export function renderReportsV012() {
     ${pageHeading(
       "MY ACTIVITY",
       "Reports",
-      "Your own SHARE Lens submissions and programme activity."
+      "Your own SHARE Service360 submissions and programme activity."
     )}
 
     <div class="dashboard-grid four">
