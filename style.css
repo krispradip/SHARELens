@@ -126,7 +126,7 @@ select {
   align-items: center;
   justify-content: center;
 
-  border-radius: 14px;
+  border-radius: 50%;
 
   background: var(--brand);
 
@@ -584,7 +584,7 @@ select {
   align-items: center;
   justify-content: center;
 
-  border-radius: 9px;
+  border-radius: 50%;
 
   background: var(--brand);
 
@@ -10943,7 +10943,7 @@ select {
 .topbar-logo::before {
   content: "";
   position: absolute;
-  inset: -4px;
+  inset: -5px;
   border: 1.5px solid rgba(213, 21, 91, 0.15);
   border-top-color: rgba(213, 21, 91, 0.94);
   border-right-color: rgba(255, 170, 206, 0.66);
