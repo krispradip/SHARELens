@@ -10923,3 +10923,82 @@ select {
   }
 
 }
+
+/* =========================================================
+   SHARE SERVICE360 — ANIMATED BRAND MARK
+   Ambient orbit and light sweep; the 360 stays readable.
+   Visual-only. Disabled for reduced-motion preferences.
+========================================================= */
+.brand-mark,
+.topbar-logo {
+  position: relative;
+  isolation: isolate;
+  flex-shrink: 0;
+  background: linear-gradient(145deg, #46001a 0%, #7b153c 100%);
+  box-shadow: 0 4px 14px rgba(70, 0, 26, 0.18);
+  animation: service360LogoGlow 5.6s ease-in-out infinite;
+}
+
+.brand-mark::before,
+.topbar-logo::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border: 1.5px solid rgba(213, 21, 91, 0.15);
+  border-top-color: rgba(213, 21, 91, 0.94);
+  border-right-color: rgba(255, 170, 206, 0.66);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: service360LogoOrbit 6.4s linear infinite;
+}
+
+.brand-mark::after,
+.topbar-logo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 26%,
+    rgba(255, 255, 255, 0.25) 49%,
+    transparent 72%
+  );
+  background-size: 240% 100%;
+  background-position: 155% 0;
+  animation: service360LogoSweep 5.6s ease-in-out infinite;
+}
+
+@keyframes service360LogoOrbit {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes service360LogoGlow {
+  0%, 100% { box-shadow: 0 4px 14px rgba(70, 0, 26, 0.18); }
+  50% { box-shadow: 0 5px 18px rgba(123, 21, 60, 0.34); }
+}
+
+@keyframes service360LogoSweep {
+  0%, 12% { background-position: 155% 0; opacity: 0; }
+  20% { opacity: 1; }
+  39% { background-position: -65% 0; opacity: 0.8; }
+  43%, 100% { background-position: -65% 0; opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-mark,
+  .topbar-logo,
+  .brand-mark::before,
+  .topbar-logo::before,
+  .brand-mark::after,
+  .topbar-logo::after {
+    animation: none !important;
+  }
+
+  .brand-mark::after,
+  .topbar-logo::after {
+    opacity: 0;
+  }
+}
