@@ -1,5 +1,3 @@
-import { analyseInteraction } from "./agents/agentOrchestrator.js";
-
 import {
   renderAmbassadorHomeV012,
   renderServicePulseV012,
@@ -1383,10 +1381,8 @@ const navigation = {
     },
 
     {
-      title: "AI Platform",
+      title: "Knowledge",
       items: [
-        ["ai-agents", "AI Agents"],
-        ["agent-config", "Agent Configuration"],
         ["knowledge-sources", "Knowledge Sources"]
       ]
     },
@@ -2712,41 +2708,6 @@ function ambassadorPerformance() {
     </div>
 
 
-    <section class="overall-ai-strip">
-
-      <div>
-
-        <span class="section-label light-label">
-          OVERALL PERFORMANCE ANALYSIS
-        </span>
-
-        <h2>
-          86% · Strong
-        </h2>
-
-        <p>
-          Based on all 12 assessed interactions in the selected period.
-          Run Analyse Overall to understand what is driving your score.
-        </p>
-
-      </div>
-
-      <button
-        class="analyse-overall-button"
-        onclick="runAmbassadorOverallAnalysis()"
-      >
-        ✦ Analyse Overall
-      </button>
-
-    </section>
-
-
-    <div
-      id="ambassador-overall-output"
-      class="agent-output hidden-output"
-    ></div>
-
-
     <section class="dashboard-card">
 
       <div class="table-heading-with-controls">
@@ -2901,19 +2862,9 @@ function interactionBlock(interaction) {
               : "primary-small"
           }"
 
-          onclick="${
-            interaction.score >= 90
-              ? `toggleInteractionDetails('${interaction.id}')`
-              : `analyseInlineInteraction('${interaction.id}')`
-          }"
+          onclick="toggleInteractionDetails('${interaction.id}')"
         >
-          ${
-            expanded
-              ? "Collapse"
-              : interaction.score >= 90
-                ? "View Details"
-                : "✦ Analyse Interaction"
-          }
+          ${expanded ? "Collapse" : "View Details"}
         </button>
 
       </div>
@@ -2991,541 +2942,26 @@ function toggleInteractionDetails(id) {
 }
 
 
-function analyseInlineInteraction(id) {
-
-  expandedInteractionId =
-    expandedInteractionId === id
-      ? null
-      : id;
-
-
-  navigateTo(
-    "performance",
-    {
-      preserveInteraction: true
-    }
-  );
-
-}
-
-
-function renderExpandedInteraction(
-  interaction
-) {
-
-  if (interaction.score >= 90) {
-
-    return `
-      <div class="inline-analysis-placeholder">
-
-        <span class="section-label">
-          INTERACTION RESULT
-        </span>
-
-        <h3>
-          Good Interaction
-        </h3>
-
-        <p>
-          This interaction met the expected service standard.
-        </p>
-
-      </div>
-    `;
-
-  }
-
-
+function renderExpandedInteraction(interaction) {
+  const status = getInteractionStatus(interaction.score);
   return `
-    <div
-      id="inline-analysis-${interaction.id}"
-      class="inline-analysis-placeholder"
-    >
-
-      <div class="analysis-ready">
-
-        <div>
-
-          <span class="section-label">
-            AI INTERACTION ANALYSIS
-          </span>
-
-          <h3>
-            Ready to analyse ${interaction.id}
-          </h3>
-
-          <p>
-            SHARE Service360 will run the specialist agent team against this interaction.
-          </p>
-
-        </div>
-
-        <button
-          class="primary-small"
-          onclick="startInlineAnalysis('${interaction.id}')"
-        >
-          ✦ Start Analysis
-        </button>
-
-      </div>
-
-    </div>
-  `;
-
-}
-
-
-function startInlineAnalysis(id) {
-
-  const interaction =
-    interactions.find(
-      item =>
-        item.id === id
-    );
-
-
-  if (!interaction) return;
-
-
-  const output =
-    document.getElementById(
-      `inline-analysis-${id}`
-    );
-
-
-  if (!output) return;
-
-
-  output.innerHTML =
-    buildAgentPipeline(
-      "Interaction Analysis",
-      [
-        "Evaluation Agent",
-        "SOP Agent",
-        "Compliance Agent",
-        "Combined Analysis"
-      ],
-      "interaction-pipeline"
-    );
-
-
-  animatePipeline(
-    "interaction-pipeline",
-    [
-      "Reviewing service quality and customer handling...",
-      "Checking required service process steps...",
-      "Checking mandatory controls and compliance...",
-      "Combining findings and preparing the next action..."
-    ],
-    () => {
-
-      const analysis =
-        analyseInteraction(
-          interaction
-        );
-
-
-      output.innerHTML = `
-        <div class="inline-analysis-result">
-
-          <span class="section-label">
-            AI ANALYSIS COMPLETE
-          </span>
-
-          <h3>
-            ${
-              interaction.score < 50
-                ? "Needs Attention"
-                : "Opportunity to Strengthen"
-            }
-          </h3>
-
-
-          <div class="analysis-score-row">
-
-            ${analysisMiniCard(
-              "Service Quality",
-              `${analysis.evaluation.score}%`
-            )}
-
-            ${analysisMiniCard(
-              "SOP Adherence",
-              `${analysis.sop.compliance}%`
-            )}
-
-            ${analysisMiniCard(
-              "Compliance",
-              `${analysis.compliance.complianceScore}%`
-            )}
-
+    <div class="inline-analysis-placeholder">
+      <span class="section-label">INTERACTION DETAILS</span>
+      <h3>${status.label}</h3>
+      <p>Recorded score: ${interaction.score}% · ${interaction.channel} · ${interaction.process}</p>
+      ${interaction.score < 90 && interaction.trainingTitle ? `
+        <div class="recommended-development">
+          <div>
+            <span class="section-label">SUGGESTED LEARNING</span>
+            <h3>${interaction.trainingTitle}</h3>
+            <p>Review the relevant learning material and knowledge check.</p>
           </div>
-
-
-          <div class="recommended-development">
-
-            <div>
-
-              <span class="section-label">
-                RECOMMENDED NEXT ACTION
-              </span>
-
-              <h3>
-                ${interaction.trainingTitle}
-              </h3>
-
-              <p>
-                Complete the 15 min refresher and then the 5 min Knowledge Check.
-              </p>
-
-            </div>
-
-            <button
-              onclick="navigateTo('training')"
-            >
-              Go to Training
-            </button>
-
-          </div>
-
+          <button onclick="navigateTo('training')">Go to Training</button>
         </div>
-      `;
-
-    }
-  );
-
-}
-
-
-function analysisMiniCard(
-  title,
-  value
-) {
-
-  return `
-    <div class="analysis-agent-card">
-
-      <span>
-        ${title}
-      </span>
-
-      <strong>
-        ${value}
-      </strong>
-
+      ` : ""}
     </div>
   `;
-
 }
-
-
-function runAmbassadorOverallAnalysis() {
-
-  const output =
-    document.getElementById(
-      "ambassador-overall-output"
-    );
-
-
-  if (!output) return;
-
-
-  output.classList.remove(
-    "hidden-output"
-  );
-
-
-  output.innerHTML =
-    buildAgentPipeline(
-      "Analysing Overall Performance",
-      [
-        "Evaluation Agent",
-        "SOP Agent",
-        "Compliance Agent",
-        "Pattern Agent",
-        "Combined Analysis"
-      ],
-      "ambassador-overall-pipeline"
-    );
-
-
-  animatePipeline(
-    "ambassador-overall-pipeline",
-    [
-      "Reviewing all assessed interactions in the selected period...",
-      "Checking recurring SOP adherence patterns...",
-      "Checking recurring compliance findings...",
-      "Identifying themes across assessed interactions...",
-      "Preparing overall findings and recommended development..."
-    ],
-    () => {
-
-      output.innerHTML = `
-        <span class="section-label">
-          OVERALL AI ANALYSIS
-        </span>
-
-        <h3>
-          Recurring opportunity: refund timeline communication
-        </h3>
-
-        <p>
-          Identified across the full 12-interaction assessment population, including INT-1001 and INT-0984.
-        </p>
-
-        <button
-          class="primary-small"
-          onclick="navigateTo('training')"
-        >
-          Open Recommended Development
-        </button>
-      `;
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   GENERIC AI PIPELINE
-========================================================= */
-
-function buildAgentPipeline(
-  title,
-  agents,
-  prefix
-) {
-
-  return `
-    <div class="agent-pipeline">
-
-      <div class="pipeline-heading">
-
-        <div>
-
-          <span class="section-label">
-            AGENT-TO-AGENT ORCHESTRATION
-          </span>
-
-          <h3>
-            ${title}
-          </h3>
-
-        </div>
-
-        <span class="pipeline-running-badge">
-          AI team running
-        </span>
-
-      </div>
-
-
-      <div class="pipeline-steps">
-
-        ${agents.map(
-          (agent, index) => `
-
-            ${
-              index > 0
-                ? `
-                  <div class="pipeline-line"></div>
-                `
-                : ""
-            }
-
-            <div
-              id="${prefix}-${index}"
-              class="pipeline-step ${
-                index === 0
-                  ? "active"
-                  : "waiting"
-              }"
-            >
-
-              <div class="pipeline-number">
-                ${index + 1}
-              </div>
-
-              <div>
-
-                <strong>
-                  ${agent}
-                </strong>
-
-                <span class="pipeline-step-status">
-                  ${
-                    index === 0
-                      ? "Running"
-                      : "Waiting"
-                  }
-                </span>
-
-              </div>
-
-            </div>
-
-          `
-        ).join("")}
-
-      </div>
-
-
-      <div class="pipeline-status">
-
-        <div class="processing-dot"></div>
-
-        <span id="${prefix}-message">
-          Starting analysis...
-        </span>
-
-      </div>
-
-    </div>
-  `;
-
-}
-
-
-function animatePipeline(
-  prefix,
-  messages,
-  onComplete
-) {
-
-  messages.forEach(
-    (message, index) => {
-
-      const startDelay =
-        index * 850;
-
-
-      if (index > 0) {
-
-        setTimeout(() => {
-
-          const node =
-            document.getElementById(
-              `${prefix}-${index}`
-            );
-
-
-          if (!node) return;
-
-
-          node.classList.remove(
-            "waiting",
-            "complete"
-          );
-
-
-          node.classList.add(
-            "active"
-          );
-
-
-          const status =
-            node.querySelector(
-              ".pipeline-step-status"
-            );
-
-
-          if (status) {
-
-            status.textContent =
-              "Running";
-
-          }
-
-
-          const messageNode =
-            document.getElementById(
-              `${prefix}-message`
-            );
-
-
-          if (messageNode) {
-
-            messageNode.textContent =
-              message;
-
-          }
-
-        }, startDelay);
-
-      } else {
-
-        const messageNode =
-          document.getElementById(
-            `${prefix}-message`
-          );
-
-
-        if (messageNode) {
-
-          messageNode.textContent =
-            message;
-
-        }
-
-      }
-
-
-      setTimeout(() => {
-
-        const node =
-          document.getElementById(
-            `${prefix}-${index}`
-          );
-
-
-        if (node) {
-
-          node.classList.remove(
-            "active",
-            "waiting"
-          );
-
-
-          node.classList.add(
-            "complete"
-          );
-
-
-          const status =
-            node.querySelector(
-              ".pipeline-step-status"
-            );
-
-
-          if (status) {
-
-            status.textContent =
-              "Complete";
-
-          }
-
-        }
-
-
-        if (
-          index ===
-          messages.length - 1
-        ) {
-
-          setTimeout(
-            onComplete,
-            350
-          );
-
-        }
-
-      }, startDelay + 620);
-
-    }
-  );
-
-}
-
 
 /* =========================================================
    TRAINING
@@ -5356,63 +4792,7 @@ function managerPerformance() {
     </div>
 
 
-    ${managementAI("manager")}
-
     ${performanceBreakdownSection()}
-  `;
-
-}
-
-
-function managementAI(type) {
-
-  const outputId =
-    type === "manager"
-      ? "manager-agent-output"
-      : "service-agent-output";
-
-
-  const handler =
-    type === "manager"
-      ? "runManagerAnalysis()"
-      : "runServiceAnalysis()";
-
-
-  return `
-    <section class="overall-ai-strip">
-
-      <div>
-
-        <span class="section-label light-label">
-          AI PERFORMANCE ANALYSIS
-        </span>
-
-        <h2>
-          Analyse current filtered view
-        </h2>
-
-        <p>
-          Identify recurring themes, severity and recommended interventions.
-        </p>
-
-      </div>
-
-      <button
-        class="analyse-overall-button"
-        onclick="${handler}"
-      >
-        ✦ Analyse Current View
-      </button>
-
-    </section>
-
-
-    <div
-      id="${outputId}"
-      class="agent-output"
-    >
-      Run analysis to identify recurring patterns.
-    </div>
   `;
 
 }
@@ -6578,8 +5958,6 @@ function servicePerformance() {
     </div>
 
 
-    ${managementAI("service")}
-
     ${performanceBreakdownSection()}
   `;
 
@@ -7084,40 +6462,6 @@ function servicePulseDashboard(
       )}
 
     </div>
-
-
-    <section class="service-pulse-ai-card">
-
-      <div>
-
-        <span class="section-label light-label">
-          INTELLIGENT ANALYSIS
-        </span>
-
-        <h2>
-          Turn assessment data into action
-        </h2>
-
-        <p>
-          Analyse recurring behaviours, locations and scenarios in the current filtered view.
-        </p>
-
-      </div>
-
-      <button
-        class="analyse-overall-button"
-        onclick="runServicePulseAI()"
-      >
-        ✦ Analyse Service Pulse
-      </button>
-
-    </section>
-
-
-    <div
-      id="service-pulse-ai-output"
-      class="agent-output hidden-output"
-    ></div>
 
 
     <div class="dashboard-grid two">
@@ -8143,301 +7487,6 @@ function servicePulseTemplatesView() {
 
 
 /* =========================================================
-   SERVICE PULSE AI
-========================================================= */
-
-function runServicePulseAI() {
-
-  const output =
-    document.getElementById(
-      "service-pulse-ai-output"
-    );
-
-
-  if (!output) return;
-
-
-  output.classList.remove(
-    "hidden-output"
-  );
-
-
-  output.innerHTML =
-    buildAgentPipeline(
-      "Analysing Service Pulse",
-      [
-        "Assessment Agent",
-        "Pattern Agent",
-        "Location Severity Agent",
-        "Behaviour Agent",
-        "Next Best Action"
-      ],
-      "service-pulse-pipeline"
-    );
-
-
-  animatePipeline(
-    "service-pulse-pipeline",
-    [
-      "Reviewing assessment scores, scenarios and individual responses...",
-      "Looking for recurring behaviour patterns across assessments...",
-      "Comparing performance across business units, brands and locations...",
-      "Identifying which SHARE behaviours are driving the results...",
-      "Preparing the recommended next best action..."
-    ],
-    showServicePulseAIResult
-  );
-
-}
-
-
-function showServicePulseAIResult() {
-
-  const output =
-    document.getElementById(
-      "service-pulse-ai-output"
-    );
-
-
-  if (!output) return;
-
-
-  const filteredData =
-    getServicePulseFilteredData();
-
-
-  const overallScore =
-    servicePulseOverallScore(
-      filteredData
-    );
-
-
-  const locationGroups =
-    groupServicePulse(
-      filteredData,
-      "location"
-    );
-
-
-  const scenarioGroups =
-    groupServicePulse(
-      filteredData,
-      "scenario"
-    );
-
-
-  const weakestLocation =
-    [...locationGroups]
-      .sort(
-        (a, b) =>
-          a.score - b.score
-      )[0];
-
-
-  const weakestScenario =
-    [...scenarioGroups]
-      .sort(
-        (a, b) =>
-          a.score - b.score
-      )[0];
-
-
-  const weakestBehaviour =
-    [...servicePulseBehaviourAnalytics]
-      .sort(
-        (a, b) =>
-          a.yes - b.yes
-      )[0];
-
-
-  output.innerHTML = `
-    <div class="pulse-ai-result">
-
-      <div class="pulse-ai-result-header">
-
-        <div>
-
-          <span class="section-label">
-            SERVICE PULSE AI ANALYSIS
-          </span>
-
-          <h2>
-            Primary opportunity:
-            ${weakestBehaviour.behaviour}
-          </h2>
-
-          <p>
-            SHARE Service360 analysed ${filteredData.length} assessments in the current filtered view. Overall Service Pulse performance is ${overallScore.toFixed(2)}%.
-          </p>
-
-        </div>
-
-        <span
-          class="status-block ${pulseStatusClass(overallScore)}"
-        >
-          ${pulseStatusLabel(overallScore)}
-        </span>
-
-      </div>
-
-
-      <div class="dashboard-grid four pulse-ai-result-cards">
-
-        ${metricCard(
-          "Overall Service Pulse",
-          `${overallScore.toFixed(2)}%`,
-          `${filteredData.length} assessments`
-        )}
-
-        ${metricCard(
-          "Weakest Behaviour",
-          `${weakestBehaviour.yes}%`,
-          weakestBehaviour.behaviour
-        )}
-
-        ${metricCard(
-          "Lowest Location",
-          weakestLocation
-            ? `${weakestLocation.score.toFixed(1)}%`
-            : "N/A",
-          weakestLocation
-            ? weakestLocation.name
-            : "No location data"
-        )}
-
-        ${metricCard(
-          "Weakest Scenario",
-          weakestScenario
-            ? `${weakestScenario.score.toFixed(1)}%`
-            : "N/A",
-          weakestScenario
-            ? weakestScenario.name
-            : "No scenario data"
-        )}
-
-      </div>
-
-
-      <div class="pulse-ai-insight-grid">
-
-        <section class="pulse-ai-insight">
-
-          <span class="section-label">
-            WHAT IS DRIVING IT
-          </span>
-
-          <h3>
-            ${weakestBehaviour.behaviour}
-          </h3>
-
-          <p>
-            ${100 - weakestBehaviour.yes}% of the current behaviour sample does not demonstrate this expected SHARE behaviour.
-          </p>
-
-        </section>
-
-
-        <section class="pulse-ai-insight">
-
-          <span class="section-label">
-            WHERE TO LOOK
-          </span>
-
-          <h3>
-            ${
-              weakestLocation
-                ? weakestLocation.name
-                : "Location analysis"
-            }
-          </h3>
-
-          <p>
-            ${
-              weakestLocation
-                ? `${weakestLocation.name} currently has the lowest average Service Pulse score at ${weakestLocation.score.toFixed(1)}%.`
-                : "Use the location filters to identify the lowest-performing locations."
-            }
-          </p>
-
-        </section>
-
-
-        <section class="pulse-ai-insight">
-
-          <span class="section-label">
-            CUSTOMER JOURNEY
-          </span>
-
-          <h3>
-            ${
-              weakestScenario
-                ? weakestScenario.name
-                : "Scenario analysis"
-            }
-          </h3>
-
-          <p>
-            ${
-              weakestScenario
-                ? `This scenario currently has the lowest average score at ${weakestScenario.score.toFixed(1)}%.`
-                : "Review scenario performance to identify journey-level gaps."
-            }
-          </p>
-
-        </section>
-
-
-        <section class="pulse-ai-insight recommended-action-insight">
-
-          <span class="section-label">
-            NEXT BEST ACTION
-          </span>
-
-          <h3>
-            Targeted SHARE behaviour refresher
-          </h3>
-
-          <p>
-            Assign focused learning to the affected population, follow with a Knowledge Check and validate improvement in the next Service Pulse cycle.
-          </p>
-
-        </section>
-
-      </div>
-
-
-      <div class="pulse-ai-actions">
-
-        <button
-          class="small-button"
-          onclick="setServicePulseTab('questions')"
-        >
-          View Question Analysis
-        </button>
-
-        <button
-          class="small-button"
-          onclick="setServicePulseTab('submissions')"
-        >
-          View Assessments
-        </button>
-
-        <button
-          class="primary-small"
-          onclick="navigateTo('group-training')"
-        >
-          Review Training
-        </button>
-
-      </div>
-
-    </div>
-  `;
-
-}
-
-
-/* =========================================================
    AUDIT
 ========================================================= */
 
@@ -8499,118 +7548,6 @@ function auditPage() {
 
 
 /* =========================================================
-   MANAGEMENT AI
-========================================================= */
-
-function runManagerAnalysis() {
-
-  const output =
-    document.getElementById(
-      "manager-agent-output"
-    );
-
-
-  if (!output) return;
-
-
-  output.innerHTML =
-    buildAgentPipeline(
-      "Analysing Entertainment UAE",
-      [
-        "Performance Agent",
-        "Pattern Agent",
-        "Knowledge Gap Agent",
-        "Intervention Agent"
-      ],
-      "manager-pipeline"
-    );
-
-
-  animatePipeline(
-    "manager-pipeline",
-    [
-      "Reviewing performance across the selected BU scope...",
-      "Identifying recurring patterns...",
-      "Linking patterns to knowledge gaps...",
-      "Preparing the recommended intervention..."
-    ],
-    () => {
-
-      output.innerHTML = `
-        <span class="section-label">
-          BU AI ANALYSIS
-        </span>
-
-        <h3>
-          Refund SLA knowledge is the highest recurring opportunity.
-        </h3>
-
-        <p>
-          34 Ambassadors across 3 locations are contributing to the pattern.
-        </p>
-      `;
-
-    }
-  );
-
-}
-
-
-function runServiceAnalysis() {
-
-  const output =
-    document.getElementById(
-      "service-agent-output"
-    );
-
-
-  if (!output) return;
-
-
-  output.innerHTML =
-    buildAgentPipeline(
-      "Analysing Service Delivery Scope",
-      [
-        "Performance Agent",
-        "Pattern Agent",
-        "Location Severity Agent",
-        "Intervention Agent"
-      ],
-      "service-performance-pipeline"
-    );
-
-
-  animatePipeline(
-    "service-performance-pipeline",
-    [
-      "Reviewing performance across the selected organisational scope...",
-      "Identifying systemic patterns...",
-      "Ranking affected locations by severity...",
-      "Preparing the recommended intervention..."
-    ],
-    () => {
-
-      output.innerHTML = `
-        <span class="section-label">
-          SERVICE DELIVERY AI ANALYSIS
-        </span>
-
-        <h3>
-          Refund SLA remains the highest recurring cross-location theme.
-        </h3>
-
-        <p>
-          City Centre Deira currently shows the highest severity within the available dataset.
-        </p>
-      `;
-
-    }
-  );
-
-}
-
-
-/* =========================================================
    ADMIN
 ========================================================= */
 
@@ -8620,11 +7557,11 @@ function adminHome() {
     ${pageTitle(
       "PLATFORM ADMINISTRATION",
       "SHARE Service360 Platform",
-      "Manage identity, access, AI agents, integrations and governance."
+      "Manage identity, access, knowledge sources, integrations and governance."
     )}
 
 
-    <div class="dashboard-grid four">
+    <div class="dashboard-grid three">
 
       ${metricCard(
         "Platform Users",
@@ -8636,12 +7573,6 @@ function adminHome() {
         "Active Ambassadors",
         "812",
         "Current"
-      )}
-
-      ${metricCard(
-        "AI Agents",
-        "13",
-        "Configured"
       )}
 
       ${metricCard(
@@ -9076,7 +8007,7 @@ function renderCurrentPage() {
       "knowledge-sources":
         () => `
           ${pageTitle(
-            "AI PLATFORM",
+            "KNOWLEDGE",
             "Knowledge Sources",
             "Manage approved knowledge sources used by SHARE Service360."
           )}
@@ -9106,22 +8037,6 @@ function renderCurrentPage() {
             "IDENTITY & ACCESS",
             "Identity Providers",
             "Configure Staff ID and Microsoft Entra ID."
-          ),
-
-      "ai-agents":
-        () =>
-          genericRolePage(
-            "AI PLATFORM",
-            "AI Agents",
-            "View specialist AI capabilities."
-          ),
-
-      "agent-config":
-        () =>
-          genericRolePage(
-            "AI PLATFORM",
-            "Agent Configuration",
-            "Configure AI orchestration."
           ),
 
       frameworks:
@@ -9714,23 +8629,8 @@ window.handleNotificationAction =
 window.toggleInteractionDetails =
   toggleInteractionDetails;
 
-window.analyseInlineInteraction =
-  analyseInlineInteraction;
-
-window.startInlineAnalysis =
-  startInlineAnalysis;
-
 window.openPerformanceInteraction =
   openPerformanceInteraction;
-
-window.runAmbassadorOverallAnalysis =
-  runAmbassadorOverallAnalysis;
-
-window.runManagerAnalysis =
-  runManagerAnalysis;
-
-window.runServiceAnalysis =
-  runServiceAnalysis;
 
 window.answerKnowledgeQuestion =
   answerKnowledgeQuestion;
@@ -9767,9 +8667,6 @@ window.closeServicePulseDetail =
 
 window.exportServicePulse =
   exportServicePulse;
-
-window.runServicePulseAI =
-  runServicePulseAI;
 
 window.selectServicePulseScenarioV012 =
   selectServicePulseScenarioV012;
