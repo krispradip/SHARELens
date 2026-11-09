@@ -170,7 +170,7 @@ export const KPI_CARD_DEFINITIONS = {
     "SHARE Performance measures SHARERewards performance for the selected Ambassador or organisational scope. It brings together SHARE Acquisition, Sales Penetration and Service Pulse performance.",
 
   ambassadorPerformance:
-    "Ambassador Performance measures participation in the Ambassador programme. It is based on Campaign Participation, Broadcast Acknowledgement, Feedback & Suggestions, and SHARE Wall Submission. The current prototype uses equal-weight target attainment across the four components.",
+    "Ambassador Performance measures participation in the Ambassador programme. It is based on Campaign Participation, Broadcast Acknowledgement, Feedback & Suggestions, and SHARE Wall Submission. Current illustrative scoring uses equal-weight target attainment across the four components.",
 
   trainingPerformance:
     "Training Performance measures learning and development performance. It brings together Online Training Completion, Knowledge Score, and Physical / In-Store Training Completion.",

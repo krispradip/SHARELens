@@ -264,7 +264,7 @@ const metricDefinitions = {
     "SHARE Points earned by acquired members. The points belong to the members; acquisition contribution is attributed to the Ambassador.",
 
   pointsValue:
-    `Estimated monetary value of SHARE Points earned by members. Prototype conversion: 1 SHARE Point = AED ${SHARE_POINT_AED_VALUE.toFixed(2)}.`,
+    `Estimated monetary value of SHARE Points earned by members. Illustrative conversion: 1 SHARE Point = AED ${SHARE_POINT_AED_VALUE.toFixed(2)}.`,
 
   activeAmbassadors:
     "Ambassadors currently active within the selected organisational scope.",
@@ -858,7 +858,7 @@ const servicePulseSubmissionsData = [
   {
     id: "SP-011",
     date: "07 Oct 2026",
-    inspector: "Demo Christine",
+    inspector: "Service Auditor",
     bu: "Retail",
     brand: "LEGO",
     location: "Mall of the Emirates",
@@ -914,7 +914,7 @@ const servicePulseSubmissionsData = [
   {
     id: "SP-015",
     date: "07 Oct 2026",
-    inspector: "Demo Christine",
+    inspector: "Service Auditor",
     bu: "Retail",
     brand: "Carrefour",
     location: "Mall of the Emirates",
@@ -1582,7 +1582,7 @@ function continueWithSSO() {
   if (!matchedRole) {
 
     setLoginMessage(
-      "Enter one of the corporate prototype accounts to demonstrate Microsoft SSO.",
+      "Enter one of the listed corporate test accounts to continue.",
       "info"
     );
 
@@ -1664,7 +1664,7 @@ function topBar() {
             </span>
 
             <span class="prototype-creator-badge">
-              Prototype created by Pradip Krishnamoorthy
+              Created by Pradip Krishnamoorthy
             </span>
 
           </div>
@@ -1815,7 +1815,7 @@ function sidebar() {
       <div class="sidebar-version">
 
         <span>
-          Prototype v${APP_VERSION}
+          v${APP_VERSION}
         </span>
 
         <strong>
@@ -4136,7 +4136,7 @@ function knowledgeEditor() {
 
       <button
         class="primary-small"
-        onclick="showToast('Prototype article published')"
+        onclick="showToast('Article publishing requires a connected content service')"
       >
         Publish Update
       </button>
@@ -4759,7 +4759,7 @@ function sharePointsCalculator() {
           </strong>
 
           <small>
-            Prototype value conversion
+            Illustrative value conversion
           </small>
 
         </div>
@@ -6342,7 +6342,7 @@ function showBroadcastComposer() {
 
       <button
         class="primary-small"
-        onclick="showToast('Prototype broadcast published')"
+        onclick="showToast('Broadcast publishing requires a connected communications service')"
       >
         Publish Broadcast
       </button>
@@ -6504,7 +6504,7 @@ function serviceHome() {
         </div>
 
         <p>
-          Average score across ${servicePulseSubmissionsData.length} assessments in the current prototype dataset.
+          Average score across ${servicePulseSubmissionsData.length} assessments in the current available dataset.
         </p>
 
         <button
@@ -7382,7 +7382,7 @@ function servicePulseBehaviourSummary() {
           </h3>
 
           <p>
-            Prototype analytical layer translating assessment questions into operational behaviours.
+            Assessment questions grouped into operational behaviours.
           </p>
 
         </div>
@@ -8052,7 +8052,7 @@ function servicePulseTemplatesView() {
 
         <button
           class="primary-small"
-          onclick="showToast('Prototype template editor opened')"
+          onclick="showToast('Template editing requires a configured service')"
         >
           + Create / Update Template
         </button>
@@ -8129,7 +8129,7 @@ function servicePulseTemplatesView() {
     <section class="notice-card">
 
       <strong>
-        Prototype scoring note
+        Scoring methodology note
       </strong>
 
       <p>
@@ -8331,7 +8331,7 @@ function showServicePulseAIResult() {
           </h3>
 
           <p>
-            ${100 - weakestBehaviour.yes}% of the current prototype behaviour sample does not demonstrate this expected SHARE behaviour.
+            ${100 - weakestBehaviour.yes}% of the current behaviour sample does not demonstrate this expected SHARE behaviour.
           </p>
 
         </section>
@@ -8485,7 +8485,7 @@ function auditPage() {
     <section class="notice-card">
 
       <strong>
-        Prototype assumption
+        Pending configuration
       </strong>
 
       <p>
@@ -8600,7 +8600,7 @@ function runServiceAnalysis() {
         </h3>
 
         <p>
-          City Centre Deira currently shows the highest severity within the prototype dataset.
+          City Centre Deira currently shows the highest severity within the available dataset.
         </p>
       `;
 
@@ -8647,7 +8647,7 @@ function adminHome() {
       ${metricCard(
         "Integrations",
         "11",
-        "Prototype"
+        "Not connected"
       )}
 
     </div>
@@ -8660,14 +8660,14 @@ function integrationsPage() {
 
   const integrations = [
 
-    ["Mitti / SafetyCulture", "Training / Service Pulse", "Prototype"],
-    ["Knowmax", "Knowledge Base", "Prototype"],
-    ["Infobip", "Communications", "Prototype"],
-    ["Adjust", "Acquisition Attribution", "Prototype"],
+    ["Mitti / SafetyCulture", "Training / Service Pulse", "Not connected"],
+    ["Knowmax", "Knowledge Base", "Not connected"],
+    ["Infobip", "Communications", "Not connected"],
+    ["Adjust", "Acquisition Attribution", "Not connected"],
     ["Alida", "Ambassador Hub", "Placeholder"],
     ["OneView", "Customer / Service Context", "Placeholder"],
     ["Asana", "Action / Task Connectivity", "Placeholder"],
-    ["HR / Staff Master", "Identity & Organisational Scope", "Prototype"],
+    ["HR / Staff Master", "Identity & Organisational Scope", "Not connected"],
     ["Genesys", "Customer Interactions", "Planned"]
 
   ];
@@ -8677,7 +8677,7 @@ function integrationsPage() {
     ${pageTitle(
       "PLATFORM",
       "Integrations",
-      "Prototype representation of current and future connectivity."
+      "Integration catalogue showing current and planned connections."
     )}
 
 
@@ -8727,7 +8727,7 @@ function integrationsPage() {
       </h3>
 
       <p>
-        The prototype currently uses <strong>1 SHARE Point = AED ${SHARE_POINT_AED_VALUE.toFixed(2)}</strong> for estimated monetary-value reporting.
+        The current estimated-value calculation uses <strong>1 SHARE Point = AED ${SHARE_POINT_AED_VALUE.toFixed(2)}</strong> for estimated monetary-value reporting.
       </p>
 
     </section>
@@ -8756,7 +8756,7 @@ function genericRolePage(
     <section class="dashboard-card">
 
       <span class="section-label">
-        PROTOTYPE VIEW
+        CAPABILITY OVERVIEW
       </span>
 
       <h3>
@@ -8764,7 +8764,7 @@ function genericRolePage(
       </h3>
 
       <p>
-        This capability is represented within the SHARE Service360 prototype.
+        This section is reserved for a forthcoming SHARE Service360 capability.
       </p>
 
     </section>

@@ -977,7 +977,7 @@ export function renderManagementPerformanceV012(
           </h2>
 
           <span class="v12-data-source-note">
-            Prototype read model
+            Available data
           </span>
         </div>
 
@@ -1145,7 +1145,7 @@ export function renderManagementAmbassadorsV012(
           null,
           "",
           "",
-          "Prototype workflow"
+          "Review tracking"
         )}
       </div>
 
@@ -1850,7 +1850,7 @@ export function renderManagementKnowledgeChecksV012(
           null,
           "",
           "",
-          "Current prototype"
+          "Available checks"
         )}
       </div>
 
