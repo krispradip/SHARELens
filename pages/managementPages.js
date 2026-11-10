@@ -259,11 +259,6 @@ function managementHeader(
         <p>${subtitle}</p>
       </div>
 
-      <div class="v12-management-scope">
-        <span>Current scope</span>
-        <strong>${scope}</strong>
-      </div>
-
     </div>
   `;
 }
@@ -620,7 +615,7 @@ export function renderBULeadHomeV012() {
     ${managementFilterBar(false)}
 
     <div class="v12-management-kpi-grid">
-      ${managementKpiCard("Total Ambassadors", d.totalAmbassadors, null, "", "ambassadors", "Current scope")}
+      ${managementKpiCard("Total Ambassadors", d.totalAmbassadors, null, "", "ambassadors")}
       ${managementKpiCard("Active Rate", d.activeRate, MANAGEMENT_TARGETS.activeRate, "%", "ambassadors")}
       ${managementKpiCard("SHARE Performance", d.sharePerformance, MANAGEMENT_TARGETS.sharePerformance, "%", "team-performance")}
       ${managementKpiCard("Ambassador Performance", d.ambassadorPerformance, MANAGEMENT_TARGETS.ambassadorPerformance, "%", "team-performance")}
@@ -661,7 +656,7 @@ export function renderProgrammeLeadHomeV012() {
     ${managementFilterBar(true)}
 
     <div class="v12-management-kpi-grid">
-      ${managementKpiCard("Total Ambassadors", d.totalAmbassadors, null, "", "group-ambassadors", "Current scope")}
+      ${managementKpiCard("Total Ambassadors", d.totalAmbassadors, null, "", "group-ambassadors")}
       ${managementKpiCard("Active Rate", d.activeRate, MANAGEMENT_TARGETS.activeRate, "%", "group-ambassadors")}
       ${managementKpiCard("SHARE Performance", d.sharePerformance, MANAGEMENT_TARGETS.sharePerformance, "%", "group-performance")}
       ${managementKpiCard("Ambassador Performance", d.ambassadorPerformance, MANAGEMENT_TARGETS.ambassadorPerformance, "%", "group-performance")}
@@ -1110,7 +1105,7 @@ export function renderManagementAmbassadorsV012(
           null,
           "",
           "",
-          "Visible in current scope"
+          "Visible"
         )}
 
         ${managementKpiCard(
