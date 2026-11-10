@@ -3,7 +3,7 @@
    Owner: Pradip
 
    PURPOSE:
-   Provides prototype management metrics for BU Lead and
+   Provides testing management metrics for BU Lead and
    Programme Lead dashboards through a production-shaped
    data contract.
 
@@ -267,7 +267,7 @@ export const PROGRAMME_LEAD_DASHBOARD = {
    MANAGEMENT DRILL-DOWN DATA
 
    PURPOSE:
-   Prototype datasets for operational management screens.
+   Illustrative datasets for operational management screens.
 
    PRODUCTION DATA REQUIREMENT:
    Replace these arrays with repository/API responses. Keep

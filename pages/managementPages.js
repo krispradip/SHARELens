@@ -52,7 +52,7 @@ let managementKnowledgeCheckModalOpen = false;
    submission summaries.
 
    PRODUCTION DATA REQUIREMENT:
-   Replace prototype managementData.js values with repository
+   Replace temporary managementData.js values with repository
    / API responses. UI markup should not change when the
    persistence layer moves to PostgreSQL / Aurora, Databricks
    or approved enterprise sources.
@@ -977,7 +977,7 @@ export function renderManagementPerformanceV012(
           </h2>
 
           <span class="v12-data-source-note">
-            Prototype read model
+            Available data
           </span>
         </div>
 
@@ -1145,7 +1145,7 @@ export function renderManagementAmbassadorsV012(
           null,
           "",
           "",
-          "Prototype workflow"
+          "Review tracking"
         )}
       </div>
 
@@ -1421,7 +1421,7 @@ function campaignComposer(
 
       <div class="v12-management-form-actions">
         <span>
-          Prototype writes through managementActionService.
+          Writes through managementActionService.
         </span>
 
         <button
@@ -1850,7 +1850,7 @@ export function renderManagementKnowledgeChecksV012(
           null,
           "",
           "",
-          "Current prototype"
+          "Available checks"
         )}
       </div>
 

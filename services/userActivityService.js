@@ -2,7 +2,7 @@
    SERVICE: User Activity Service
 
    PURPOSE:
-   Maintains the latest known login timestamp for prototype
+   Maintains the latest known login timestamp for testing
    users and derives an inactivity-review status.
 
    BUSINESS MEANING:
@@ -22,7 +22,7 @@
    A BU Lead / Programme Lead must verify the reason first.
 
    STORAGE:
-   Browser localStorage for prototype demonstration only.
+   Browser localStorage for this testing environment only.
 
    PRODUCTION TARGET:
    Enterprise identity / authentication audit source.

@@ -4,7 +4,7 @@ import { buildSubmissionContext } from "./userContextService.js";
    SERVICE: Submission Service
 
    PURPOSE:
-   Creates and stores prototype operational submissions.
+   Creates and stores operational submissions in the browser.
 
    BUSINESS MEANING:
    Demonstrates the future native workflow pattern:
@@ -12,7 +12,7 @@ import { buildSubmissionContext } from "./userContextService.js";
    submission ID.
 
    STORAGE:
-   Browser localStorage for prototype demonstration only.
+   Browser localStorage for this testing environment only.
 
    PRODUCTION TARGET:
    Secure API + enterprise data store / workflow service.
@@ -58,7 +58,7 @@ export function getSubmissionsByType(type) {
    SERVICE: Submission Status Update
 
    PURPOSE:
-   Updates an existing prototype submission by ID.
+   Updates an existing saved submission by ID.
 
    BUSINESS MEANING:
    Supports visible workflow progression such as OneView
@@ -68,7 +68,7 @@ export function getSubmissionsByType(type) {
    Submission ID + partial status/data changes.
 
    OUTPUTS:
-   Updated submission persisted to prototype local storage.
+   Updated submission persisted to browser local storage.
 
    CHANGE IMPACT:
    Used by workflow screens and activity reporting.

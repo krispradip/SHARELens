@@ -44,7 +44,7 @@ import {
    integration configuration and native submissions.
 
    OUTPUTS:
-   Screen HTML and structured prototype submissions.
+   Screen HTML and structured user submissions.
 
    DEPENDENCIES:
    platformData.js
@@ -487,7 +487,7 @@ export function initializeV12Motion() {
 
    CHANGE IMPACT:
    New submissions immediately change the Feedback +
-   Suggestions count in this prototype.
+   Suggestions count in this environment.
 ========================================================= */
 
 function ambassadorPerformanceCounts() {
@@ -589,7 +589,7 @@ function ambassadorPerformanceCard() {
      Component attainment is capped at 100% so exceeding one
      target cannot compensate for missing another.
 
-     Current prototype weighting:
+     Current illustrative weighting:
      25% Campaign Participation
      25% Broadcast Acknowledgement
      25% Feedback + Suggestions
@@ -909,7 +909,7 @@ function ambassadorPerformanceCard() {
 
    PURPOSE:
    Generates the Ambassador greeting from the user's local
-   device time rather than a fixed prototype phrase.
+   device time rather than a fixed label.
 
    BUSINESS MEANING:
    Keeps the home experience contextually correct across
@@ -1190,7 +1190,7 @@ export function renderAmbassadorHomeV012() {
 
    INPUTS:
    Lead / Programme communications from platformData.js and
-   local prototype response records.
+   locally saved response records.
 
    OUTPUTS:
    Participation, thumbs-up / thumbs-down acknowledgements
@@ -1569,7 +1569,7 @@ export function reactToBroadcastFormV012(
    Makes Service Pulse directly usable after authentication.
 
    BUSINESS MEANING:
-   Replaces QR-to-external-form dependency for the prototype.
+   Replaces the previous QR-to-external-form dependency.
 
    OUTPUTS:
    Structured Service Pulse submission with profile context.
@@ -1619,7 +1619,7 @@ export function renderServicePulseV012() {
       <section class="dashboard-card">
         <span class="section-label">CURRENT STATUS</span>
         <h3>Your recent Service Pulse activity</h3>
-        ${submissionRows("service-pulse", "No Service Pulse assessments submitted from this prototype yet.")}
+        ${submissionRows("service-pulse", "No Service Pulse assessments submitted yet.")}
       </section>
     </div>
 
@@ -1779,7 +1779,7 @@ export function renderFeedbackV012() {
         <label class="v12-full-field">
           <span>Optional Image</span>
           <input id="feedback-image" type="file" accept="image/*">
-          <small>Prototype stores the selected file name only. Production requires enterprise media storage.</small>
+          <small>Only the selected file name is retained. Image storage requires an approved media service.</small>
         </label>
 
         <div class="v12-form-actions">
@@ -1791,7 +1791,7 @@ export function renderFeedbackV012() {
       <section class="dashboard-card">
         <span class="section-label">MY SUBMISSIONS</span>
         <h3>Recent feedback</h3>
-        ${submissionRows("feedback", "No feedback submitted from this prototype yet.")}
+        ${submissionRows("feedback", "No feedback submitted yet.")}
       </section>
     </div>
   `;
@@ -1949,7 +1949,7 @@ export function renderSuggestionsV012() {
           >
 
           <small>
-            Prototype stores the selected file name only.
+            Only the selected file name is retained.
           </small>
 
         </label>
@@ -1985,7 +1985,7 @@ export function renderSuggestionsV012() {
 
         ${submissionRows(
           "suggestion",
-          "No suggestions submitted from this prototype yet."
+          "No suggestions submitted yet."
         )}
 
       </section>
@@ -2066,7 +2066,7 @@ export function submitSuggestionFormV012() {
    ticket creation is technically approved.
 
    OUTPUTS:
-   Structured request with prototype OneView ticket status.
+   Structured request with illustrative OneView ticket status.
 ========================================================= */
 
 export function renderManualTransactionV012() {
@@ -2247,7 +2247,7 @@ export function renderManualTransactionV012() {
       <section class="dashboard-card">
         <span class="section-label">MY REQUESTS</span>
         <h3>Recent manual transactions</h3>
-        ${submissionRows("manual-transaction", "No manual transaction requests submitted from this prototype yet.")}
+        ${submissionRows("manual-transaction", "No manual transaction requests submitted yet.")}
       </section>
     </div>
   `;
@@ -2357,7 +2357,7 @@ export function renderShareWallV012() {
       <section class="dashboard-card">
         <span class="section-label">MY UPDATES</span>
         <h3>Recent SHARE Wall submissions</h3>
-        ${submissionRows("share-wall", "No SHARE Wall updates submitted from this prototype yet.")}
+        ${submissionRows("share-wall", "No SHARE Wall updates submitted yet.")}
       </section>
     </div>
   `;
@@ -2581,7 +2581,7 @@ export function renderPhysicalTrainingV012() {
       <section class="dashboard-card">
         <span class="section-label">MY SESSIONS</span>
         <h3>Recent training / huddles</h3>
-        ${submissionRows("physical-training", "No physical training sessions submitted from this prototype yet.")}
+        ${submissionRows("physical-training", "No physical training sessions submitted yet.")}
       </section>
     </div>
   `;
@@ -2691,7 +2691,7 @@ export function renderKnowledgeResultsV012(query = "") {
         <span>${escapeHtml(item.category)} · Updated ${escapeHtml(item.updated)}</span>
       </div>
       <span class="v12-source-badge">${escapeHtml(item.source)}</span>
-      <button class="small-button" onclick="showToast('Opening approved knowledge article in the prototype.')">Open</button>
+      <button class="small-button" onclick="showToast('Knowledge article content is not linked for opening yet.')">Open</button>
     </div>
   `).join("");
 }
@@ -2739,7 +2739,7 @@ export function renderReportsV012() {
           <span class="section-label">ACTIVITY LOG</span>
           <h3>Recent submissions</h3>
         </div>
-        <span class="v12-source-badge">${all.length} total prototype records</span>
+        <span class="v12-source-badge">${all.length} records in this browser</span>
       </div>
 
       ${all.length ? all.slice(0, 20).map(item => `
@@ -2764,7 +2764,7 @@ export function renderReportsV012() {
    Shows reusable profile context and programme journey.
 
    SOURCE:
-   Prototype identity master + Adjust attribution reference.
+   Identity master and Adjust attribution reference.
 ========================================================= */
 
 export function renderStatusV012() {

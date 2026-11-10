@@ -3,7 +3,7 @@
    Owner: Pradip
 
    PURPOSE:
-   Provides prototype persistence for management-created
+   Provides browser-based persistence for management-created
    Campaigns / Broadcasts and review actions.
 
    BUSINESS MEANING:

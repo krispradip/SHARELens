@@ -162,7 +162,7 @@ const shareEarnRates = {
    USERS
 ========================================================= */
 
-const prototypeUsers = {
+const testingUsers = {
 
   ambassador: {
     login: "100245",
@@ -264,7 +264,7 @@ const metricDefinitions = {
     "SHARE Points earned by acquired members. The points belong to the members; acquisition contribution is attributed to the Ambassador.",
 
   pointsValue:
-    `Estimated monetary value of SHARE Points earned by members. Prototype conversion: 1 SHARE Point = AED ${SHARE_POINT_AED_VALUE.toFixed(2)}.`,
+    `Estimated monetary value of SHARE Points earned by members. Illustrative conversion: 1 SHARE Point = AED ${SHARE_POINT_AED_VALUE.toFixed(2)}.`,
 
   activeAmbassadors:
     "Ambassadors currently active within the selected organisational scope.",
@@ -1523,11 +1523,11 @@ function signIn() {
 
   const matchedRole =
     Object
-      .keys(prototypeUsers)
+      .keys(testingUsers)
       .find(role => {
 
         const user =
-          prototypeUsers[role];
+          testingUsers[role];
 
         return (
           user.login.toLowerCase() === login &&
@@ -1565,11 +1565,11 @@ function continueWithSSO() {
 
   const matchedRole =
     Object
-      .keys(prototypeUsers)
+      .keys(testingUsers)
       .find(role => {
 
         const user =
-          prototypeUsers[role];
+          testingUsers[role];
 
         return (
           user.identityType === "Microsoft Entra ID" &&
@@ -1582,7 +1582,7 @@ function continueWithSSO() {
   if (!matchedRole) {
 
     setLoginMessage(
-      "Enter one of the corporate prototype accounts to demonstrate Microsoft SSO.",
+      "Enter one of the listed corporate testing accounts to continue.",
       "info"
     );
 
@@ -1631,7 +1631,7 @@ function signOut() {
 function topBar() {
 
   const user =
-    prototypeUsers[currentRole];
+    testingUsers[currentRole];
 
 
   return `
@@ -1663,8 +1663,8 @@ function topBar() {
               v${APP_VERSION}
             </span>
 
-            <span class="prototype-creator-badge">
-              Prototype created by Pradip Krishnamoorthy
+            <span class="creator-badge">
+              Created by Pradip Krishnamoorthy
             </span>
 
           </div>
@@ -1758,7 +1758,7 @@ function sidebar() {
           </strong>
 
           <span>
-            ${prototypeUsers[currentRole].role}
+            ${testingUsers[currentRole].role}
           </span>
 
         </div>
@@ -1815,7 +1815,7 @@ function sidebar() {
       <div class="sidebar-version">
 
         <span>
-          Prototype v${APP_VERSION}
+          v${APP_VERSION}
         </span>
 
         <strong>
@@ -2091,7 +2091,7 @@ function showToast(message) {
 
   let toast =
     document.getElementById(
-      "prototype-toast"
+      "notification-toast"
     );
 
 
@@ -2103,10 +2103,10 @@ function showToast(message) {
       );
 
     toast.id =
-      "prototype-toast";
+      "notification-toast";
 
     toast.className =
-      "prototype-toast";
+      "notification-toast";
 
     document.body.appendChild(
       toast
@@ -2377,7 +2377,7 @@ function compactJourney() {
 function ambassadorHome() {
 
   const user =
-    prototypeUsers.ambassador;
+    testingUsers.ambassador;
 
 
   const achievement =
@@ -4136,7 +4136,7 @@ function knowledgeEditor() {
 
       <button
         class="primary-small"
-        onclick="showToast('Prototype article published')"
+        onclick="showToast('Article publishing requires a connected content service')"
       >
         Publish Update
       </button>
@@ -4328,7 +4328,7 @@ function filterKnowledgeBase(
 function statusPage() {
 
   const user =
-    prototypeUsers.ambassador;
+    testingUsers.ambassador;
 
 
   const achievement =
@@ -4759,7 +4759,7 @@ function sharePointsCalculator() {
           </strong>
 
           <small>
-            Prototype value conversion
+            Illustrative value conversion
           </small>
 
         </div>
@@ -6342,7 +6342,7 @@ function showBroadcastComposer() {
 
       <button
         class="primary-small"
-        onclick="showToast('Prototype broadcast published')"
+        onclick="showToast('Broadcast publishing requires a connected communications service')"
       >
         Publish Broadcast
       </button>
@@ -6504,7 +6504,7 @@ function serviceHome() {
         </div>
 
         <p>
-          Average score across ${servicePulseSubmissionsData.length} assessments in the current prototype dataset.
+          Average score across ${servicePulseSubmissionsData.length} assessments in the current available dataset.
         </p>
 
         <button
@@ -7382,7 +7382,7 @@ function servicePulseBehaviourSummary() {
           </h3>
 
           <p>
-            Prototype analytical layer translating assessment questions into operational behaviours.
+            Assessment question analysis grouped into operational behaviours.
           </p>
 
         </div>
@@ -8052,7 +8052,7 @@ function servicePulseTemplatesView() {
 
         <button
           class="primary-small"
-          onclick="showToast('Prototype template editor opened')"
+          onclick="showToast('Template editing requires a configured service')"
         >
           + Create / Update Template
         </button>
@@ -8129,7 +8129,7 @@ function servicePulseTemplatesView() {
     <section class="notice-card">
 
       <strong>
-        Prototype scoring note
+        Scoring methodology note
       </strong>
 
       <p>
@@ -8331,7 +8331,7 @@ function showServicePulseAIResult() {
           </h3>
 
           <p>
-            ${100 - weakestBehaviour.yes}% of the current prototype behaviour sample does not demonstrate this expected SHARE behaviour.
+            ${100 - weakestBehaviour.yes}% of the current behaviour sample does not demonstrate this expected SHARE behaviour.
           </p>
 
         </section>
@@ -8485,7 +8485,7 @@ function auditPage() {
     <section class="notice-card">
 
       <strong>
-        Prototype assumption
+        Pending configuration
       </strong>
 
       <p>
@@ -8600,7 +8600,7 @@ function runServiceAnalysis() {
         </h3>
 
         <p>
-          City Centre Deira currently shows the highest severity within the prototype dataset.
+          City Centre Deira currently shows the highest severity within the available dataset.
         </p>
       `;
 
@@ -8647,7 +8647,7 @@ function adminHome() {
       ${metricCard(
         "Integrations",
         "11",
-        "Prototype"
+        "Not connected"
       )}
 
     </div>
@@ -8660,14 +8660,14 @@ function integrationsPage() {
 
   const integrations = [
 
-    ["Mitti / SafetyCulture", "Training / Service Pulse", "Prototype"],
-    ["Knowmax", "Knowledge Base", "Prototype"],
-    ["Infobip", "Communications", "Prototype"],
-    ["Adjust", "Acquisition Attribution", "Prototype"],
+    ["Mitti / SafetyCulture", "Training / Service Pulse", "Not connected"],
+    ["Knowmax", "Knowledge Base", "Not connected"],
+    ["Infobip", "Communications", "Not connected"],
+    ["Adjust", "Acquisition Attribution", "Not connected"],
     ["Alida", "Ambassador Hub", "Placeholder"],
     ["OneView", "Customer / Service Context", "Placeholder"],
     ["Asana", "Action / Task Connectivity", "Placeholder"],
-    ["HR / Staff Master", "Identity & Organisational Scope", "Prototype"],
+    ["HR / Staff Master", "Identity & Organisational Scope", "Not connected"],
     ["Genesys", "Customer Interactions", "Planned"]
 
   ];
@@ -8677,7 +8677,7 @@ function integrationsPage() {
     ${pageTitle(
       "PLATFORM",
       "Integrations",
-      "Prototype representation of current and future connectivity."
+      "Integration catalogue showing current and planned connections."
     )}
 
 
@@ -8727,7 +8727,7 @@ function integrationsPage() {
       </h3>
 
       <p>
-        The prototype currently uses <strong>1 SHARE Point = AED ${SHARE_POINT_AED_VALUE.toFixed(2)}</strong> for estimated monetary-value reporting.
+        The current illustrative calculation uses <strong>1 SHARE Point = AED ${SHARE_POINT_AED_VALUE.toFixed(2)}</strong> for estimated monetary-value reporting.
       </p>
 
     </section>
@@ -8756,7 +8756,7 @@ function genericRolePage(
     <section class="dashboard-card">
 
       <span class="section-label">
-        PROTOTYPE VIEW
+        CAPABILITY OVERVIEW
       </span>
 
       <h3>
@@ -8764,7 +8764,7 @@ function genericRolePage(
       </h3>
 
       <p>
-        This capability is represented within the SHARE Service360 prototype.
+        This capability is represented within SHARE Service360.
       </p>
 
     </section>
@@ -9181,7 +9181,7 @@ function renderCurrentPage() {
 
    PURPOSE:
    Bridges modular Ambassador pages to the existing global
-   prototype shell and toast system.
+   application shell and notification system.
 
    BUSINESS MEANING:
    Keeps page-specific workflows outside app.js while
@@ -9191,7 +9191,7 @@ function renderCurrentPage() {
    Native form values from modular Ambassador pages.
 
    OUTPUTS:
-   Prototype submissions and refreshed page state.
+   Saved submissions and refreshed page state.
 
    CHANGE IMPACT:
    Changes affect Ambassador workflow submission behaviour.

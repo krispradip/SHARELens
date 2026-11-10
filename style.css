@@ -204,7 +204,7 @@ select {
 }
 
 
-.prototype-badge,
+.testing-badge,
 .version-badge {
   padding:
     5px
@@ -218,7 +218,7 @@ select {
 }
 
 
-.prototype-badge {
+.testing-badge {
   background: var(--brand);
 
   color: white;
@@ -4322,7 +4322,7 @@ select {
    TOAST
 ========================================================= */
 
-.prototype-toast {
+.notification-toast {
   position: fixed;
 
   z-index: 900;
@@ -4356,7 +4356,7 @@ select {
 }
 
 
-.prototype-toast.visible {
+.notification-toast.visible {
   opacity: 1;
 
   transform:
@@ -10862,14 +10862,14 @@ select {
 
 
 /* =========================================================
-   SHARE SERVICE360 — PROTOTYPE CREATOR SIGNATURE
+   SHARE SERVICE360 — CREATOR SIGNATURE
 
    PURPOSE:
-   Makes prototype authorship explicit across login and
+   Displays application authorship across login and
    authenticated views.
 ========================================================= */
 
-.prototype-creator-badge {
+.creator-badge {
   display: inline-flex;
   align-items: center;
   padding: 3px 7px;
@@ -10918,7 +10918,7 @@ select {
 
 @media (max-width: 900px) {
 
-  .prototype-creator-badge {
+  .creator-badge {
     display: none;
   }
 

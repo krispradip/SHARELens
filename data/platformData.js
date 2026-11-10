@@ -3,7 +3,7 @@
    VERSION: v0.12.0
 
    PURPOSE:
-   Centralises prototype configuration used by the new
+   Centralises testing configuration used by the new
    Ambassador experience.
 
    BUSINESS MEANING:
@@ -11,7 +11,7 @@
    and knowledge source configuration separate from page UI.
 
    INPUTS:
-   Prototype configuration maintained in this file.
+   Testing configuration maintained in this file.
 
    OUTPUTS:
    Read-only configuration consumed by pages and services.
@@ -31,7 +31,7 @@ export const BUILD = {
 
 
 /* =========================================================
-   COMPONENT: Prototype User Context
+   COMPONENT: Testing User Context
 
    PURPOSE:
    Provides stable identity and organisational metadata.
@@ -44,7 +44,7 @@ export const BUILD = {
    Authenticated role / user.
 
    OUTPUTS:
-   Canonical prototype profile fields.
+   Canonical user profile fields.
 
    CHANGE IMPACT:
    Changes appear in forms, submissions and reports.
@@ -170,7 +170,7 @@ export const KPI_CARD_DEFINITIONS = {
     "SHARE Performance measures SHARERewards performance for the selected Ambassador or organisational scope. It brings together SHARE Acquisition, Sales Penetration and Service Pulse performance.",
 
   ambassadorPerformance:
-    "Ambassador Performance measures participation in the Ambassador programme. It is based on Campaign Participation, Broadcast Acknowledgement, Feedback & Suggestions, and SHARE Wall Submission. The current prototype uses equal-weight target attainment across the four components.",
+    "Ambassador Performance measures participation in the Ambassador programme. It is based on Campaign Participation, Broadcast Acknowledgement, Feedback & Suggestions, and SHARE Wall Submission. The current illustrative score uses equal-weight target attainment across the four components.",
 
   trainingPerformance:
     "Training Performance measures learning and development performance. It brings together Online Training Completion, Knowledge Score, and Physical / In-Store Training Completion.",
@@ -226,7 +226,7 @@ export const KPI_CARD_DEFINITIONS = {
    Feedback + Suggestions submissions and SHARE Wall updates.
 
    IMPORTANT:
-   Final weighting is not yet confirmed. The prototype score
+   Final weighting is not yet confirmed. The current score
    is therefore a demo value, while each component is shown
    transparently underneath it.
 
@@ -355,7 +355,7 @@ export const KNOWLEDGE_ARTICLES = [
 
 
 /* =========================================================
-   COMPONENT: Service Pulse Prototype Configuration
+   COMPONENT: Service Pulse Configuration
 
    PURPOSE:
    Provides the current four-scenario Service Pulse model.
@@ -443,7 +443,7 @@ export const NEXT_BEST_ACTIONS = [
    COMPONENT: Ambassador Communications
 
    PURPOSE:
-   Provides prototype Campaign, Broadcast and Reminder
+   Provides testing Campaign, Broadcast and Reminder
    communications for the Ambassador experience.
 
    BUSINESS MEANING:
