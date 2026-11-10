@@ -11013,3 +11013,24 @@ button.v12-comms-filter:focus-visible {
   outline: 2px solid var(--brand);
   outline-offset: 2px;
 }
+
+/* Desktop: keep navigation visible while the page content scrolls.
+   The sidebar can scroll independently if the menu exceeds the viewport. */
+@media (min-width: 851px) {
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .workspace-body > .sidebar {
+    position: sticky;
+    top: 72px;
+    align-self: start;
+    box-sizing: border-box;
+    height: calc(100vh - 72px);
+    height: calc(100dvh - 72px);
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+  }
+}
