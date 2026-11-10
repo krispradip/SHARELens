@@ -62,7 +62,7 @@ export const BU_LEAD_DASHBOARD = {
   acquisition: 1842,
   acquisitionTarget: 2100,
   salesPenetration: 36.4,
-  totalSalesAed: 24000000, // Illustrative MTD sales across Entertainment UAE
+  totalSalesAed: 360000, // Illustrative MTD sales across Entertainment UAE
   servicePulse: 92.1,
   trainingCompletion: 91.0,
   knowledgeScore: 93.0,
@@ -155,7 +155,7 @@ export const PROGRAMME_LEAD_DASHBOARD = {
   acquisition: 64230,
   acquisitionTarget: 70000,
   salesPenetration: 36.4,
-  totalSalesAed: 310000000, // Illustrative MTD sales across authorised BUs and markets
+  totalSalesAed: 1800000, // Illustrative MTD sales across authorised BUs and markets
   servicePulse: 92.1,
   trainingCompletion: 87.5,
   knowledgeScore: 86.2,

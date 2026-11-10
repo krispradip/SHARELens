@@ -67,8 +67,11 @@ function formatNumber(value) {
 
 // Presentation only: monetary figures are illustrative until sales integration.
 function formatSalesAed(value) {
-  const millions = Number(value) / 1000000;
-  return `AED ${millions.toLocaleString("en-AE", {
+  const amount = Number(value);
+  if (amount < 1000000) {
+    return `AED ${Math.round(amount).toLocaleString("en-AE")}`;
+  }
+  return `AED ${(amount / 1000000).toLocaleString("en-AE", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   })}M`;
