@@ -367,7 +367,7 @@ function attentionCard(items, route) {
 function brandPerformanceTable(items, route) {
 
   return `
-    <section class="dashboard-card v12-management-panel">
+    <section class="dashboard-card v12-management-panel v12-brand-performance-panel">
 
       <div class="v12-management-panel-head">
         <h2>PERFORMANCE BY BRAND</h2>
@@ -395,14 +395,14 @@ function brandPerformanceTable(items, route) {
         ${items.map(item => `
           <div class="v12-management-table-row">
             <strong>${item.name}</strong>
-            <span>${formatNumber(item.ambassadors)}</span>
-            <span>${item.activeRate}%</span>
-            <span>${item.sharePerformance}%</span>
-            <span>${item.ambassadorPerformance}%</span>
-            <span class="${statusClass(item.salesPenetration, MANAGEMENT_TARGETS.salesPenetration)}">
+            <span class="v12-brand-metric" data-label="Ambassadors">${formatNumber(item.ambassadors)}</span>
+            <span class="v12-brand-metric" data-label="Active">${item.activeRate}%</span>
+            <span class="v12-brand-metric" data-label="SHARE Performance">${item.sharePerformance}%</span>
+            <span class="v12-brand-metric" data-label="Ambassador Performance">${item.ambassadorPerformance}%</span>
+            <span class="v12-brand-metric ${statusClass(item.salesPenetration, MANAGEMENT_TARGETS.salesPenetration)}" data-label="Sales Penetration">
               ${item.salesPenetration}%
             </span>
-            <span class="${statusClass(item.servicePulse, MANAGEMENT_TARGETS.servicePulse)}">
+            <span class="v12-brand-metric ${statusClass(item.servicePulse, MANAGEMENT_TARGETS.servicePulse)}" data-label="Service Pulse">
               ${item.servicePulse}%
             </span>
           </div>
@@ -630,7 +630,7 @@ export function renderBULeadHomeV012() {
       ${managementKpiCard("Training Completion", d.trainingCompletion, MANAGEMENT_TARGETS.trainingCompletion, "%", "training-overview")}
     </div>
 
-    <div class="v12-management-main-grid">
+    <div class="v12-management-main-grid v12-brand-attention-grid">
       ${brandPerformanceTable(d.brands, "team-performance")}
       ${attentionCard(d.requiresAttention, "team-attention")}
     </div>

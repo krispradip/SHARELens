@@ -1212,3 +1212,73 @@
   }
 
 }
+
+/* =========================================================
+   BU Lead Home: balanced brand performance and attention
+   Brand metric labels and values remain readable at 50/50
+   panel widths. Other management tables are unaffected.
+========================================================= */
+.v12-management-main-grid.v12-brand-attention-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.v12-brand-performance-panel .v12-management-table {
+  overflow: visible;
+}
+
+.v12-brand-performance-panel .v12-management-table-head {
+  display: none;
+}
+
+.v12-brand-performance-panel .v12-management-table-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px 12px;
+  min-width: 0;
+  padding: 12px 0;
+  font-size: 14px;
+}
+
+.v12-brand-performance-panel .v12-management-table-head +
+.v12-management-table-row {
+  border-top: 0;
+  padding-top: 2px;
+}
+
+.v12-brand-performance-panel .v12-management-table-row > strong {
+  grid-column: 1 / -1;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.v12-brand-performance-panel .v12-management-table-row > .v12-brand-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.25;
+  font-variant-numeric: tabular-nums;
+}
+
+.v12-brand-performance-panel .v12-brand-metric::before {
+  content: attr(data-label);
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+@media (max-width: 1100px) {
+  .v12-management-main-grid.v12-brand-attention-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .v12-brand-performance-panel .v12-management-table-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
