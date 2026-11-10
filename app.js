@@ -1664,10 +1664,6 @@ function topBar() {
               v${APP_VERSION}
             </span>
 
-            <span class="creator-badge">
-              Created by Pradip Krishnamoorthy
-            </span>
-
           </div>
 
           <span>
