@@ -11002,3 +11002,14 @@ select {
     opacity: 0;
   }
 }
+
+/* SHARE Service360: keyboard-accessible Communications category controls */
+button.v12-comms-filter {
+  cursor: pointer;
+  font-family: inherit;
+  line-height: 1.3;
+}
+button.v12-comms-filter:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}

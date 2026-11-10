@@ -24,10 +24,11 @@ import {
   submitShareWallFormV012,
   submitPhysicalTrainingFormV012,
   setSelectedCommunicationV012,
+  setCommunicationTypeFilterV012,
   participateInCampaignFormV012,
   reactToBroadcastFormV012,
   initializeV12Motion
-} from "./pages/ambassadorPages.js";
+} from "./pages/ambassadorPages.js?v=0.12.0-1110-comms";
 
 import {
   renderBULeadHomeV012,
@@ -2298,7 +2299,8 @@ function handleNotificationAction(
 
   navigateTo(
     target ||
-    "communications"
+    "communications",
+    { preserveCommunicationSelection: true }
   );
 
 }
@@ -8792,6 +8794,13 @@ function navigateTo(
 
   }
 
+
+  if (page === "communications" && currentRole === "ambassador") {
+    setCommunicationTypeFilterV012(options.communicationType || "all");
+    if (!options.preserveCommunicationSelection) {
+      setSelectedCommunicationV012(null);
+    }
+  }
 
   currentPage =
     page;

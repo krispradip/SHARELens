@@ -58,6 +58,7 @@ import {
 
 let selectedServicePulseScenario = SERVICE_PULSE.scenarios[0];
 let selectedCommunicationId = null;
+let selectedCommunicationType = "all";
 
 
 /* =========================================================
@@ -746,7 +747,7 @@ function ambassadorPerformanceCard() {
           <button
             type="button"
             class="v12-subcard-link"
-            onclick="showToast('Campaign detail will open from the Campaigns module when Lead campaign management is connected.')"
+            onclick="navigateTo('communications', { communicationType: 'campaign' })"
           >
             View campaigns
           </button>
@@ -790,7 +791,7 @@ function ambassadorPerformanceCard() {
           <button
             type="button"
             class="v12-subcard-link"
-            onclick="showToast('Broadcast acknowledgement detail will open from Communications.')"
+            onclick="navigateTo('communications', { communicationType: 'broadcast' })"
           >
             View broadcasts
           </button>
@@ -1208,6 +1209,16 @@ export function setSelectedCommunicationV012(
     communicationId || null;
 }
 
+// Shared category selection for dashboard drill-down and Communications.
+export function setCommunicationTypeFilterV012(
+  communicationType = "all"
+) {
+  selectedCommunicationType =
+    ["all", "campaign", "broadcast", "reminder"].includes(communicationType)
+      ? communicationType
+      : "all";
+}
+
 
 function communicationResponse(
   communicationId,
@@ -1237,7 +1248,11 @@ function communicationTypeLabel(type) {
 export function renderCommunicationsV012() {
 
   const ordered =
-    [...COMMUNICATIONS]
+    COMMUNICATIONS
+      .filter(item =>
+        selectedCommunicationType === "all" ||
+        item.type === selectedCommunicationType
+      )
       .sort((a, b) => {
 
         if (
@@ -1260,23 +1275,23 @@ export function renderCommunicationsV012() {
       "Campaigns, broadcasts and reminders sent to you by the SHARE programme."
     )}
 
-    <div class="v12-comms-filter-row">
+    <div class="v12-comms-filter-row" role="group" aria-label="Filter communications">
 
-      <span class="v12-comms-filter active">
-        All
-      </span>
-
-      <span class="v12-comms-filter campaign">
-        Campaign
-      </span>
-
-      <span class="v12-comms-filter broadcast">
-        Broadcast
-      </span>
-
-      <span class="v12-comms-filter reminder">
-        Reminder
-      </span>
+      ${[
+        ["all", "All"],
+        ["campaign", "Campaigns"],
+        ["broadcast", "Broadcasts"],
+        ["reminder", "Reminders"]
+      ].map(([type, label]) => `
+        <button
+          type="button"
+          class="v12-comms-filter ${type} ${selectedCommunicationType === type ? "active" : ""}"
+          aria-pressed="${selectedCommunicationType === type}"
+          onclick="navigateTo('communications', { communicationType: '${type}' })"
+        >
+          ${label}
+        </button>
+      `).join("")}
 
     </div>
 
