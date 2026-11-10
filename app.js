@@ -50,7 +50,7 @@ import {
   submitManagementTrainingEventFormV012,
   openManagementKnowledgeCheckModalStateV012,
   closeManagementKnowledgeCheckModalStateV012
-} from "./pages/managementPages.js?v=0.12.0-1110-remove-scope";
+} from "./pages/managementPages.js?v=0.12.0-1110-sales";
 
 import {
   recordLogin,

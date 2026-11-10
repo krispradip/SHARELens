@@ -65,6 +65,15 @@ function formatNumber(value) {
   return Number(value).toLocaleString();
 }
 
+// Presentation only: monetary figures are illustrative until sales integration.
+function formatSalesAed(value) {
+  const millions = Number(value) / 1000000;
+  return `AED ${millions.toLocaleString("en-AE", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  })}M`;
+}
+
 
 function statusClass(value, target, higherIsBetter = true) {
 
@@ -152,7 +161,8 @@ function managementKpiCard(
   target,
   suffix = "",
   route = "",
-  helper = ""
+  helper = "",
+  totalSalesAed = null
 ) {
 
   const numeric =
@@ -210,6 +220,23 @@ function managementKpiCard(
       </div>
 
       <strong>${display}</strong>
+
+      ${label === "Sales Penetration" && Number.isFinite(totalSalesAed)
+        ? `
+          <div class="v12-management-sales-values" aria-label="Illustrative month-to-date sales values">
+            <div>
+              <span>Total sales</span>
+              <strong>${formatSalesAed(totalSalesAed)}</strong>
+            </div>
+            <div>
+              <span>SHARE sales</span>
+              <strong>${formatSalesAed(totalSalesAed * numeric / 100)}</strong>
+            </div>
+            <small>Illustrative · MTD</small>
+          </div>
+        `
+        : ""
+      }
 
       <div class="v12-management-kpi-bottom">
         <span class="${
@@ -620,7 +647,7 @@ export function renderBULeadHomeV012() {
       ${managementKpiCard("SHARE Performance", d.sharePerformance, MANAGEMENT_TARGETS.sharePerformance, "%", "team-performance")}
       ${managementKpiCard("Ambassador Performance", d.ambassadorPerformance, MANAGEMENT_TARGETS.ambassadorPerformance, "%", "team-performance")}
       ${managementKpiCard("SHARE Acquisition", d.acquisition, d.acquisitionTarget, "", "manager-acquisition")}
-      ${managementKpiCard("Sales Penetration", d.salesPenetration, MANAGEMENT_TARGETS.salesPenetration, "%", "team-performance")}
+      ${managementKpiCard("Sales Penetration", d.salesPenetration, MANAGEMENT_TARGETS.salesPenetration, "%", "team-performance", "", d.totalSalesAed)}
       ${managementKpiCard("Service Pulse", d.servicePulse, MANAGEMENT_TARGETS.servicePulse, "%", "team-service-pulse")}
       ${managementKpiCard("Training Completion", d.trainingCompletion, MANAGEMENT_TARGETS.trainingCompletion, "%", "training-overview")}
     </div>
@@ -661,7 +688,7 @@ export function renderProgrammeLeadHomeV012() {
       ${managementKpiCard("SHARE Performance", d.sharePerformance, MANAGEMENT_TARGETS.sharePerformance, "%", "group-performance")}
       ${managementKpiCard("Ambassador Performance", d.ambassadorPerformance, MANAGEMENT_TARGETS.ambassadorPerformance, "%", "group-performance")}
       ${managementKpiCard("SHARE Acquisition", d.acquisition, d.acquisitionTarget, "", "group-acquisition")}
-      ${managementKpiCard("Sales Penetration", d.salesPenetration, MANAGEMENT_TARGETS.salesPenetration, "%", "group-performance")}
+      ${managementKpiCard("Sales Penetration", d.salesPenetration, MANAGEMENT_TARGETS.salesPenetration, "%", "group-performance", "", d.totalSalesAed)}
       ${managementKpiCard("Service Pulse", d.servicePulse, MANAGEMENT_TARGETS.servicePulse, "%", "service-pulse")}
       ${managementKpiCard("Training Completion", d.trainingCompletion, MANAGEMENT_TARGETS.trainingCompletion, "%", "group-training")}
     </div>

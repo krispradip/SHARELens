@@ -1282,3 +1282,39 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* Supplementary monetary context within Sales Penetration KPI only. */
+.v12-management-sales-values {
+  display: grid;
+  gap: 5px;
+  margin: -1px 0 10px;
+  padding: 9px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.v12-management-sales-values > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 4px 8px;
+}
+
+.v12-management-sales-values > div > span {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.v12-management-sales-values > div > strong {
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.v12-management-sales-values > small {
+  color: var(--muted);
+  font-size: 9px;
+}
