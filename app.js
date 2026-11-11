@@ -28,7 +28,7 @@ import {
   participateInCampaignFormV012,
   reactToBroadcastFormV012,
   initializeV12Motion
-} from "./pages/ambassadorPages.js?v=0.12.0-1111-communications-sync";
+} from "./pages/ambassadorPages.js?v=0.12.0-1111-activity-counters";
 
 import {
   renderBULeadHomeV012,
@@ -50,7 +50,7 @@ import {
   submitManagementTrainingEventFormV012,
   openManagementKnowledgeCheckModalStateV012,
   closeManagementKnowledgeCheckModalStateV012
-} from "./pages/managementPages.js?v=0.12.0-1111-communications-sync";
+} from "./pages/managementPages.js?v=0.12.0-1111-activity-counters";
 
 import {
   recordLogin,

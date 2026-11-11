@@ -16,6 +16,8 @@ import {
   MANAGEMENT_RECOGNITION
 } from "../data/managementData.js";
 
+import { getInteractionSnapshot } from "../services/interactionMetricsService.js";
+
 import {
   getCreatedCampaigns,
   createManagementCampaign,
@@ -501,7 +503,8 @@ function buPerformanceTable(items, route) {
 }
 
 
-function campaignCard(data, route) {
+function campaignCard(data, route, programmeLead = false) {
+  const activity = getInteractionSnapshot(programmeLead);
 
   return `
     <section class="dashboard-card v12-management-panel">
@@ -520,11 +523,11 @@ function campaignCard(data, route) {
       <div class="v12-management-mini-grid">
         <div>
           <span>Active campaigns</span>
-          <strong>${data.active}</strong>
+          <strong>${data.active + activity.publishedCampaigns}</strong>
         </div>
 
         <div>
-          <span>Participation</span>
+          <span>Participation (baseline)</span>
           <strong>${data.participationRate}%</strong>
         </div>
 
@@ -532,11 +535,11 @@ function campaignCard(data, route) {
           ? `
             <div>
               <span>Broadcasts</span>
-              <strong>${data.broadcasts}</strong>
+              <strong>${data.broadcasts + activity.publishedBroadcasts}</strong>
             </div>
 
             <div>
-              <span>Acknowledgement</span>
+              <span>Acknowledgement (baseline)</span>
               <strong>${data.acknowledgementRate}%</strong>
             </div>
           `
@@ -553,6 +556,14 @@ function campaignCard(data, route) {
           `
         }
 
+        <div>
+          <span>Recorded campaign responses</span>
+          <strong>${activity.campaignResponses}</strong>
+        </div>
+        <div>
+          <span>Recorded acknowledgements</span>
+          <strong>${activity.broadcastAcknowledgements}</strong>
+        </div>
       </div>
 
     </section>
@@ -560,7 +571,8 @@ function campaignCard(data, route) {
 }
 
 
-function trainingCard(data, route) {
+function trainingCard(data, route, programmeLead = false) {
+  const activity = getInteractionSnapshot(programmeLead);
 
   return `
     <section class="dashboard-card v12-management-panel">
@@ -584,12 +596,12 @@ function trainingCard(data, route) {
 
         <div>
           <span>${data.inPersonSessions != null ? "In-person sessions" : "Physical sessions"}</span>
-          <strong>${data.inPersonSessions ?? data.physicalSessions}</strong>
+          <strong>${(data.inPersonSessions ?? data.physicalSessions) + activity.physicalTraining}</strong>
         </div>
 
         <div>
           <span>${data.peopleReached != null ? "People reached" : "Evaluation score"}</span>
-          <strong>${data.peopleReached != null ? data.peopleReached : `${data.evaluationScore}/5`}</strong>
+          <strong>${data.peopleReached != null ? data.peopleReached + activity.peopleReached : `${data.evaluationScore}/5`}</strong>
         </div>
 
         <div>
@@ -603,10 +615,12 @@ function trainingCard(data, route) {
 }
 
 
-function submissionCard(data, route) {
+function submissionCard(data, route, programmeLead = false) {
+  const activity = getInteractionSnapshot(programmeLead);
 
-  const entries =
-    Object.entries(data);
+  const entries = Object.entries(data).map(([key, value]) => [
+    key, value + (activity[key] || 0)
+  ]);
 
   return `
     <section class="dashboard-card v12-management-panel">
@@ -671,11 +685,11 @@ export function renderBULeadHomeV012() {
     </div>
 
     <div class="v12-management-secondary-grid">
-      ${campaignCard(d.campaignSummary, "manager-communications")}
-      ${trainingCard(d.trainingSummary, "training-overview")}
+      ${campaignCard(d.campaignSummary, "manager-communications", false)}
+      ${trainingCard(d.trainingSummary, "training-overview", false)}
     </div>
 
-    ${submissionCard(d.submissions, "manager-hub")}
+    ${submissionCard(d.submissions, "manager-hub", false)}
   `;
 }
 
@@ -712,8 +726,8 @@ export function renderProgrammeLeadHomeV012() {
     </div>
 
     <div class="v12-management-secondary-grid">
-      ${campaignCard(d.campaignSummary, "group-communications")}
-      ${trainingCard(d.trainingSummary, "group-training")}
+      ${campaignCard(d.campaignSummary, "group-communications", true)}
+      ${trainingCard(d.trainingSummary, "group-training", true)}
 
       <section class="dashboard-card v12-management-panel">
         <div class="v12-management-panel-head">
@@ -735,7 +749,7 @@ export function renderProgrammeLeadHomeV012() {
 
           <div>
             <span>Assessments</span>
-            <strong>${formatNumber(d.servicePulseSummary.assessments)}</strong>
+            <strong>${formatNumber(d.servicePulseSummary.assessments + getInteractionSnapshot(true).servicePulse)}</strong>
           </div>
 
           <div>
@@ -776,7 +790,7 @@ export function renderProgrammeLeadHomeV012() {
       </section>
     </div>
 
-    ${submissionCard(d.submissions, "group-hub")}
+    ${submissionCard(d.submissions, "group-hub", true)}
   `;
 }
 
@@ -2061,6 +2075,14 @@ export function renderManagementSubmissionsV012(
     programmeLead
       ? 8
       : 1;
+  const activity = getInteractionSnapshot(programmeLead);
+  const nativeByType = {
+    "Feedback": activity.feedback,
+    "Suggestions": activity.suggestions,
+    "SHARE Wall": activity.shareWall,
+    "Physical Training / Huddles": activity.physicalTraining,
+    "Manual Transactions": activity.manualTransactions
+  };
 
   return pageShell(
     programmeLead,
@@ -2080,7 +2102,7 @@ export function renderManagementSubmissionsV012(
                 <strong>
                   ${formatNumber(
                     item.total *
-                    multiplier
+                    multiplier + (nativeByType[item.type] || 0)
                   )}
                 </strong>
 
