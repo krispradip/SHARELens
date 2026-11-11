@@ -15,6 +15,9 @@ import {
 
 import { getUserContext } from "../services/userContextService.js";
 import {
+  getPublishedCommunicationsForAmbassador
+} from "../services/managementActionService.js";
+import {
   createSubmission,
   getSubmissions,
   getSubmissionsByType,
@@ -543,31 +546,36 @@ function ambassadorPerformanceCard() {
       100
     );
 
-  const campaignRate =
-    Math.round(
-      (
-        performance
-          .campaignParticipation
-          .participated /
-        performance
-          .campaignParticipation
-          .available
-      ) *
-      100
-    );
+  // Retain the approved illustrative historical counts, while
+  // including actual newly published and responded-to pilot items.
+  const published = getPublishedCommunicationsForAmbassador(
+    getUserContext("ambassador")
+  );
+  const newCampaigns = published.filter(item => item.type === "campaign");
+  const newBroadcasts = published.filter(item => item.type === "broadcast");
+  const newCampaignResponses = newCampaigns.filter(item =>
+    communicationResponse(item.id, "campaign-participation")
+  ).length;
+  const newBroadcastResponses = newBroadcasts.filter(item =>
+    communicationResponse(item.id, "broadcast-acknowledgement")
+  ).length;
 
-  const acknowledgementRate =
-    Math.round(
-      (
-        performance
-          .broadcastAcknowledgement
-          .acknowledged /
-        performance
-          .broadcastAcknowledgement
-          .sent
-      ) *
-      100
-    );
+  const campaignAvailable =
+    performance.campaignParticipation.available + newCampaigns.length;
+  const campaignParticipated =
+    performance.campaignParticipation.participated + newCampaignResponses;
+  const broadcastsSent =
+    performance.broadcastAcknowledgement.sent + newBroadcasts.length;
+  const broadcastsAcknowledged =
+    performance.broadcastAcknowledgement.acknowledged + newBroadcastResponses;
+
+  const campaignRate = Math.round(
+    (campaignParticipated / Math.max(1, campaignAvailable)) * 100
+  );
+
+  const acknowledgementRate = Math.round(
+    (broadcastsAcknowledged / Math.max(1, broadcastsSent)) * 100
+  );
 
   const wallRate =
     Math.round(
@@ -737,7 +745,7 @@ function ambassadorPerformanceCard() {
           </span>
 
           <small>
-            ${performance.campaignParticipation.participated} of ${performance.campaignParticipation.available} campaigns participated · target ${performance.campaignParticipation.threshold}%
+            ${campaignParticipated} of ${campaignAvailable} campaigns participated · target ${performance.campaignParticipation.threshold}%
           </small>
 
           <div class="v12-subcard-progress">
@@ -781,7 +789,7 @@ function ambassadorPerformanceCard() {
           </span>
 
           <small>
-            ${performance.broadcastAcknowledgement.acknowledged} of ${performance.broadcastAcknowledgement.sent} acknowledged · target ${performance.broadcastAcknowledgement.threshold}%
+            ${broadcastsAcknowledged} of ${broadcastsSent} acknowledged · target ${performance.broadcastAcknowledgement.threshold}%
           </small>
 
           <div class="v12-subcard-progress">
@@ -1225,10 +1233,12 @@ function communicationResponse(
   responseType
 ) {
 
+  const currentStaffId = getUserContext("ambassador").staffId;
   return getSubmissions()
     .find(item =>
       item.type === responseType &&
-      item.data?.communicationId === communicationId
+      item.data?.communicationId === communicationId &&
+      item.context?.staffId === currentStaffId
     );
 }
 
@@ -1248,7 +1258,10 @@ function communicationTypeLabel(type) {
 export function renderCommunicationsV012() {
 
   const ordered =
-    COMMUNICATIONS
+    [
+      ...getPublishedCommunicationsForAmbassador(getUserContext("ambassador")),
+      ...COMMUNICATIONS
+    ]
       .filter(item =>
         selectedCommunicationType === "all" ||
         item.type === selectedCommunicationType
