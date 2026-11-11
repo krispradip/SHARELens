@@ -28,7 +28,7 @@ import {
   participateInCampaignFormV012,
   reactToBroadcastFormV012,
   initializeV12Motion
-} from "./pages/ambassadorPages.js?v=0.12.0-1110-comms";
+} from "./pages/ambassadorPages.js?v=0.12.0-1111-communications-sync";
 
 import {
   renderBULeadHomeV012,
@@ -50,7 +50,7 @@ import {
   submitManagementTrainingEventFormV012,
   openManagementKnowledgeCheckModalStateV012,
   closeManagementKnowledgeCheckModalStateV012
-} from "./pages/managementPages.js?v=0.12.0-1110-sales-smaller";
+} from "./pages/managementPages.js?v=0.12.0-1111-communications-sync";
 
 import {
   recordLogin,
@@ -58,6 +58,11 @@ import {
   getActivityStatus,
   formatLastLogin
 } from "./services/userActivityService.js";
+
+import {
+  getPublishedCommunicationsForAmbassador
+} from "./services/managementActionService.js";
+import { getUserContext } from "./services/userContextService.js";
 
 const app = document.getElementById("app");
 
@@ -82,7 +87,6 @@ let currentPage = "home";
 let expandedInteractionId = null;
 
 let notificationDrawerOpen = false;
-let unreadNotifications = 5;
 
 let servicePulseTab = "dashboard";
 let servicePulseDetailId = null;
@@ -357,6 +361,40 @@ const ambassadorNotifications = [
   }
 
 ];
+
+
+// Newly published campaigns and broadcasts appear in Notifications too.
+const readCreatedNotificationIds = new Set();
+
+function safeNotificationText(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function ambassadorNotificationFeed() {
+  const created = getPublishedCommunicationsForAmbassador(
+    getUserContext("ambassador")
+  ).map(item => ({
+    id: `N-${item.id}`,
+    communicationId: item.id,
+    type: item.type,
+    title: safeNotificationText(item.title),
+    detail: safeNotificationText(item.summary),
+    date: safeNotificationText(item.date),
+    action: item.type === "campaign" ? "Open Campaign" : "Acknowledge",
+    target: "communications",
+    unread: !readCreatedNotificationIds.has(item.id)
+  }));
+  return [...created, ...ambassadorNotifications];
+}
+
+function unreadAmbassadorCount() {
+  return ambassadorNotificationFeed().filter(item => item.unread).length;
+}
 
 
 /* =========================================================
@@ -1689,10 +1727,10 @@ function topBar() {
                 ◇
 
                 ${
-                  unreadNotifications > 0
+                  unreadAmbassadorCount() > 0
                     ? `
                       <span class="notification-count">
-                        ${unreadNotifications}
+                        ${unreadAmbassadorCount()}
                       </span>
                     `
                     : ""
@@ -2180,7 +2218,7 @@ function notificationDrawer() {
       </div>
 
 
-      ${ambassadorNotifications
+      ${ambassadorNotificationFeed()
         .map(item => `
 
           <div class="notification-item">
@@ -2263,7 +2301,7 @@ function handleNotificationAction(
 ) {
 
   const item =
-    ambassadorNotifications
+    ambassadorNotificationFeed()
       .find(
         notification =>
           notification.id ===
@@ -2274,14 +2312,9 @@ function handleNotificationAction(
   if (item) {
 
     item.unread = false;
-
-    unreadNotifications =
-      ambassadorNotifications
-        .filter(
-          notification =>
-            notification.unread
-        )
-        .length;
+    if (notificationId.startsWith("N-COM-")) {
+      readCreatedNotificationIds.add(item.communicationId);
+    }
 
     setSelectedCommunicationV012(
       item.communicationId
@@ -2511,7 +2544,7 @@ function ambassadorHome() {
             class="small-button"
             onclick="toggleNotificationDrawer()"
           >
-            ${unreadNotifications} updates
+            ${unreadAmbassadorCount()} updates
           </button>
 
         </div>
@@ -9619,7 +9652,7 @@ function submitManagementCampaignV012() {
   try {
 
     const created =
-      submitManagementCampaignFormV012();
+      submitManagementCampaignFormV012(currentRole === "service");
 
     showToast(
       `${created.type} published · ${created.id}`
