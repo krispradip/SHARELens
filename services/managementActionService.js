@@ -1,3 +1,5 @@
+import { getSubmissions } from "./submissionService.js";
+
 /* =========================================================
    SERVICE: Management Action Service
    Owner: Pradip
@@ -97,6 +99,88 @@ export function createManagementCampaign(
   return created;
 }
 
+
+/* =========================================================
+   COMMUNICATION DELIVERY AND RESPONSE READ MODEL
+
+   One browser: shared localStorage joins Management publishing
+   with Ambassador Communications. When connected to corporate
+   APIs, replace these functions with permission-filtered
+   server endpoints and database-backed records. GitHub Pages
+   cannot synchronize data across browsers or devices.
+========================================================= */
+
+function audienceMatches(audience, user) {
+  const scope = String(audience || "All Ambassadors");
+  if (scope === "All Ambassadors") return true;
+  if (scope === "Entertainment UAE") {
+    return user.businessUnit === "Entertainment" && user.country === "UAE";
+  }
+  if (scope.startsWith("Brand:")) {
+    return user.brand === scope.slice("Brand:".length);
+  }
+  if (scope.startsWith("Store:")) {
+    return user.store === scope.slice("Store:".length);
+  }
+  // Earlier pilot records used generic options without target identifiers.
+  // Those older records remain visible to the sole testing Ambassador.
+  return scope === "Selected Brand" || scope === "Selected Store";
+}
+
+function displayCommunicationDate(value) {
+  if (!value) return "";
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return String(value);
+  return d.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  });
+}
+
+export function getPublishedCommunicationsForAmbassador(user) {
+  return getCreatedCampaigns()
+    .filter(record =>
+      record.status === "Live" &&
+      ["Campaign", "Broadcast"].includes(record.type) &&
+      audienceMatches(record.audience, user || {})
+    )
+    .map(record => ({
+      id: record.id,
+      type: record.type.toLowerCase(),
+      title: record.title,
+      summary: record.message || "Please review and respond to this communication.",
+      sender: record.publisherRole === "service"
+        ? "Programme Lead"
+        : "BU Lead",
+      date: displayCommunicationDate(record.createdAt),
+      due: displayCommunicationDate(record.end),
+      actionLabel: record.type === "Campaign" ? "Participate" : "Acknowledge",
+      reminderTarget: "",
+      createdAt: record.createdAt,
+      audience: record.audience
+    }));
+}
+
+// Only observed responses are counted, never simulated recipients.
+// Records are already newest-first; de-duplicate by Ambassador staff ID.
+export function getCommunicationResponses(communicationId, type = "Campaign") {
+  const submissionType = type === "Broadcast"
+    ? "broadcast-acknowledgement"
+    : "campaign-participation";
+  const seen = new Set();
+  return getSubmissions()
+    .filter(item =>
+      item.type === submissionType &&
+      item.data?.communicationId === communicationId
+    )
+    .filter(item => {
+      const person = item.context?.staffId || item.context?.userId || item.submissionId;
+      if (seen.has(person)) return false;
+      seen.add(person);
+      return true;
+    });
+}
 
 export function recordAmbassadorReview(
   ambassadorId,
