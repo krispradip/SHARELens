@@ -28,7 +28,7 @@ import {
   participateInCampaignFormV012,
   reactToBroadcastFormV012,
   initializeV12Motion
-} from "./pages/ambassadorPages.js?v=0.12.0-1110-comms";
+} from "./pages/ambassadorPages.js?v=0.12.0-1111-communications-sync";
 
 import {
   renderBULeadHomeV012,
@@ -50,7 +50,7 @@ import {
   submitManagementTrainingEventFormV012,
   openManagementKnowledgeCheckModalStateV012,
   closeManagementKnowledgeCheckModalStateV012
-} from "./pages/managementPages.js?v=0.12.0-1110-sales-smaller";
+} from "./pages/managementPages.js?v=0.12.0-1111-communications-sync";
 
 import {
   recordLogin,
@@ -9619,7 +9619,7 @@ function submitManagementCampaignV012() {
   try {
 
     const created =
-      submitManagementCampaignFormV012();
+      submitManagementCampaignFormV012(currentRole === "service");
 
     showToast(
       `${created.type} published · ${created.id}`

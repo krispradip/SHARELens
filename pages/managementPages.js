@@ -19,6 +19,7 @@ import {
 import {
   getCreatedCampaigns,
   createManagementCampaign,
+  getCommunicationResponses,
   recordAmbassadorReview,
   getAmbassadorReviews,
   getCreatedTrainingEvents,
@@ -60,6 +61,15 @@ let managementKnowledgeCheckModalOpen = false;
    CHANGE IMPACT:
    BU Lead / Team Lead home and Marian / Programme Lead home.
 ========================================================= */
+
+function escapeHtml(value = "") {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
 
 function formatNumber(value) {
   return Number(value).toLocaleString();
@@ -1404,8 +1414,14 @@ function campaignComposer(
                 : "Entertainment UAE"
               }
             </option>
-            <option>Selected Brand</option>
-            <option>Selected Store</option>
+            ${[...new Set(scopedAmbassadors(programmeLead).map(item => item.brand))]
+              .sort()
+              .map(brand => `<option value="Brand:${escapeHtml(brand)}">Brand · ${escapeHtml(brand)}</option>`)
+              .join("")}
+            ${[...new Set(scopedAmbassadors(programmeLead).map(item => item.store))]
+              .sort()
+              .map(store => `<option value="Store:${escapeHtml(store)}">Store · ${escapeHtml(store)}</option>`)
+              .join("")}
           </select>
         </label>
 
@@ -1506,50 +1522,63 @@ export function renderManagementCampaignsV012(
 
         <div class="v12-campaign-list">
 
-          ${items
-            .map(
-              item => `
-                <div class="v12-campaign-row">
-
-                  <span class="v12-campaign-type ${String(item.type).toLowerCase()}">
-                    ${item.type}
-                  </span>
-
-                  <div>
-                    <strong>${item.title}</strong>
-                    <small>
-                      ${item.audience} ·
-                      ${item.start || "Today"} →
-                      ${item.end || "Open"}
-                    </small>
-                  </div>
-
-                  <span>${item.status}</span>
-
-                  <div>
-                    <strong>${item.rate || 0}%</strong>
-                    <small>
-                      ${item.type === "Broadcast"
-                        ? "acknowledged"
-                        : "participated"
-                      }
-                    </small>
-                  </div>
-
-                  <span>
-                    ${formatNumber(
-                      item.participated || 0
-                    )}
-                    /
-                    ${formatNumber(
-                      item.sent || 0
-                    )}
-                  </span>
-
+          ${items.map(item => {
+            const isPublished = Boolean(item.createdAt);
+            const responses = isPublished
+              ? getCommunicationResponses(item.id, item.type)
+              : [];
+            return `
+              <div class="v12-campaign-row">
+                <span class="v12-campaign-type ${String(item.type).toLowerCase()}">
+                  ${escapeHtml(item.type)}
+                </span>
+                <div>
+                  <strong>${escapeHtml(item.title)}</strong>
+                  <small>
+                    ${escapeHtml(item.audience)} ·
+                    ${escapeHtml(item.start || "Today")} →
+                    ${escapeHtml(item.end || "Open")}
+                  </small>
                 </div>
-              `
-            )
-            .join("")}
+                <span>${escapeHtml(item.status)}</span>
+                <div>
+                  <strong>${isPublished ? "—" : `${item.rate || 0}%`}</strong>
+                  <small>
+                    ${isPublished ? "Delivery not connected" : item.type === "Broadcast"
+                      ? "acknowledged"
+                      : "participated"}
+                  </small>
+                </div>
+                <span>
+                  ${isPublished
+                    ? `${responses.length} recorded`
+                    : `${formatNumber(item.participated || 0)} / ${formatNumber(item.sent || 0)}`}
+                </span>
+              </div>
+
+              ${isPublished ? `
+                <details class="v12-management-response-details">
+                  <summary>
+                    View ${responses.length} ${item.type === "Broadcast" ? "acknowledgement(s)" : "response(s)"}
+                  </summary>
+                  ${responses.length
+                    ? responses.map(response => `
+                      <div class="v12-management-response-row">
+                        <strong>${escapeHtml(response.context?.ambassadorName || response.context?.staffId || "Ambassador")}</strong>
+                        <span>${escapeHtml(
+                          item.type === "Broadcast"
+                            ? response.data?.reaction === "up" ? "👍 Acknowledged · Positive" : "👎 Acknowledged · Negative"
+                            : response.data?.response || ""
+                        )}</span>
+                        <small>${escapeHtml(response.createdAt || "")}</small>
+                      </div>
+                    `).join("")
+                    : `<p>No Ambassador interaction recorded in this browser yet.</p>`
+                  }
+                </details>
+              ` : ""}
+            `;
+          }).join("")}
 
         </div>
 
@@ -2147,7 +2176,7 @@ export function toggleManagementCampaignComposerV012() {
 }
 
 
-export function submitManagementCampaignFormV012() {
+export function submitManagementCampaignFormV012(programmeLead = false) {
 
   const type =
     document
@@ -2210,7 +2239,8 @@ export function submitManagementCampaignFormV012() {
       title,
       message,
       start,
-      end
+      end,
+      publisherRole: programmeLead ? "service" : "manager"
     });
 
   managementCampaignComposerOpen =
