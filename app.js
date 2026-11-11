@@ -1,4 +1,4 @@
-import { analyseInteraction } from "./agents/agentOrchestrator.js";
+import { analyseInteraction } from "./services/interactionAnalysisService.js";
 
 import {
   renderAmbassadorHomeV012,
