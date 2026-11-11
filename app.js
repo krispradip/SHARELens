@@ -1263,6 +1263,7 @@ const navigation = {
     {
       title: "My Activity",
       items: [
+        ["performance", "My Performance"],
         ["reports", "Reports"],
         ["status", "My Status"]
       ]
@@ -8890,6 +8891,9 @@ function renderCurrentPage() {
 
       home:
         renderAmbassadorHomeV012,
+
+      performance:
+        ambassadorPerformance,
 
       "service-pulse":
         renderServicePulseV012,
