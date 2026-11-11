@@ -577,18 +577,13 @@ function ambassadorPerformanceCard() {
     (broadcastsAcknowledged / Math.max(1, broadcastsSent)) * 100
   );
 
-  const wallRate =
-    Math.round(
-      (
-        performance
-          .shareWall
-          .submitted /
-        performance
-          .shareWall
-          .expected
-      ) *
-      100
-    );
+  const wallSubmitted = performance.shareWall.submitted +
+    getSubmissionsByType("share-wall").filter(item =>
+      item.context?.staffId === getUserContext("ambassador").staffId
+    ).length;
+  const wallRate = Math.min(100, Math.round(
+    (wallSubmitted / Math.max(1, performance.shareWall.expected)) * 100
+  ));
 
 
   /*
@@ -875,7 +870,7 @@ function ambassadorPerformanceCard() {
           </div>
 
           <strong class="v12-subcard-value">
-            ${performance.shareWall.submitted}
+            ${wallSubmitted}
             <small>
               / ${performance.shareWall.expected}
             </small>
@@ -2744,7 +2739,10 @@ export function renderReportsV012() {
     wall: getSubmissionsByType("share-wall").length,
     training: getSubmissionsByType("physical-training").length,
     pulse: getSubmissionsByType("service-pulse").length,
-    manual: getSubmissionsByType("manual-transaction").length
+    manual: getSubmissionsByType("manual-transaction").length,
+    suggestions: getSubmissionsByType("suggestion").length,
+    campaigns: getSubmissionsByType("campaign-participation").length,
+    broadcasts: getSubmissionsByType("broadcast-acknowledgement").length
   };
 
   return `
@@ -2759,6 +2757,10 @@ export function renderReportsV012() {
       <section class="dashboard-card metric-card"><span>SHARE Wall</span><strong>${counts.wall}</strong><small>Updates</small></section>
       <section class="dashboard-card metric-card"><span>Training / Huddles</span><strong>${counts.training}</strong><small>Sessions</small></section>
       <section class="dashboard-card metric-card"><span>Service Pulse</span><strong>${counts.pulse}</strong><small>Assessments</small></section>
+      <section class="dashboard-card metric-card"><span>Campaigns</span><strong>${counts.campaigns}</strong><small>Responses</small></section>
+      <section class="dashboard-card metric-card"><span>Broadcasts</span><strong>${counts.broadcasts}</strong><small>Acknowledgements</small></section>
+      <section class="dashboard-card metric-card"><span>Suggestions</span><strong>${counts.suggestions}</strong><small>Submitted</small></section>
+      <section class="dashboard-card metric-card"><span>Manual Transactions</span><strong>${counts.manual}</strong><small>Requests</small></section>
     </div>
 
     <section class="dashboard-card">
