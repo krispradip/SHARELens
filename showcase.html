@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>SHARE Service360 | Real UI Show & Tell</title>
+<style>
+  :root { color-scheme: light; font-family: Arial, Helvetica, sans-serif; }
+  * { box-sizing: border-box; }
+  html,body { margin:0; padding:0; height:100%; width:100%; overflow:hidden; background:#fff; }
+  #actual-app { position:fixed; inset:0; width:100%; height:100%; border:0; background:#fff; display:block; }
+  #curtain { position:fixed; inset:0; background:#210819; opacity:0; pointer-events:none; transition:opacity 370ms ease; z-index:9; }
+  #curtain.covered { opacity:1; }
+  #pointer { position:fixed; left:0; top:0; z-index:8; opacity:0; pointer-events:none; transform:translate3d(-80px,-80px,0); transition: transform 580ms cubic-bezier(.28,.72,.18,1),opacity 180ms ease; filter:drop-shadow(0 2px 2px #0004); }
+  #pointer.visible { opacity:1; }
+  #pointer svg { width:26px; height:32px; display:block; }
+  #pointer.tap:after { content:""; position:absolute; left:5px; top:5px; width:23px; height:23px; border:2px solid #b21e5b; border-radius:50%; animation:tap 460ms ease-out both; }
+  @keyframes tap { from {transform:scale(.3);opacity:.85} to {transform:scale(2.9);opacity:0} }
+  #controls { position:fixed; z-index:12; right:14px; bottom:14px; display:flex; align-items:center; gap:3px; padding:7px 9px; background:rgba(22,18,30,.92); border:1px solid rgba(255,255,255,.2); border-radius:13px; color:white; box-shadow:0 8px 25px #0003; opacity:.12; transition:opacity 200ms ease; }
+  body.controls-awake #controls, #controls:hover, #controls:focus-within { opacity:1; }
+  #controls button { appearance:none; border:0; background:transparent; border-radius:7px; color:#fff; cursor:pointer; min-width:29px; min-height:31px; padding:4px 7px; font:600 13px Arial,sans-serif; }
+  #controls button:hover, #controls button:focus-visible { background:rgba(255,255,255,.2); outline:0; }
+  #controls .divider { height:19px; width:1px; background:#fff5; margin:0 5px; }
+  #scene-label { max-width:162px; min-width:110px; padding:0 10px; line-height:1.2; }
+  #scene-label small { display:block; font-size:9px; font-weight:700; letter-spacing:.095em; opacity:.66; text-transform:uppercase; }
+  #scene-label strong { display:block; font-size:12px; white-space:nowrap; text-overflow:ellipsis; overflow:hidden; }
+  #controls .recording { background:#982548; }
+  #progress { position:absolute; bottom:0; left:10px; right:10px; height:2px; border-radius:4px; background:#ffffff26; overflow:hidden; }
+  #progress-fill { height:100%; width:0; background:#f8bad2; transition:width 250ms linear; }
+  #error { display:none; position:fixed; z-index:15; inset:0; background:#fff; color:#2b1821; align-items:center; justify-content:center; text-align:center; padding:24px; }
+  #error.visible { display:flex; }
+  #error .body { max-width:600px; }
+  #error strong { font-size:22px; }
+  #error p { line-height:1.5; }
+  #error a { color:#8e1a4d; }
+  #toast { position:fixed; z-index:18; left:50%; bottom:76px; transform:translate(-50%,8px); background:#241421; color:white; border-radius:9px; padding:10px 17px; font:13px Arial,sans-serif; opacity:0; pointer-events:none; transition:all 200ms ease; }
+  #toast.visible { opacity:1; transform:translate(-50%,0); }
+  body.capturing #controls, body.capturing #toast { visibility:hidden; }
+  @media (prefers-reduced-motion:reduce) { #pointer,#curtain {transition-duration:0ms} }
+</style>
+</head>
+<body>
+<iframe id="actual-app" title="Live SHARE Service360 user interface" src="about:blank" loading="eager"></iframe>
+<div id="pointer" aria-hidden="true"><svg viewBox="0 0 27 35" xmlns="http://www.w3.org/2000/svg"><path d="M2 1 2 29 9.5 22.2 14.1 32.6 20.1 30 15.3 19.5 25.6 19.4Z" fill="#fff" stroke="#28202b" stroke-width="2.2" stroke-linejoin="round"/></svg></div>
+<div id="curtain" class="covered"></div>
+<div id="controls" role="toolbar" aria-label="Show and tell playback">
+  <button id="previous" aria-label="Previous scene" title="Previous scene (Left arrow)">‹</button>
+  <button id="toggle" aria-label="Pause" title="Play / pause (Space)">Ⅱ</button>
+  <button id="next" aria-label="Next scene" title="Next scene (Right arrow)">›</button>
+  <div class="divider"></div>
+  <div id="scene-label"><small id="role-name">Ambassador</small><strong id="page-name">Dashboard</strong></div>
+  <div class="divider"></div>
+  <button id="speed" title="Playback speed">1×</button>
+  <button id="restart" aria-label="Replay" title="Replay (R)">↻</button>
+  <button id="fullscreen" aria-label="Full screen" title="Full screen (F)">⛶</button>
+  <button id="record" aria-label="Record screen" title="Record current tab to WebM">●</button>
+  <div id="progress"><div id="progress-fill"></div></div>
+</div>
+<div id="toast" role="status"></div>
+<div id="error" role="alert"><div class="body"><strong>Unable to load the actual SHARE Service360 interface</strong><p id="error-message">This animation must run beside the original SHARE Service360 application files on GitHub Pages, not from a detached copy.</p><p><a href="./index.html">Open the original SHARE Service360 application</a></p></div></div>
+<script>
+/* No re-created UI: this page loads the unchanged index.html and drives its existing functions. */
+(() => {
+  'use strict';
+  const frame=document.getElementById('actual-app');
+  const shade=document.getElementById('curtain');
+  const pointer=document.getElementById('pointer');
+  const control=document.getElementById('controls');
+  const toggle=document.getElementById('toggle');
+  const progress=document.getElementById('progress-fill');
+  const roleName=document.getElementById('role-name');
+  const pageName=document.getElementById('page-name');
+  const people={
+    ambassador:{login:'100245',label:'Ambassador'},
+    manager:{login:'ahmed.salah@maf.ae',label:'BU Lead / Trainer'},
+    service:{login:'marian.zakhary@maf.ae',label:'Programme Lead'}
+  };
+  // All page IDs, control selectors and user identities match the main-branch application.
+  // None of these scenes submits forms, publishes communications, or alters business metrics.
+  const scenes=[
+    {role:'ambassador',page:'home',label:'My SHARE dashboard',focus:'.v12-home-heading',hold:4100},
+    {role:'ambassador',page:'home',label:'Performance and KPIs',focus:'.v12-kpi-grid',hold:3200},
+    {role:'ambassador',page:'communications',label:'Communications',focus:'.content h1',hold:4000},
+    {role:'ambassador',page:'service-pulse',label:'Service Pulse',focus:'.content h1',hold:3300},
+    {role:'ambassador',page:'training-online',label:'Online Training',focus:'.content h1',hold:3300},
+    {role:'ambassador',page:'status',label:'My Status',focus:'.v12-journey-list',hold:3500},
+    {role:'manager',page:'home',label:'Entertainment UAE Dashboard',focus:'.v12-management-page-head',hold:4300},
+    {role:'manager',page:'home',label:'Brand performance',focus:'.v12-brand-attention-grid',hold:3400},
+    {role:'manager',page:'team-performance',label:'Programme Performance',focus:'.v12-management-page-head',hold:3600},
+    {role:'manager',page:'ambassadors',label:'Ambassadors',focus:'.v12-management-page-head',hold:3500},
+    {role:'manager',page:'manager-communications',label:'Campaigns & Broadcasts',focus:'.v12-management-actionbar',hold:3200},
+    {role:'manager',page:'manager-communications',label:'Campaign composer',action:'button[onclick="toggleManagementCampaignComposerV012()"]',focus:'.v12-management-composer',hold:3600},
+    {role:'manager',page:'training-overview',label:'Training overview',focus:'.v12-management-page-head',hold:3400},
+    {role:'service',page:'home',label:'SHARE Ambassador Programme',focus:'.v12-management-page-head',hold:4300},
+    {role:'service',page:'home',label:'Business unit comparison',focus:'.v12-management-main-grid',hold:3400},
+    {role:'service',page:'group-performance',label:'Programme Performance',focus:'.v12-management-page-head',hold:3900},
+    {role:'service',page:'group-ambassadors',label:'Ambassadors',focus:'.v12-management-page-head',hold:3600},
+    {role:'service',page:'group-communications',label:'Campaigns & Broadcasts',focus:'.v12-management-actionbar',hold:3600},
+    {role:'service',page:'group-recognition',label:'Recognition / Leaderboard',focus:'.v12-management-page-head',hold:3900},
+    {role:'service',page:'group-hub',label:'Forms & Submissions',focus:'.v12-management-page-head',hold:3500}
+  ];
+  let cursor=-1, identity=null, currentAppPage=null, generation=0, playing=true, speed=1, capture=null, captureChunks=[];
+  let toastTimer=null, controlsTimer=null;
+  const qs=new URLSearchParams(location.search);
+  const speedParam=Number(qs.get('speed'));
+  if ([1,1.25,1.5,2].includes(speedParam))speed=speedParam;
+  document.getElementById('speed').textContent=speed+'×';
+  const startRole=qs.get('role');
+  const initialIndex=startRole&&people[startRole]?scenes.findIndex(x=>x.role===startRole):0;
+  if(qs.get('autoplay')==='0')playing=false;
+  function announce(msg){
+    const el=document.getElementById('toast');
+    el.textContent=msg;el.classList.add('visible');clearTimeout(toastTimer);
+    toastTimer=setTimeout(()=>el.classList.remove('visible'),2300);
+  }
+  function wake(){
+    document.body.classList.add('controls-awake');clearTimeout(controlsTimer);
+    controlsTimer=setTimeout(()=>{if(!control.matches(':hover')&&!control.matches(':focus-within'))document.body.classList.remove('controls-awake');},2400);
+  }
+  document.addEventListener('mousemove',wake);document.addEventListener('touchstart',wake,{passive:true});
+  const valid=t=>t===generation;
+  async function wait(ms,t,ignorePause=false){
+    let left=ms/Math.max(.25,speed);
+    while(left>0){
+      if(!valid(t))return false;
+      if(!playing&&!ignorePause){await new Promise(r=>setTimeout(r,60));continue;}
+      const step=Math.min(60,left);await new Promise(r=>setTimeout(r,step));left-=step;
+    }
+    return valid(t);
+  }
+  function fatal(message){
+    document.getElementById('error-message').textContent=message;
+    document.getElementById('error').classList.add('visible');
+    playing=false;toggle.textContent='▶';
+  }
+  function app(){try{return frame.contentWindow;}catch{return null;}}
+  function dom(){try{return frame.contentDocument;}catch{return null;}}
+  function hidePointer(){pointer.classList.remove('visible','tap');}
+  function point(el){
+    if(!el)return;
+    const r=el.getBoundingClientRect();const outer=frame.getBoundingClientRect();
+    const x=Math.max(12,Math.min(innerWidth-32,outer.left+r.left+Math.min(Math.max(18,r.width*.55),r.width-7)));
+    const y=Math.max(12,Math.min(innerHeight-35,outer.top+r.top+Math.min(Math.max(12,r.height*.5),r.height-3)));
+    pointer.style.transform=`translate3d(${Math.round(x)}px,${Math.round(y)}px,0)`;
+    pointer.classList.add('visible');
+  }
+  function findNav(page){
+    const all=dom()?.querySelectorAll('.nav-item[onclick]')||[];
+    return [...all].find(el=>el.getAttribute('onclick')?.includes(`navigateTo('${page}')`));
+  }
+  async function loadIdentity(role,t){
+    if(role===identity&&dom()?.querySelector('#workspace'))return true;
+    shade.classList.add('covered');hidePointer();
+    if(!await wait(410,t,true))return false;
+    identity=null;currentAppPage=null;
+    const url=`./index.html?share360_showcase=1&role=${encodeURIComponent(role)}&v=20261116`;
+    frame.src=url;
+    const ready=await new Promise(resolve=>{
+      let finished=false;
+      const deadline=Date.now()+19000;
+      const timer=setInterval(()=>{
+        if(finished)return;
+        const w=app(),d=dom();
+        if(typeof w?.signIn==='function'&&d?.getElementById('login-id')){
+          finished=true;clearInterval(timer);resolve(true);
+        }else if(Date.now()>deadline||!valid(t)){
+          finished=true;clearInterval(timer);resolve(false);
+        }
+      },70);
+    });
+    if(!ready){if(valid(t))fatal('The real GitHub main-branch app did not finish loading. Verify that showcase.html and index.html are deployed together.');return false;}
+    const d=dom(),w=app();
+    d.getElementById('login-id').value=people[role].login;
+    d.getElementById('login-password').value='demo123';
+    w.signIn();
+    if(!d.getElementById('workspace')){fatal('The existing sign-in function did not open the requested persona. No substitute screen was generated.');return false;}
+    identity=role;currentAppPage="home";
+    if(!await wait(550,t,true))return false;
+    shade.classList.remove('covered');
+    return true;
+  }
+  async function navigate(page,t){
+    const el=findNav(page);
+    if(!el){
+      if(typeof app()?.navigateTo!=='function')throw new Error(`Original app route missing: ${page}`);
+      app().navigateTo(page);currentAppPage=page;return;
+    }
+    el.scrollIntoView({behavior:'smooth',block:'nearest'});
+    if(!await wait(310,t))return;
+    point(el);
+    if(!await wait(620,t))return;
+    pointer.classList.remove('tap');void pointer.offsetWidth;pointer.classList.add('tap');
+    el.click();currentAppPage=page;
+    await wait(440,t);
+  }
+  async function focus(selector,t){
+    const d=dom();let target=selector?d?.querySelector(selector):null;
+    target=target||d?.querySelector('main.content h1, main.content h2, main.content section, main.content');
+    if(!target)return;
+    target.scrollIntoView({behavior:'smooth',block:selector?.includes('grid')||selector?.includes('journey')?'center':'start',inline:'nearest'});
+    if(!await wait(610,t))return;
+    point(target);
+  }
+  async function showScene(i,t){
+    const scene=scenes[i];
+    roleName.textContent=people[scene.role].label;
+    pageName.textContent=scene.label;
+    progress.style.width=`${100*i/scenes.length}%`;
+    if(!await loadIdentity(scene.role,t))return;
+    // The loginAsRole function sets the true current page to home.
+    // Repeated home scenes retain the rendered DOM so its native animations stay intact.
+    if(currentAppPage!==scene.page){await navigate(scene.page,t);}
+    if(!valid(t))return;
+    if(scene.action&&!dom()?.querySelector(".v12-management-composer")){
+      const action=dom()?.querySelector(scene.action);
+      if(action){
+        action.scrollIntoView({behavior:'smooth',block:'center'});
+        if(!await wait(450,t))return;
+        point(action);
+        if(!await wait(570,t))return;
+        pointer.classList.remove('tap');void pointer.offsetWidth;pointer.classList.add('tap');
+        action.click();
+        if(!await wait(400,t))return;
+      }
+    }
+    await focus(scene.focus,t);
+  }
+  async function run(index){
+    const t=++generation;playing=true;toggle.textContent='Ⅱ';toggle.setAttribute('aria-label','Pause');
+    for(let i=index;i<scenes.length;i++){
+      if(!valid(t))return;
+      cursor=i;
+      try{await showScene(i,t);}catch(e){if(valid(t))fatal(String(e?.message||e));return;}
+      if(!valid(t))return;
+      if(!await wait(scenes[i].hold,t))return;
+    }
+    if(!valid(t))return;
+    playing=false;toggle.textContent='▶';toggle.setAttribute('aria-label','Play');
+    progress.style.width='100%';hidePointer();
+    if(capture)finishCapture();
+    if(qs.get('loop')==='1')setTimeout(()=>{if(valid(t)&&!capture)run(0);},1200);
+  }
+  function jump(i){
+    i=Math.max(0,Math.min(scenes.length-1,i));
+    // If jumping within the same role, the new scene drives the actual original page.
+    const prior=cursor;
+    if(prior!==i&&scenes[i].role===identity){
+      const firstInRole=i===0||scenes[i-1].role!==scenes[i].role;
+      if(firstInRole){identity=null;}
+    }
+    run(i);
+  }
+  function pause(){
+    playing=!playing;toggle.textContent=playing?'Ⅱ':'▶';
+    toggle.setAttribute('aria-label',playing?'Pause':'Play');
+    if(playing&&cursor===scenes.length-1&&parseFloat(progress.style.width)===100)run(0);
+  }
+  document.getElementById('previous').onclick=()=>jump(cursor-1);
+  document.getElementById('next').onclick=()=>jump(cursor+1);
+  toggle.onclick=pause;
+  document.getElementById('restart').onclick=()=>jump(0);
+  document.getElementById('fullscreen').onclick=()=>{if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.();};
+  document.getElementById('speed').onclick=()=>{const speeds=[1,1.25,1.5,2];speed=speeds[(speeds.indexOf(speed)+1)%speeds.length];document.getElementById('speed').textContent=speed+'×';};
+  document.addEventListener('keydown',e=>{
+    if(['INPUT','TEXTAREA','SELECT'].includes(e.target?.tagName))return;
+    const key=e.key.toLowerCase();
+    if(key===' '){e.preventDefault();pause();}
+    else if(key==='arrowright')jump(cursor+1);
+    else if(key==='arrowleft')jump(cursor-1);
+    else if(key==='r')jump(0);
+    else if(key==='f')document.getElementById('fullscreen').click();
+    else if(['1','2','3'].includes(key)){const role=['ambassador','manager','service'][Number(key)-1];jump(scenes.findIndex(s=>s.role===role));}
+  });
+  function finishCapture(){
+    const data=capture;if(!data)return;
+    capture=null;document.body.classList.remove('capturing');
+    if(data.recorder.state!=='inactive')data.recorder.stop();
+    data.stream.getTracks().forEach(t=>t.stop());
+  }
+  document.getElementById('record').onclick=async()=>{
+    if(capture){finishCapture();return;}
+    if(!navigator.mediaDevices?.getDisplayMedia||!window.MediaRecorder){announce('Screen recording is not supported in this browser');return;}
+    try{
+      const stream=await navigator.mediaDevices.getDisplayMedia({video:{frameRate:30,displaySurface:'browser'},audio:false,preferCurrentTab:true});
+      const types=['video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm'];
+      const format=types.find(x=>MediaRecorder.isTypeSupported(x))||'';
+      captureChunks=[];
+      const recorder=new MediaRecorder(stream,format?{mimeType:format}:{});
+      capture={stream,recorder};
+      recorder.ondataavailable=e=>{if(e.data.size)captureChunks.push(e.data);};
+      recorder.onstop=()=>{
+        if(!captureChunks.length)return;
+        const blob=new Blob(captureChunks,{type:format||'video/webm'});
+        const url=URL.createObjectURL(blob);const a=document.createElement('a');
+        a.href=url;a.download='SHARE-Service360-actual-UI-showcase.webm';a.click();
+        setTimeout(()=>URL.revokeObjectURL(url),30000);
+        document.body.classList.remove('capturing');
+      };
+      stream.getVideoTracks()[0].addEventListener('ended',()=>{if(capture)finishCapture();});
+      document.body.classList.add('capturing');
+      recorder.start(1000);
+      jump(0);
+    }catch(e){announce('Recording cancelled or permission unavailable');}
+  };
+  // Start in the original app immediately. A query parameter can start at a selected real role.
+  run(Math.max(0,initialIndex));
+  if(qs.get('autoplay')==='0')setTimeout(()=>{playing=false;toggle.textContent='▶';},10);
+})();
+</script>
+</body>
+</html>
