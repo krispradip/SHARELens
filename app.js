@@ -1847,17 +1847,6 @@ function sidebar() {
         `)
         .join("")}
 
-
-      <div class="sidebar-version">
-
-        <span>
-          v${APP_VERSION}
-        </span>
-
-
-
-      </div>
-
     </aside>
   `;
 
