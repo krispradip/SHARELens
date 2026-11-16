@@ -82,6 +82,16 @@
     {role:'ambassador',page:'home',label:'My SHARE dashboard',focus:'.v12-home-heading',hold:4100},
     {role:'ambassador',page:'home',label:'Performance and KPIs',focus:'.v12-kpi-grid',hold:3200},
     {role:'ambassador',page:'communications',label:'Communications',focus:'.content h1',hold:4000},
+    {role:'ambassador',page:'feedback',label:'Feedback form',focus:'.content h1',tour:[
+      ['#feedback-from',1100],['#feedback-category',1200],['#feedback-text',1600],
+      ['#feedback-image',1100],['button[onclick="submitFeedbackV012()"]',1300]
+    ],hold:2200},
+    {role:'ambassador',page:'feedback',label:'Feedback history',focus:'.dashboard-grid.two > section:last-child',hold:3200},
+    {role:'ambassador',page:'suggestions',label:'Suggestion form',focus:'.content h1',tour:[
+      ['#suggestion-category',1100],['#suggestion-title',1200],['#suggestion-text',1600],
+      ['#suggestion-image',1100],['button[onclick="submitSuggestionV012()"]',1300]
+    ],hold:2200},
+    {role:'ambassador',page:'suggestions',label:'Suggestion history',focus:'.dashboard-grid.two > section:last-child',hold:3200},
     {role:'ambassador',page:'service-pulse',label:'Service Pulse',focus:'.content h1',hold:3300},
     {role:'ambassador',page:'training-online',label:'Online Training',focus:'.content h1',hold:3300},
     {role:'ambassador',page:'status',label:'My Status',focus:'.v12-journey-list',hold:3500},
@@ -154,7 +164,7 @@
     shade.classList.add('covered');hidePointer();
     if(!await wait(410,t,true))return false;
     identity=null;currentAppPage=null;
-    const url=`./index.html?share360_showcase=1&role=${encodeURIComponent(role)}&v=20261116-sidebar-version-flow`;
+    const url=`./index.html?share360_showcase=1&role=${encodeURIComponent(role)}&v=20261116-feedback-suggestion-tour`;
     frame.src=url;
     const ready=await new Promise(resolve=>{
       let finished=false;
@@ -209,6 +219,19 @@
     if(!await wait(610,t))return;
     point(target);
   }
+  // Reveal the actual application form controls without entering invented information.
+  async function tourFields(fields,t){
+    for(const [selector,dwell] of fields){
+      if(!valid(t))return;
+      const el=dom()?.querySelector(selector);
+      if(!el)throw new Error('SHARE Service360 field not found: '+selector);
+      el.scrollIntoView({behavior:'smooth',block:'center',inline:'nearest'});
+      if(!await wait(650,t))return;
+      point(el);
+      if(typeof el.focus==='function')el.focus({preventScroll:true});
+      if(!await wait(dwell,t))return;
+    }
+  }
   async function showScene(i,t){
     const scene=scenes[i];
     roleName.textContent=people[scene.role].label;
@@ -232,6 +255,7 @@
       }
     }
     await focus(scene.focus,t);
+    if(scene.tour)await tourFields(scene.tour,t);
   }
   async function run(index){
     const t=++generation;playing=true;toggle.textContent='Ⅱ';toggle.setAttribute('aria-label','Pause');
