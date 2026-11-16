@@ -171,6 +171,13 @@
     });
     if(!ready){if(valid(t))fatal('The real GitHub main-branch app did not finish loading. Verify that showcase.html and index.html are deployed together.');return false;}
     const d=dom(),w=app();
+    // Keep the source application's interface intact; suppress author credit only in this showcase iframe.
+    if (!d.getElementById('showcase-hide-author-credit')) {
+      const creditStyle=d.createElement('style');
+      creditStyle.id='showcase-hide-author-credit';
+      creditStyle.textContent='#sidebar .sidebar-version > strong, .login-footer-creator > strong { display: none !important; }';
+      d.head.appendChild(creditStyle);
+    }
     d.getElementById('login-id').value=people[role].login;
     d.getElementById('login-password').value='demo123';
     w.signIn();
