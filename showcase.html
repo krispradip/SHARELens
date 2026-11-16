@@ -160,7 +160,11 @@
     return [...all].find(el=>el.getAttribute('onclick')?.includes(`navigateTo('${page}')`));
   }
   async function loadIdentity(role,t){
-    if(role===identity&&dom()?.querySelector('#workspace'))return true;
+    if(role===identity&&dom()?.querySelector('#workspace')){
+      // A skipped transition may have left the curtain up; keep this persona visible.
+      shade.classList.remove('covered');
+      return true;
+    }
     shade.classList.add('covered');hidePointer();
     if(!await wait(410,t,true))return false;
     identity=null;currentAppPage=null;
@@ -238,6 +242,7 @@
     pageName.textContent=scene.label;
     progress.style.width=`${100*i/scenes.length}%`;
     if(!await loadIdentity(scene.role,t))return;
+    shade.classList.remove('covered');
     // The loginAsRole function sets the true current page to home.
     // Repeated home scenes retain the rendered DOM so its native animations stay intact.
     if(currentAppPage!==scene.page){await navigate(scene.page,t);}
