@@ -1854,9 +1854,7 @@ function sidebar() {
           v${APP_VERSION}
         </span>
 
-        <strong>
-          Created by Pradip Krishnamoorthy
-        </strong>
+
 
       </div>
 
