@@ -1059,3 +1059,17 @@
   }
 
 }
+
+/* Live campaign/broadcast engagement indicator (same source as Home score). */
+.v12-comms-score-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  margin: 12px 0;
+  padding: 12px 16px;
+  border: 1px solid var(--border, #e7e2e5);
+  border-radius: 10px;
+  background: var(--white, #fff);
+  font-size: 13px;
+}
+.v12-comms-score-summary strong { color: var(--brand, #46001a); }

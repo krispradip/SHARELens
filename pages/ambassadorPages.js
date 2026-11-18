@@ -14,6 +14,7 @@ import {
 } from "../data/platformData.js";
 
 import { getUserContext } from "../services/userContextService.js";
+import { getAmbassadorScoreSnapshotV012 } from "../services/ambassadorScoreService.js";
 import {
   getPublishedCommunicationsForAmbassador
 } from "../services/managementActionService.js";
@@ -494,185 +495,15 @@ export function initializeV12Motion() {
    Suggestions count in this environment.
 ========================================================= */
 
-function ambassadorPerformanceCounts() {
-
-  const feedbackCount =
-    AMBASSADOR_PERFORMANCE
-      .feedbackSuggestions
-      .baselineFeedback +
-    getSubmissionsByType(
-      "feedback"
-    ).length;
-
-  const suggestionCount =
-    AMBASSADOR_PERFORMANCE
-      .feedbackSuggestions
-      .baselineSuggestions +
-    getSubmissionsByType(
-      "suggestion"
-    ).length;
-
-  return {
-    feedbackCount,
-    suggestionCount,
-    combined:
-      feedbackCount +
-      suggestionCount
-  };
-
-}
-
-
 function ambassadorPerformanceCard() {
-
-  const performance =
-    AMBASSADOR_PERFORMANCE;
-
-  const counts =
-    ambassadorPerformanceCounts();
-
-  const threshold =
-    performance
-      .feedbackSuggestions
-      .monthlyThreshold;
-
-  const combinedProgress =
-    Math.min(
-      100,
-      (
-        counts.combined /
-        threshold
-      ) *
-      100
-    );
-
-  // Retain the approved illustrative historical counts, while
-  // including actual newly published and responded-to pilot items.
-  const published = getPublishedCommunicationsForAmbassador(
-    getUserContext("ambassador")
-  );
-  const newCampaigns = published.filter(item => item.type === "campaign");
-  const newBroadcasts = published.filter(item => item.type === "broadcast");
-  const newCampaignResponses = newCampaigns.filter(item =>
-    communicationResponse(item.id, "campaign-participation")
-  ).length;
-  const newBroadcastResponses = newBroadcasts.filter(item =>
-    communicationResponse(item.id, "broadcast-acknowledgement")
-  ).length;
-
-  const campaignAvailable =
-    performance.campaignParticipation.available + newCampaigns.length;
-  const campaignParticipated =
-    performance.campaignParticipation.participated + newCampaignResponses;
-  const broadcastsSent =
-    performance.broadcastAcknowledgement.sent + newBroadcasts.length;
-  const broadcastsAcknowledged =
-    performance.broadcastAcknowledgement.acknowledged + newBroadcastResponses;
-
-  const campaignRate = Math.round(
-    (campaignParticipated / Math.max(1, campaignAvailable)) * 100
-  );
-
-  const acknowledgementRate = Math.round(
-    (broadcastsAcknowledged / Math.max(1, broadcastsSent)) * 100
-  );
-
-  const wallSubmitted = performance.shareWall.submitted +
-    getSubmissionsByType("share-wall").filter(item =>
-      item.context?.staffId === getUserContext("ambassador").staffId
-    ).length;
-  const wallRate = Math.min(100, Math.round(
-    (wallSubmitted / Math.max(1, performance.shareWall.expected)) * 100
-  ));
-
-
-  /*
-     Ambassador Performance Score
-     ----------------------------
-     Each component is measured against its agreed target.
-     Component attainment is capped at 100% so exceeding one
-     target cannot compensate for missing another.
-
-     Current illustrative weighting:
-     25% Campaign Participation
-     25% Broadcast Acknowledgement
-     25% Feedback + Suggestions
-     25% SHARE Wall Submission
-
-     This can be changed later if business weighting is
-     formally agreed.
-  */
-
-  const campaignAttainment =
-    Math.min(
-      100,
-      (
-        campaignRate /
-        performance
-          .campaignParticipation
-          .threshold
-      ) *
-      100
-    );
-
-  const acknowledgementAttainment =
-    Math.min(
-      100,
-      (
-        acknowledgementRate /
-        performance
-          .broadcastAcknowledgement
-          .threshold
-      ) *
-      100
-    );
-
-  const feedbackSuggestionAttainment =
-    Math.min(
-      100,
-      (
-        counts.combined /
-        threshold
-      ) *
-      100
-    );
-
-  const wallAttainment =
-    Math.min(
-      100,
-      (
-        performance
-          .shareWall
-          .submitted /
-        performance
-          .shareWall
-          .expected
-      ) *
-      100
-    );
-
-  const ambassadorPerformanceScore =
-    (
-      campaignAttainment +
-      acknowledgementAttainment +
-      feedbackSuggestionAttainment +
-      wallAttainment
-    ) /
-    4;
-
-  const ambassadorScoreDecimals =
-    Number.isInteger(
-      ambassadorPerformanceScore
-    )
-      ? 0
-      : 1;
-
-  const ambassadorScoreDisplay =
-    ambassadorPerformanceScore
-      .toFixed(
-        ambassadorScoreDecimals
-      );
-
+  const performance = AMBASSADOR_PERFORMANCE;
+  const {
+    counts, threshold, combinedProgress, campaignRate, acknowledgementRate,
+    campaignAvailable, campaignParticipated, broadcastsSent, broadcastsAcknowledged,
+    wallSubmitted, wallRate, campaignAttainment, acknowledgementAttainment,
+    feedbackSuggestionAttainment, wallAttainment, ambassadorPerformanceScore,
+    ambassadorScoreDecimals, ambassadorScoreDisplay
+  } = getAmbassadorScoreSnapshotV012();
 
   return `
     <section class="dashboard-card v12-motion-card v12-ambassador-performance">
@@ -1251,6 +1082,7 @@ function communicationTypeLabel(type) {
 
 
 export function renderCommunicationsV012() {
+  const livePerformance = getAmbassadorScoreSnapshotV012();
 
   const ordered =
     [
@@ -1282,6 +1114,11 @@ export function renderCommunicationsV012() {
       "Communications",
       "Campaigns, broadcasts and reminders sent to you by the SHARE programme."
     )}
+
+    <div class="v12-comms-score-summary" role="status">
+      <span>Broadcast acknowledged: <strong>${livePerformance.broadcastsAcknowledged} of ${livePerformance.broadcastsSent}</strong></span>
+      <span>Ambassador Performance: <strong>${livePerformance.ambassadorScoreDisplay}%</strong></span>
+    </div>
 
     <div class="v12-comms-filter-row" role="group" aria-label="Filter communications">
 

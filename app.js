@@ -28,7 +28,7 @@ import {
   participateInCampaignFormV012,
   reactToBroadcastFormV012,
   initializeV12Motion
-} from "./pages/ambassadorPages.js?v=0.12.0-1111-activity-counters";
+} from "./pages/ambassadorPages.js?v=0.12.0-1118-score-sync";
 
 import {
   renderBULeadHomeV012,
@@ -63,6 +63,7 @@ import {
   getPublishedCommunicationsForAmbassador
 } from "./services/managementActionService.js";
 import { getUserContext } from "./services/userContextService.js";
+import { getAmbassadorScoreSnapshotV012 } from "./services/ambassadorScoreService.js";
 
 const app = document.getElementById("app");
 
@@ -9543,18 +9544,20 @@ function reactToBroadcastV012(
   communicationId,
   reaction
 ) {
-
-  runV12Submission(
-    () =>
-      reactToBroadcastFormV012(
-        communicationId,
-        reaction
-      ),
-    reaction === "up"
-      ? "Broadcast acknowledged with thumbs up"
-      : "Broadcast acknowledged with thumbs down"
-  );
-
+  try {
+    const before = getAmbassadorScoreSnapshotV012();
+    const submission = reactToBroadcastFormV012(communicationId, reaction);
+    const after = getAmbassadorScoreSnapshotV012();
+    const delta = after.ambassadorPerformanceScore - before.ambassadorPerformanceScore;
+    const scoreText = delta > 0.001
+      ? `Ambassador Score ${before.ambassadorPerformanceScore.toFixed(1)}% → ${after.ambassadorPerformanceScore.toFixed(1)}%`
+      : `Ambassador Score ${after.ambassadorPerformanceScore.toFixed(1)}% (unchanged)`;
+    showToast(`Broadcast acknowledged · ${after.broadcastsAcknowledged}/${after.broadcastsSent} · ${scoreText}`);
+    renderCurrentPage();
+    return submission;
+  } catch (error) {
+    showToast(error?.message || "Could not record broadcast acknowledgement.");
+  }
 }
 
 
