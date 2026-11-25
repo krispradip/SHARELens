@@ -10,7 +10,7 @@ export const ROLE_ROUTES = Object.freeze({
   ambassador: Object.freeze(["home","performance","service-pulse","communications","feedback","suggestions","manual-transaction","share-wall","training","training-online","training-physical","knowledge","reports","knowledge-check","status"]),
   manager: Object.freeze(["home","team-performance","team-attention","team-service-pulse","training-overview","knowledge-gaps","manager-knowledge","ambassadors","manager-onboarding","manager-acquisition","manager-communications","manager-hub"]),
   service: Object.freeze(["home","group-performance","group-attention","service-pulse","audit","group-training","group-gaps","group-knowledge","group-ambassadors","group-onboarding","group-acquisition","group-communications","group-hub","group-recognition","group-actions"]),
-  admin: Object.freeze(["home","integrations","knowledge-sources","users-access","roles","identity","ai-agents","agent-config","frameworks","notifications","engagement-leaderboard","audit-log"])
+  admin: Object.freeze(["home","integrations","knowledge-sources","users-access","roles","identity","frameworks","notifications","engagement-leaderboard","audit-log"])
 });
 export function canAccessRoute(role, page) {
   return typeof page === "string" &&
