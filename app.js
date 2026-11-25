@@ -1425,10 +1425,8 @@ const navigation = {
     },
 
     {
-      title: "AI Platform",
+      title: "Knowledge Management",
       items: [
-        ["ai-agents", "AI Agents"],
-        ["agent-config", "Agent Configuration"],
         ["knowledge-sources", "Knowledge Sources"]
       ]
     },
@@ -8660,12 +8658,6 @@ function adminHome() {
       )}
 
       ${metricCard(
-        "AI Agents",
-        "13",
-        "Configured"
-      )}
-
-      ${metricCard(
         "Integrations",
         "11",
         "Not connected"
@@ -9116,7 +9108,7 @@ function renderCurrentPage() {
       "knowledge-sources":
         () => `
           ${pageTitle(
-            "AI PLATFORM",
+            "KNOWLEDGE MANAGEMENT",
             "Knowledge Sources",
             "Manage approved knowledge sources used by SHARE Service360."
           )}
@@ -9146,22 +9138,6 @@ function renderCurrentPage() {
             "IDENTITY & ACCESS",
             "Identity Providers",
             "Configure Staff ID and Microsoft Entra ID."
-          ),
-
-      "ai-agents":
-        () =>
-          genericRolePage(
-            "AI PLATFORM",
-            "AI Agents",
-            "View specialist AI capabilities."
-          ),
-
-      "agent-config":
-        () =>
-          genericRolePage(
-            "AI PLATFORM",
-            "Agent Configuration",
-            "Configure AI orchestration."
           ),
 
       frameworks:
