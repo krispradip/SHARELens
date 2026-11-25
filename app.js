@@ -63,6 +63,7 @@ import {
   getPublishedCommunicationsForAmbassador
 } from "./services/managementActionService.js";
 import { getUserContext } from "./services/userContextService.js";
+import { canAccessRoute } from "./services/rolePolicy.js";
 import { getAmbassadorScoreSnapshotV012 } from "./services/ambassadorScoreService.js";
 
 const app = document.getElementById("app");
@@ -8802,6 +8803,11 @@ function navigateTo(
   options = {}
 ) {
 
+  if (!canAccessRoute(currentRole, page)) {
+    showToast("This page is not available for your role.");
+    return;
+  }
+
   if (
     page === "performance" &&
     !options.preserveInteraction
@@ -8867,6 +8873,10 @@ function openPerformanceInteraction(id) {
 
 
 function renderCurrentPage() {
+
+  if (!canAccessRoute(currentRole, currentPage)) {
+    currentPage = "home";
+  }
 
   let content = "";
 
