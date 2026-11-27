@@ -139,6 +139,48 @@ async function handler(req,res){
     await pool.query("DELETE FROM s360_sessions WHERE token_hash=$1",[sha(token)]);
     return json(res,200,{ok:true});
   }
+  if(path==="/api/users"&&req.method==="GET"){
+    if(actor.role!=="admin")throw fail(403,"Permission denied");
+    const q=await pool.query("SELECT id,login,role,status,display_name,identity_provider FROM s360_users ORDER BY created_at DESC LIMIT 500");
+    return json(res,200,{items:q.rows});
+  }
+  if(path==="/api/users"&&req.method==="POST"){
+    if(actor.role!=="admin")throw fail(403,"Permission denied");
+    const data=await body(req),login=assertValue(data.login,"login").toLowerCase();
+    const name=assertValue(data.display_name,"display_name"),role=data.role;
+    if(!["service","manager"].includes(role))throw fail(400,"Only Programme Leads and BU Leads may be created here");
+    if(typeof data.password!=="string"||data.password.length<12)throw fail(400,"Password must have at least 12 characters");
+    const scopes=Array.isArray(data.scopes)?data.scopes:[];
+    if(!scopes.length||scopes.length>20)throw fail(400,"One or more organization scopes are required");
+    for(const scope of scopes){
+      if(!scopeColumns.every(k=>typeof scope[k]==="string"&&scope[k].trim()&&scope[k].length<=120))throw fail(400,"Each scope requires country, business_unit, brand and store");
+    }
+    return json(res,201,await transaction(async client=>{
+      const hash=await argon2.hash(data.password,{type:argon2.argon2id});
+      const u=await client.query("INSERT INTO s360_users(login,password_hash,role,display_name) VALUES($1,$2,$3,$4) RETURNING id",[login,hash,role,name]);
+      const uid=u.rows[0].id;
+      for(const scope of scopes)await client.query(
+        "INSERT INTO s360_user_scopes(user_id,country,business_unit,brand,store) VALUES($1,$2,$3,$4,$5)",
+        [uid,...scopeColumns.map(k=>scope[k].trim())]
+      );
+      await audit(client,actor,"user.create",uid,{role,scopes});
+      return {id:uid,login,role};
+    }));
+  }
+  if(path==="/api/users/reset-password"&&req.method==="POST"){
+    if(actor.role!=="admin")throw fail(403,"Permission denied");
+    const data=await body(req);
+    if(typeof data.password!=="string"||data.password.length<12)throw fail(400,"Password must have at least 12 characters");
+    const row=await pool.query("SELECT id FROM s360_users WHERE id=$1",[data.user_id]);
+    if(!row.rowCount)throw fail(404,"User not found");
+    await transaction(async client=>{
+      const hashed=await argon2.hash(data.password,{type:argon2.argon2id});
+      await client.query("UPDATE s360_users SET password_hash=$1,updated_at=now() WHERE id=$2",[hashed,data.user_id]);
+      await client.query("DELETE FROM s360_sessions WHERE user_id=$1",[data.user_id]);
+      await audit(client,actor,"user.password-reset",data.user_id);
+    });
+    return json(res,200,{ok:true});
+  }
   if(path==="/api/ambassadors"&&req.method==="GET"){
     const scopes=await getScopes(pool,actor);
     const q=await pool.query(`SELECT a.*,u.display_name,u.login,u.status FROM s360_ambassadors a
