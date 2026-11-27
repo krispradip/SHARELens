@@ -65,6 +65,7 @@ import { getUserContext } from "./services/userContextService.js";
 import { canAccessRoute } from "./services/rolePolicy.js";
 import { isCorporateApiMode, apiLogin, apiLogout, clearApiSession } from "./services/apiAuthClient.js";
 import {renderAmbassadorManagementPage,loadAmbassadorManagement,createAmbassadorFromForm,changeAmbassadorStatus,resetAmbassadorManagement} from "./pages/ambassadorManagementPage.js";
+import {renderUserManagementPage,loadUserManagement,createLeadAccount,resetLeadPassword,clearUserManagement} from "./pages/userManagementPage.js";
 import { getAmbassadorScoreSnapshotV012 } from "./services/ambassadorScoreService.js";
 
 const app = document.getElementById("app");
@@ -1689,6 +1690,7 @@ async function signOut() {
   if(isCorporateApiMode){try{await apiLogout();}catch{clearApiSession();}}
   authenticatedUser=null;
   resetAmbassadorManagement();
+  clearUserManagement();
   location.reload();
 }
 
@@ -8075,7 +8077,7 @@ function renderCurrentPage() {
         `,
 
       "users-access":
-        () => isCorporateApiMode ? renderAmbassadorManagementPage() : genericRolePage(
+        () => isCorporateApiMode ? renderUserManagementPage() : genericRolePage(
             "IDENTITY & ACCESS",
             "Users & Access",
             "Manage Staff ID, Microsoft SSO and organisational scope."
@@ -8138,10 +8140,12 @@ function renderCurrentPage() {
 
   renderShell(content);
 
-  if (isCorporateApiMode && (currentPage==="ambassador-management" || (currentRole==="admin" && currentPage==="users-access"))) {
-    // Loading is initiated only when the page is opened, not during every redraw.
+  if (isCorporateApiMode && currentPage==="ambassador-management") {
     if(!window.s360ManagementLoaded){window.s360ManagementLoaded=true;loadAmbassadorManagement();}
   } else {window.s360ManagementLoaded=false;}
+  if (isCorporateApiMode && currentRole==="admin" && currentPage==="users-access") {
+    if(!window.s360UsersLoaded){window.s360UsersLoaded=true;loadUserManagement();}
+  } else {window.s360UsersLoaded=false;}
 
   if (
     currentRole === "ambassador"
@@ -8665,6 +8669,9 @@ window.signIn =
   signIn;
 window.createAmbassadorFromForm=createAmbassadorFromForm;
 window.changeAmbassadorStatus=changeAmbassadorStatus;
+window.createLeadAccount=createLeadAccount;
+window.resetLeadPassword=resetLeadPassword;
+window.refreshUserManagementPage=()=>{if(window.s360UsersLoaded){renderShell(renderUserManagementPage());}};
 window.refreshAmbassadorManagementPage=()=>{if(window.s360ManagementLoaded){renderShell(renderAmbassadorManagementPage());}};
 
 window.continueWithSSO =
