@@ -45,3 +45,14 @@ Create payload: `{login,password,display_name,share_ambassador_id,employer,busin
 - Run integration/role-isolation tests on actual PostgreSQL (including multiple tenants), load tests and a backup/restore test.
 - The application currently has a *single process* API listening on `PORT` (default 8080); deployment wiring for static assets and `/api` routing is not part of this first commit.
 - SSO is not implemented. Local credentials are interim; external tenant Ambassadors must remain supported after Microsoft Entra integration.
+
+## Frontend login integration (new)
+- `index.html` now includes `<meta name="share-service360-api-mode" content="disabled">`; this is intentionally **disabled** until the EKS ingress routes `/api/*` to the Node API.
+- Set the meta value to `enabled` only on the corporate build after server/API routing, migration, Vault variables, security hardening and role checks are verified.
+- With API mode enabled, the existing login page calls `POST /api/auth/login`, disables fake Microsoft SSO, hides demo sign-in instructions, and uses the authenticated role.
+- Admin and Programme Lead get **Manage Ambassadors** under their sidebar. Admin also sees Ambassador management from **Users & Access**.
+- The static GitHub Pages preview stays in demonstration mode. It does not provide real credential validation or persistence.
+- **Important:** legacy frontend dashboards, analytics and other workflow stores are still demo data. Live authentication does NOT mean those sections are production-ready.
+- The old demo identities/passwords remain in frontend source for compatibility; remove them from the corporate production bundle before production rollout (hiding a DOM element does not secure secrets).
+- The current Node API handles `/api` but does not serve the static frontend. Deploy an ingress path split or an approved reverse proxy. Do **not** replace the existing corporate static web pod with this API-only image.
+- This is an initial code integration, **not tested in the corporate environment**. No automated browser or live Postgres test has run yet.
