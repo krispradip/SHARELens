@@ -1,3 +1,6 @@
+import {readFile} from "node:fs/promises";
+import {resolve, extname} from "node:path";
+import {fileURLToPath} from "node:url";
 import http from "node:http";
 import {randomBytes, createHash, timingSafeEqual} from "node:crypto";
 import argon2 from "argon2";
@@ -11,6 +14,40 @@ const pool = new pg.Pool({connectionString:process.env.DATABASE_URL,
 const port = Number(process.env.PORT || 8080);
 const secureCookie = process.env.COOKIE_SECURE !== "false";
 const sessionHours = 8;
+const webRoot = resolve(fileURLToPath(new URL("../", import.meta.url)));
+const allowedTopLevel = new Set(["index.html","app.js","style.css","showcase.html"]);
+const allowedFolders = new Set(["pages","data","styles","services"]);
+const mime = {".html":"text/html; charset=utf-8",".js":"text/javascript; charset=utf-8",".css":"text/css; charset=utf-8",".json":"application/json; charset=utf-8",".svg":"image/svg+xml"};
+async function serveFrontend(url,res){
+  let pathname;
+  try { pathname=decodeURIComponent(url.pathname); }
+  catch { return json(res,400,{error:"Invalid path"}); }
+  if(pathname==="/" || pathname==="/share-service360" || pathname==="/share-service360/") pathname="/index.html";
+  if(pathname.startsWith("/share-service360/"))pathname=pathname.slice("/share-service360".length);
+  const parts=pathname.slice(1).split("/");
+  const allowed = parts.length===1 ? allowedTopLevel.has(parts[0]) :
+    parts.length===2 && allowedFolders.has(parts[0]) && /^[a-zA-Z0-9._-]+$/.test(parts[1]);
+  if(!allowed || parts.some(x=>x===".." || x.startsWith("."))) return json(res,404,{error:"Not found"});
+  const file=resolve(webRoot,"."+pathname);
+  if(!file.startsWith(webRoot+"/"))return json(res,404,{error:"Not found"});
+  const type=mime[extname(file)];
+  if(!type)return json(res,404,{error:"Not found"});
+  try{
+    let data=await readFile(file);
+    if(parts[0]==="index.html"){
+      let html=data.toString("utf8");
+      if(process.env.S360_API_MODE==="enabled"){
+        html=html.replace('name="share-service360-api-mode" content="disabled"','name="share-service360-api-mode" content="enabled"');
+        html=html.replace(/<div class="test-accounts">[\s\S]*?<\/div>\s*<\/section>/,
+          '<\/section>'); // Later replace the entire demo login markup in the dedicated UAT frontend.
+      }
+      data=Buffer.from(html);
+    }
+    res.writeHead(200,{"content-type":type,"cache-control":"no-store","x-content-type-options":"nosniff","x-frame-options":"DENY","referrer-policy":"no-referrer"});
+    res.end(data);
+  }catch(e){return json(res,404,{error:"Not found"});}
+}
+
 const sha = value => createHash("sha256").update(value).digest("hex");
 const json = (res,status,obj,headers={}) => {
   res.writeHead(status,{"content-type":"application/json; charset=utf-8","cache-control":"no-store","x-content-type-options":"nosniff",...headers});
@@ -82,7 +119,7 @@ async function handler(req,res){
   if(path==="/health/ready"&&req.method==="GET"){
     await pool.query("SELECT 1");return json(res,200,{ok:true,database:"connected"});
   }
-  if(!path.startsWith("/api/"))return json(res,404,{error:"Not found"});
+  if(!path.startsWith("/api/"))return req.method==="GET" ? serveFrontend(url,res) : json(res,405,{error:"Method not allowed"});
   if(req.method==="POST"&&path==="/api/auth/login"){
     const data=await body(req),login=clean(data.login).toLowerCase(),password=data.password;
     if(!login||typeof password!=="string")throw fail(400,"Login and password are required");
