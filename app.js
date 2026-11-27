@@ -8700,9 +8700,6 @@ window.toggleInteractionDetails =
 window.analyseInlineInteraction =
   analyseInlineInteraction;
 
-window.startInlineAnalysis =
-  startInlineAnalysis;
-
 window.openPerformanceInteraction =
   openPerformanceInteraction;
 
@@ -8750,9 +8747,6 @@ window.closeServicePulseDetail =
 
 window.exportServicePulse =
   exportServicePulse;
-
-window.runServicePulseAI =
-  runServicePulseAI;
 
 window.selectServicePulseScenarioV012 =
   selectServicePulseScenarioV012;
