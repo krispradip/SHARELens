@@ -7522,7 +7522,7 @@ function servicePulseTemplatesView() {
 
 
 /* =========================================================
-   SERVICE PULSE AI
+   SERVICE PULSE REPORTING
 ========================================================= */
 
 function auditPage() {
@@ -7583,7 +7583,7 @@ function auditPage() {
 
 
 /* =========================================================
-   MANAGEMENT AI
+   MANAGEMENT OPERATIONS
 ========================================================= */
 
 function adminHome() {
