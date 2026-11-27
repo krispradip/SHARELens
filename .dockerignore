@@ -1,0 +1,10 @@
+.git
+.github
+node_modules
+**/node_modules
+**/.env
+**/.env.*
+!**/.env.example
+*.zip
+README.md
+wrangler.jsonc
