@@ -1567,7 +1567,7 @@ async function signIn() {
         clearApiSession();throw new Error("Your account has no supported role.");
       }
       authenticatedUser=user;
-      testingUsers[role]={...testingUsers[role],name:user.display_name,login:user.login,initials:user.display_name.split(/\\s+/).map(p=>p[0]||"").join("").slice(0,2).toUpperCase()};
+      testingUsers[role]={...testingUsers[role],name:user.display_name,login:user.login,initials:user.display_name.split(/\s+/).map(p=>p[0]||"").join("").slice(0,2).toUpperCase()};
       loginAsRole(role);
     } catch(err){setLoginMessage(err.message||"Unable to sign in.");}
     finally{if(submit)submit.disabled=false;}
@@ -1853,6 +1853,7 @@ function sidebar() {
 
 
           ${group.items
+            .filter(item => isCorporateApiMode || item[0] !== "ambassador-management")
             .map(item => `
 
               <div
