@@ -64,6 +64,8 @@ import {
 } from "./services/managementActionService.js";
 import { getUserContext } from "./services/userContextService.js";
 import { canAccessRoute } from "./services/rolePolicy.js";
+import { isCorporateApiMode, apiLogin, apiLogout, clearApiSession } from "./services/apiAuthClient.js";
+import {renderAmbassadorManagementPage,loadAmbassadorManagement,createAmbassadorFromForm,changeAmbassadorStatus,resetAmbassadorManagement} from "./pages/ambassadorManagementPage.js";
 import { getAmbassadorScoreSnapshotV012 } from "./services/ambassadorScoreService.js";
 
 const app = document.getElementById("app");
@@ -84,6 +86,7 @@ const SHARE_POINT_AED_VALUE = 0.10;
 ========================================================= */
 
 let currentRole = null;
+let authenticatedUser = null;
 let currentPage = "home";
 
 let expandedInteractionId = null;
@@ -1354,6 +1357,7 @@ const navigation = {
       title: "People & Ambassadors",
       items: [
         ["group-ambassadors", "Ambassadors"],
+        ["ambassador-management", "Manage Ambassadors"],
         ["group-onboarding", "Onboarding & Offboarding"]
       ]
     },
@@ -1419,6 +1423,7 @@ const navigation = {
       title: "Identity & Access",
       items: [
         ["users-access", "Users & Access"],
+        ["ambassador-management", "Manage Ambassadors"],
         ["roles", "Roles & Permissions"],
         ["identity", "Identity Providers"]
       ]
@@ -1546,7 +1551,29 @@ function setLoginMessage(message, type = "error") {
 }
 
 
-function signIn() {
+async function signIn() {
+  if (isCorporateApiMode) {
+    const loginNode=document.getElementById("login-id");
+    const passwordNode=document.getElementById("login-password");
+    const submit=document.querySelector(".login-method-card .primary-button");
+    const login=loginNode?.value?.trim() || "";
+    const password=passwordNode?.value || "";
+    if(!login||!password){setLoginMessage("Enter your username and password.");return;}
+    if(submit)submit.disabled=true;
+    try {
+      const user=await apiLogin(login,password);
+      const role=user.role;
+      if(!["admin","service","manager","ambassador"].includes(role)){
+        clearApiSession();throw new Error("Your account has no supported role.");
+      }
+      authenticatedUser=user;
+      testingUsers[role]={...testingUsers[role],name:user.display_name,login:user.login,initials:user.display_name.split(/\\s+/).map(p=>p[0]||"").join("").slice(0,2).toUpperCase()};
+      loginAsRole(role);
+    } catch(err){setLoginMessage(err.message||"Unable to sign in.");}
+    finally{if(submit)submit.disabled=false;}
+    return;
+  }
+
 
   const login =
     document
@@ -1594,6 +1621,8 @@ function signIn() {
 
 
 function continueWithSSO() {
+  if(isCorporateApiMode){setLoginMessage("Microsoft SSO is not enabled yet. Please sign in with your assigned username and password.","info");return;}
+
 
   const login =
     document
@@ -1657,10 +1686,11 @@ function loginAsRole(role) {
 }
 
 
-function signOut() {
-
+async function signOut() {
+  if(isCorporateApiMode){try{await apiLogout();}catch{clearApiSession();}}
+  authenticatedUser=null;
+  resetAmbassadorManagement();
   location.reload();
-
 }
 
 
@@ -8635,11 +8665,13 @@ function runServiceAnalysis() {
 
 function adminHome() {
 
+  if(isCorporateApiMode){return `${pageTitle("PLATFORM ADMINISTRATION","SHARE Service360 Platform","Manage accounts and programme access.")}<section class="dashboard-card"><h3>Ambassador Management</h3><p>Manage individual SHARE Ambassador accounts using the sidebar.</p><button class="primary-button" onclick="navigateTo(\'ambassador-management\')">Manage Ambassadors</button></section>`;}
+
   return `
     ${pageTitle(
       "PLATFORM ADMINISTRATION",
       "SHARE Service360 Platform",
-      "Manage identity, access, AI agents, integrations and governance."
+      "Manage identity, access, integrations and governance."
     )}
 
 
@@ -8865,6 +8897,7 @@ function openPerformanceInteraction(id) {
 
 
 function renderCurrentPage() {
+  if(isCorporateApiMode && !authenticatedUser){location.reload();return;}
 
   if (!canAccessRoute(currentRole, currentPage)) {
     currentPage = "home";
@@ -9012,6 +9045,7 @@ function renderCurrentPage() {
   ) {
 
     const pages = {
+      "ambassador-management":renderAmbassadorManagementPage,
 
       home:
         renderProgrammeLeadHomeV012,
@@ -9098,6 +9132,7 @@ function renderCurrentPage() {
   ) {
 
     const pages = {
+      "ambassador-management":renderAmbassadorManagementPage,
 
       home:
         adminHome,
@@ -9117,8 +9152,7 @@ function renderCurrentPage() {
         `,
 
       "users-access":
-        () =>
-          genericRolePage(
+        () => isCorporateApiMode ? renderAmbassadorManagementPage() : genericRolePage(
             "IDENTITY & ACCESS",
             "Users & Access",
             "Manage Staff ID, Microsoft SSO and organisational scope."
@@ -9180,6 +9214,11 @@ function renderCurrentPage() {
 
 
   renderShell(content);
+
+  if (isCorporateApiMode && (currentPage==="ambassador-management" || (currentRole==="admin" && currentPage==="users-access"))) {
+    // Loading is initiated only when the page is opened, not during every redraw.
+    if(!window.s360ManagementLoaded){window.s360ManagementLoaded=true;loadAmbassadorManagement();}
+  } else {window.s360ManagementLoaded=false;}
 
   if (
     currentRole === "ambassador"
@@ -9701,6 +9740,9 @@ function filterV12Knowledge() {
 
 window.signIn =
   signIn;
+window.createAmbassadorFromForm=createAmbassadorFromForm;
+window.changeAmbassadorStatus=changeAmbassadorStatus;
+window.refreshAmbassadorManagementPage=()=>{if(window.s360ManagementLoaded){renderShell(renderAmbassadorManagementPage());}};
 
 window.continueWithSSO =
   continueWithSSO;
