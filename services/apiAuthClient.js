@@ -3,7 +3,7 @@
  * Personal GitHub Pages is intentionally a demo; corporate EKS uses the real API.
  * Token is memory-only, cleared on refresh; never written to browser storage.
  */
-export const isCorporateApiMode = location.hostname === "share-service360.dev.grid2.maf.ae";
+export const isCorporateApiMode = location.hostname !== "github.io" && !location.hostname.endsWith(".github.io") && document.querySelector('meta[name="share-service360-api-mode"]')?.content === "enabled";
 let bearerToken = null;
 export async function apiRequest(path,{method="GET",body}={}) {
   const res=await fetch(path,{
