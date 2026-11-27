@@ -1,0 +1,17 @@
+{
+  "name": "share-service360-api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "argon2": "^0.43.0",
+    "pg": "^8.16.3"
+  }
+}
